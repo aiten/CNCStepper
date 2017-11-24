@@ -199,14 +199,6 @@ private:
 
 	typedef CDecimaAsInt super;
 
-public:
-
-//	static char* ToString(mm1000_t v, char*tmp, uint8_t precision, uint8_t scale);	// right aligned
-//	static char* ToString(mm1000_t v, char*tmp, uint8_t scale) { return SkipSpaces(ToString(v, tmp, 11, scale)); };
-
-//	char*ToString(char*tmp, uint8_t precision, uint8_t scale) { return ToString(_value, tmp, precision, scale); } // right aligned
-//	char*ToString(char*tmp, uint8_t scale) { return ToString(_value, tmp, scale); }
-
 };
 
 ////////////////////////////////////////////////////////

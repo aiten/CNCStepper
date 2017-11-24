@@ -13,10 +13,6 @@ private:
 
 	typedef CControl super;
 
-public:
-
-	CControl3D()				 { }
-
 protected:
 
 	virtual void Init() override;

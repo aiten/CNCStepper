@@ -85,7 +85,7 @@ void CDenavitHartenberg::FromPosition(float posxyz[3], float angles[NUM_AXIS],fl
 
 	if (true)
 	{
-		unsigned int count = 0;
+		unsigned int count;
 		uint8_t i=0;
 		float diff=FLT_MAX;
 

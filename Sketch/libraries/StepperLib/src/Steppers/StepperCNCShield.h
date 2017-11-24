@@ -174,9 +174,5 @@ public:
 			_pod._referenceHitValue[4] == zref || _pod._referenceHitValue[5] == zref;
 	}
 
-protected:
-
 	////////////////////////////////////////////////////////
-
-private:
 };

@@ -32,7 +32,7 @@ public:
 
 	void Idle(unsigned int idletime);
 	void Resume(bool restorePenDown);
-	bool IsResumePenDown() { return _isPenDownTimeout; }
+	bool IsResumePenDown() const { return _isPenDownTimeout; }
 
 	void PenDown();
 	void PenUp();

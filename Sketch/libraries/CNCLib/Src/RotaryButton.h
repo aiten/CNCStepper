@@ -47,7 +47,7 @@ public:
 		uint8_t p = ToPos(pinAValue,pinBValue);
 		if (p == _lastPos) return Nothing;
 
-		signed char add = 0;
+		signed char add;
 		if      (_lastPos == 3 && p == 0) add = 1;
 		else if (_lastPos == 0 && p == 3) add = -1;
 		else add = (signed char)p - (signed char)_lastPos;

@@ -99,7 +99,7 @@ public:
 		Wire.write((int)(eeaddress & 0xFF)); // LSB
 		Wire.endTransmission();
 		Wire.requestFrom(deviceaddress, length);
-		int c = 0;
+		int c;
 		for (c = 0; c < length; c++)
 			if (Wire.available()) buffer[c] = Wire.read();
 	}

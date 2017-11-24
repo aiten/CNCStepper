@@ -40,10 +40,6 @@ private:
 
 	typedef CControl3D super;
 
-public:
-
-	//	CMyControl()				 { }
-
 protected:
 
 	virtual void Init() override;

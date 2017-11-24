@@ -180,7 +180,7 @@ mm1000_t CGCodeParserBase::ParseParameter(bool)
 
 unsigned long CGCodeParserBase::GetUint32OrParam(unsigned long max)
 {
-	unsigned long param = 0;
+	unsigned long param;
 	if (_reader->GetChar() == '#')
 	{
 		_reader->GetNextChar();
@@ -734,7 +734,7 @@ void CGCodeParserBase::G0203Command(bool isG02)
 		if (r < 0.0)
 		{
 			h_x2_div_d = -h_x2_div_d;
-			r = -r; // Finished with r. 
+			// r = -r; // Finished with r. 
 		}
 
 		// Complete the operation by calculating the actual center of the arc

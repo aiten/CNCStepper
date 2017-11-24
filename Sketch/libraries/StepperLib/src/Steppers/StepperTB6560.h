@@ -211,12 +211,4 @@ public:
 		(_referenceHitValue[5] && HALFastdigitalRead(TB6560_Z_MAX_PIN) == TB6560_REF_ON);
 		*/
 	}
-
-
-    protected:
-
-	////////////////////////////////////////////////////////
-
-private:
-
 };

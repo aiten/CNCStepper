@@ -383,7 +383,7 @@ inline bool CompareMaxDiff(mm1000_t a, mm1000_t b, mm1000_t diff = 3) { return  
 bool CMotionControl::Test3D(const mm1000_t src[NUM_AXIS],const mm1000_t ofs[NUM_AXIS],mm1000_t dest[NUM_AXIS], mm1000_t vect[NUM_AXIS], float angle, bool printOK)
 {
 	SetRotate(angle,vect,ofs);
-	return Test(src,ofs,dest, printOK, [=] (void) -> void { 
+	return Test(src,ofs,dest, printOK, [=] () -> void { 
 		DumpArray<mm1000_t, NUM_AXIS>(F("Vector"), vect, false);
 		DumpType<float>(F("Angle"), angle, false);
 	}	);

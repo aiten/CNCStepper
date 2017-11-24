@@ -72,7 +72,7 @@ pin_t CStepperL298N::_pinRef[NUM_AXIS * 2] =
 
 ////////////////////////////////////////////////////////
 
-void CStepperL298N::Init(void)
+void CStepperL298N::Init()
 {
 	super::Init();
 

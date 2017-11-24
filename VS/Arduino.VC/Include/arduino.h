@@ -94,7 +94,7 @@ inline char pgm_read_byte(const char* p) { return *p; }
 typedef  const char* PGM_P;
 
 
-inline void attachInterrupt(uint8_t, void(*)(void), int /* mode */) {};
+inline void attachInterrupt(uint8_t, void(*)(), int /* mode */) {};
 inline void detachInterrupt(uint8_t) {};
 
 inline uint8_t digitalPinToInterrupt(uint8_t p) { return ((p) == 2 ? 0 : ((p) == 3 ? 1 : NOT_AN_INTERRUPT)); }

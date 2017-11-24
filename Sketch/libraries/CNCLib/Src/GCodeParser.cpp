@@ -1099,7 +1099,7 @@ void CGCodeParser::G68ExtXXCommand(axis_t rotaxis)
 
 	float pos1=(float) (move.newpos[rotaxis] - CMotionControl::GetInstance()->GetOffset2D(rotaxis));
 	float pos2;
-	float angle=0;
+	float angle;
 
 	axis_t axis2;
 	axis_t axis3;

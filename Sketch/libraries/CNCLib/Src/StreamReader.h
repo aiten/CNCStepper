@@ -28,11 +28,10 @@ class CStreamReader
 {
 public:
 
-	CStreamReader();
 	void Init(char* buffer)					{ _buffer = buffer; _error = 0; }
 
-	bool IsError()							{ return _error != 0; };
-	error_t GetError()						{ return _error; }
+	bool IsError() const					{ return _error != 0; }
+	error_t GetError() const				{ return _error; }
 
 	char SkipSpaces();
 	char SkipSpacesToUpper()				{ return Toupper(SkipSpaces()); }

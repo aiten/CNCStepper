@@ -45,7 +45,7 @@ public:
 	bool IsError()											{ return _error != 0; };
 	error_t GetError()										{ return _error; }
 
-	typedef void(*PrintOKMessage)(void);
+	typedef void(*PrintOKMessage)();
 	PrintOKMessage	GetOkMessage()							{ return _OkMessage; }
 
 	CStreamReader* GetReader()								{ return _reader; }

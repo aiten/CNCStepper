@@ -261,7 +261,7 @@ public:
 		return GetD()->openNextFile();
 	}
 
-	void rewindDirectory(void) {}
+	void rewindDirectory() {}
 
 	//	virtual int peek();
 	//	virtual void flush();

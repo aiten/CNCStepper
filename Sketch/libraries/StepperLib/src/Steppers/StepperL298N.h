@@ -32,7 +32,7 @@ private:
 public:
 
 	CStepperL298N();
-	virtual void Init(void);
+	virtual void Init() override;
 
 protected:
 

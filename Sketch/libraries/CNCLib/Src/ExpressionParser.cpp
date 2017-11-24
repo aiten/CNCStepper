@@ -382,7 +382,7 @@ expr_t CExpressionParser::ParseLevel10()
 
 expr_t CExpressionParser::ParseNumber()
 {
-	expr_t ans = 0;
+	expr_t ans;
 
 	switch (GetTokenType())
 	{

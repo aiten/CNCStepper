@@ -934,7 +934,7 @@ CStepper::SMovement* CStepper::GetNextMovement(uint8_t idx)
 		if (!_movements._queue.Buffer[idx].IsSkipForOptimizing())
 			return &_movements._queue.Buffer[idx];
 	}
-	return _movements._queue.GetNext(idx);
+	// not reachable;
 }
 
 ////////////////////////////////////////////////////////

@@ -90,10 +90,10 @@ uint8_t ToPrecisionS2(long v)
 
 unsigned long _ulsqrt_round(unsigned long val, bool round)
 {
-	unsigned long temp, g, b, bshft;
-	g = 0;
-	b = 0x8000;
-	bshft = 15;
+	unsigned long temp;
+	unsigned long g = 0;
+	unsigned long b = 0x8000;
+	unsigned long bshft = 15;
 	uint8_t i;
 	for (i = 0; i < 15; i++)
 	{

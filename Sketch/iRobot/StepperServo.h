@@ -79,8 +79,6 @@ public:
 	virtual uint8_t GetReferenceValue(uint8_t referenceid) override;
 	virtual bool IsAnyReference() override;
 
-    protected:
-
 ////////////////////////////////////////////////////////
 
 private:

@@ -1,16 +1,17 @@
-CNCLib
+CNCLib / CNCStepper
 ======
 
-CNCLib is a project to build your own DIY CNC machine.
+Build your own CNC machine/laser with *CNCLib* and *CNCStepper*.<br />
+Both projects are on github.
 
-The first part of the project implements a library to customize CNC machines on
-different Arduino hardware.
+https://github.com/aiten/CNCLib <br />
+https://github.com/aiten/CNCStepper
 
-The second part is designed for Windows to communicate with the CNC (Arduino)
-machine.
 
-Arduino
--------
+CNCStepper
+======
+
+uUe the windows CNCLib application to control your CNC machine.
 
 see folder: *Sketch*
 
@@ -26,7 +27,7 @@ see folder: *Sketch*
 
 -   LCD 12864 (using u8glib) and SD
 
--   can be used with servos
+-   can be used with servos (see sketch IRobot)
 
 ### Software
 
@@ -42,23 +43,3 @@ see folder: *Sketch*
 
 -   HPGL Interpreter sample
 
-Windows
--------
-
-see folder: *VC/CNCLib*
-
--   Sending (GCode) to Arduino
-
--   Configure CNC machine by writing to the Eeprom
-
--   Support different machines (axis, range, ...)
-
--   Support CNC-Joystick(Arduino based)
-
--   Preview
-
--   Import HPGL with "Resize" and "Move"
-
--   Import Image (laser)
-
--   Sample for WPF, WebApi, Enterprise architecture, ...

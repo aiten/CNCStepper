@@ -11,7 +11,7 @@ https://github.com/aiten/CNCStepper
 CNCStepper
 ======
 
-uUe the windows CNCLib application to control your CNC machine.
+Use the windows CNCLib application to control your CNC machine.
 
 see folder: *Sketch*
 

@@ -17,14 +17,10 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpeedChart
 {
-	public class TimeSample
+    public class TimeSample
 	{
 		public int Index { get; set; }
 		public int TimerMS { get; set; }
@@ -42,13 +38,15 @@ namespace SpeedChart
 			char[] delimiterChars = { ';' };
 			string[] col = line.Split(delimiterChars, StringSplitOptions.None);
 
-			TimeSample ts = new TimeSample();
+		    var ts = new TimeSample
+		    {
+		        Index = int.Parse(col[0]),
+		        TimerMS = int.Parse(col[1]),
+		        Dist = int.Parse(col[2]),
+		        SysSpeed = int.Parse(col[3])
+		    };
 
-			ts.Index = int.Parse(col[0]);
-			ts.TimerMS = int.Parse(col[1]);
-			ts.Dist = int.Parse(col[2]);
-			ts.SysSpeed = int.Parse(col[3]);
-			if (!string.IsNullOrEmpty(col[4])) ts.XSpeed = int.Parse(col[4]);
+		    if (!string.IsNullOrEmpty(col[4])) ts.XSpeed = int.Parse(col[4]);
 			if (!string.IsNullOrEmpty(col[5])) ts.YSpeed = int.Parse(col[5]);
 			if (!string.IsNullOrEmpty(col[6])) ts.ZSpeed = int.Parse(col[6]);
 			if (!string.IsNullOrEmpty(col[7])) ts.ASpeed = int.Parse(col[7]);

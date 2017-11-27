@@ -1,14 +1,11 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Win32;
 
 namespace SpeedChart.ViewModels
 {
@@ -20,13 +17,13 @@ namespace SpeedChart.ViewModels
         string _filename;
         string _directory;
         int _fileNo = 1;
-        bool _loaded = false;
+        bool _loaded;
 
         string _content;
 
         public MainWindowViewModel()
         {
-            _directory = System.IO.Path.GetTempPath();
+            _directory = Path.GetTempPath();
             _filename = _directory + @"ProxxonMF70.csv";
         }
 
@@ -39,16 +36,14 @@ namespace SpeedChart.ViewModels
 
             public event EventHandler CanExecuteChanged
             {
-                add { CommandManager.RequerySuggested += value; }
-                remove { CommandManager.RequerySuggested -= value; }
+                add => CommandManager.RequerySuggested += value;
+                remove => CommandManager.RequerySuggested -= value;
             }
 
             public DelegateCommand(Action command, Func<bool> canExecute = null)
             {
-                if (command == null)
-                    throw new ArgumentNullException();
                 _canExecute = canExecute;
-                _command = command;
+                _command = command ?? throw new ArgumentNullException();
             }
             
             public async void Execute(object parameter)
@@ -65,11 +60,7 @@ namespace SpeedChart.ViewModels
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var eventHandler = this.PropertyChanged;
-            if (eventHandler != null)
-            {
-                eventHandler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public MainWindow ViewWindow { get; set; }
@@ -80,12 +71,12 @@ namespace SpeedChart.ViewModels
 
         public int FileNo
         {
-            get { return _fileNo; }
+            get => _fileNo;
             set { _fileNo = value; OnPropertyChanged(); }
         }
         public string Content
         {
-            get { return _content ; }
+            get => _content;
             set { _content = value; OnPropertyChanged(); }
         }
 
@@ -98,21 +89,23 @@ namespace SpeedChart.ViewModels
         public void Browse()
         {
             // Configure open file dialog box
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.InitialDirectory = _directory;
+            var dlg = new OpenFileDialog
+            {
+                InitialDirectory = _directory
+            };
             //dlg.FileName = "Document"; // Default file name
             //dlg.DefaultExt = ".txt"; // Default file extension
             //dlg.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
 
             // Show open file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
+            bool? result = dlg.ShowDialog();
 
             // Process open file dialog box results
             if (result == true)
             {
                 // Open document
                 _filename = dlg.FileName;
-                _directory = System.IO.Path.GetDirectoryName(_filename) + @"\";
+                _directory = Path.GetDirectoryName(_filename) + @"\";
                 LoadFile();
             }
         }
@@ -156,7 +149,7 @@ namespace SpeedChart.ViewModels
 				int dotidx = filename.LastIndexOf('.');
 				if (dotidx >= 0)
 				{
-					filename = filename.Insert(dotidx, "#" + fileno.ToString());
+					filename = filename.Insert(dotidx, "#" + fileno);
 				}
 			}
 			return filename;
@@ -262,14 +255,14 @@ namespace SpeedChart.ViewModels
 
         #region Commands
 
-        public ICommand BrowseCommand { get { return new DelegateCommand(Browse, CanBrowse); } }
-        public ICommand LoadCommand { get { return new DelegateCommand(Load, CanLoad); } }
-        public ICommand LoadNextCommand { get { return new DelegateCommand(LoadNextFile, CanLoadNextFile); } }
-        public ICommand LoadPrevCommand { get { return new DelegateCommand(LoadPrevFile, CanLoadPrevFile); } }
-        public ICommand ZoomInCommand { get { return new DelegateCommand(ZoomIn, CanZoomIn); } }
-        public ICommand ZoomOutCommand { get { return new DelegateCommand(ZoomOut, CanZoomOut); } }
-        public ICommand XOfsPlusCommand { get { return new DelegateCommand(XOfsPlus, CanXOfsPlus); } }
-        public ICommand XOfsMinusCommand { get { return new DelegateCommand(XOfsMinus, CanXOfsMinus); } }
+        public ICommand BrowseCommand => new DelegateCommand(Browse, CanBrowse);
+        public ICommand LoadCommand => new DelegateCommand(Load, CanLoad);
+        public ICommand LoadNextCommand => new DelegateCommand(LoadNextFile, CanLoadNextFile);
+        public ICommand LoadPrevCommand => new DelegateCommand(LoadPrevFile, CanLoadPrevFile);
+        public ICommand ZoomInCommand => new DelegateCommand(ZoomIn, CanZoomIn);
+        public ICommand ZoomOutCommand => new DelegateCommand(ZoomOut, CanZoomOut);
+        public ICommand XOfsPlusCommand => new DelegateCommand(XOfsPlus, CanXOfsPlus);
+        public ICommand XOfsMinusCommand => new DelegateCommand(XOfsMinus, CanXOfsMinus);
 
         #endregion
     }

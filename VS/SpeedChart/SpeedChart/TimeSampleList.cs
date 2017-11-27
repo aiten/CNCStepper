@@ -16,24 +16,21 @@
   http://www.gnu.org/licenses/
 */
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpeedChart
 {
-	public class TimeSampleList : List<TimeSample>
+    public class TimeSampleList : List<TimeSample>
 	{
 		public void ReadFiles(string filename)
 		{
 			Clear();
 
-			using (StreamReader r = new StreamReader(filename))
+			using (var r = new StreamReader(filename))
 			{
-				string line;;
+				string line;
 
 				while (!string.IsNullOrEmpty(line = r.ReadLine()))
 				{

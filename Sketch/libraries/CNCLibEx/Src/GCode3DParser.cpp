@@ -451,7 +451,7 @@ bool CGCode3DParser::GetFileName(char*buffer)
 		}
 		ch = _reader->GetNextChar();
 	}
-	*(buffer++) = 0;
+	*buffer = 0;
 	return true;
 }
 

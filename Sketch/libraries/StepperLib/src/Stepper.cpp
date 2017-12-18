@@ -1398,7 +1398,7 @@ inline void CStepper::StepOut()
 	stepperstatic_avr uint8_t axescount[NUM_AXIS];
 	axisArray_t directionUp = 0;
 
-	uint8_t bytedircount = 0;
+	uint8_t bytedircount;
 	bool countit = true;
 	if (((DirCountByte_t*)&dir_count)->byte.byteInfo.nocount != 0)
 		countit = false;

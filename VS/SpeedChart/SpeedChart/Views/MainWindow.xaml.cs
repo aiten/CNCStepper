@@ -1,49 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿////////////////////////////////////////////////////////
+/*
+  This file is part of CNCLib - A library for stepper motors.
+
+  Copyright (c) 2013-2015 Herbert Aitenbichler
+
+  CNCLib is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  CNCLib is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  http://www.gnu.org/licenses/
+*/
+
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SpeedChart
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
 	{
 		public MainWindow()
 		{
 
 			InitializeComponent();
 
-            var vm = DataContext as SpeedChart.ViewModels.MainWindowViewModel;
+            var vm = DataContext as ViewModels.MainWindowViewModel;
             vm.ViewWindow = this;
         }
 
-		TimeSampleList _list = new TimeSampleList();
-        public SpeedChartControl SpeedChart { get { return _chart; } }
+        public SpeedChartControl SpeedChart => _chart;
 
-		protected override void OnMouseMove(MouseEventArgs e)
+	    protected override void OnMouseMove(MouseEventArgs e)
 		{
 			base.OnMouseMove(e);
 			Point pt = e.GetPosition(this);
 
-			var ts = _chart.HitTest(pt);
+			TimeSample ts = _chart.HitTest(pt);
 
 			if (ts != null)
 			{
-                (DataContext as SpeedChart.ViewModels.MainWindowViewModel).Content = ts.Index + ": " + ts.Info;
+                (DataContext as ViewModels.MainWindowViewModel).Content = ts.Index + ": " + ts.Info;
 			}
 		}
 /*

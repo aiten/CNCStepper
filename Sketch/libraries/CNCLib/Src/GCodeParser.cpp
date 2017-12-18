@@ -398,10 +398,12 @@ const CGCodeParser::SParamInfo CGCodeParser::_paramdef[] PROGMEM =
 	{ PARAMSTART_CURRENTPOS+2,	_zPos,      false,	CGCodeParser::SParamInfo::IsMm1000 },
 #if NUM_AXIS > 3
 	{ PARAMSTART_CURRENTPOS+3,	_aPos,      false,	CGCodeParser::SParamInfo::IsMm1000 },
-#elif NUM_AXIS > 4
+#if NUM_AXIS > 4
 	{ PARAMSTART_CURRENTPOS+4,	_bPos,      false,	CGCodeParser::SParamInfo::IsMm1000 },
-#elif NUM_AXIS > 5
+#if NUM_AXIS > 5
 	{ PARAMSTART_CURRENTPOS+5,	_cPos,      false,	CGCodeParser::SParamInfo::IsMm1000 },
+#endif
+#endif
 #endif
 
 	{ PARAMSTART_CURRENTABSPOS,	_currentAbsPos,true,		CGCodeParser::SParamInfo::IsMm1000 },
@@ -421,12 +423,15 @@ const CGCodeParser::SParamInfo CGCodeParser::_paramdef[] PROGMEM =
 	{ PARAMSTART_G54OFFSET + 1 * PARAMSTART_G54FF_OFFSET,	_g55home,	true,			CGCodeParser::SParamInfo::IsMm1000 },
 #if G54ARRAYSIZE > 2
 	{ PARAMSTART_G54OFFSET + 2 * PARAMSTART_G54FF_OFFSET,	_g56home,	true,			CGCodeParser::SParamInfo::IsMm1000 },
-#elif G54ARRAYSIZE > 3
+#if G54ARRAYSIZE > 3
 	{ PARAMSTART_G54OFFSET + 3 * PARAMSTART_G54FF_OFFSET,	_g57home,	true,			CGCodeParser::SParamInfo::IsMm1000 },
-#elif G54ARRAYSIZE > 4
+#if G54ARRAYSIZE > 4
 	{ PARAMSTART_G54OFFSET + 4 * PARAMSTART_G54FF_OFFSET,	_g58home,	true,			CGCodeParser::SParamInfo::IsMm1000 },
-#elif G54ARRAYSIZE > 5
+#if G54ARRAYSIZE > 5
 	{ PARAMSTART_G54OFFSET + 5 * PARAMSTART_G54FF_OFFSET,	_g59home,	true,			CGCodeParser::SParamInfo::IsMm1000 },
+#endif
+#endif
+#endif
 #endif
 
 	{ PARAMSTART_FEEDRATE,	_feedrate, false,			CGCodeParser::SParamInfo::IsMm1000 },

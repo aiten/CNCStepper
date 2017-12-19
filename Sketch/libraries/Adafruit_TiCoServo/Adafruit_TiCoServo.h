@@ -60,8 +60,7 @@ class Adafruit_TiCoServo {
     maxPulse(MAX_PULSE_WIDTH) { };
   void        attach(const int8_t pin, const uint16_t min = MIN_PULSE_WIDTH,
                 const uint16_t max = MAX_PULSE_WIDTH),
-              write(const uint16_t pos),
-              writeMicroseconds(const uint16_t pos);
+              write(const uint16_t pos);
   uint8_t     read(void);
   uint16_t    readMicroseconds(void);
 #endif
@@ -80,5 +79,9 @@ class Adafruit_TiCoServo {
   uint16_t             minPulse, maxPulse;
 #endif
 };
+
+#ifndef __TINY_SERVO__
+#define writeMicroseconds(x) write(x)
+#endif
 
 #endif // _ADAFRUIT_TICOSERVO_H_

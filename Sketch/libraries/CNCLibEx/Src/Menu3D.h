@@ -19,41 +19,25 @@
 
 #pragma once
 
-////////////////////////////////////////////////////////
-
-#include "Configuration.h"
+#include <MenuBase.h>
 
 ////////////////////////////////////////////////////////
 
-#include <U8GLCD.h>
-#include "MyMenu.h"
-
-////////////////////////////////////////////////////////
-
-class CMyLcd : public CU8GLcd
+class CMenu3D : public CMenuBase
 {
-private:
-
-	typedef CU8GLcd super;
 
 public:
 
-	virtual void Init() override;
-	virtual void Beep(const SPlayTone*,bool) override;
+	////////////////////////////////////////////////////////
+
+	void MenuButtonPressSDStart(const SMenuItemDef*);
+
+	void SetSDMenu() { SetMenu(_SDMenuDef); }
 
 protected:
 
-	virtual class U8G2& GetU8G() override;
-	virtual class CMenu3D& GetMenu() override	{ return _menu; }
-
-	virtual bool DrawLoopDefault(EnumAsByte(EDrawLoopType) type, uintptr_t data) override;
-
-private:
-
-	CMyMenu _menu;
+	const SMenuDef*		_SDMenuDef= NULL;
 
 };
 
 ////////////////////////////////////////////////////////
-
-extern CMyLcd Lcd;

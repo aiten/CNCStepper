@@ -37,6 +37,7 @@
 #include "Beep.h"
 #include "RotaryButton.h"
 
+#include "Menu3D.h"
 #include "U8GLCD.h"
 
 #include "GCodeParser.h"
@@ -654,6 +655,12 @@ bool CU8GLcd::DrawLoopPreset(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 
 void CU8GLcd::ButtonPressStartSDPage()
 {
+	_currentpage = GetPageCount() - 1;	// TODO: last is default menu
+	GetMenu().SetSDMenu();
+	SetRotaryFocusMenuPage();
+	OKBeep();
+	return;
+
 	if (CGCode3DParser::GetExecutingFileName()[0])
 	{
 		PostCommand(EGCodeSyntaxType::GCode, F("m21"));									// Init SD
@@ -878,7 +885,7 @@ uint8_t CU8GLcd::GetMenuIdx()
 {
 	if (_rotaryFocus == RotaryMenuPage)
 	{
-		uint8_t menu = _rotarybutton.GetPageIdx(GetMenu().GetMenuDef()->GetItemCount());
+		uint8_t menu = _rotarybutton.GetPageIdx(GetMenu().GetMenuItemCount());
 		if (menu != GetMenu().GetPosition())
 		{
 			GetMenu().SetPosition(menu);
@@ -892,7 +899,7 @@ uint8_t CU8GLcd::GetMenuIdx()
 
 void CU8GLcd::SetRotaryFocusMenuPage()
 {
-	_rotarybutton.SetPageIdx(GetMenu().GetPosition()); _rotarybutton.SetMinMax(0, GetMenu().GetMenuDef()->GetItemCount() - 1, false);
+	_rotarybutton.SetPageIdx(GetMenu().GetPosition()); _rotarybutton.SetMinMax(0, GetMenu().GetMenuItemCount() - 1, false);
 	_rotaryFocus = RotaryMenuPage;
 }
 
@@ -925,12 +932,12 @@ bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 
 	SetPosition(ToCol(0), ToRow(0) - HeadLineOffset());
 	Print(F("Menu: "));
-	Print(GetMenu().GetMenuDef()->GetText());
+	Print(GetMenu().GetText());
 
 	uint8_t x = 255;
 	const uint8_t printFirstLine = 1;
 	const uint8_t printLastLine = (TotalRows()- 1);
-	const uint8_t menuEntries = GetMenu().GetMenuDef()->GetItemCount();
+	const uint8_t menuEntries = GetMenu().GetMenuItemCount();
 
 	if (_rotaryFocus == RotaryMenuPage)
 	{
@@ -952,7 +959,7 @@ bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 				Print(F(" "));
 
 
-			Print(GetMenu().GetMenuDef()->GetItems()[i].GetText());
+			Print(GetMenu().GetItemText(i));
 		}
 	}
 

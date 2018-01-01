@@ -95,12 +95,11 @@ public:
 	menupos_t GetPosition()											{ return _menuHelper.GetPosition(); }
 	void SetPosition(menupos_t position)							{ _menuHelper.SetPosition(position); }
 
-	menupos_t GetMenuItemCount()									{ return GetMenuDef()->GetItemCount(); }
+	menupos_t GetMenuItemCount();
+	const __FlashStringHelper*  GetItemText(uint8_t idx);
+	const __FlashStringHelper*  GetText();
 
 	CMenuHelper& GetMenuHelper()									{ return _menuHelper; }
-
-	const SMenuDef*GetMenuDef()										{ return _current; }
-	const SMenuDef*GetMainMenuDef()									{ return _main; }
 
 	void SetMainMenu()												{ SetMenu(_main); }
 
@@ -111,6 +110,9 @@ public:
 	void ErrorBeep()												{ return CLcd::GetInstance()->ErrorBeep(); };
 
 protected:
+
+	const SMenuDef*GetMenuDef() { return _current; }
+	const SMenuDef*GetMainMenuDef() { return _main; }
 
 	//////////////////////////////////////////
 

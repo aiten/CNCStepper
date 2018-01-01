@@ -44,7 +44,7 @@ public:
 protected:
 
 	virtual class U8G2& GetU8G() override;
-	virtual class CMenuBase& GetMenu() override	{ return _menu; }
+	virtual class CMenu3D& GetMenu() override	{ return _menu; }
 
 	virtual bool DrawLoopDefault(EnumAsByte(EDrawLoopType) type,uintptr_t data) override;
 

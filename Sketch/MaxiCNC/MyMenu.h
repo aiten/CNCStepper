@@ -25,23 +25,23 @@
 
 ////////////////////////////////////////////////////////
 
-#include "MenuBase.h"
+#include "Menu3D.h"
 
 ////////////////////////////////////////////////////////
 
 class CMyLcd;
 
-class CMyMenu : public CMenuBase
+class CMyMenu : public CMenu3D
 {
 private:
 
-	typedef CMenuBase super;
+	typedef CMenu3D super;
 
 public:
 
 	static CMyLcd* GetLcd()												{ return ((CMyLcd*) CLcd::GetInstance()); }
 
-	CMyMenu()															{ _main = &_mainMenu; }
+	CMyMenu()															{ _main = &_mainMenu; _SDMenuDef = &_SDMenu; }
 
 protected:
 

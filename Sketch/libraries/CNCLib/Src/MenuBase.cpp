@@ -60,6 +60,27 @@ CMenuBase::MenuFunction CMenuBase::SMenuItemDef::GetButtonPress() const
 
 ////////////////////////////////////////////////////////////
 
+CMenuBase::menupos_t CMenuBase::GetMenuItemCount()
+{
+	return GetMenuDef()->GetItemCount();
+}
+
+////////////////////////////////////////////////////////////
+
+const __FlashStringHelper*  CMenuBase::GetItemText(uint8_t idx)
+{
+	return GetMenuDef()->GetItems()[idx].GetText();
+}
+
+////////////////////////////////////////////////////////////
+
+const __FlashStringHelper*  CMenuBase::GetText()
+{
+	return GetMenuDef()->GetText();
+};
+
+////////////////////////////////////////////////////////////
+
 bool CMenuBase::Select()
 {
 	const SMenuItemDef* item = &GetMenuDef()->GetItems()[GetMenuHelper().GetPosition()];

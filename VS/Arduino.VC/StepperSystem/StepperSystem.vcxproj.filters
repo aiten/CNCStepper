@@ -261,6 +261,9 @@
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuHelper.h">
       <Filter>CNCLib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\Src\Menu3D.h">
+      <Filter>CNCLibEx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\MsvcStepper\MsvcStepper.cpp">
@@ -355,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuHelper.cpp">
       <Filter>CNCLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\Menu3D.cpp">
+      <Filter>CNCLibEx</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

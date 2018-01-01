@@ -25,17 +25,17 @@
 
 ////////////////////////////////////////////////////////
 
-#include "MenuBase.h"
+#include "Menu3D.h"
 
 ////////////////////////////////////////////////////////
 
 class CMyLcd;
 
-class CMyMenu : public CMenuBase
+class CMyMenu : public CMenu3D
 {
 private:
 
-	typedef CMenuBase super;
+	typedef CMenu3D super;
 
 public:
 

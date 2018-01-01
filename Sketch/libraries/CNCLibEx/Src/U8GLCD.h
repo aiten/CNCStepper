@@ -78,7 +78,7 @@ protected:
 protected:
 
 	virtual class U8G2& GetU8G() = 0;
-	virtual class CMenuBase& GetMenu() = 0;
+	virtual class CMenu3D& GetMenu() = 0;
 
 	uint8_t GetPageCount();
 

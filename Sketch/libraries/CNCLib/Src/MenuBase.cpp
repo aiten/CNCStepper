@@ -62,7 +62,7 @@ CMenuBase::MenuFunction CMenuBase::SMenuItemDef::GetButtonPress() const
 
 bool CMenuBase::Select()
 {
-	const SMenuItemDef* item = &GetMenuDef()->GetItems()[GetPosition()];
+	const SMenuItemDef* item = &GetMenuDef()->GetItems()[GetMenuHelper().GetPosition()];
 	MenuFunction fnc = item->GetButtonPress();
 	if (fnc != NULL)
 	{
@@ -71,48 +71,6 @@ bool CMenuBase::Select()
 	}
 
 	return false;
-}
-
-////////////////////////////////////////////////////////////
-
-void CMenuBase::AdjustOffset(menupos_t firstline, menupos_t lastline)
-{
-	menupos_t pos = GetPosition();
-	const menupos_t menuEntries = GetMenuDef()->GetItemCount();
-
-	if (pos == 0)
-	{
-		SetOffset(0);				// first menuitem selected => move to first line
-	}
-	else if (pos - 1 < GetOffset())
-	{
-		SubOffset(GetOffset() - (pos - 1));
-	}
-
-	if (menuEntries >= lastline)
-	{
-		if (pos == menuEntries - 1)
-		{
-			AddOffset(pos + firstline - GetOffset() - lastline);	// last menuitem selected => move to last line
-		}
-		else if (((pos + 1) + firstline - GetOffset()) > lastline)
-		{
-			AddOffset((pos + 1) + firstline - GetOffset() - lastline);
-		}
-	}
-}
-
-////////////////////////////////////////////////////////////
-
-uint8_t CMenuBase::ToPrintLine(menupos_t firstline, menupos_t lastline, menupos_t i)
-{
-	// return 255 if not to print
-
-	uint8_t printtorow = i + firstline - GetOffset();	// may overrun => no need to check for minus
-	if (printtorow >= firstline && printtorow <= lastline)
-		return printtorow;
-
-	return 255;
 }
 
 ////////////////////////////////////////////////////////////
@@ -133,11 +91,11 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef*def)
 	if (posMenu!=NULL)
 	{
 		// param2 != NULL => find index
-		_position = newMenu->FindMenuIdx((uintptr_t) def, [](const SMenuItemDef* def, uintptr_t param) -> bool
+		GetMenuHelper().SetPosition(newMenu->FindMenuIdx((uintptr_t) def, [](const SMenuItemDef* def, uintptr_t param) -> bool
 		{
 			return	def->GetButtonPress() == &CMenuBase::MenuButtonPressSetMenu &&			// must be setMenu
 					def->GetParam1() == ((const SMenuItemDef*)param)->GetParam2();			// param1 or new menu ust be param2 of "Back from"
-		});
+		}));
 	}
 
 	Changed();
@@ -152,7 +110,7 @@ void CMenuBase::MenuButtonPressMenuBack(const SMenuItemDef* def)
 	
 	SetMenu(newMenu);
 
-	SetPosition(GetMenuDef()->FindMenuIdx((uintptr_t) oldMenu, [](const SMenuItemDef* def, uintptr_t oldMenu) -> bool
+	GetMenuHelper().SetPosition(GetMenuDef()->FindMenuIdx((uintptr_t) oldMenu, [](const SMenuItemDef* def, uintptr_t oldMenu) -> bool
 	{
 		return def->GetParam1() == oldMenu && def->GetButtonPress() == &CMenuBase::MenuButtonPressSetMenu;
 	}));

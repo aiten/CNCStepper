@@ -21,6 +21,7 @@
 
 #include "CNCLibTypes.h"
 #include "LCD.h"
+#include "MenuHelper.h"
 
 ////////////////////////////////////////////////////////
 
@@ -91,13 +92,12 @@ public:
 
 public:
 
-	menupos_t GetPosition()											{ return _position; }
-	void SetPosition(menupos_t position)							{ _position = position; }
+	menupos_t GetPosition()											{ return _menuHelper.GetPosition(); }
+	void SetPosition(menupos_t position)							{ _menuHelper.SetPosition(position); }
 
-	menupos_t GetOffset()											{ return _offset; }
+	menupos_t GetMenuItemCount()									{ return GetMenuDef()->GetItemCount(); }
 
-	void AdjustOffset(menupos_t firstline, menupos_t lastline);
-	uint8_t ToPrintLine(menupos_t firstline, menupos_t lastline, menupos_t i);		// return 255 if not to print
+	CMenuHelper& GetMenuHelper()									{ return _menuHelper; }
 
 	const SMenuDef*GetMenuDef()										{ return _current; }
 	const SMenuDef*GetMainMenuDef()									{ return _main; }
@@ -120,16 +120,11 @@ protected:
 
 	//////////////////////////////////////////
 
-	void SetOffset(menupos_t offset)								{ _offset = offset; }
-	void AddOffset(menupos_t offset)								{ _offset += offset; }
-	void SubOffset(menupos_t offset)								{ _offset -= offset; }
-
 	const SMenuDef*		_main=NULL;
 
 private:
 
-	menupos_t			_position;									// current selected menu
-	menupos_t			_offset;									// start of menuitem to draw  
+	CMenuHelper			_menuHelper;
 	const SMenuDef*		_current;
 
 public:
@@ -139,7 +134,7 @@ public:
 
 	void MenuButtonPressSetCommand(const SMenuItemDef*def);			// param1 => const char* to command
 
-	void SetMenu(const SMenuDef* pMenu)								{ _current = pMenu; _position = 0; _offset = 0; };
+	void SetMenu(const SMenuDef* pMenu)								{ _current = pMenu; _menuHelper.Clear(); };
 
 	////////////////////////////////////////////////////////
 

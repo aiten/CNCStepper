@@ -36,6 +36,7 @@
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\Matrix4x4.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuBase.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuBaseText.h" />
+    <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuHelper.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MessageCNCLib.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MotionControl.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MotionControlBase.h" />
@@ -107,6 +108,7 @@
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\HelpParser.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\LCD.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuBase.cpp" />
+    <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuHelper.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\MotionControl.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\MotionControlBase.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\Parser.cpp" />

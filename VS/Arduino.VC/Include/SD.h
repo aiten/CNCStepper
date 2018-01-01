@@ -243,7 +243,7 @@ public:
 		return st.st_size;
 	}
 
-	const char* name()	{ return _dirfile->_name; }
+	char* name()	{ return _dirfile->_name; }
 	
 	bool isDirectory(const char *name)
 	{

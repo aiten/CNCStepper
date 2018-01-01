@@ -53,8 +53,9 @@ public:
 	static unsigned long GetExecutingFileSize()					{ return _state._printFileSize; }
 	static const char* GetExecutingFileName()					{ return _state._printfilename; }
 
-	static void  SetExecutingFilePosition(unsigned long pos)	{ _state._printFilePos = pos; }
-	static void  SetExecutingFileLine(unsigned long line)		{ _state._printFileLine = line; }
+	static void SetExecutingFilePosition(unsigned long pos)		{ _state._printFilePos = pos; }
+	static void SetExecutingFileLine(unsigned long line)		{ _state._printFileLine = line; }
+	static void SetExecutingFileName(char* filename)			{ strcpy(_state._printfilename,filename); }
 
 	static void Init()											{ super::Init(); _state.Init(); }
 
@@ -88,7 +89,8 @@ private:
 			_printFilePos = 0;
 			_printFileLine = 0;
 			_isM28 = false;
-			strcpy_P(_printfilename, PSTR("CNCLib.nc"));
+			_printfilename[0] = 0;
+			//strcpy_P(_printfilename, PSTR("CNCLib.nc"));
 		}
 	};
 

@@ -209,6 +209,10 @@ private:
 	int8_t						_screensaveYDiff = 1;
 	unsigned long				_screensaveTime = 0;
 
+	uint8_t						_SDFileCount = 255;
+
+	CMenuHelper					_menuHelper;
+
 	CRingBufferQueue<char, 128> _commandHis;
 
 	bool IsScreenSaver() const;

@@ -570,7 +570,7 @@ inline uint8_t ToPageIdx(uint8_t idx)
 bool CU8GLcd::DrawLoopSpeedOverride(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
 	if (type == DrawLoopHeader)			return true;
-	if (type==DrawLoopQueryTimerout && _rotaryFocus == RotarySlider)	{ *((unsigned long*)data) = 333; return true; }
+	if (type==DrawLoopQueryTimerout && _rotaryFocus == RotarySlider)	{ *((unsigned long*)data) = 200; return true; }
 	if (type != DrawLoopDraw)			return DrawLoopDefault(type, data);
 
 	SetPosition(ToCol(0), ToRow(0) - HeadLineOffset()); Print(F("Speed Override"));
@@ -654,36 +654,160 @@ bool CU8GLcd::DrawLoopPreset(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 
 void CU8GLcd::ButtonPressStartSDPage()
 {
-	PostCommand(EGCodeSyntaxType::GCode, F("m21"));									// Init SD
-
-	char printfilename[MAXFILEEXTNAME + 1 + 10];
-	InitPostCommand(EGCodeSyntaxType::GCode, printfilename);
-	strcat_P(printfilename, PSTR("m23 "));
-	strcat(printfilename, CGCode3DParser::GetExecutingFileName());
-
-	if (PostCommand(printfilename))
+	if (CGCode3DParser::GetExecutingFileName()[0])
 	{
-		PostCommand(EGCodeSyntaxType::GCode, F("m24"));
-	}
+		PostCommand(EGCodeSyntaxType::GCode, F("m21"));									// Init SD
 
-	OKBeep();
+		char printfilename[MAXFILEEXTNAME + 1 + 10];
+		InitPostCommand(EGCodeSyntaxType::GCode, printfilename);
+		strcat_P(printfilename, PSTR("m23 "));
+		strcat(printfilename, CGCode3DParser::GetExecutingFileName());
+
+		if (PostCommand(printfilename))
+		{
+			PostCommand(EGCodeSyntaxType::GCode, F("m24"));
+		}
+	}
+	else
+	{
+		if (_rotaryFocus == RotarySlider)
+		{
+			File rootdir = SD.open("/");
+			uint8_t countSDFiles = 0;
+
+			if (rootdir)
+			{
+				File entry = rootdir.openNextFile();
+
+				while (entry)
+				{
+					if (!entry.isDirectory())
+					{
+						if (countSDFiles == _menuHelper.GetPosition())
+						{
+							CGCode3DParser::SetExecutingFileName(entry.name());
+							entry.close();
+							break;
+						}
+						countSDFiles++;
+					}
+					entry.close();
+					entry = rootdir.openNextFile();
+				}
+				rootdir.rewindDirectory();
+				rootdir.close();
+			}
+
+			SetRotaryFocusMainPage();
+		}
+		else
+		{
+			_rotarybutton.SetMinMax(0, _SDFileCount - 1, false);
+			_rotarybutton.SetPageIdx(0);
+			_rotaryFocus = RotarySlider;
+		}
+		OKBeep();
+	}
 }
 
 ////////////////////////////////////////////////////////////
 
+#define SDVISIBLEFILECOUNT 5
+
+uint8_t CountSDFiles()
+{
+	File rootdir = SD.open("/");
+	uint8_t countSDFiles = 0;
+
+	if(rootdir)
+	{
+		File entry = rootdir.openNextFile();
+
+		while (entry)
+		{
+			if (!entry.isDirectory())
+			{
+				countSDFiles++;
+			}
+			entry.close();
+			entry = rootdir.openNextFile();
+		}
+		rootdir.rewindDirectory();
+		rootdir.close();
+	}
+	return countSDFiles;
+}
+
 bool CU8GLcd::DrawLoopStartSD(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
-	if (type!=DrawLoopDraw)		return DrawLoopDefault(type,data);
-	if (type==DrawLoopQueryTimerout)	{ *((unsigned long*)data) = 5000; return true; }
+	if (type!=DrawLoopDraw)				return DrawLoopDefault(type,data);
+	if (type==DrawLoopQueryTimerout) { *((unsigned long*)data) = _rotaryFocus == RotarySlider ? 100 : 5000; return true; }
 
-	char tmp[16];
+	if (CGCode3DParser::GetExecutingFileName()[0])
+	{
+		char tmp[16];
 
-	if (!CGCode3DParser::GetExecutingFile())
-		DrawString(ToCol(3), ToRow(2), F("Press to start"));
+		if (!CGCode3DParser::GetExecutingFile())
+			DrawString(ToCol(3), ToRow(2), F("Press to start"));
 
-	SetPosition(ToCol(0), ToRow(3) + PosLineOffset()); Print(F("File: ")); Print(CGCode3DParser::GetExecutingFileName());
-	SetPosition(ToCol(0), ToRow(4) + PosLineOffset()); Print(F("At:   ")); Print(CSDist::ToString(CGCode3DParser::GetExecutingFilePosition(), tmp, 8));
-	SetPosition(ToCol(0), ToRow(5) + PosLineOffset()); Print(F("Line: ")); Print(CSDist::ToString(CGCode3DParser::GetExecutingFileLine(), tmp, 8));
+		SetPosition(ToCol(0), ToRow(3) + PosLineOffset()); Print(F("File: ")); Print(CGCode3DParser::GetExecutingFileName());
+		SetPosition(ToCol(0), ToRow(4) + PosLineOffset()); Print(F("At:   ")); Print(CSDist::ToString(CGCode3DParser::GetExecutingFilePosition(), tmp, 8));
+		SetPosition(ToCol(0), ToRow(5) + PosLineOffset()); Print(F("Line: ")); Print(CSDist::ToString(CGCode3DParser::GetExecutingFileLine(), tmp, 8));
+	}
+	else
+	{
+		File rootdir = SD.open("/");
+
+		if (_rotaryFocus == RotarySlider)
+		{
+			_menuHelper.SetPosition(_rotarybutton.GetPageIdx(_SDFileCount));
+		}
+
+		if (rootdir)
+		{
+			if (_SDFileCount == 255)
+			{
+				_SDFileCount = CountSDFiles();
+				_menuHelper.Clear();
+			}
+
+			const uint8_t printFirstLine = 1;
+			const uint8_t printLastLine = (TotalRows() - 1);
+
+			_menuHelper.AdjustOffset(_SDFileCount, printFirstLine, printLastLine);
+
+			uint8_t i=0;
+			File entry = rootdir.openNextFile();
+
+			while (entry)
+			{
+				if (!entry.isDirectory())
+				{
+					uint8_t printtorow = _menuHelper.ToPrintLine(printFirstLine, printLastLine, i);
+					if (printtorow != 255)
+					{
+						SetPosition(ToCol(0), ToRow(printtorow));
+						if (i == _menuHelper.GetPosition() && _rotaryFocus == RotarySlider)
+							Print(F(">"));
+						else
+							Print(F(" "));
+
+						Print(entry.name());
+					}
+					i++;
+				}
+
+				entry.close();
+				entry = rootdir.openNextFile();
+			}
+			rootdir.rewindDirectory();
+			rootdir.close();
+		}
+		else
+		{
+			DrawString(ToCol(3), ToRow(2), F("No SD card found"));
+		}
+	}
 
 	return true;
 }
@@ -796,7 +920,7 @@ void CU8GLcd::ButtonPressMenuPage()
 bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
 	if (type==DrawLoopHeader)			return true;
-	if (type==DrawLoopQueryTimerout)	{ *((unsigned long*)data) = 333; return true; }
+	if (type==DrawLoopQueryTimerout)	{ *((unsigned long*)data) = 200; return true; }
 	if (type!=DrawLoopDraw)				return DrawLoopDefault(type,data);
 
 	SetPosition(ToCol(0), ToRow(0) - HeadLineOffset());
@@ -811,14 +935,14 @@ bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	if (_rotaryFocus == RotaryMenuPage)
 	{
 		x = GetMenuIdx();													// get and set menupositions
-		GetMenu().AdjustOffset(printFirstLine, printLastLine);
+		GetMenu().GetMenuHelper().AdjustOffset(menuEntries, printFirstLine, printLastLine);
 	}
 
 	uint8_t i;
 
 	for (i = 0; i < menuEntries; i++)
 	{
-		uint8_t printtorow = GetMenu().ToPrintLine(printFirstLine, printLastLine, i);
+		uint8_t printtorow = GetMenu().GetMenuHelper().ToPrintLine(printFirstLine, printLastLine, i);
 		if (printtorow != 255)
 		{
 			SetPosition(ToCol(0), ToRow(printtorow) + PosLineOffset());

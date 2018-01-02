@@ -21,20 +21,36 @@
 
 typedef  uint8_t u8g_fntpgm_uint8_t;
 
+#define clrscr() system("cls")
+
 class U8GLIB // : public Stream
 {
+	char _buffer[4048];
+	char _tmp[1024];
+
 public:
 	void begin() {};
-	void firstPage() {};
-	bool nextPage() { return false; }
-	void drawStr(int, int, const char*) {}
+	void firstPage() { _buffer[0]=0; };
+	bool nextPage()
+	{
+		FILE* fout;
+		fopen_s(&fout,"c:\\tmp\\LCD.txt", "wt");
+		if (fout)
+		{
+			fwrite(_buffer, strlen(_buffer), 1, fout);
+			fclose(fout);
+		}
+
+		return false;
+	}
+	void drawStr(int x, int y, const char* text) { setPrintPos(x, y); print(text); }
 	void setFont(const u8g_fntpgm_uint8_t *font) { font; };
-	void setPrintPos(int , int )	{ };
+	void setPrintPos(int x, int y)  { sprintf_s(_tmp, "SP:%i:%i\n",x,y); strcat_s(_buffer,_tmp); };
 
-	void print(const char)			{ };
+	void print(const char ch)		{ sprintf_s(_tmp, "P:%c\n",ch); strcat_s(_buffer, _tmp); };
 
-	void print(const char*)			{ };
-	void println(const char*)		{ };
+	void print(const char* text)	{ sprintf_s(_tmp, "P:%s\n", text); strcat_s(_buffer, _tmp); };
+	void println(const char* text)	{ sprintf_s(_tmp, "PL:%s\n", text); strcat_s(_buffer, _tmp); };
 };
 
 class U8GLIB_ST7920_128X64_1X : public U8GLIB

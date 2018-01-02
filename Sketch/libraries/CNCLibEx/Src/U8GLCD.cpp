@@ -934,30 +934,27 @@ bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	Print(F("Menu: "));
 	Print(GetMenu().GetText());
 
-	uint8_t x = 255;
+	uint8_t selectedMenuIdx = 255;
 	const uint8_t printFirstLine = 1;
 	const uint8_t printLastLine = (TotalRows()- 1);
 	const uint8_t menuEntries = GetMenu().GetMenuItemCount();
 
 	if (_rotaryFocus == RotaryMenuPage)
 	{
-		x = GetMenuIdx();													// get and set menupositions
-		GetMenu().GetMenuHelper().AdjustOffset(menuEntries, printFirstLine, printLastLine);
+		selectedMenuIdx = GetMenuIdx();													// get and set menupositions
 	}
 
-	uint8_t i;
+	GetMenu().GetMenuHelper().AdjustOffset(menuEntries, printFirstLine, printLastLine);
 
-	for (i = 0; i < menuEntries; i++)
+	for (uint8_t i = 0; i < menuEntries; i++)
 	{
 		uint8_t printtorow = GetMenu().GetMenuHelper().ToPrintLine(printFirstLine, printLastLine, i);
 		if (printtorow != 255)
 		{
-			SetPosition(ToCol(0), ToRow(printtorow) + PosLineOffset());
-			if (i == x && _rotaryFocus == RotaryMenuPage)
+			bool isSelectedMenu = i == selectedMenuIdx && _rotaryFocus == RotaryMenuPage;
+			SetPosition(ToCol(isSelectedMenu ? 0 : 1), ToRow(printtorow) + PosLineOffset());
+			if (isSelectedMenu)
 				Print(F(">"));
-			else
-				Print(F(" "));
-
 
 			Print(GetMenu().GetItemText(i));
 		}

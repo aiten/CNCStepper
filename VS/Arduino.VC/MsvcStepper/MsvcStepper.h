@@ -149,9 +149,11 @@ private:
 	bool _isReferenceMove;
 	uint8_t _isReferenceId;
 	int  _referenceMoveSteps;
+	
+	void DoISR();
 
 public:
 
-	void DoISR();
+	void HandleIdle();
 };
 

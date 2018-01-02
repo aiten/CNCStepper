@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace LCD12864Emulator
 {
@@ -20,8 +13,25 @@ namespace LCD12864Emulator
     {
         public LCD12864LCDControl()
         {
-
+            _timer = new Timer(50);
+            _timer.Elapsed += (sender, e) => HandleTimer();
+            _timer.Start();
         }
+
+        private Timer _timer;
+        private DateTime _lastLCDFileDate;
+
+        private void HandleTimer()
+        {
+            DateTime lcdFileDate = System.IO.File.GetLastWriteTime(_fileName);
+            if (_lastLCDFileDate != lcdFileDate)
+            {
+                Dispatcher.Invoke(InvalidateVisual);
+                _lastLCDFileDate = lcdFileDate;
+            }
+        }
+
+        private string _fileName = System.IO.Path.GetTempPath() + @"\CNCLib_LCD.txt";
 
         static LCD12864LCDControl()
         {
@@ -30,7 +40,7 @@ namespace LCD12864Emulator
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            var printinfo = System.IO.File.ReadAllLines(@"c:\tmp\LCD.txt", new ASCIIEncoding());
+            var printinfo = ReadLCDFile();
 
             double x=0;
             double y =0;
@@ -74,6 +84,18 @@ namespace LCD12864Emulator
                     drawingContext.DrawText(formattedText, new Point(x* scaleX, y* scaleY - chscaleSizeY));
                     x += text.Length * chsizeX;
                 }
+            }
+        }
+
+        private string[] ReadLCDFile()
+        {
+            try
+            {
+                return System.IO.File.ReadAllLines(_fileName, new ASCIIEncoding());
+            }
+            catch (Exception)
+            {
+                return new string[0];
             }
         }
     }

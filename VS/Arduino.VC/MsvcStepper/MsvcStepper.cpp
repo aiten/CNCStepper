@@ -81,6 +81,23 @@ void CMsvcStepper::DoISR()
 
 ////////////////////////////////////////////////////////////
 
+void CMsvcStepper::HandleIdle()
+{
+	if (IsBusy())
+		DoISR();
+
+	static unsigned long lasttimerinterrupt = 0;
+
+	if (lasttimerinterrupt + 100 < millis())
+	{
+		lasttimerinterrupt = millis();
+		if (CHAL::_TimerEvent0)
+			CHAL::_TimerEvent0();
+	}
+}
+
+////////////////////////////////////////////////////////////
+
 void CMsvcStepper::OnStart()
 {
 	_refMovestart = 0;

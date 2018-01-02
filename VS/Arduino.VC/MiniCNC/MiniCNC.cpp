@@ -73,6 +73,5 @@ void loop()
 
 static void Idle()
 {
-	if (MyStepper.IsBusy())
-		MyStepper.DoISR();
+	MyStepper.HandleIdle();
 }

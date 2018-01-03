@@ -102,39 +102,16 @@ inline uint8_t digitalPinToInterrupt(uint8_t p) { return ((p) == 2 ? 0 : ((p) ==
 typedef unsigned char	uint8_t;
 typedef signed char		int8_t;
 
-extern std::function<uint8_t(short)> mydigitalRead;
-inline uint8_t digitalReadFromFile(short pin)
-{
-	char tmpname[_MAX_PATH];
-	char filename[_MAX_PATH];
-	::GetTempPathA(_MAX_PATH, tmpname);
-	sprintf_s(filename, "%s\\CNCLib_digitalReadFor_%i.txt", tmpname, (int)pin);
-
-	FILE* fin;
-	fopen_s(&fin, filename, "rt");
-	if (fin)
-	{
-		char buffer[512];
-		fgets(buffer, sizeof(buffer), fin);
-		fclose(fin);
-		return atoi(buffer) == 0 ? LOW : HIGH;
-	}
-	return 255;
-}
 
 inline void analogWrite(short, int)	{};
 inline int analogRead(short) { return 0; };
 inline void digitalWrite(short, short)	{};
-inline uint8_t digitalRead(short pin)
-{
-	uint8_t value = digitalReadFromFile(pin);
-	if (value != 255)
-		return value;
-	if (mydigitalRead != NULL) 
-		return mydigitalRead(pin); 
-	return LOW;
-};
+extern uint8_t digitalRead(short pin);
 inline void pinMode(short, short)		{};
+
+#define DIGITALREADNOVALUE 255
+extern std::function<uint8_t(short)> digitalReadEvent;
+extern uint8_t digitalReadFromFile(short pin);
 
 #define LED_BUILTIN (13)
 

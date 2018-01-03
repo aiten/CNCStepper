@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -23,11 +24,10 @@ namespace LCD12864Emulator.ViewModels
 
         #region Operations
 
-        void WriteFile(uint pin, bool value)
+        void WriteFile(string fileName, bool value)
         {
             while (true)
             {
-                var fileName = GetFileName(pin);
                 try
                 {
                     System.IO.File.WriteAllText(fileName, value ? "1" : "0");
@@ -39,18 +39,15 @@ namespace LCD12864Emulator.ViewModels
             }
         }
 
-        void DeleteFile(string filename)
+        async Task WaitFile(string filename, int timeout)
         {
-            while (true)
+            var sw = new Stopwatch();
+            sw.Start();
+            while (sw.ElapsedMilliseconds < timeout)
             {
-                try
-                {
-                    System.IO.File.Delete(filename);
+                if (!System.IO.File.Exists(filename))
                     break;
-                }
-                catch (IOException)
-                {
-                }
+                await Task.Delay(10);
             }
         }
 
@@ -60,30 +57,34 @@ namespace LCD12864Emulator.ViewModels
         }
 
 
-        async Task SetPin(uint pin, int timeout)
+        async Task SetPin(uint pin, bool value, int timeout)
         {
-            WriteFile(pin, true);
-            await Task.Delay(timeout);
-            DeleteFile(GetFileName(pin));
+            string filename = GetFileName(pin);
+            WriteFile(filename, value);
+            await WaitFile(filename,timeout);
+            WriteFile(filename, !value);
         }
         async Task RotarySetPin(uint pin1, uint pin2, int timeout)
         {
-            WriteFile(pin1, true);
-            await Task.Delay(timeout);
-            WriteFile(pin2, true);
-            await Task.Delay(timeout);
-            DeleteFile(GetFileName(pin1));
-            await Task.Delay(timeout);
-            DeleteFile(GetFileName(pin2));
+            string filename1 = GetFileName(pin1);
+            string filename2 = GetFileName(pin2);
+            WriteFile(filename1, true);
+            await WaitFile(filename1, timeout);
+            WriteFile(filename2, true);
+            await WaitFile(filename2, timeout);
+            WriteFile(filename1, false);
+            await WaitFile(filename1, timeout);
+            WriteFile(filename2, false);
+            await WaitFile(filename2, timeout);
         }
 
         #endregion
 
         #region Commands
 
-        public ICommand RottaryButtonCommand => new DelegateCommand(async () => await SetPin(35,500), () => true);
-        public ICommand RottaryLeftCommand => new DelegateCommand(async () => await RotarySetPin(31,33,150), () => true);
-        public ICommand RottaryRightCommand => new DelegateCommand(async () => await RotarySetPin(33,31, 150), () => true);
+        public ICommand RottaryButtonCommand => new DelegateCommand(async () => await SetPin(35,false, 500), () => true);
+        public ICommand RottaryLeftCommand => new DelegateCommand(async () => await RotarySetPin(31,33,500), () => true);
+        public ICommand RottaryRightCommand => new DelegateCommand(async () => await RotarySetPin(33,31, 500), () => true);
 
         #endregion
     }

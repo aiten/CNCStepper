@@ -36,7 +36,7 @@ class CStepper& Stepper = MyStepper;
 int _tmain(int /* argc */, _TCHAR* /* argv */ [])
 {
 
-	mydigitalRead = [](short pin)
+	digitalReadEvent = [](short pin)
 	{
 		switch (pin)
 		{
@@ -44,7 +44,7 @@ int _tmain(int /* argc */, _TCHAR* /* argv */ [])
 			case KILL_PIN: return HIGH;
 #endif
 		}
-		return LOW;
+		return DIGITALREADNOVALUE;
 	};
 
 	setup();

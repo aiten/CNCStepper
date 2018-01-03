@@ -40,13 +40,13 @@ class CStepper& Stepper = MyStepper;
 
 int _tmain(int /* argc */, _TCHAR* /* argv */ [])
 {
-	mydigitalRead = [](short pin)
+	digitalReadEvent = [](short pin)
 	{
 		switch (pin)
 		{
-		case CAT(BOARDNAME, _LCD_KILL_PIN): return CAT(BOARDNAME, _LCD_KILL_PIN_OFF);
+			case CAT(BOARDNAME, _LCD_KILL_PIN): return CAT(BOARDNAME, _LCD_KILL_PIN_OFF);
 		}
-		return LOW;
+		return DIGITALREADNOVALUE;
 	};
 
 	setup();

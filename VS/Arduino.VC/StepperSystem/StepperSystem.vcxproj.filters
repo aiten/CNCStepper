@@ -362,5 +362,8 @@
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\Menu3D.cpp">
       <Filter>CNCLibEx</Filter>
     </ClCompile>
+    <ClCompile Include="..\Include\arduino.cpp">
+      <Filter>MsvcExt</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

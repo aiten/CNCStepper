@@ -2,7 +2,7 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2017 Herbert Aitenbichler
+  Copyright (c) 2013-2018 Herbert Aitenbichler
 
   CNCLib is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -150,7 +150,7 @@ const CMyMenu::SMenuItemDef CMyMenu::_rotateMenuItems[] PROGMEM =
 
 const CMyMenu::SMenuItemDef CMyMenu::_SDSelectMenuItems[] PROGMEM =
 {
-	{ _mSDStart, (MenuFunction)&CMenu3D::MenuButtonPressSDSelect },
+	{ MENUENTRY_SDFILES, (MenuFunction)&CMenu3D::MenuButtonPressSDSelect },
 	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t) &_SDMenu },
 	{ NULL, 0 }
 };
@@ -194,7 +194,7 @@ const CMyMenu::SMenuDef CMyMenu::_moveBMenu PROGMEM = { _mmMoveB, _moveMenuItems
 const CMyMenu::SMenuDef CMyMenu::_moveCMenu PROGMEM = { _mmMoveC, _moveMenuItems, (menuparam_t)C_AXIS };
 const CMyMenu::SMenuDef CMyMenu::_rotateMenu PROGMEM = { _mmRotate, _rotateMenuItems };
 const CMyMenu::SMenuDef CMyMenu::_SDMenu PROGMEM	  = { _mmSD, _SDMenuItems };
-const CMyMenu::SMenuDef CMyMenu::_SDSelectMenu PROGMEM = { _mmSD, _SDSelectMenuItems };
+const CMyMenu::SMenuDef CMyMenu::_SDSelectMenu PROGMEM = { _mmSDSelect, _SDSelectMenuItems };
 const CMyMenu::SMenuDef CMyMenu::_extraMenu PROGMEM = { _mmExtra, _extraMenuItems };
 
 ////////////////////////////////////////////////////////////

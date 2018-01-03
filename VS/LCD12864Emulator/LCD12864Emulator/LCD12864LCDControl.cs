@@ -38,30 +38,37 @@ namespace LCD12864Emulator
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LCD12864LCDControl), new FrameworkPropertyMetadata(typeof(LCD12864LCDControl)));
         }
 
+        int _chsizeX=10;
+        int _chsizeY=6;
+
+        int _sizeX = 128;
+        int _sizeY = 64;
+
+        double ScaleX => ActualWidth / _sizeX;
+        double ScaleY => ActualHeight / _sizeY;
+
+        double ChScaleSizeX => ScaleX * _chsizeX;
+        double ChScaleSizeY => ScaleY * _chsizeY;
+
+        Typeface _tf = new Typeface("Courier");
+
         protected override void OnRender(DrawingContext drawingContext)
         {
             var printinfo = ReadLCDFile();
 
             double x=0;
             double y =0;
-            int chsizeX=10;
-            int chsizeY=6;
-
-            int sizeX = 128;
-            int sizeY = 64;
-
-            double scaleX = ActualWidth / sizeX;
-            double scaleY = ActualHeight / sizeY;
-
-            double chscaleSizeX = scaleX * chsizeX;
-            double chscaleSizeY= scaleY * chsizeY;
-
-            Typeface tf = new Typeface("Courier");
+            string text=null;
 
             foreach (var s in printinfo)
             {
                 if (s.StartsWith("SP:"))
                 {
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        DrawText(drawingContext, text, x, y);
+                        text = null;
+                    }
                     // SP: 0:21
                     var cord = s.Split(':');
                     if (cord.Length == 3)
@@ -73,18 +80,32 @@ namespace LCD12864Emulator
                 else if (s.StartsWith("P:"))
                 {
                     // SP:0:21
-                    var text = s.Substring(2);
-                    FormattedText formattedText = new FormattedText(
-                        text,
-                        CultureInfo.GetCultureInfo("en-us"),
-                        FlowDirection.LeftToRight,
-                        tf,
-                       ActualHeight/ (chsizeY+1),
-                        Brushes.Black);
-                    drawingContext.DrawText(formattedText, new Point(x* scaleX, y* scaleY - chscaleSizeY));
-                    x += text.Length * chsizeX;
+                    if (string.IsNullOrEmpty(text))
+                    {
+                        text = s.Substring(2);
+                    }
+                    else
+                    {
+                        text = text+s.Substring(2);
+                    }
                 }
             }
+            if (!string.IsNullOrEmpty(text))
+            {
+                DrawText(drawingContext, text, x, y);
+            }
+        }
+
+        private void DrawText(DrawingContext drawingContext, string text, double x, double y)
+        {
+            FormattedText formattedText = new FormattedText(
+                text,
+                CultureInfo.GetCultureInfo("en-us"),
+                FlowDirection.LeftToRight,
+                _tf,
+                ActualHeight / (_chsizeY + 1),
+                Brushes.Black);
+            drawingContext.DrawText(formattedText, new Point(x * ScaleX, y * ScaleY - ChScaleSizeY));
         }
 
         private string[] ReadLCDFile()

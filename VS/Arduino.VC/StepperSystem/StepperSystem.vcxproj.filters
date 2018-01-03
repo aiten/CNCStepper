@@ -264,6 +264,9 @@
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\Src\Menu3D.h">
       <Filter>CNCLibEx</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\Src\SDDirReader.h">
+      <Filter>CNCLibEx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\MsvcStepper\MsvcStepper.cpp">
@@ -364,6 +367,12 @@
     </ClCompile>
     <ClCompile Include="..\Include\arduino.cpp">
       <Filter>MsvcExt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\SDDirReader.cpp">
+      <Filter>CNCLibEx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\U8GLCD_Menu.cpp">
+      <Filter>CNCLibEx</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

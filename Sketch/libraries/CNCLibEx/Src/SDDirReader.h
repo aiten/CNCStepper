@@ -19,31 +19,27 @@
 
 #pragma once
 
-#include <MenuBase.h>
-
 ////////////////////////////////////////////////////////
 
-class CMenu3D : public CMenuBase
+class CSDDirReader
 {
-private:
-
-	typedef CMenuBase super;
 
 public:
 
 	////////////////////////////////////////////////////////
 
-	void MenuButtonPressSDStart(const SMenuItemDef*);
-	void MenuButtonPressSDSelect(const SMenuItemDef*);
+	CSDDirReader(const char* dir, bool(*skip)(File*));
+	~CSDDirReader();
 
-	void SetSDMenu() { SetMenu(_SDMenuDef); }
+	void Reset();
+	bool MoveNext();
+
+	File Current;
 
 protected:
 
-	const SMenuDef*		_SDMenuDef= NULL;
-
+	File _rootDir;
+	bool (*_skip)(File*);
 };
-
-#define MENUENTRY_SDFILES (const char *)1
 
 ////////////////////////////////////////////////////////

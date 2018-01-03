@@ -2,7 +2,7 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2017 Herbert Aitenbichler
+  Copyright (c) 2013-2018 Herbert Aitenbichler
 
   CNCLib is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ public:
 				if (check(item, param)) return x;
 			}
 
-			return 0;
+			return 255;
 		}
 
 	public:
@@ -96,7 +96,7 @@ public:
 	void SetPosition(menupos_t position)							{ _menuHelper.SetPosition(position); }
 
 	menupos_t GetMenuItemCount();
-	const __FlashStringHelper*  GetItemText(uint8_t idx);
+	const __FlashStringHelper*  GetItemText(menupos_t idx);
 	const __FlashStringHelper*  GetText();
 
 	CMenuHelper& GetMenuHelper()									{ return _menuHelper; }
@@ -109,10 +109,10 @@ public:
 	void OKBeep()													{ return CLcd::GetInstance()->OKBeep(); };
 	void ErrorBeep()												{ return CLcd::GetInstance()->ErrorBeep(); };
 
-protected:
-
 	const SMenuDef*GetMenuDef() { return _current; }
 	const SMenuDef*GetMainMenuDef() { return _main; }
+
+	protected:
 
 	//////////////////////////////////////////
 

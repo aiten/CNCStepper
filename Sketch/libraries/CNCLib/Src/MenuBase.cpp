@@ -2,7 +2,7 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2017 Herbert Aitenbichler
+  Copyright (c) 2013-2018 Herbert Aitenbichler
 
   CNCLib is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ CMenuBase::menupos_t CMenuBase::GetMenuItemCount()
 
 ////////////////////////////////////////////////////////////
 
-const __FlashStringHelper*  CMenuBase::GetItemText(uint8_t idx)
+const __FlashStringHelper*  CMenuBase::GetItemText(menupos_t idx)
 {
 	return GetMenuDef()->GetItems()[idx].GetText();
 }

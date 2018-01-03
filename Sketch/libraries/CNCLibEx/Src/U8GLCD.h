@@ -2,7 +2,7 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2017 Herbert Aitenbichler
+  Copyright (c) 2013-2018 Herbert Aitenbichler
 
   CNCLib is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -134,7 +134,7 @@ public:
 		OKBeep();
 	}
 
-	uint8_t GetMenuIdx();
+	uint8_t GetMenuIdx(uint8_t addidx);
 
 	////////////////////////////////////////////////////////
 
@@ -210,8 +210,7 @@ private:
 	unsigned long				_screensaveTime = 0;
 
 	uint8_t						_SDFileCount = 255;
-
-	CMenuHelper					_menuHelper;
+	uint8_t						_addMenuItems = 0;
 
 	CRingBufferQueue<char, 128> _commandHis;
 

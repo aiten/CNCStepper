@@ -2,7 +2,7 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2017 Herbert Aitenbichler
+  Copyright (c) 2013-2018 Herbert Aitenbichler
 
   CNCLib is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@
 #include "GCodeParser.h"
 #include "GCode3DParser.h"
 #include "GCodeBuilder.h"
+#include "SDDirReader.h"
 
 ////////////////////////////////////////////////////////////
 //
@@ -90,16 +91,6 @@ void CU8GLcd::SetDefaultPage()
 {
 	_currentpage = 1;					// TODO: first (0 based) page is default
 	SetRotaryFocusMainPage();
-}
-
-////////////////////////////////////////////////////////////
-
-void CU8GLcd::SetMenuPage()
-{
-	_currentpage = GetPageCount()-1;	// TODO: last is default menu
-	GetMenu().SetMainMenu();
-	SetRotaryFocusMenuPage();
-	OKBeep();
 }
 
 ////////////////////////////////////////////////////////////
@@ -614,13 +605,6 @@ void CU8GLcd::ButtonPressSpeedOverride()
 
 ////////////////////////////////////////////////////////////
 
-void CU8GLcd::ButtonPressShowMenu()
-{
-	SetMenuPage();
-}
-
-////////////////////////////////////////////////////////////
-
 bool CU8GLcd::DrawLoopPreset(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
 	if (type==DrawLoopHeader)			return true;
@@ -659,91 +643,9 @@ void CU8GLcd::ButtonPressStartSDPage()
 	GetMenu().SetSDMenu();
 	SetRotaryFocusMenuPage();
 	OKBeep();
-	return;
-
-	if (CGCode3DParser::GetExecutingFileName()[0])
-	{
-		PostCommand(EGCodeSyntaxType::GCode, F("m21"));									// Init SD
-
-		char printfilename[MAXFILEEXTNAME + 1 + 10];
-		InitPostCommand(EGCodeSyntaxType::GCode, printfilename);
-		strcat_P(printfilename, PSTR("m23 "));
-		strcat(printfilename, CGCode3DParser::GetExecutingFileName());
-
-		if (PostCommand(printfilename))
-		{
-			PostCommand(EGCodeSyntaxType::GCode, F("m24"));
-		}
-	}
-	else
-	{
-		if (_rotaryFocus == RotarySlider)
-		{
-			File rootdir = SD.open("/");
-			uint8_t countSDFiles = 0;
-
-			if (rootdir)
-			{
-				File entry = rootdir.openNextFile();
-
-				while (entry)
-				{
-					if (!entry.isDirectory())
-					{
-						if (countSDFiles == _menuHelper.GetPosition())
-						{
-							CGCode3DParser::SetExecutingFileName(entry.name());
-							entry.close();
-							break;
-						}
-						countSDFiles++;
-					}
-					entry.close();
-					entry = rootdir.openNextFile();
-				}
-				rootdir.rewindDirectory();
-				rootdir.close();
-			}
-
-			SetRotaryFocusMainPage();
-		}
-		else
-		{
-			_rotarybutton.SetMinMax(0, _SDFileCount - 1, false);
-			_rotarybutton.SetPageIdx(0);
-			_rotaryFocus = RotarySlider;
-		}
-		OKBeep();
-	}
 }
 
 ////////////////////////////////////////////////////////////
-
-#define SDVISIBLEFILECOUNT 5
-
-uint8_t CountSDFiles()
-{
-	File rootdir = SD.open("/");
-	uint8_t countSDFiles = 0;
-
-	if(rootdir)
-	{
-		File entry = rootdir.openNextFile();
-
-		while (entry)
-		{
-			if (!entry.isDirectory())
-			{
-				countSDFiles++;
-			}
-			entry.close();
-			entry = rootdir.openNextFile();
-		}
-		rootdir.rewindDirectory();
-		rootdir.close();
-	}
-	return countSDFiles;
-}
 
 bool CU8GLcd::DrawLoopStartSD(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
@@ -763,57 +665,8 @@ bool CU8GLcd::DrawLoopStartSD(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	}
 	else
 	{
-		File rootdir = SD.open("/");
-
-		if (_rotaryFocus == RotarySlider)
-		{
-			_menuHelper.SetPosition(_rotarybutton.GetPageIdx(_SDFileCount));
-		}
-
-		if (rootdir)
-		{
-			if (_SDFileCount == 255)
-			{
-				_SDFileCount = CountSDFiles();
-				_menuHelper.Clear();
-			}
-
-			const uint8_t printFirstLine = 1;
-			const uint8_t printLastLine = (TotalRows() - 1);
-
-			_menuHelper.AdjustOffset(_SDFileCount, printFirstLine, printLastLine);
-
-			uint8_t i=0;
-			File entry = rootdir.openNextFile();
-
-			while (entry)
-			{
-				if (!entry.isDirectory())
-				{
-					uint8_t printtorow = _menuHelper.ToPrintLine(printFirstLine, printLastLine, i);
-					if (printtorow != 255)
-					{
-						SetPosition(ToCol(0), ToRow(printtorow));
-						if (i == _menuHelper.GetPosition() && _rotaryFocus == RotarySlider)
-							Print(F(">"));
-						else
-							Print(F(" "));
-
-						Print(entry.name());
-					}
-					i++;
-				}
-
-				entry.close();
-				entry = rootdir.openNextFile();
-			}
-			rootdir.rewindDirectory();
-			rootdir.close();
-		}
-		else
-		{
-			DrawString(ToCol(3), ToRow(2), F("No SD card found"));
-		}
+		DrawString(ToCol(3), ToRow(2), F("No SD card found"));
+		DrawString(ToCol(4), ToRow(2), F("or no file selected"));
 	}
 
 	return true;
@@ -873,90 +726,6 @@ bool CU8GLcd::DrawLoopCommandHis(EnumAsByte(EDrawLoopType) type,uintptr_t data)
 				tmp[--idx] = _commandHis.Buffer[commandpos];
 			}
 			Print(&tmp[idx]);
-		}
-	}
-
-	return true;
-}
-
-////////////////////////////////////////////////////////////
-
-uint8_t CU8GLcd::GetMenuIdx()
-{
-	if (_rotaryFocus == RotaryMenuPage)
-	{
-		uint8_t menu = _rotarybutton.GetPageIdx(GetMenu().GetMenuItemCount());
-		if (menu != GetMenu().GetPosition())
-		{
-			GetMenu().SetPosition(menu);
-		}
-	}
-
-	return GetMenu().GetPosition();
-}
-
-////////////////////////////////////////////////////////////
-
-void CU8GLcd::SetRotaryFocusMenuPage()
-{
-	_rotarybutton.SetPageIdx(GetMenu().GetPosition()); _rotarybutton.SetMinMax(0, GetMenu().GetMenuItemCount() - 1, false);
-	_rotaryFocus = RotaryMenuPage;
-}
-
-////////////////////////////////////////////////////////////
-
-void CU8GLcd::ButtonPressMenuPage()
-{
-	switch (_rotaryFocus)
-	{
-		case RotaryMainPage:	SetRotaryFocusMenuPage(); OKBeep();  break;
-		case RotaryMenuPage:
-		{
-			if (!GetMenu().Select())
-			{
-				ErrorBeep();
-			}
-
-			break;
-		}
-	}
-}
-
-////////////////////////////////////////////////////////////
-
-bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
-{
-	if (type==DrawLoopHeader)			return true;
-	if (type==DrawLoopQueryTimerout)	{ *((unsigned long*)data) = 200; return true; }
-	if (type!=DrawLoopDraw)				return DrawLoopDefault(type,data);
-
-	SetPosition(ToCol(0), ToRow(0) - HeadLineOffset());
-	Print(F("Menu: "));
-	Print(GetMenu().GetText());
-
-	uint8_t selectedMenuIdx = 255;
-	const uint8_t printFirstLine = 1;
-	const uint8_t printLastLine = (TotalRows()- 1);
-	const uint8_t menuEntries = GetMenu().GetMenuItemCount();
-
-	if (_rotaryFocus == RotaryMenuPage)
-	{
-		selectedMenuIdx = GetMenuIdx();													// get and set menupositions
-	}
-
-	GetMenu().GetMenuHelper().AdjustOffset(menuEntries, printFirstLine, printLastLine);
-
-	for (uint8_t i = 0; i < menuEntries; i++)
-	{
-		uint8_t printtorow = GetMenu().GetMenuHelper().ToPrintLine(printFirstLine, printLastLine, i);
-		if (printtorow != 255)
-		{
-			bool isSelectedMenu = i == selectedMenuIdx && _rotaryFocus == RotaryMenuPage;
-			SetPosition(ToCol(isSelectedMenu ? 0 : 1), ToRow(printtorow) + PosLineOffset());
-			if (isSelectedMenu)
-				Print(F(">"));
-
-			Print(GetMenu().GetItemText(i));
 		}
 	}
 

@@ -2,7 +2,7 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2017 Herbert Aitenbichler
+  Copyright (c) 2013-2018 Herbert Aitenbichler
 
   CNCLib is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -91,6 +91,8 @@ static const char _mmMoveC[] PROGMEM = "Move C";
 static const char _mmRotate[] PROGMEM = "Rotate";
 static const char _mmSD[] PROGMEM		= "SD Card";
 static const char _mmExtra[] PROGMEM	= "Extra";
+
+static const char _mmSDSelect[] PROGMEM = "SD Select file";
 
 ////////////////////////////////////////////////////////////
 // Commands

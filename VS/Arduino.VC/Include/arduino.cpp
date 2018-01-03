@@ -2,7 +2,7 @@
 /*
 This file is part of CNCLib - A library for stepper motors.
 
-Copyright (c) 2013-2017 Herbert Aitenbichler
+Copyright (c) 2013-2018 Herbert Aitenbichler
 
 CNCLib is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,9 @@ http://www.gnu.org/licenses/
 
 #include "arduino.h"
 
-uint8_t digitalReadValues[256] = { LOW };
+#define MAXDIGITALREADPINS 256
+
+uint8_t digitalReadValues[MAXDIGITALREADPINS] = { LOW };
 
 uint8_t digitalRead(short pin)
 {
@@ -28,13 +30,13 @@ uint8_t digitalRead(short pin)
 	if (value == DIGITALREADNOVALUE && digitalReadEvent != NULL)
 		value = digitalReadEvent(pin);
 
-	if (value == DIGITALREADNOVALUE && pin < 256)
+	if (value == DIGITALREADNOVALUE && pin < MAXDIGITALREADPINS)
 		value = digitalReadValues[pin];
 
 	if (value == DIGITALREADNOVALUE)
 		value = LOW;
 
-	if (pin < 256)
+	if (pin < MAXDIGITALREADPINS)
 	{
 		// remember last value
 		digitalReadValues[pin] = value;

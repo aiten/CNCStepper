@@ -60,12 +60,14 @@ protected:
 	static const SMenuDef _moveCMenu PROGMEM;
 	static const SMenuDef _rotateMenu PROGMEM;
 	static const SMenuDef _SDMenu PROGMEM;
+	static const SMenuDef _SDSelectMenu PROGMEM;
 	static const SMenuDef _extraMenu PROGMEM;
 
 	static const SMenuItemDef _mainMenuItems[] PROGMEM;
 	static const SMenuItemDef _moveMenuItems[] PROGMEM;
 	static const SMenuItemDef _rotateMenuItems[] PROGMEM;
 	static const SMenuItemDef _SDMenuItems[] PROGMEM;
+	static const SMenuItemDef _SDSelectMenuItems[] PROGMEM;
 	static const SMenuItemDef _extraMenuItems[] PROGMEM;
 
 };

@@ -63,6 +63,7 @@ static const char _mRYZ[] PROGMEM  = "Rotate X";
 
 static const char _mSDInit[] PROGMEM = "Init Card";
 static const char _mSDStart[] PROGMEM = "Start";
+static const char _mSDSelect[] PROGMEM = "Select file";
 
 ////////////////////////////////////////////////////////////
 // Extra Menu

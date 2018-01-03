@@ -2,7 +2,7 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2017 Herbert Aitenbichler
+  Copyright (c) 2013-2018 Herbert Aitenbichler
 
   CNCLib is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -61,3 +61,7 @@ void CMenu3D::MenuButtonPressSDStart(const CMenuBase::SMenuItemDef*)
 }
 
 ////////////////////////////////////////////////////////////
+
+void CMenu3D::MenuButtonPressSDSelect(const CMenuBase::SMenuItemDef*)
+{
+}

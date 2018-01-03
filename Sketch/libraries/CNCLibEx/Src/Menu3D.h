@@ -25,12 +25,16 @@
 
 class CMenu3D : public CMenuBase
 {
+private:
+
+	typedef CMenuBase super;
 
 public:
 
 	////////////////////////////////////////////////////////
 
 	void MenuButtonPressSDStart(const SMenuItemDef*);
+	void MenuButtonPressSDSelect(const SMenuItemDef*);
 
 	void SetSDMenu() { SetMenu(_SDMenuDef); }
 

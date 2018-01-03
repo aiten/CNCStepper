@@ -115,7 +115,7 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef*def)
 		GetMenuHelper().SetPosition(newMenu->FindMenuIdx((uintptr_t) def, [](const SMenuItemDef* def, uintptr_t param) -> bool
 		{
 			return	def->GetButtonPress() == &CMenuBase::MenuButtonPressSetMenu &&			// must be setMenu
-					def->GetParam1() == ((const SMenuItemDef*)param)->GetParam2();			// param1 or new menu ust be param2 of "Back from"
+					def->GetParam1() == ((const SMenuItemDef*)param)->GetParam2();			// param1 or new menu must be param2 of "Back from"
 		}));
 	}
 

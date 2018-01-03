@@ -148,13 +148,22 @@ const CMyMenu::SMenuItemDef CMyMenu::_rotateMenuItems[] PROGMEM =
 ////////////////////////////////////////////////////////////
 // SD Menu
 
-const CMyMenu::SMenuItemDef CMyMenu::_SDMenuItems[] PROGMEM =
+const CMyMenu::SMenuItemDef CMyMenu::_SDSelectMenuItems[] PROGMEM =
 {
-	{ _mSDInit, &CMenuBase::MenuButtonPressSetCommand, (menuparam_t) _m21 },
-	{ _mSDStart, (MenuFunction) &CMenu3D::MenuButtonPressSDStart },
-	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t) &_mainMenu },
+	{ _mSDStart, (MenuFunction)&CMenu3D::MenuButtonPressSDSelect },
+	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t) &_SDMenu },
 	{ NULL, 0 }
 };
+
+const CMyMenu::SMenuItemDef CMyMenu::_SDMenuItems[] PROGMEM =
+{
+	{ _mSDInit, &CMenuBase::MenuButtonPressSetCommand, (menuparam_t)_m21 },
+	{ _mSDStart, (MenuFunction)&CMenu3D::MenuButtonPressSDStart },
+	{ _mSDSelect, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_SDSelectMenu },
+	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t)&_mainMenu },
+	{ NULL, 0 }
+};
+
 
 ////////////////////////////////////////////////////////////
 // Extra Menu
@@ -185,6 +194,7 @@ const CMyMenu::SMenuDef CMyMenu::_moveBMenu PROGMEM = { _mmMoveB, _moveMenuItems
 const CMyMenu::SMenuDef CMyMenu::_moveCMenu PROGMEM = { _mmMoveC, _moveMenuItems, (menuparam_t)C_AXIS };
 const CMyMenu::SMenuDef CMyMenu::_rotateMenu PROGMEM = { _mmRotate, _rotateMenuItems };
 const CMyMenu::SMenuDef CMyMenu::_SDMenu PROGMEM	  = { _mmSD, _SDMenuItems };
+const CMyMenu::SMenuDef CMyMenu::_SDSelectMenu PROGMEM = { _mmSD, _SDSelectMenuItems };
 const CMyMenu::SMenuDef CMyMenu::_extraMenu PROGMEM = { _mmExtra, _extraMenuItems };
 
 ////////////////////////////////////////////////////////////

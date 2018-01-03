@@ -83,8 +83,8 @@ namespace LCD12864Emulator.ViewModels
         #region Commands
 
         public ICommand RottaryButtonCommand => new DelegateCommand(async () => await SetPin(35,false, 500), () => true);
-        public ICommand RottaryLeftCommand => new DelegateCommand(async () => await RotarySetPin(31,33,500), () => true);
-        public ICommand RottaryRightCommand => new DelegateCommand(async () => await RotarySetPin(33,31, 500), () => true);
+        public ICommand RottaryLeftCommand => new DelegateCommand(async () => await RotarySetPin(33, 31, 500), () => true);
+        public ICommand RottaryRightCommand => new DelegateCommand(async () => await RotarySetPin(31,33,500), () => true);
 
         #endregion
     }

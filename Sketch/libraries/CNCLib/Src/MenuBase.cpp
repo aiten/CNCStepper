@@ -81,9 +81,9 @@ const __FlashStringHelper*  CMenuBase::GetText()
 
 ////////////////////////////////////////////////////////////
 
-bool CMenuBase::Select()
+bool CMenuBase::Select(menupos_t idx)
 {
-	const SMenuItemDef* item = &GetMenuDef()->GetItems()[GetMenuHelper().GetPosition()];
+	const SMenuItemDef* item = &GetMenuDef()->GetItems()[idx];
 	MenuFunction fnc = item->GetButtonPress();
 	if (fnc != NULL)
 	{

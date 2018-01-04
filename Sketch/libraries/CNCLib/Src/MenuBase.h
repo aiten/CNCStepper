@@ -103,7 +103,7 @@ public:
 
 	void SetMainMenu()												{ SetMenu(_main); }
 
-	bool Select();
+	bool Select(menupos_t idx);
 	virtual void Changed()=0;
 
 	void OKBeep()													{ return CLcd::GetInstance()->OKBeep(); };

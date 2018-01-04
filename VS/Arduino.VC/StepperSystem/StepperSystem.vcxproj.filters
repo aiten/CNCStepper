@@ -258,14 +258,14 @@
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\GCodeBuilder.h">
       <Filter>CNCLib</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuHelper.h">
-      <Filter>CNCLib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\Src\Menu3D.h">
       <Filter>CNCLibEx</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\Src\SDDirReader.h">
       <Filter>CNCLibEx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuNavigator.h">
+      <Filter>CNCLib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -359,9 +359,6 @@
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\GCodeBuilder.cpp">
       <Filter>CNCLib</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuHelper.cpp">
-      <Filter>CNCLib</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\Menu3D.cpp">
       <Filter>CNCLibEx</Filter>
     </ClCompile>
@@ -373,6 +370,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\U8GLCD_Menu.cpp">
       <Filter>CNCLibEx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuNavigator.cpp">
+      <Filter>CNCLib</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

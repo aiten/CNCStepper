@@ -118,7 +118,7 @@ void CU8GLcd::ButtonPressMenuPage()
 		case RotaryMainPage:	SetRotaryFocusMenuPage(); OKBeep();  break;
 		case RotaryMenuPage:
 		{
-			if (!GetMenu().Select())
+			if (!GetMenu().Select(GetMenu().GetMenuHelper().GetPosition()))
 			{
 				ErrorBeep();
 			}

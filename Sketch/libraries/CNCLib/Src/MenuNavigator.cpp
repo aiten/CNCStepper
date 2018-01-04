@@ -2,7 +2,7 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2017 Herbert Aitenbichler
+  Copyright (c) 2013-2018 Herbert Aitenbichler
 
   CNCLib is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -27,11 +27,11 @@
 #include <stdlib.h>
 #include <arduino.h>
 
-#include "MenuHelper.h"
+#include "MenuNavigator.h"
 
 ////////////////////////////////////////////////////////////
 
-void CMenuHelper::AdjustOffset(menupos_t menuEntries, menupos_t firstline, menupos_t lastline)
+void CMenuNavigator::AdjustOffset(menupos_t menuEntries, menupos_t firstline, menupos_t lastline)
 {
 	menupos_t pos = GetPosition();
 
@@ -59,7 +59,7 @@ void CMenuHelper::AdjustOffset(menupos_t menuEntries, menupos_t firstline, menup
 
 ////////////////////////////////////////////////////////////
 
-uint8_t CMenuHelper::ToPrintLine(menupos_t firstline, menupos_t lastline, menupos_t i)
+uint8_t CMenuNavigator::ToPrintLine(menupos_t firstline, menupos_t lastline, menupos_t i)
 {
 	// return 255 if not to print
 

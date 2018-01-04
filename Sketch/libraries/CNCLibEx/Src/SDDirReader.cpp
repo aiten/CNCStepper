@@ -27,15 +27,21 @@
 #include <stdlib.h>
 #include <arduino.h>
 
-#include "Control3D.h"
-#include "GCode3DParser.h"
 #include "SDDirReader.h"
+
+////////////////////////////////////////////////////////////
+
+CSDDirReader::CSDDirReader(bool(*skip)(File*))
+{
+	_rootDir = SD.open(PSTR("/"));
+	_skip = skip;
+}
 
 ////////////////////////////////////////////////////////////
 
 CSDDirReader::CSDDirReader(const char* dir, bool(*skip)(File*))
 {
-	_rootDir = SD.open("/");
+	_rootDir = SD.open(dir);
 	_skip = skip;
 }
 
@@ -48,6 +54,9 @@ CSDDirReader::~CSDDirReader()
 		_rootDir.rewindDirectory();
 		_rootDir.close();
 	}
+
+	if (Current)
+		Current.close();
 }
 
 ////////////////////////////////////////////////////////////

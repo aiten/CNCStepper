@@ -2,7 +2,7 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2017 Herbert Aitenbichler
+  Copyright (c) 2013-2018 Herbert Aitenbichler
 
   CNCLib is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ void CMyMenu::MenuButtonPressEnd(const SMenuItemDef*)
 
 void CMyMenu::MenuButtonPressMoveNextAxis(const SMenuItemDef*def)
 {
-	uint8_t old = GetPosition();
+	uint8_t old = GetNavigator().GetItemIdx();
 
 	axis_t axis = (axis_t) (unsigned int) GetMenuDef()->GetParam1();
 	axis = (axis + ((int) def->GetParam1()) + LCD_NUMAXIS) % LCD_NUMAXIS;
@@ -61,7 +61,7 @@ void CMyMenu::MenuButtonPressMoveNextAxis(const SMenuItemDef*def)
 	const SMenuDef* nextMenu = (const SMenuDef*) _mainMenuItems[axis].GetParam1();
 
 	SetMenu(nextMenu);
-	SetPosition(old);
+	GetNavigator().SetPosition(old);
 
 	Changed();
 }

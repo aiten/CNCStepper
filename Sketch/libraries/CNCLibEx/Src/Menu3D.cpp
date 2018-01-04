@@ -30,8 +30,7 @@
 #include "Control3D.h"
 #include "GCode3DParser.h"
 #include "Menu3D.h"
-
-////////////////////////////////////////////////////////////
+#include "SDDirReader.h"
 
 ///////////////////////////////////////////////////////////
 
@@ -64,4 +63,17 @@ void CMenu3D::MenuButtonPressSDStart(const CMenuBase::SMenuItemDef*)
 
 void CMenu3D::MenuButtonPressSDSelect(const CMenuBase::SMenuItemDef*)
 {
+	CSDDirReader dirreader([](File*file) -> bool { return file->isDirectory(); });
+	uint8_t currentFileIdx = (uint8_t) GetNavigator().GetParam();
+
+	for (uint8_t fileidx = 0; dirreader.MoveNext(); fileidx++)
+	{
+		if (fileidx == currentFileIdx)
+		{
+			CGCode3DParser::SetExecutingFileName(dirreader.Current.name());
+			OKBeep();
+			MenuButtonPressMenuBack(&GetMenuDef()->GetItems()[FindMenuIndexBack()]);
+			break;
+		}
+	}
 }

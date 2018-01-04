@@ -31,7 +31,7 @@
 #include <LCD.h>
 #include <RotaryButton.h>
 #include <PushButton.h>
-#include <Beep.h>
+#include "ConfigurationCNCLibEx.h"
 
 ////////////////////////////////////////////////////////////
 
@@ -135,6 +135,8 @@ public:
 	}
 
 	uint8_t GetMenuIdx(uint8_t addidx);
+
+	bool PrintMenuLine(uint8_t& drawidx, uint8_t selectedIdx, bool& isselected);
 
 	////////////////////////////////////////////////////////
 

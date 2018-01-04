@@ -112,7 +112,7 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef*def)
 	if (posMenu!=NULL)
 	{
 		// param2 != NULL => find index
-		GetMenuHelper().SetPosition(newMenu->FindMenuIdx((uintptr_t) def, [](const SMenuItemDef* def, uintptr_t param) -> bool
+		GetNavigator().SetPosition(newMenu->FindMenuIdx((uintptr_t) def, [](const SMenuItemDef* def, uintptr_t param) -> bool
 		{
 			return	def->GetButtonPress() == &CMenuBase::MenuButtonPressSetMenu &&			// must be setMenu
 					def->GetParam1() == ((const SMenuItemDef*)param)->GetParam2();			// param1 or new menu must be param2 of "Back from"
@@ -131,12 +131,21 @@ void CMenuBase::MenuButtonPressMenuBack(const SMenuItemDef* def)
 	
 	SetMenu(newMenu);
 
-	GetMenuHelper().SetPosition(GetMenuDef()->FindMenuIdx((uintptr_t) oldMenu, [](const SMenuItemDef* def, uintptr_t oldMenu) -> bool
+	GetNavigator().SetPosition(GetMenuDef()->FindMenuIdx((uintptr_t) oldMenu, [](const SMenuItemDef* def, uintptr_t oldMenu) -> bool
 	{
 		return def->GetParam1() == oldMenu && def->GetButtonPress() == &CMenuBase::MenuButtonPressSetMenu;
 	}));
 
 	Changed();
+}
+////////////////////////////////////////////////////////////
+
+uint8_t CMenuBase::FindMenuIndexBack()
+{
+	return GetMenuDef()->FindMenuIdx((uintptr_t)GetMenuDef(), [](const SMenuItemDef* def, uintptr_t oldMenu) -> bool
+	{
+		return def->GetButtonPress() == &CMenuBase::MenuButtonPressMenuBack;
+	});
 }
 
 ////////////////////////////////////////////////////////////

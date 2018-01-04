@@ -2,7 +2,7 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2017 Herbert Aitenbichler
+  Copyright (c) 2013-2018 Herbert Aitenbichler
 
   CNCLib is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 ////////////////////////////////////////////////////////
 
-class CMenuHelper
+class CMenuNavigator
 {
 public:
 
@@ -31,15 +31,21 @@ public:
 
 public:
 
-	menupos_t GetPosition()											{ return _position; }
-	void SetPosition(menupos_t position)							{ _position = position; }
+	menupos_t GetPosition() const									{ return _position; }
+	void SetPosition(menupos_t itemIdx, menupos_t position)			{ _itemIdx = itemIdx;  _position = position; }
+	void SetPosition(menupos_t itemIdx)								{ SetPosition(itemIdx, itemIdx); }
 
-	menupos_t GetOffset()											{ return _offset; }
+	menupos_t GetItemIdx() const									{ return _itemIdx; }
+
+	menupos_t GetOffset() const										{ return _offset; }
 
 	void AdjustOffset(menupos_t menuEntries, menupos_t firstline, menupos_t lastline);
 	uint8_t ToPrintLine(menupos_t firstline, menupos_t lastline, menupos_t i);		// return 255 if not to print
 
-	void Clear()													{ _offset = 0;  _position = 0; }
+	uintptr_t GetParam() const										{ return _param;  }
+	void SetParam(uintptr_t param)									{ _param = param; }
+
+	void Clear()													{ _itemIdx = 0;  _offset = 0;  _position = 0; }
 
 protected:
 
@@ -51,8 +57,11 @@ protected:
 
 private:
 
+	menupos_t			_itemIdx;									// current "itemIdx" in MenuDef
 	menupos_t			_position;									// current selected menu
 	menupos_t			_offset;									// start of menuitem to draw  
+
+	uintptr_t			_param;										// "user" value of current position  
 
 };
 

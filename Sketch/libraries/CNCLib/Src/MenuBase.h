@@ -21,7 +21,7 @@
 
 #include "CNCLibTypes.h"
 #include "LCD.h"
-#include "MenuHelper.h"
+#include "MenuNavigator.h"
 
 ////////////////////////////////////////////////////////
 
@@ -92,14 +92,11 @@ public:
 
 public:
 
-	menupos_t GetPosition()											{ return _menuHelper.GetPosition(); }
-	void SetPosition(menupos_t position)							{ _menuHelper.SetPosition(position); }
-
 	menupos_t GetMenuItemCount();
 	const __FlashStringHelper*  GetItemText(menupos_t idx);
 	const __FlashStringHelper*  GetText();
 
-	CMenuHelper& GetMenuHelper()									{ return _menuHelper; }
+	CMenuNavigator& GetNavigator()									{ return _menuNavigator; }
 
 	void SetMainMenu()												{ SetMenu(_main); }
 
@@ -126,17 +123,18 @@ public:
 
 private:
 
-	CMenuHelper			_menuHelper;
+	CMenuNavigator		_menuNavigator;
 	const SMenuDef*		_current;
 
 public:
 
 	void MenuButtonPressSetMenu(const SMenuItemDef*);				// param1 => new menu, param2 != 0 => SetPosition, MenuFunction must be MenuButtonPressSetMenu & Menu = param2
 	void MenuButtonPressMenuBack(const SMenuItemDef*);				// param1 => new menu, find and set position to "this" menu in new menu
+	uint8_t FindMenuIndexBack();									// find MenuBack in this(current) menu
 
 	void MenuButtonPressSetCommand(const SMenuItemDef*def);			// param1 => const char* to command
 
-	void SetMenu(const SMenuDef* pMenu)								{ _current = pMenu; _menuHelper.Clear(); };
+	void SetMenu(const SMenuDef* pMenu)								{ _current = pMenu; _menuNavigator.Clear(); };
 
 	////////////////////////////////////////////////////////
 
@@ -152,6 +150,7 @@ public:
 	void MenuButtonPressResurrect(const SMenuItemDef*);
 	void MenuButtonPressHold(const SMenuItemDef*);
 	void MenuButtonPressResume(const SMenuItemDef*);
+
 
 	enum EMoveType
 	{

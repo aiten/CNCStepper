@@ -650,14 +650,11 @@ void CU8GLcd::ButtonPressStartSDPage()
 bool CU8GLcd::DrawLoopStartSD(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
 	if (type!=DrawLoopDraw)				return DrawLoopDefault(type,data);
-	if (type==DrawLoopQueryTimerout) { *((unsigned long*)data) = _rotaryFocus == RotarySlider ? 100 : 5000; return true; }
+	if (type==DrawLoopQueryTimerout)	{ *((unsigned long*)data) = CGCode3DParser::GetExecutingFile() ? 1000 : 5000; return true; }
 
 	if (CGCode3DParser::GetExecutingFileName()[0])
 	{
 		char tmp[16];
-
-		if (!CGCode3DParser::GetExecutingFile())
-			DrawString(ToCol(3), ToRow(2), F("Press to start"));
 
 		SetPosition(ToCol(0), ToRow(3) + PosLineOffset()); Print(F("File: ")); Print(CGCode3DParser::GetExecutingFileName());
 		SetPosition(ToCol(0), ToRow(4) + PosLineOffset()); Print(F("At:   ")); Print(CSDist::ToString(CGCode3DParser::GetExecutingFilePosition(), tmp, 8));
@@ -666,7 +663,7 @@ bool CU8GLcd::DrawLoopStartSD(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	else
 	{
 		DrawString(ToCol(3), ToRow(2), F("No SD card found"));
-		DrawString(ToCol(4), ToRow(2), F("or no file selected"));
+		DrawString(ToCol(2), ToRow(3), F("or no file selected"));
 	}
 
 	return true;

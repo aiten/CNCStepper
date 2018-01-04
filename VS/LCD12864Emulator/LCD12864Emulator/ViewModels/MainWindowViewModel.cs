@@ -1,14 +1,26 @@
-﻿
-using System;
-using System.ComponentModel;
+﻿////////////////////////////////////////////////////////
+/*
+  This file is part of CNCLib - A library for stepper motors.
+
+  Copyright (c) 2013-2018 Herbert Aitenbichler
+
+  CNCLib is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  CNCLib is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  http://www.gnu.org/licenses/
+*/
+
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using LCD12864Emulator.Helpers;
-using Microsoft.Win32;
 
 namespace LCD12864Emulator.ViewModels
 {
@@ -30,7 +42,7 @@ namespace LCD12864Emulator.ViewModels
             {
                 try
                 {
-                    System.IO.File.WriteAllText(fileName, value ? "1" : "0");
+                    File.WriteAllText(fileName, value ? "1" : "0");
                     break;
                 }
                 catch (IOException)
@@ -45,7 +57,7 @@ namespace LCD12864Emulator.ViewModels
             sw.Start();
             while (sw.ElapsedMilliseconds < timeout)
             {
-                if (!System.IO.File.Exists(filename))
+                if (!File.Exists(filename))
                     break;
                 await Task.Delay(10);
             }
@@ -53,9 +65,8 @@ namespace LCD12864Emulator.ViewModels
 
         private static string GetFileName(uint pin)
         {
-            return $"{System.IO.Path.GetTempPath()} \\CNCLib_digitalReadFor_{pin}.txt";
+            return $"{Path.GetTempPath()}\\CNCLib_digitalReadFor_{pin}.txt";
         }
-
 
         async Task SetPin(uint pin, bool value, int timeout)
         {

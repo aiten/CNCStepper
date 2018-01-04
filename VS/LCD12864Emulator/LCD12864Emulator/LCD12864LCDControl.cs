@@ -1,7 +1,24 @@
-﻿using System;
+﻿////////////////////////////////////////////////////////
+/*
+  This file is part of CNCLib - A library for stepper motors.
+
+  Copyright (c) 2013-2018 Herbert Aitenbichler
+
+  CNCLib is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  CNCLib is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  http://www.gnu.org/licenses/
+*/
+
+using System;
 using System.Globalization;
 using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -54,13 +71,13 @@ namespace LCD12864Emulator
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            var printinfo = ReadLCDFile();
+            string[] printinfo = ReadLCDFile();
 
             double x=0;
             double y =0;
             string text=null;
 
-            foreach (var s in printinfo)
+            foreach (string s in printinfo)
             {
                 if (s.StartsWith("SP:"))
                 {
@@ -70,7 +87,7 @@ namespace LCD12864Emulator
                         text = null;
                     }
                     // SP: 0:21
-                    var cord = s.Split(':');
+                    string[] cord = s.Split(':');
                     if (cord.Length == 3)
                     {
                         x = int.Parse(cord[1]);
@@ -98,7 +115,7 @@ namespace LCD12864Emulator
 
         private void DrawText(DrawingContext drawingContext, string text, double x, double y)
         {
-            FormattedText formattedText = new FormattedText(
+            var formattedText = new FormattedText(
                 text,
                 CultureInfo.GetCultureInfo("en-us"),
                 FlowDirection.LeftToRight,

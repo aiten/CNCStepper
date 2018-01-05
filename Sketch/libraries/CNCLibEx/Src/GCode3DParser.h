@@ -103,7 +103,10 @@ private:
 	void M29Command();		// Stop write to SD file
 	void M30Command();		// Delete file on SD
 
-	bool GetFileName(char*buffer);
+	bool GetPathName(char*buffer);
+	bool GetFileName(char*&buffer, uint8_t& pathlength);
+	bool AddPathChar(char ch, char*&buffer, uint8_t& pathlength);
+
 	bool CheckSD();
 	bool DeleteSDFile(char*buffer, bool errorifnotexists);
 

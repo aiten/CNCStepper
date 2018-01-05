@@ -196,7 +196,7 @@ void CGCode3DParser::M22Command()
 void CGCode3DParser::M23Command()
 {
 	char filename[MAXPATHNAME];
-	if (!CheckSD() || !GetFileName(filename))
+	if (!CheckSD() || !GetPathName(filename))
 		return;
 
 	GetExecutingFile() = SD.open(filename, FILE_READ);
@@ -316,7 +316,27 @@ void CGCode3DParser::M28Command()
 	if (!_state._isM28)
 	{
 		char filename[MAXPATHNAME];
-		if (!CheckSD() || !GetFileName(filename) || !DeleteSDFile(filename, false))
+		if (!CheckSD() || !GetPathName(filename))
+			return;
+
+		// create folders
+		char* lastslash = strrchr(filename, '/');
+
+		if (lastslash != NULL && lastslash != filename)
+		{
+			*lastslash = 0;
+			if (!SD.exists(filename))
+			{
+				if (!SD.mkdir(filename))
+				{
+					Error(MESSAGE_PARSER3D_ERROR_CREATING_FILE);
+					return;
+				}
+			}
+			*lastslash = '/';
+		}
+		
+		if (!DeleteSDFile(filename, false))
 			return;
 
 		_state._file = SD.open(filename, FILE_WRITE);
@@ -352,7 +372,7 @@ void CGCode3DParser::M29Command()
 void CGCode3DParser::M30Command()
 {
 	char filename[MAXPATHNAME];
-	if (!CheckSD() || !GetFileName(filename))
+	if (!CheckSD() || !GetPathName(filename))
 		return;
 
 	if (DeleteSDFile(filename, true))
@@ -406,15 +426,67 @@ bool CGCode3DParser::DeleteSDFile(char*filename, bool errorifnotexists)
 
 ////////////////////////////////////////////////////////////
 
-bool CGCode3DParser::GetFileName(char*buffer)
+bool CGCode3DParser::AddPathChar(char ch, char*&buffer, uint8_t& pathlength)
 {
-	_reader->SkipSpaces();
+	pathlength++;
+	if (pathlength >= MAXPATHNAME)
+	{
+		Error(MESSAGE_PARSER3D_ILLEGAL_FILENAME);
+		return false;
+	}
+	*(buffer++) = ch;
+	return true;
+}
 
+bool CGCode3DParser::GetPathName(char*buffer)
+{
+	char ch = _reader->SkipSpaces();
+	bool first = true;
+	uint8_t pathlength = 0;
+
+	while (!CStreamReader::IsSpaceOrEnd(ch) && !IsCommentStart(ch))
+	{
+		if (ch == '/')
+		{
+			if (!AddPathChar(ch, buffer, pathlength))
+				return false;
+
+			ch = _reader->GetNextChar();
+			if (CStreamReader::IsSpaceOrEnd(ch) || IsCommentStart(ch))
+			{
+				// must not end with /
+				Error(MESSAGE_PARSER3D_ILLEGAL_FILENAME);
+				return false;
+			}
+		}
+		else if (first)
+		{
+		}
+		else
+		{
+			Error(MESSAGE_PARSER3D_ILLEGAL_FILENAME);
+			return false;
+		}
+		first = false;
+
+		if (!GetFileName(buffer, pathlength))
+			return false;
+		
+		ch = _reader->GetChar();
+	}
+
+	return AddPathChar(0, buffer, pathlength);
+}
+
+////////////////////////////////////////////////////////////
+
+bool CGCode3DParser::GetFileName(char*&buffer, uint8_t& pathlength)
+{
 	uint8_t dotidx = 0;
 	uint8_t length = 0;
 
 	char ch = _reader->GetChar();
-	for (uint8_t i = 0; i < MAXPATHNAME; i++)
+	while (true)
 	{
 		if (ch == '.')
 		{
@@ -426,11 +498,14 @@ bool CGCode3DParser::GetFileName(char*buffer)
 				Error(MESSAGE_PARSER3D_ILLEGAL_FILENAME);
 				return false;
 			}
-			*(buffer++) = ch;
+			if (!AddPathChar(ch, buffer, pathlength))
+				return false;
 		}
-		else if (CStreamReader::IsDigit(ch) || CStreamReader::IsAlpha(ch) || ch == '/' || ch == '_' || ch == '~')
+		else if (CStreamReader::IsDigit(ch) || CStreamReader::IsAlpha(ch) || ch == '_' || ch == '~')
 		{
-			*(buffer++) = ch;
+			if (!AddPathChar(ch, buffer, pathlength))
+				return false;
+
 			length++;
 
 			if ((dotidx == 0 && length > MAXFILENAME) ||
@@ -440,7 +515,7 @@ bool CGCode3DParser::GetFileName(char*buffer)
 				return false;
 			}
 		}
-		else if (CStreamReader::IsSpaceOrEnd(ch))
+		else if (ch == '/' || CStreamReader::IsSpaceOrEnd(ch) || IsCommentStart(ch))
 		{
 			break;
 		}
@@ -451,7 +526,7 @@ bool CGCode3DParser::GetFileName(char*buffer)
 		}
 		ch = _reader->GetNextChar();
 	}
-	*buffer = 0;
+
 	return true;
 }
 

@@ -67,7 +67,7 @@ namespace LCD12864Emulator
         double ChScaleSizeX => ScaleX * _chsizeX;
         double ChScaleSizeY => ScaleY * _chsizeY;
 
-        Typeface _tf = new Typeface("Courier");
+        Typeface _tf = new Typeface("Courier New");
 
         protected override void OnRender(DrawingContext drawingContext)
         {

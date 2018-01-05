@@ -98,6 +98,8 @@ protected:
 	virtual mm1000_t CalcAllPreset(axis_t axis);
 	virtual void CommentMessage(char* )					{ };
 
+	bool IsCommentStart(char);
+
 protected:
 
 	typedef void(CGCodeParserBase::*LastCommandCB)();

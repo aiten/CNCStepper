@@ -123,6 +123,13 @@ void CGCodeParserBase::SkipCommentNested()
 
 ////////////////////////////////////////////////////////////
 
+bool CGCodeParserBase::IsCommentStart(char ch)
+{
+	return ch == '(' || ch == '*' || ch == ';';
+}
+
+////////////////////////////////////////////////////////////
+
 char CGCodeParserBase::SkipSpacesOrComment()
 {
 	switch (_reader->SkipSpaces())

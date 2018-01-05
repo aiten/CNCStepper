@@ -96,13 +96,6 @@ bool CMenuBase::Select(menupos_t idx)
 
 ////////////////////////////////////////////////////////////
 
-void CMenuBase::MenuButtonPressSetCommand(const SMenuItemDef*def)
-{ 
-	PostCommand(EGCodeSyntaxType::GCodeBasic,(const __FlashStringHelper*)def->GetParam1());
-}
-
-////////////////////////////////////////////////////////////
-
 void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef*def)
 {
 	const SMenuDef* newMenu = (const SMenuDef*) def->GetParam1();
@@ -146,6 +139,14 @@ uint8_t CMenuBase::FindMenuIndexBack()
 	{
 		return def->GetButtonPress() == &CMenuBase::MenuButtonPressMenuBack;
 	});
+}
+
+////////////////////////////////////////////////////////////
+
+void CMenuBase::MenuButtonPressSetCommand(const SMenuItemDef*def)
+{
+	PostCommand(EGCodeSyntaxType::GCodeBasic, (const __FlashStringHelper*)def->GetParam1());
+	CLcd::GetInstance()->OKBeep();
 }
 
 ////////////////////////////////////////////////////////////
@@ -194,7 +195,10 @@ void CMenuBase::MenuButtonPressRotate(const SMenuItemDef*def)
 		case RotateOffset:		PostCommand(EGCodeSyntaxType::GCode, F("g68.11")); break;
 		case RotateSetYZ:		PostCommand(EGCodeSyntaxType::GCode, F("g68.13 j0k0")); break;
 		case RotateSetX:		PostCommand(EGCodeSyntaxType::GCode, F("g68.14 i0")); break;
+		default:				CLcd::GetInstance()->ErrorBeep(); return;
+
 	}
+	CLcd::GetInstance()->OKBeep();
 }
 
 ////////////////////////////////////////////////////////////
@@ -263,6 +267,7 @@ void CMenuBase::MenuButtonPressHomeA(axis_t axis)
 		default:		builder.Add(F("0")); break;
 	}
 	PostCommand(builder.GetCommand());
+	CLcd::GetInstance()->OKBeep();
 };
 
 ////////////////////////////////////////////////////////////
@@ -279,6 +284,7 @@ void CMenuBase::MenuButtonPressMoveG92(const SMenuItemDef*)
 		.Add(F("0"));
 
 	PostCommand(builder.GetCommand());
+	CLcd::GetInstance()->OKBeep();
 }
 
 ////////////////////////////////////////////////////////////
@@ -289,6 +295,7 @@ void CMenuBase::MenuButtonPressSpindle(const SMenuItemDef*)
 		PostCommand(EGCodeSyntaxType::GCodeBasic, F("m5"));
 	else
 		PostCommand(EGCodeSyntaxType::GCodeBasic, F("m3"));
+	CLcd::GetInstance()->OKBeep();
 }
 
 ////////////////////////////////////////////////////////////
@@ -299,6 +306,7 @@ void CMenuBase::MenuButtonPressCoolant(const SMenuItemDef*)
 		PostCommand(EGCodeSyntaxType::GCodeBasic, F("m9"));
 	else
 		PostCommand(EGCodeSyntaxType::GCodeBasic, F("m7"));
+	CLcd::GetInstance()->OKBeep();
 }
 
 ////////////////////////////////////////////////////////////

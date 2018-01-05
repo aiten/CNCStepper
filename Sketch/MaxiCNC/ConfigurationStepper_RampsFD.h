@@ -21,9 +21,14 @@
 
 ////////////////////////////////////////////////////////
 
+#define RAMPSFD_NUM_AXIS	MYNUM_AXIS
+#define LCD_NUMAXIS			MYNUM_AXIS
+
+////////////////////////////////////////////////////////
+
 #include <Steppers/StepperRampsFD_pins.h>
 
-//swap X with E PINs
+//swap X with E PINs because damaged pin on X socket => use e0
 #undef RAMPSFD_X_STEP_PIN
 #undef RAMPSFD_X_DIR_PIN
 #undef RAMPSFD_X_ENABLE_PIN
@@ -38,15 +43,11 @@
 #define RAMPSFD_X_STEP_PIN     36
 #define RAMPSFD_X_DIR_PIN      28
 #define RAMPSFD_X_ENABLE_PIN   42
+
 ////////////////////////////////////////
 
 #include <Steppers/StepperRampsFD.h>
 #define BOARDNAME RAMPSFD
-
-////////////////////////////////////////////////////////
-
-#define LCD_NUMAXIS	6
-#define MYNUM_AXIS	6
 
 ////////////////////////////////////////////////////////
 

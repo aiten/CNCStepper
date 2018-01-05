@@ -21,13 +21,13 @@
 
 ////////////////////////////////////////////////////////
 
-#include <Steppers/StepperRamps14_pins.h>
-#include <Steppers/StepperRamps14.h>
-#define BOARDNAME RAMPS14
+#define RAMPS14_NUM_AXIS	MYNUM_AXIS
+#define LCD_NUMAXIS			MYNUM_AXIS
 
 ////////////////////////////////////////////////////////
 
-#define LCD_NUMAXIS	5
-#define MYNUM_AXIS	5
+#include <Steppers/StepperRamps14_pins.h>
+#include <Steppers/StepperRamps14.h>
+#define BOARDNAME RAMPS14
 
 ////////////////////////////////////////////////////////

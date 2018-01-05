@@ -21,6 +21,12 @@
 
 ////////////////////////////////////////////////////////
 
+#ifndef RAMPS14_NUM_AXIS
+#define RAMPS14_NUM_AXIS 5
+#endif
+
+////////////////////////////////////////////////////////
+
 #undef  RAMPS14_USE_A4998
 #define RAMPS14_USE_DRV8825
 
@@ -66,13 +72,21 @@
 #define RAMPS14_Z2_DIR_PIN			34
 #define RAMPS14_Z2_ENABLE_PIN		30
 
+#if RAMPS14_NUM_AXIS > 3
+
 #define RAMPS14_E0_STEP_PIN			26
 #define RAMPS14_E0_DIR_PIN			28
 #define RAMPS14_E0_ENABLE_PIN		24
 
+#endif
+
+#if RAMPS14_NUM_AXIS > 4
+
 #define RAMPS14_E1_STEP_PIN			36
 #define RAMPS14_E1_DIR_PIN			34
 #define RAMPS14_E1_ENABLE_PIN		30
+
+#endif
 
 #define RAMPS14_SDPOWER				-1
 #define RAMPS14_LED_PIN				13

@@ -21,6 +21,12 @@
 
 ////////////////////////////////////////////////////////
 
+#ifndef RAMPSFD_NUM_AXIS
+#define RAMPSFD_NUM_AXIS 6
+#endif
+
+////////////////////////////////////////////////////////
+
 #undef  RAMPSFD_USE_A4998
 #define RAMPSFD_USE_DRV8825
 
@@ -62,17 +68,23 @@
 #define RAMPSFD_Z_MIN_PIN			26
 #define RAMPSFD_Z_MAX_PIN			34
 
+#if RAMPSFD_NUM_AXIS > 3
 #define RAMPSFD_E0_STEP_PIN			36
 #define RAMPSFD_E0_DIR_PIN			28
 #define RAMPSFD_E0_ENABLE_PIN		42
+#endif
 
+#if RAMPSFD_NUM_AXIS > 4
 #define RAMPSFD_E1_STEP_PIN			43
 #define RAMPSFD_E1_DIR_PIN			41
 #define RAMPSFD_E1_ENABLE_PIN		39
+#endif
 
+#if RAMPSFD_NUM_AXIS > 5
 #define RAMPSFD_E2_STEP_PIN			32
 #define RAMPSFD_E2_DIR_PIN			47
 #define RAMPSFD_E2_ENABLE_PIN		45
+#endif
 
 #define RAMPSFD_SDPOWER_PIN			-1
 #define RAMPSFD_SDSS_PIN			4	
@@ -169,8 +181,11 @@
 #define RAMPSFD_LCD_ROTARY_ENC_OFF	HIGH
 
 #define RAMPSFD_LCD_BEEPER          RAMPSFD_AUX4_9		// Summer auf Ramps FD
-#define RAMPSFD_LCD_KILL_PIN        RAMPSFD_AUX4_7		// Stoptaste auf Ramps FD (LCD) => shared with E1
+
+#if RAMPSFD_NUM_AXIS < 5
+#define RAMPSFD_LCD_KILL_PIN        RAMPSFD_AUX4_7		// Stoptaste auf Ramps FD (LCD) => shared with E1 => do not use if we have E1 in use axis
 //#define RAMPSFD_LCD_KILL_PIN        RAMPSFD_ESTOP_PIN	// hard link
+#endif
 
 #define RAMPSFD_LCD_KILL_PIN_ON		LOW
 #define RAMPSFD_LCD_KILL_PIN_OFF	HIGH

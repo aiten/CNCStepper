@@ -205,7 +205,7 @@ private:
 
 	uint8_t						_currentpage;
 
-	int8_t						_screensaveX = 0;
+	int8_t						_screensaveX = 2;
 	int8_t						_screensaveY = 0;
 	int8_t						_screensaveXDiff = 1;
 	int8_t						_screensaveYDiff = 1;

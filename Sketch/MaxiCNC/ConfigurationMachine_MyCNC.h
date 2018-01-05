@@ -33,6 +33,10 @@
 
 ////////////////////////////////////////////////////////
 
+#define MYNUM_AXIS	4
+
+////////////////////////////////////////////////////////
+
 #define X_MAXSIZE 134000				// in mm1000_t
 #define Y_MAXSIZE 134000 
 #define Z_MAXSIZE 83000 
@@ -139,7 +143,7 @@
 #define PROBE_PIN_ON  LOW
 #define PROBE_PIN_OFF HIGH
 
-#if NUM_AXIS < 6
+#if MYNUM_AXIS < 6
 // LCD KILL is shared with E1 (RampsFD) (DIR)
 #define HOLDRESUME_PIN		CAT(BOARDNAME, _LCD_KILL_PIN)
 #define HOLDRESUME_PIN_ON	CAT(BOARDNAME, _LCD_KILL_PIN_ON)

@@ -150,7 +150,7 @@ const CMyMenu::SMenuItemDef CMyMenu::_rotateMenuItems[] PROGMEM =
 
 const CMyMenu::SMenuItemDef CMyMenu::_SDSelectMenuItems[] PROGMEM =
 {
-	{ MENUENTRY_SDFILES, (MenuFunction)&CMenu3D::MenuButtonPressSDSelect },
+	{ (const char*)(MENUENTRY_SDFILES), (MenuFunction)&CMenu3D::MenuButtonPressSDSelect },
 	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t) &_SDMenu },
 	{ NULL, 0 }
 };

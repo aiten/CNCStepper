@@ -32,7 +32,7 @@ public:
 public:
 
 	menupos_t GetPosition() const									{ return _position; }
-	void SetPosition(menupos_t itemIdx, menupos_t position)			{ _itemIdx = itemIdx;  _position = position; }
+	void SetPosition(menupos_t itemIdx, menupos_t position)			{ _itemIdx = itemIdx;  _position = position; _empty = false; }
 	void SetPosition(menupos_t itemIdx)								{ SetPosition(itemIdx, itemIdx); }
 
 	menupos_t GetItemIdx() const									{ return _itemIdx; }
@@ -45,7 +45,8 @@ public:
 	uintptr_t GetParam() const										{ return _param;  }
 	void SetParam(uintptr_t param)									{ _param = param; }
 
-	void Clear()													{ _itemIdx = 0;  _offset = 0;  _position = 0; }
+	void Clear()													{ _itemIdx = 0;  _offset = 0;  _position = 0; _empty = true; }
+	bool IsCleared() const											{ return _empty; }
 
 protected:
 
@@ -59,7 +60,8 @@ private:
 
 	menupos_t			_itemIdx;									// current "itemIdx" in MenuDef
 	menupos_t			_position;									// current selected menu
-	menupos_t			_offset;									// start of menuitem to draw  
+	menupos_t			_offset;									// start of menuitem to draw 
+	bool				_empty;										// empty - => cleared
 
 	uintptr_t			_param;										// "user" value of current position  
 

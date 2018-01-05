@@ -134,7 +134,7 @@ public:
 		OKBeep();
 	}
 
-	uint8_t GetMenuIdx(uint8_t addidx);
+	uint8_t GetMenuIdx();
 
 	bool PrintMenuLine(uint8_t& drawidx, uint8_t selectedIdx, bool& isselected);
 
@@ -212,7 +212,7 @@ private:
 	unsigned long				_screensaveTime = 0;
 
 	uint8_t						_SDFileCount = 255;
-	uint8_t						_addMenuItems = 0;
+	int8_t						_addMenuItems = 0;
 
 	CRingBufferQueue<char, 128> _commandHis;
 

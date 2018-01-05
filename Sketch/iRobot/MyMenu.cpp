@@ -76,6 +76,10 @@ void CMyMenu::MenuButtonPressFuerElise(const SMenuItemDef* /* def */)
 ////////////////////////////////////////////////////////////
 // Main Menu
 
+#ifndef _MSC_VER
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
+
 const CMyMenu::SMenuItemDef CMyMenu::_mainMenuItems[] PROGMEM =
 {
 	{ _mMoveX, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t) &_moveXMenu },
@@ -94,9 +98,9 @@ const CMyMenu::SMenuItemDef CMyMenu::_mainMenuItems[] PROGMEM =
 #endif
 #endif
 #endif
-	{ _mRotate, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_rotateMenu },
-	{ _mSD, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_SDMenu },
-	{ _mExtra, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_extraMenu },
+	{ _mRotate, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t) &_rotateMenu },
+	{ _mSD, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t) &_SDMenu },
+	{ _mExtra, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t) &_extraMenu },
 	{ _mEnd, (MenuFunction) &CMyMenu::MenuButtonPressEnd },
 	{ NULL, 0 }
 };
@@ -138,12 +142,22 @@ const CMyMenu::SMenuItemDef CMyMenu::_rotateMenuItems[] PROGMEM =
 ////////////////////////////////////////////////////////////
 // SD Menu
 
-const CMyMenu::SMenuItemDef CMyMenu::_SDMenuItems[] PROGMEM =
+const CMyMenu::SMenuItemDef CMyMenu::_SDSelectMenuItems[] PROGMEM =
 {
-	{ _mSDInit, &CMenuBase::MenuButtonPressSetCommand, (menuparam_t) _m21 },
-	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t) &_mainMenu },
+	{ (const char*)(MENUENTRY_SDFILES), (MenuFunction)&CMenu3D::MenuButtonPressSDSelect },
+	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t) &_SDMenu },
 	{ NULL, 0 }
 };
+
+const CMyMenu::SMenuItemDef CMyMenu::_SDMenuItems[] PROGMEM =
+{
+	{ _mSDInit, &CMenuBase::MenuButtonPressSetCommand, (menuparam_t)_m21 },
+	{ _mSDStart, (MenuFunction)&CMenu3D::MenuButtonPressSDStart },
+	{ _mSDSelect, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_SDSelectMenu },
+	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t)&_mainMenu },
+	{ NULL, 0 }
+};
+
 
 ////////////////////////////////////////////////////////////
 // Extra Menu
@@ -170,8 +184,9 @@ const CMyMenu::SMenuDef CMyMenu::_moveZMenu PROGMEM = { _mmMoveZ, _moveMenuItems
 const CMyMenu::SMenuDef CMyMenu::_moveAMenu PROGMEM = { _mmMoveA, _moveMenuItems, (menuparam_t)A_AXIS };
 const CMyMenu::SMenuDef CMyMenu::_moveBMenu PROGMEM = { _mmMoveB, _moveMenuItems, (menuparam_t)B_AXIS };
 const CMyMenu::SMenuDef CMyMenu::_moveCMenu PROGMEM = { _mmMoveC, _moveMenuItems, (menuparam_t)C_AXIS };
-const CMyMenu::SMenuDef CMyMenu::_rotateMenu PROGMEM= { _mmRotate, _rotateMenuItems };
-const CMyMenu::SMenuDef CMyMenu::_SDMenu PROGMEM	= { _mmSD, _SDMenuItems };
+const CMyMenu::SMenuDef CMyMenu::_rotateMenu PROGMEM = { _mmRotate, _rotateMenuItems };
+const CMyMenu::SMenuDef CMyMenu::_SDMenu PROGMEM	  = { _mmSD, _SDMenuItems };
+const CMyMenu::SMenuDef CMyMenu::_SDSelectMenu PROGMEM = { _mmSDSelect, _SDSelectMenuItems };
 const CMyMenu::SMenuDef CMyMenu::_extraMenu PROGMEM = { _mmExtra, _extraMenuItems };
 
 ////////////////////////////////////////////////////////////

@@ -142,7 +142,7 @@ void CMenuBase::MenuButtonPressMenuBack(const SMenuItemDef* def)
 
 uint8_t CMenuBase::FindMenuIndexBack()
 {
-	return GetMenuDef()->FindMenuIdx((uintptr_t)GetMenuDef(), [](const SMenuItemDef* def, uintptr_t oldMenu) -> bool
+	return GetMenuDef()->FindMenuIdx(0, [](const SMenuItemDef* def, uintptr_t) -> bool
 	{
 		return def->GetButtonPress() == &CMenuBase::MenuButtonPressMenuBack;
 	});

@@ -71,7 +71,6 @@ void CMenu3D::MenuButtonPressSDSelect(const CMenuBase::SMenuItemDef*)
 		if (fileidx == currentFileIdx)
 		{
 			CGCode3DParser::SetExecutingFileName(dirreader.Current.name());
-			OKBeep();
 			MenuButtonPressMenuBack(&GetMenuDef()->GetItems()[FindMenuIndexBack()]);
 			break;
 		}

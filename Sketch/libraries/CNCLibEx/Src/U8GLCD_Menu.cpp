@@ -62,19 +62,19 @@ void CU8GLcd::ButtonPressShowMenu()
 
 ////////////////////////////////////////////////////////////
 
-uint8_t CU8GLcd::GetMenuIdx(uint8_t addidx)
+uint8_t CU8GLcd::GetMenuIdx()
 {
 	if (_rotaryFocus == RotaryMenuPage)
 	{
-		uint8_t menu = _rotarybutton.GetPageIdx(GetMenu().GetMenuItemCount() + addidx);
-		if (menu != GetMenu().GetNavigator().GetPosition())
+		uint8_t menu = _rotarybutton.GetPageIdx(GetMenu().GetMenuItemCount() + _addMenuItems);
+		if (GetMenu().GetNavigator().IsCleared() || menu != GetMenu().GetNavigator().GetPosition())
 		{
 			uint8_t menuidx = menu;
 
 			if (_SDFileCount != 255)
 			{
 				menuidx = 0;
-				if (_SDFileCount == 0 || menu > addidx)
+				if (_SDFileCount == 0 || menu > _addMenuItems)
 					menuidx = 1;
 			}
 
@@ -105,7 +105,8 @@ void CU8GLcd::SetRotaryFocusMenuPage()
 				_SDFileCount++;
 			}
 		}
-		_addMenuItems = _SDFileCount - 1;
+		_addMenuItems = _SDFileCount;
+		_addMenuItems--;
 	}
 	else
 	{
@@ -160,7 +161,8 @@ bool CU8GLcd::PrintMenuLine(uint8_t& drawidx, uint8_t selectedMenuIdx, bool& isS
 bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
 	if (type==DrawLoopHeader)			return true;
-	if (type==DrawLoopQueryTimerout)	{ *((unsigned long*)data) = 2000; return true; }
+//	if (type==DrawLoopQueryTimerout)	{ *((unsigned long*)data) = 2000; return true; }
+	if (type == DrawLoopQueryTimerout) { *((unsigned long*)data) = 250; return true; }
 	if (type!=DrawLoopDraw)				return DrawLoopDefault(type,data);
 
 	SetPosition(ToCol(0), ToRow(0) - HeadLineOffset());
@@ -175,7 +177,7 @@ bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 
 	if (_rotaryFocus == RotaryMenuPage)
 	{
-		selectedMenuIdx = GetMenuIdx(_addMenuItems);
+		selectedMenuIdx = GetMenuIdx();
 	}
 
 	GetMenu().GetNavigator().AdjustOffset(menuEntries + _addMenuItems, printFirstLine, printLastLine);

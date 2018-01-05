@@ -44,6 +44,6 @@ protected:
 
 };
 
-#define MENUENTRY_SDFILES (const char *)1
+#define MENUENTRY_SDFILES ((const __FlashStringHelper*)1)
 
 ////////////////////////////////////////////////////////

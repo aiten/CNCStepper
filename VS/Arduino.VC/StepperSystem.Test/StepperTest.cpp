@@ -15,7 +15,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 http://www.gnu.org/licenses/
 */
-////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 
@@ -52,9 +52,9 @@ namespace StepperSystemTest
 
 		char* AddFileName(char*dest, const char* start, const char*filename)
 		{
-			strcpy(dest, start);
-			strcat(dest, "Test_");
-			strcat(dest, filename);
+			strcpy_s(dest,sizeof(dest), start);
+			strcat_s(dest, sizeof(dest), "Test_");
+			strcat_s(dest, sizeof(dest), filename);
 
 			return dest;
 		}
@@ -93,8 +93,8 @@ namespace StepperSystemTest
 			FILE* fsrc;
 			FILE* fdest;
 
-			fsrc = fopen(pathname_src, "rt");
-			fdest = fopen(pathname_dest, "rt");
+			fopen_s(&fsrc, pathname_src, "rt");
+			fopen_s(&fdest, pathname_dest, "rt");
 
 			Assert::IsTrue(fsrc != NULL);
 			Assert::IsTrue(fdest != NULL);
@@ -710,7 +710,8 @@ namespace StepperSystemTest
 			Stepper.SetJerkSpeed(2, 4000);
 
 			//		FILE *f = fopen("P:\\Arduino\\MyStepper.Moves\\plt\\motoguzz.plt","rt");
-			FILE *f = fopen("c:\\tmp\\testc.hpgl", "rt");
+			FILE *f;
+			fopen_s(&f,"c:\\tmp\\testc.hpgl", "rt");
 
 			bool penIsUp = true;
 			int line = 0;
@@ -720,7 +721,7 @@ namespace StepperSystemTest
 				char cmd[16];
 				int x, y;
 				//			int cnt=fscanf(f,"%2s%i%i;",&cmd,&x,&y);
-				int cnt = fscanf(f, "%2s %i,%i;", cmd, &x, &y);
+				int cnt = fscanf_s(f, "%2s %i,%i;", cmd, _countof(cmd), &x, &y);
 
 				if (cmd[0] != ';')
 					line++;

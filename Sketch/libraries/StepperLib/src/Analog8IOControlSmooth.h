@@ -73,7 +73,7 @@ public:
 	}
 
 #ifndef REDUCED_SIZE
-	void SetLevel(int16_t level)
+	void SetLevel(uint8_t level)
 	{
 		_level = level;
 	}

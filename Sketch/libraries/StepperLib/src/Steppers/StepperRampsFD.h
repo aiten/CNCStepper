@@ -81,16 +81,14 @@ public:
 		CHAL::pinModeInputPullUp(RAMPSFD_Z_MAX_PIN);
 		HALFastdigitalWrite(RAMPSFD_Z_STEP_PIN, RAMPSFD_PIN_STEP_ON);
 
-#if RAMPSFD_NUM_AXIS > 3
 		CHAL::pinModeOutput(RAMPSFD_E0_STEP_PIN);
 		CHAL::pinModeOutput(RAMPSFD_E0_DIR_PIN);
 		CHAL::pinModeOutput(RAMPSFD_E0_ENABLE_PIN);
 		//  CHAL::pinModeInputPullUp(RAMPSFD_E0_MIN_PIN);         
 		//  CHAL::pinModeInputPullUp(RAMPSFD_E0_MAX_PIN);         
 		HALFastdigitalWrite(RAMPSFD_E0_STEP_PIN, RAMPSFD_PIN_STEP_ON);
-#endif
 
-#if RAMPSFD_NUM_AXIS > 4
+#ifndef RAMPSFD_DISABLE_E1
 		CHAL::pinModeOutput(RAMPSFD_E1_STEP_PIN);
 		CHAL::pinModeOutput(RAMPSFD_E1_DIR_PIN);
 		CHAL::pinModeOutput(RAMPSFD_E1_ENABLE_PIN);
@@ -99,15 +97,12 @@ public:
 		HALFastdigitalWrite(RAMPSFD_E1_STEP_PIN, RAMPSFD_PIN_STEP_ON);
 #endif
 
-#if RAMPSFD_NUM_AXIS > 5
 		CHAL::pinModeOutput(RAMPSFD_E2_STEP_PIN);
 		CHAL::pinModeOutput(RAMPSFD_E2_DIR_PIN);
 		CHAL::pinModeOutput(RAMPSFD_E2_ENABLE_PIN);
 		//  CHAL::pinModeInputPullUp(E2_MIN_PIN);         
 		//  CHAL::pinModeInputPullUp(E2_MAX_PIN);         
 		HALFastdigitalWrite(RAMPSFD_E2_STEP_PIN, RAMPSFD_PIN_STEP_ON);
-#endif
-
 
 #ifdef _MSC_VER
 #pragma warning( default : 4127 )
@@ -135,15 +130,11 @@ protected:
 			case X_AXIS:  if (level != LevelOff)	HALFastdigitalWrite(RAMPSFD_X_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPSFD_X_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_OFF); break;
 			case Y_AXIS:  if (level != LevelOff)	HALFastdigitalWrite(RAMPSFD_Y_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPSFD_Y_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_OFF); break;
 			case Z_AXIS:  if (level != LevelOff)	HALFastdigitalWrite(RAMPSFD_Z_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPSFD_Z_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_OFF); break;
-#if RAMPSFD_NUM_AXIS > 3
 			case E0_AXIS: if (level != LevelOff)	HALFastdigitalWrite(RAMPSFD_E0_ENABLE_PIN, RAMPSFD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPSFD_E0_ENABLE_PIN, RAMPSFD_PIN_ENABLE_OFF); break;
-#endif
-#if RAMPSFD_NUM_AXIS > 4
+#ifndef RAMPSFD_DISABLE_E1
 			case E1_AXIS: if (level != LevelOff)	HALFastdigitalWrite(RAMPSFD_E1_ENABLE_PIN, RAMPSFD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPSFD_E1_ENABLE_PIN, RAMPSFD_PIN_ENABLE_OFF); break;
 #endif
-#if RAMPSFD_NUM_AXIS > 5
 			case E2_AXIS: if (level != LevelOff)	HALFastdigitalWrite(RAMPSFD_E2_ENABLE_PIN, RAMPSFD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPSFD_E2_ENABLE_PIN, RAMPSFD_PIN_ENABLE_OFF); break;
-#endif
 
 #ifdef _MSC_VER
 #pragma warning( default : 4127 )
@@ -163,15 +154,11 @@ protected:
 			case X_AXIS:  return ConvertLevel(HALFastdigitalRead(RAMPSFD_X_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
 			case Y_AXIS:  return ConvertLevel(HALFastdigitalRead(RAMPSFD_Y_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
 			case Z_AXIS:  return ConvertLevel(HALFastdigitalRead(RAMPSFD_Z_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
-#if RAMPSFD_NUM_AXIS > 3
 			case E0_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPSFD_E0_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
-#endif
-#if RAMPSFD_NUM_AXIS > 4
+#ifndef RAMPSFD_DISABLE_E1
 			case E1_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPSFD_E1_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
 #endif
-#if RAMPSFD_NUM_AXIS > 5
 			case E2_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPSFD_E2_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
-#endif
 #ifdef _MSC_VER
 #pragma warning( default : 4127 )
 #endif
@@ -201,15 +188,11 @@ protected:
 		if ((directionUp&(1 << X_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPSFD_X_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_X_DIR_PIN, RAMPSFD_PIN_DIR_ON);
 		if ((directionUp&(1 << Y_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPSFD_Y_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_Y_DIR_PIN, RAMPSFD_PIN_DIR_ON);
 		if ((directionUp&(1 << Z_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPSFD_Z_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_Z_DIR_PIN, RAMPSFD_PIN_DIR_ON);
-#if RAMPSFD_NUM_AXIS > 3
 		if ((directionUp&(1 << E0_AXIS)) != 0) HALFastdigitalWriteNC(RAMPSFD_E0_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_E0_DIR_PIN, RAMPSFD_PIN_DIR_ON);
-#endif
-#if RAMPSFD_NUM_AXIS > 4
+#ifndef RAMPSFD_DISABLE_E1
 		if ((directionUp&(1 << E1_AXIS)) != 0) HALFastdigitalWriteNC(RAMPSFD_E1_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_E1_DIR_PIN, RAMPSFD_PIN_DIR_ON);
 #endif
-#if RAMPSFD_NUM_AXIS > 5
 		if ((directionUp&(1 << E2_AXIS)) != 0) HALFastdigitalWriteNC(RAMPSFD_E2_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_E2_DIR_PIN, RAMPSFD_PIN_DIR_ON);
-#endif
 
 		for (uint8_t cnt = 0;; cnt++)
 		{
@@ -217,30 +200,22 @@ protected:
 			if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_X_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
 			if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_Y_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
 			if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_Z_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
-#if RAMPSFD_NUM_AXIS > 3
 			if (steps[E0_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E0_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
-#endif
-#if RAMPSFD_NUM_AXIS > 4
+#ifndef RAMPSFD_DISABLE_E1
 			if (steps[E1_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E1_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
 #endif
-#if RAMPSFD_NUM_AXIS > 5
 			if (steps[E2_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E2_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
-#endif
 
 			Delay1(RAMPSFD_NUM_AXIS);
 
 			if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_X_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
 			if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_Y_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
 			if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_Z_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
-#if RAMPSFD_NUM_AXIS > 3
 			if (steps[E0_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E0_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
-#endif
-#if RAMPSFD_NUM_AXIS > 4
+#ifndef RAMPSFD_DISABLE_E1
 			if (steps[E1_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E1_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
 #endif
-#if RAMPSFD_NUM_AXIS > 5
 			if (steps[E2_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E2_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
-#endif
 
 			if (!have) break;
 

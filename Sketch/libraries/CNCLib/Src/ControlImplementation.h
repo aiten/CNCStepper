@@ -277,6 +277,8 @@ constexpr uint16_t GetInfo1b()
 #if defined(__SAMD21G18A__)
 	CConfigEeprom::EEPROM_NEED_EEPROM_FLUSH |
 	CConfigEeprom::EEPROM_NEED_DTR |
+#else
+		CConfigEeprom::EEPROM_DTRISRESET |
 #endif
 		CConfigEeprom::NONE1b;
 }

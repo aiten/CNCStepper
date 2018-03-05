@@ -137,7 +137,8 @@ public:
 	{
 		NONE1b = 0,
 		EEPROM_NEED_EEPROM_FLUSH = (1 << 0),
-		EEPROM_NEED_DTR = (1 << 1),
+		EEPROM_NEED_DTR = (1 << 1),				// deprecated, replaced by EEPROM_DTRISRESET
+		EEPROM_DTRISRESET = (1 << 2),
 	};
 
 	#define COMMANDSYNTAX_BIT	6

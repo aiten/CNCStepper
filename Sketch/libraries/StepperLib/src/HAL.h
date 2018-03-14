@@ -216,6 +216,8 @@ public:
 
 	static unsigned short analogRead(pin_t pin);
 
+	static void attachInterruptPin(pin_t pin, void(*userFunc)(void), int mode) ALWAYSINLINE;
+
 	static bool HaveEeprom() ALWAYSINLINE;
 	static void InitEeprom() ALWAYSINLINE;
 	static void FlushEeprom() ALWAYSINLINE;

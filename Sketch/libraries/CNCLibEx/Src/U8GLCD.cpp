@@ -76,6 +76,25 @@ void CU8GLcd::Init()
 
 ////////////////////////////////////////////////////////////
 
+void CU8GLcd::SetRotaryPin(pin_t pin1, pin_t pin2, pin_t pinPush, uint8_t onValuePush)
+{
+	_rotarypushbutton.SetPin(pinPush, onValuePush);
+
+	_rotarybutton.SetPin(pin1, pin2);
+
+#if defined(__AVR_ARCH__) || defined(_MSC_VER)
+#else
+
+	CHAL::attachInterruptPin(pin1, CallRotaryButtonTickISR, CHANGE);
+	CHAL::attachInterruptPin(pin2, CallRotaryButtonTickISR, CHANGE);
+
+#endif
+
+	_rotarybutton.Tick();
+}
+
+////////////////////////////////////////////////////////////
+
 uint8_t CU8GLcd::GetPageCount()
 {
 	uint8_t count;
@@ -122,9 +141,9 @@ void CU8GLcd::SetRotaryFocusMainPage()
 
 ////////////////////////////////////////////////////////////
 
-void CU8GLcd::TimerInterrupt()
+void CU8GLcd::CallRotaryButtonTick()
 {
-	super::TimerInterrupt();
+	// called within TimerInterrupt() or attachedInterrupt
 
 	switch (_rotarybutton.Tick())
 	{
@@ -134,6 +153,19 @@ void CU8GLcd::TimerInterrupt()
 			_rotaryEventTime = millis();
 			break;
 	}
+}
+
+////////////////////////////////////////////////////////////
+
+void CU8GLcd::TimerInterrupt()
+{
+	super::TimerInterrupt();
+
+#if defined(__AVR_ARCH__) || defined(_MSC_VER)
+
+	CallRotaryButtonTick();
+
+#endif
 
 	_rotarypushbutton.Check();
 }

@@ -141,6 +141,11 @@ inline void CHAL::pinModeInputPullUp(pin_t pin)
 	::pinMode(pin, INPUT_PULLUP);
 }
 
+inline void CHAL::attachInterruptPin(pin_t pin, void(*userFunc)(void), int mode)
+{
+	::attachInterrupt(digitalPinToInterrupt(pin), userFunc, mode);
+}
+
 #include "HAL_I2CEEprom.h"
 
 inline void CHAL::eeprom_write_dword(uint32_t *eeadr, uint32_t value)

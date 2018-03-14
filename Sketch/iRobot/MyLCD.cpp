@@ -85,12 +85,9 @@ void CMyLcd::Init()
 	
 	super::Init();
 
-	_rotarybutton.SetPin(ROTARY_EN1,ROTARY_EN2);
-	_rotarypushbutton.SetPin(ROTARY_ENC,ROTARY_ENC_ON);
+	SetRotaryPin(ROTARY_EN1,ROTARY_EN2, ROTARY_ENC, ROTARY_ENC_ON);
 
 	CHAL::pinModeInputPullUp(LCD_KILL_PIN);
-
-	_rotarybutton.Tick();
 }
 
 ////////////////////////////////////////////////////////////

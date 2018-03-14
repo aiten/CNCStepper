@@ -220,6 +220,11 @@ private:
 
 protected:
 
+	void SetRotaryPin(pin_t pin1, pin_t pin2, pin_t pinPush, uint8_t onValuePush);
+
+	void CallRotaryButtonTick();
+	static void CallRotaryButtonTickISR() { ((CU8GLcd*)CLcd::GetInstance())->CallRotaryButtonTick(); }
+
 	CRotaryButton<rotarypos_t, CU8GLcd_ROTARY_ACCURACY> _rotarybutton;
 	CPushButton									_rotarypushbutton;
 

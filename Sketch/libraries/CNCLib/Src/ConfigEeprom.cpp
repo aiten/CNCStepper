@@ -80,7 +80,6 @@ inline const void* AddAdr(const void*adr, eepromofs_t ofs)
 
 uint32_t CConfigEeprom::GetConfig32(eepromofs_t ofs)
 {
-	//StepperSerial.println((int)ofs);
 	if (_eepromvalid)	return CHAL::eeprom_read_dword((uint32_t*) AddAdr(CHAL::GetEepromBaseAdr(),ofs));
 	return pgm_read_dword((uint32_t*) AddAdr(_defaulteeprom,ofs));
 }
@@ -111,7 +110,11 @@ void CConfigEeprom::PrintConfig()
 	{
 		uint32_t val = GetConfig32(ofs);
 		StepperSerial.print('$'); StepperSerial.print(ofs/sizeof(uint32_t)); StepperSerial.print('=');
-		StepperSerial.print(val); StepperSerial.print('('); StepperSerial.print(val, HEX); StepperSerial.println(')');
+		StepperSerial.print(val); 
+#ifndef REDUCED_SIZE
+		StepperSerial.print('('); StepperSerial.print(val, HEX); StepperSerial.print(')');
+#endif
+		StepperSerial.println();
 	}
 }
 

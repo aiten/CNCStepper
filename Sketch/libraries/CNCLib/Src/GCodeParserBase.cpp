@@ -351,19 +351,7 @@ void CGCodeParserBase::Parse()
 			case '?':
 			{
 				_reader->GetNextChar();
-				_OkMessage = []()
-				{
-					// print abs pos => no negative values
-					for (uint8_t i = 0; i < NUM_AXIS; i++)
-					{
-						if (i != 0)
-							StepperSerial.print(':');
-						udist_t pos = CMotionControlBase::GetInstance()->GetPosition(i);
-						StepperSerial.print((uint16_t) (pos/1000l));
-						StepperSerial.print('.');
-						StepperSerial.print((uint16_t) (pos%1000));
-					}
-				};
+				_OkMessage = PrintInfo;
 				break;
 			}
 
@@ -972,3 +960,45 @@ void CGCodeParserBase::M0304Command(bool m3)
 }
 
 ////////////////////////////////////////////////////////////
+
+void CGCodeParserBase::PrintPosition(mm1000_t (*GetPos)(axis_t axis))
+{
+	for (uint8_t i = 0; i < NUM_AXIS; i++)
+	{
+		if (i != 0)
+			StepperSerial.print(':');
+
+		PrintPosition(GetPos(i));
+	}
+}
+
+////////////////////////////////////////////////////////////
+
+void CGCodeParserBase::PrintPosition(mm1000_t pos)
+{
+	int16_t  div = pos / 1000;
+	uint16_t  rem = abs(int16_t(pos % 1000));
+
+	StepperSerial.print(div);
+	StepperSerial.print('.');
+
+	if (rem < 100)
+	{
+		StepperSerial.print('0');
+		if (rem < 10) 
+			StepperSerial.print('0');
+	}
+
+	StepperSerial.print(rem);
+}
+
+////////////////////////////////////////////////////////////
+
+void CGCodeParserBase::PrintInfo()
+{
+	StepperSerial.print(F("<MPos:"));
+	PrintPosition([](axis_t axis) { return CMotionControlBase::GetInstance()->GetPosition(axis); });
+	StepperSerial.print(F("|WCO:"));
+	PrintPosition([](axis_t axis) { return GetG92PosPreset(axis); });
+	StepperSerial.print('>');
+}

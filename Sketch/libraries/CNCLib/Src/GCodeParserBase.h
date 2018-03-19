@@ -274,6 +274,10 @@ protected:
 	void G31Command(bool probevalue);
 	bool ProbeCommand(SAxisMove& move, bool probevalue);
 
+	static void PrintInfo();
+	static void PrintPosition(mm1000_t(*GetPos)(axis_t axis));
+	static void PrintPosition(mm1000_t pos);
+
 private:
 
 	void GetIJK(axis_t axis, SAxisMove& move, mm1000_t offset[2]);

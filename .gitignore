@@ -4,26 +4,16 @@
 *.bak
 *.sdf
 *.user
+
 /VS/Arduino.VC/Lib/StepperSystem.lib
 
 Debug/
 Release/
 ipch/
 .vs/
-PublishProfiles/
 
 /VS/builds
-/Sketch/libraries/grbl
 
-/VS/Arduino.VC/StepperTest/TestResult
-
-/VS/CNCLib/packages
-/VS/CNCLib/CNCLib.WebAPI/bin
-/VS/CNCLib/CNCLib.WebAPI/_bin_deployableAssemblies
-/VS/CNCLib/CNCLib.Web.WebForm/bin
-/VS/CNCLib/CNCLib.Web/bin
-/VS/CNCLib/CNCLib.Logic/bin
-/VS/CNCLib/PublishScripts
 
 obj
 bin
@@ -31,26 +21,14 @@ bin
 *.opendb
 *.db
 
-/VS/Arduino.VC/Lib/StepperSystem.pdb
-/VS/Arduino.VC/iRobot/Axis.xlsx
-/VS/Arduino.VC/DCK40Laser/DCK40Laser.csv
-/Sketch/DCK40LaserCNCShield
 /VS/Sign/Call-Invoke-SignCNCLib.ps1
+/VS/Arduino.VC/StepperTest/TestResult
 
-/Doc/Screen7.Jpg
-/Doc/Screen6.Jpg
-/Doc/Screen5.jpg
-/Doc/Screen4a.jpg
-/Doc/Screen3a.jpg
-/Doc/Screen2.jpg
-/Doc/Screen1a.jpg
-
-/VS/Plotter/packages
+/Sketch/libraries/grbl
 /Sketch/libraries/LiquidCrystal_I2C
-/VS/Plotter/packages
 /Sketch/libraries/U8glib
-/VS/CNCLib/TestResults
 /Sketch/libraries/SD
 /Sketch/libraries/DallasTemperature
 /Sketch/libraries/OneWire
 /Sketch/hardware/espressif
+/VS/Arduino.VC/Lib

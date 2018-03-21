@@ -1980,7 +1980,7 @@ void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool direct
 		if (_pod._limitCheck)
 		{
 			// check limit
-			if (newC >(long) _pod._limitMax[i] || newC < (long)_pod._limitMin[i])
+			if (newC >(long) GetLimitMax(i) || newC < (long)GetLimitMin(i))
 			{
 				Error(MESSAGE(MESSAGE_STEPPER_RangeLimit));
 				//				StepperSerial.print(F("Error: range limit")); StepperSerial.print(_limitMin[i]); StepperSerial.print(F("<")); StepperSerial.print(newC);; StepperSerial.print(F("<")); StepperSerial.print(_limitMax[i]);

@@ -176,7 +176,9 @@ public:
 #endif
 
 	void SetLimitMax(axis_t axis, udist_t limit)				{ _pod._limitMax[axis] = limit; };
+#ifndef REDUCED_SIZE
 	void SetLimitMin(axis_t axis, udist_t limit)				{ _pod._limitMin[axis] = limit; };
+#endif
 
 	void SetBacklash(axis_t axis, mdist_t dist)					{ _pod._backlash[axis] = dist; }
 
@@ -227,7 +229,11 @@ public:
 	udist_t GetCurrentPosition(axis_t axis) const				{ CCriticalRegion crit; return (*((volatile udist_t*)&_pod._current[axis])); }
 
 	udist_t GetLimitMax(axis_t axis) const						{ return _pod._limitMax[axis]; }
+#ifdef REDUCED_SIZE
+	udist_t GetLimitMin(axis_t ) const							{ return 0; }
+#else
 	udist_t GetLimitMin(axis_t axis) const						{ return _pod._limitMin[axis]; }
+#endif
 
 	mdist_t GetBacklash(axis_t axis) const						{ return _pod._backlash[axis]; }
 	axisArray_t GetLastDirection() const						{ return _pod._lastdirection; }		// check for backlash
@@ -359,7 +365,9 @@ protected:
 		timer_t			_timerAcc[NUM_AXIS];						// acc timer start
 		timer_t			_timerDec[NUM_AXIS];						// dec timer start
 
+#ifndef REDUCED_SIZE
 		udist_t			_limitMin[NUM_AXIS];
+#endif
 		udist_t			_limitMax[NUM_AXIS];
 
 		mdist_t			_backlash[NUM_AXIS];						// backlash of each axis (signed mdist_t/2)

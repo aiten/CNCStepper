@@ -34,6 +34,10 @@
 
 ////////////////////////////////////////////////////////////
 
+#ifndef REDUCED_SIZE
+
+////////////////////////////////////////////////////////////
+
 struct CGCodeParser::SModalState CGCodeParser::_modalstate;
 struct CGCodeParser::SModelessState CGCodeParser::_modlessstate;
 
@@ -1560,26 +1564,16 @@ void CGCodeParser::CNCLibCommandExtensions()
 
 void CGCodeParser::PrintAbsPosition()
 {
-	char tmp[16];
-	for (uint8_t i = 0; i < NUM_AXIS; i++)
-	{
-		if (i != 0)
-			StepperSerial.print(':');
-		StepperSerial.print(CMm1000::ToString(CMotionControlBase::GetInstance()->GetPosition(i), tmp, 3));
-	}
+	PrintPosition([](axis_t axis) { return CMotionControlBase::GetInstance()->GetPosition(axis); });
 }
 
 ////////////////////////////////////////////////////////////
 
 void CGCodeParser::PrintRelPosition()
 {
-	char tmp[16];
-	for (uint8_t i = 0; i < NUM_AXIS; i++)
-	{
-		if (i != 0)
-			StepperSerial.print(':');
-
-		StepperSerial.print(CMm1000::ToString(CMotionControlBase::GetInstance()->GetPosition(i) - CGCodeParser::GetAllPreset(i), tmp, 3));
-	}
+	PrintPosition([](axis_t axis) { return CMotionControlBase::GetInstance()->GetPosition(axis) - CGCodeParser::GetAllPreset(axis); });
 }
 
+////////////////////////////////////////////////////////////
+
+#endif // REDUCED_SIZE

@@ -41,6 +41,13 @@ public:
 	U8G2_ST7920_128X64_1_SW_SPI(void*, int, int, int) {};
 };
 
+class U8G2_ST7920_128X64_F_SW_SPI : public U8G2
+{
+public:
+	U8G2_ST7920_128X64_F_SW_SPI(void*, int, int, int) {};
+};
+
+
 static void* U8G2_R0;
 static const uint8_t* u8g_font_unifont;
 static const uint8_t* u8g_font_unifontr;

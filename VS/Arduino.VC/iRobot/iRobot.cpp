@@ -22,7 +22,7 @@
 
 #include "..\MsvcStepper\MsvcStepper.h"
 #include "TestTools.h"
-#include "..\..\..\sketch\iRobot\MyControl.h"
+#include "..\..\..\sketch\iRobot\iRobot\MyControl.h"
 #include <SPI.h>
 #include <SD.h>
 

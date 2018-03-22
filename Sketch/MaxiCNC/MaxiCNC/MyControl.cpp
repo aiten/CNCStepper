@@ -27,7 +27,7 @@
 #include <GCodeParser.h>
 
 #include "MyControl.h"
-#include "MyLCD.h"
+#include "MyLcd.h"
 
 ////////////////////////////////////////////////////////////
 

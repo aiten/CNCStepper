@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <arduino.h>
+#include <Arduino.h>
 #include <ctype.h>
 
 #include "HAL.h"

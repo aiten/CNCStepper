@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <arduino.h>
+#include <Arduino.h>
 #include <U8glib.h>
 
 #include <CNCLib.h>
@@ -38,7 +38,7 @@
 #include "RotaryButton.h"
 
 #include "Menu3D.h"
-#include "U8GLCD.h"
+#include "U8GLcd.h"
 
 #include "GCodeParser.h"
 #include "GCode3DParser.h"

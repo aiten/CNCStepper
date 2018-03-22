@@ -85,23 +85,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\Configuration.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\ConfigurationMachineTB6560Test.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\ConfigurationMachine_CNC3325.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\ConfigurationMachine_CNCShieldTest.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\ConfigurationMachine_Default.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\ConfigurationMachine_L298NTest.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\ConfigurationMachine_SMC800Test.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\ConfigurationStepper_CNCShield.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\ConfigurationStepper_L298N.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\ConfigurationStepper_SMC800.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\ConfigurationStepper_TB6560.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MyControl.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\Configuration.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_CNC3325.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_CNCShieldTest.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_Default.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_L298NTest.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_SMC800Test.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_TB6560Test.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_CNCShield.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_L298N.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_SMC800.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_TB6560.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\MyControl.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Sketch\MiniCNC\MyControl.cpp" />
+    <ClCompile Include="..\..\..\Sketch\MiniCNC\MiniCNC\MyControl.cpp" />
     <ClCompile Include="MiniCNC.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -109,7 +109,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Sketch\MiniCNC\MiniCNC.ino" />
+    <None Include="..\..\..\Sketch\MiniCNC\MiniCNC\MiniCNC.ino" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

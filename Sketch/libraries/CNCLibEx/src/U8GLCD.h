@@ -28,7 +28,7 @@
 #define U8G2 U8GLIB
 #endif
 
-#include <LCD.h>
+#include <Lcd.h>
 #include <RotaryButton.h>
 #include <PushButton.h>
 #include "ConfigurationCNCLibEx.h"

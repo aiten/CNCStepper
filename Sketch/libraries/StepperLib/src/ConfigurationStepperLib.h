@@ -16,7 +16,7 @@
 */
 ////////////////////////////////////////////////////////
 
-#include <arduino.h>
+#include <Arduino.h>
 
 #pragma once
 

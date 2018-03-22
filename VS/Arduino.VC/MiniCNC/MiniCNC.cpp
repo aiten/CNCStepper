@@ -22,7 +22,7 @@
 
 #include "..\MsvcStepper\MsvcStepper.h"
 #include "TestTools.h"
-#include "..\..\..\sketch\MiniCNC\MyControl.h"
+#include "..\..\..\sketch\MiniCNC\MiniCNC\MyControl.h"
 
 CSerial Serial;
 

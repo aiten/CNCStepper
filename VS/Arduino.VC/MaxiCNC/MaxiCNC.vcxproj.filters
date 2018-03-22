@@ -14,34 +14,34 @@
     <ClInclude Include="targetver.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MyControl.h">
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Configuration.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MyLCD.h">
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationMachine_KK1000S.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MyMenu.h">
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationMachine_MyCNC.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\Configuration.h">
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationMachine_ProxxonMF70.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationMachine_KK1000S.h">
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationStepper_Mash6050S.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationMachine_ProxxonMF70.h">
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationStepper_Ramps14.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationStepper_Mash6050S.h">
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationStepper_RampsFD.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationStepper_Ramps14.h">
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyControl.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationStepper_RampsFD.h">
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyLCD.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationMachine_MyCNC.h">
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyMenu.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
   </ItemGroup>
@@ -52,18 +52,18 @@
     <ClCompile Include="MaxiCNC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MyControl.cpp">
+    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyControl.cpp">
       <Filter>MaxiCNC</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MyLCD.cpp">
+    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyLCD.cpp">
       <Filter>MaxiCNC</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MyMenu.cpp">
+    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyMenu.cpp">
       <Filter>MaxiCNC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Sketch\MaxiCNC\MaxiCNC.ino">
+    <None Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MaxiCNC.ino">
       <Filter>MaxiCNC</Filter>
     </None>
   </ItemGroup>

@@ -16,13 +16,13 @@
     <ClInclude Include="targetver.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MiniLaser\MyControl.h">
+    <ClInclude Include="..\..\..\Sketch\MiniLaser\MiniLaser\Configuration.h">
       <Filter>MiniLaser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MiniLaser\Configuration.h">
+    <ClInclude Include="..\..\..\Sketch\MiniLaser\MiniLaser\Configuration_CNCShield.h">
       <Filter>MiniLaser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MiniLaser\Configuration_CNCShield.h">
+    <ClInclude Include="..\..\..\Sketch\MiniLaser\MiniLaser\MyControl.h">
       <Filter>MiniLaser</Filter>
     </ClInclude>
   </ItemGroup>
@@ -33,12 +33,12 @@
     <ClCompile Include="MiniLaser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\MiniLaser\MyControl.cpp">
+    <ClCompile Include="..\..\..\Sketch\MiniLaser\MiniLaser\MyControl.cpp">
       <Filter>MiniLaser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Sketch\MiniLaser\MiniLaser.ino">
+    <None Include="..\..\..\Sketch\MiniLaser\MiniLaser\MiniLaser.ino">
       <Filter>MiniLaser</Filter>
     </None>
   </ItemGroup>

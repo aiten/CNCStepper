@@ -24,9 +24,9 @@
 #include "Configuration.h"
 
 #if LCD_TYPE==1
-#include "LCD_2004_LiquidCrystal_I2C/MyLCD.h"
+#include "LCD_2004_LiquidCrystal_I2C/MyLcd.h"
 #elif LCD_TYPE==2
-#include "LCD_12864_u8g/MyLCD.h"
+#include "LCD_12864_u8g/MyLcd.h"
 #endif
 
 

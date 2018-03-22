@@ -49,7 +49,7 @@ public:
 		return _access(GetFilename(filename), 0) != -1;
 	}
 
-	bool mkdir(const char *filename)
+	bool mkdir(const char * /*filename*/)
 	{
 		return true;
 	}

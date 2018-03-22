@@ -20,7 +20,7 @@
 #pragma once
 
 #include "CNCLibTypes.h"
-#include "LCD.h"
+#include "Lcd.h"
 #include "MenuNavigator.h"
 
 ////////////////////////////////////////////////////////

@@ -16,25 +16,25 @@
     <ClInclude Include="targetver.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\iRobot\MyControl.h">
+    <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\Configuration.h">
       <Filter>iRobot</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\iRobot\StepperServo.h">
+    <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyControl.h">
       <Filter>iRobot</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\iRobot\MyMotionControl.h">
+    <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyLCD.h">
       <Filter>iRobot</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\iRobot\MyParser.h">
+    <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyMenu.h">
       <Filter>iRobot</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\iRobot\MyLCD.h">
+    <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyMotionControl.h">
       <Filter>iRobot</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\iRobot\MyMenu.h">
+    <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyParser.h">
       <Filter>iRobot</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\iRobot\Configuration.h">
+    <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\StepperServo.h">
       <Filter>iRobot</Filter>
     </ClInclude>
   </ItemGroup>
@@ -45,27 +45,27 @@
     <ClCompile Include="iRobot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\iRobot\MyControl.cpp">
+    <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyControl.cpp">
       <Filter>iRobot</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\iRobot\StepperServo.cpp">
+    <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyLCD.cpp">
       <Filter>iRobot</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\iRobot\MyMotionControl.cpp">
+    <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyMenu.cpp">
       <Filter>iRobot</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\iRobot\MyParser.cpp">
+    <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyMotionControl.cpp">
       <Filter>iRobot</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\iRobot\MyLCD.cpp">
+    <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyParser.cpp">
       <Filter>iRobot</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\iRobot\MyMenu.cpp">
+    <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\StepperServo.cpp">
       <Filter>iRobot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Sketch\iRobot\iRobot.ino">
+    <None Include="..\..\..\Sketch\iRobot\iRobot\iRobot.ino">
       <Filter>iRobot</Filter>
     </None>
   </ItemGroup>

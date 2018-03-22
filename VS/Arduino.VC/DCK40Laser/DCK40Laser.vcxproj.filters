@@ -16,19 +16,19 @@
     <ClInclude Include="targetver.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\DCK40Laser\MyControl.h">
+    <ClInclude Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\Configuration.h">
       <Filter>DCK40Laser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\DCK40Laser\MyLCD.h">
+    <ClInclude Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\Configuration_RampsFD.h">
       <Filter>DCK40Laser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\DCK40Laser\MyMenu.h">
+    <ClInclude Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyControl.h">
       <Filter>DCK40Laser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\DCK40Laser\Configuration_RampsFD.h">
+    <ClInclude Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyLCD.h">
       <Filter>DCK40Laser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\DCK40Laser\Configuration.h">
+    <ClInclude Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyMenu.h">
       <Filter>DCK40Laser</Filter>
     </ClInclude>
   </ItemGroup>
@@ -39,18 +39,18 @@
     <ClCompile Include="DCK40Laser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\DCK40Laser\MyControl.cpp">
+    <ClCompile Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyControl.cpp">
       <Filter>DCK40Laser</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\DCK40Laser\MyLCD.cpp">
+    <ClCompile Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyLCD.cpp">
       <Filter>DCK40Laser</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\DCK40Laser\MyMenu.cpp">
+    <ClCompile Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyMenu.cpp">
       <Filter>DCK40Laser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Sketch\DCK40Laser\DCK40Laser.ino">
+    <None Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\DCK40Laser.ino">
       <Filter>DCK40Laser</Filter>
     </None>
   </ItemGroup>

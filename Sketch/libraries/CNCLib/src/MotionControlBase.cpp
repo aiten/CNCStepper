@@ -21,7 +21,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-#include <arduino.h>
+#include <Arduino.h>
 #include <ctype.h>
 
 #include "CNCLib.h"

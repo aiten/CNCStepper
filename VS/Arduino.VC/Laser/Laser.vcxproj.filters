@@ -16,13 +16,13 @@
     <ClInclude Include="targetver.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\Laser\MyControl.h">
+    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Configuration.h">
       <Filter>Laser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\Laser\Configuration.h">
+    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Configuration_CNCShield.h">
       <Filter>Laser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\Laser\Configuration_CNCShield.h">
+    <ClInclude Include="..\..\..\Sketch\Laser\Laser\MyControl.h">
       <Filter>Laser</Filter>
     </ClInclude>
   </ItemGroup>
@@ -33,12 +33,12 @@
     <ClCompile Include="Laser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\Laser\MyControl.cpp">
+    <ClCompile Include="..\..\..\Sketch\Laser\Laser\MyControl.cpp">
       <Filter>Laser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Sketch\Laser\Laser.ino">
+    <None Include="..\..\..\Sketch\Laser\Laser\Laser.ino">
       <Filter>Laser</Filter>
     </None>
   </ItemGroup>

@@ -85,23 +85,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\Configuration.h" />
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationMachine_MyCNC.h" />
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationStepper_Mash6050S.h" />
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationStepper_Ramps14.h" />
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationStepper_RampsFD.h" />
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationMachine_KK1000S.h" />
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\ConfigurationMachine_ProxxonMF70.h" />
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MyControl.h" />
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MyLCD.h" />
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MyMenu.h" />
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Configuration.h" />
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationMachine_KK1000S.h" />
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationMachine_MyCNC.h" />
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationMachine_ProxxonMF70.h" />
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationStepper_Mash6050S.h" />
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationStepper_Ramps14.h" />
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationStepper_RampsFD.h" />
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyControl.h" />
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyLCD.h" />
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyMenu.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MyControl.cpp" />
-    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MyLCD.cpp" />
-    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MyMenu.cpp" />
+    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyControl.cpp" />
+    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyLCD.cpp" />
+    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyMenu.cpp" />
     <ClCompile Include="MaxiCNC.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -109,7 +109,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Sketch\MaxiCNC\MaxiCNC.ino" />
+    <None Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MaxiCNC.ino" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

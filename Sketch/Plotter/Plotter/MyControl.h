@@ -33,7 +33,7 @@
 #include <ConfigEeprom.h>
 
 #include "Configuration.h"
-#include "MyLCD.h"
+#include "MyLcd.h"
 
 // must be after "Configuration.h" because of defines
 #include <ControlImplementation.h>

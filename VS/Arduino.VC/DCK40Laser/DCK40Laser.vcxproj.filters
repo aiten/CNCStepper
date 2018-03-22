@@ -25,7 +25,7 @@
     <ClInclude Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyControl.h">
       <Filter>DCK40Laser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyLCD.h">
+    <ClInclude Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyLcd.h">
       <Filter>DCK40Laser</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyMenu.h">
@@ -42,7 +42,7 @@
     <ClCompile Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyControl.cpp">
       <Filter>DCK40Laser</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyLCD.cpp">
+    <ClCompile Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyLcd.cpp">
       <Filter>DCK40Laser</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\DCK40Laser\DCK40Laser\MyMenu.cpp">

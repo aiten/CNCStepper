@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <arduino.h>
+#include <Arduino.h>
 
 #include <CNCLib.h>
 #include <CNCLibEx.h>

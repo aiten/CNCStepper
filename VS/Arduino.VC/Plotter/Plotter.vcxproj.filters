@@ -31,13 +31,13 @@
     <ClInclude Include="..\Include\arduino.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyLCD.h">
+    <ClInclude Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyLcd.h">
       <Filter>Plotter\LCD_12864_u8g</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyMenu.h">
       <Filter>Plotter\LCD_12864_u8g</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\Plotter\LCD_2004_LiquidCrystal_I2C\MyLCD.h">
+    <ClInclude Include="..\..\..\Sketch\Plotter\LCD_2004_LiquidCrystal_I2C\MyLcd.h">
       <Filter>Plotter\LCD_2004_LiquidCrystal_I2C</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\Configuration.h">
@@ -52,7 +52,7 @@
     <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\MyControl.h">
       <Filter>Plotter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\MyLCD.h">
+    <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\MyLcd.h">
       <Filter>Plotter</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\PlotterControl.h">
@@ -69,13 +69,13 @@
     <ClCompile Include="Plotter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyLCD.cpp">
+    <ClCompile Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyLcd.cpp">
       <Filter>Plotter\LCD_12864_u8g</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyMenu.cpp">
       <Filter>Plotter\LCD_12864_u8g</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\Plotter\LCD_2004_LiquidCrystal_I2C\MyLCD.cpp">
+    <ClCompile Include="..\..\..\Sketch\Plotter\LCD_2004_LiquidCrystal_I2C\MyLcd.cpp">
       <Filter>Plotter\LCD_2004_LiquidCrystal_I2C</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\Plotter\Plotter\HPGLParser.cpp">
@@ -84,7 +84,7 @@
     <ClCompile Include="..\..\..\Sketch\Plotter\Plotter\MyControl.cpp">
       <Filter>Plotter</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\Plotter\Plotter\MyLCD.cpp">
+    <ClCompile Include="..\..\..\Sketch\Plotter\Plotter\MyLcd.cpp">
       <Filter>Plotter</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\Plotter\Plotter\PlotterControl.cpp">

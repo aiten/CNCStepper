@@ -38,7 +38,7 @@
     <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyControl.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyLCD.h">
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyLcd.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyMenu.h">
@@ -55,7 +55,7 @@
     <ClCompile Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyControl.cpp">
       <Filter>MaxiCNC</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyLCD.cpp">
+    <ClCompile Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyLcd.cpp">
       <Filter>MaxiCNC</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyMenu.cpp">

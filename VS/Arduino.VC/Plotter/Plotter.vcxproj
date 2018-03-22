@@ -86,16 +86,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyLCD.h" />
+    <ClInclude Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyLcd.h" />
     <ClInclude Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyMenu.h" />
-    <ClInclude Include="..\..\..\Sketch\Plotter\LCD_2004_LiquidCrystal_I2C\MyLCD.h">
+    <ClInclude Include="..\..\..\Sketch\Plotter\LCD_2004_LiquidCrystal_I2C\MyLcd.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\Configuration.h" />
     <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\Configuration_Ramps14.h" />
     <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\HPGLParser.h" />
     <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\MyControl.h" />
-    <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\MyLCD.h" />
+    <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\MyLcd.h" />
     <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\PlotterControl.h" />
     <ClInclude Include="..\Include\arduino.h" />
     <ClInclude Include="..\MsvcStepper\MsvcStepper.h" />
@@ -103,18 +103,18 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyLCD.cpp">
+    <ClCompile Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyLcd.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyMenu.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\Plotter\LCD_2004_LiquidCrystal_I2C\MyLCD.cpp">
+    <ClCompile Include="..\..\..\Sketch\Plotter\LCD_2004_LiquidCrystal_I2C\MyLcd.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\Plotter\Plotter\HPGLParser.cpp" />
     <ClCompile Include="..\..\..\Sketch\Plotter\Plotter\MyControl.cpp" />
-    <ClCompile Include="..\..\..\Sketch\Plotter\Plotter\MyLCD.cpp" />
+    <ClCompile Include="..\..\..\Sketch\Plotter\Plotter\MyLcd.cpp" />
     <ClCompile Include="..\..\..\Sketch\Plotter\Plotter\PlotterControl.cpp" />
     <ClCompile Include="..\MsvcStepper\MsvcStepper.cpp" />
     <ClCompile Include="Plotter.cpp" />

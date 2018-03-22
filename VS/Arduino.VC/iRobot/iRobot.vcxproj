@@ -87,7 +87,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\Configuration.h" />
     <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyControl.h" />
-    <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyLCD.h" />
+    <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyLcd.h" />
     <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyMenu.h" />
     <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyMotionControl.h" />
     <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyParser.h" />
@@ -97,7 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyControl.cpp" />
-    <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyLCD.cpp" />
+    <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyLcd.cpp" />
     <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyMenu.cpp" />
     <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyMotionControl.cpp" />
     <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyParser.cpp" />

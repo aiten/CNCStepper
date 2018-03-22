@@ -22,7 +22,7 @@
     <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyControl.h">
       <Filter>iRobot</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyLCD.h">
+    <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyLcd.h">
       <Filter>iRobot</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\iRobot\iRobot\MyMenu.h">
@@ -48,7 +48,7 @@
     <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyControl.cpp">
       <Filter>iRobot</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyLCD.cpp">
+    <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyLcd.cpp">
       <Filter>iRobot</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\iRobot\iRobot\MyMenu.cpp">

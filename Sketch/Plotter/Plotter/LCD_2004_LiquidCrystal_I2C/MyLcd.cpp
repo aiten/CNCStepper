@@ -22,13 +22,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <arduino.h>
+#include <Arduino.h>
 
 #include <StepperLib.h>
 #include <CNCLib.h>
 
 #include "..\MyControl.h"
-#include "MyLCD.h"
+#include "MyLcd.h"
 
 #ifdef MYUSE_LCD
 

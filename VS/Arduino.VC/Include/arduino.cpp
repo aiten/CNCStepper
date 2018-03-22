@@ -17,7 +17,7 @@ http://www.gnu.org/licenses/
 */
 ////////////////////////////////////////////////////////
 
-#include "arduino.h"
+#include "Arduino.h"
 
 #define MAXDIGITALREADPINS 256
 

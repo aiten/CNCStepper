@@ -164,48 +164,71 @@ protected:
 
 	////////////////////////////////////////////////////////
 	
-	virtual void  Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp) override
+	inline static void SetDirection(axisArray_t directionUp)
 	{
-		// The timing requirements for minimum pulse durations on the STEP pin are different for the two drivers. 
-		// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 
-		// they can be as short as 1 us when using the A4988.
-
-		// Step:   LOW to HIGH
-
-		if ((directionUp&(1 << X_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPS14_X_DIR_PIN,  RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_X_DIR_PIN,  RAMPS14_PIN_DIR_ON);
-		if ((directionUp&(1 << Y_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPS14_Y_DIR_PIN,  RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_Y_DIR_PIN,  RAMPS14_PIN_DIR_ON);
-		if ((directionUp&(1 << Z_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPS14_Z_DIR_PIN,  RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_Z_DIR_PIN,  RAMPS14_PIN_DIR_ON);
+		if ((directionUp&(1 << X_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPS14_X_DIR_PIN, RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_X_DIR_PIN, RAMPS14_PIN_DIR_ON);
+		if ((directionUp&(1 << Y_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPS14_Y_DIR_PIN, RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_Y_DIR_PIN, RAMPS14_PIN_DIR_ON);
+		if ((directionUp&(1 << Z_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPS14_Z_DIR_PIN, RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_Z_DIR_PIN, RAMPS14_PIN_DIR_ON);
 #if RAMPS14_NUM_AXIS > 3
 		if ((directionUp&(1 << E0_AXIS)) != 0) HALFastdigitalWriteNC(RAMPS14_E0_DIR_PIN, RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_E0_DIR_PIN, RAMPS14_PIN_DIR_ON);
 #endif
 #if RAMPS14_NUM_AXIS > 4
 		if ((directionUp&(1 << E1_AXIS)) != 0) HALFastdigitalWriteNC(RAMPS14_E1_DIR_PIN, RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_E1_DIR_PIN, RAMPS14_PIN_DIR_ON);
 #endif
+	}
+
+	////////////////////////////////////////////////////////
+
+	inline static bool SetStepPin(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	{
+		bool have = false;
+
+		if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_X_STEP_PIN, RAMPS14_PIN_STEP_OFF); have = true; }
+		if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_Y_STEP_PIN, RAMPS14_PIN_STEP_OFF); have = true; }
+		if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_Z_STEP_PIN, RAMPS14_PIN_STEP_OFF); have = true; }
+#if RAMPS14_NUM_AXIS > 3
+		if (steps[E0_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_E0_STEP_PIN, RAMPS14_PIN_STEP_OFF); have = true; }
+#endif
+#if RAMPS14_NUM_AXIS > 4
+		if (steps[E1_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_E1_STEP_PIN, RAMPS14_PIN_STEP_OFF); have = true; }
+#endif
+		return have;
+	}
+
+	////////////////////////////////////////////////////////
+
+	inline static void ClearStepPin(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	{
+		if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_X_STEP_PIN, RAMPS14_PIN_STEP_ON); }
+		if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_Y_STEP_PIN, RAMPS14_PIN_STEP_ON); }
+		if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_Z_STEP_PIN, RAMPS14_PIN_STEP_ON); }
+#if RAMPS14_NUM_AXIS > 3
+		if (steps[E0_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_E0_STEP_PIN, RAMPS14_PIN_STEP_ON); }
+#endif
+#if RAMPS14_NUM_AXIS > 4
+		if (steps[E1_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_E1_STEP_PIN, RAMPS14_PIN_STEP_ON); }
+#endif
+	}
+
+	////////////////////////////////////////////////////////
+
+	virtual void  Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp) override
+	{
+		// The timing requirements for minimum pulse durations on the STEP pin are different for the two drivers. 
+		// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 
+		// they can be as short as 1 us when using the A4988.
+
+		SetDirection(directionUp);
+
+		// Step:   LOW to HIGH
 
 		for (uint8_t cnt = 0;; cnt++)
 		{
-			register bool have = false;
-			if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_X_STEP_PIN, RAMPS14_PIN_STEP_OFF); have = true; }
-			if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_Y_STEP_PIN, RAMPS14_PIN_STEP_OFF); have = true; }
-			if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_Z_STEP_PIN, RAMPS14_PIN_STEP_OFF); have = true; }
-#if RAMPS14_NUM_AXIS > 3
-			if (steps[E0_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_E0_STEP_PIN, RAMPS14_PIN_STEP_OFF); have = true; }
-#endif
-#if RAMPS14_NUM_AXIS > 4
-			if (steps[E1_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_E1_STEP_PIN, RAMPS14_PIN_STEP_OFF); have = true; }
-#endif
+			bool have = SetStepPin(steps,cnt);
 
 			Delay1(RAMPS14_NUM_AXIS);
 
-			if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_X_STEP_PIN, RAMPS14_PIN_STEP_ON); }
-			if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_Y_STEP_PIN, RAMPS14_PIN_STEP_ON); }
-			if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_Z_STEP_PIN, RAMPS14_PIN_STEP_ON); }
-#if RAMPS14_NUM_AXIS > 3
-			if (steps[E0_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_E0_STEP_PIN, RAMPS14_PIN_STEP_ON); }
-#endif
-#if RAMPS14_NUM_AXIS > 4
-			if (steps[E1_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_E1_STEP_PIN, RAMPS14_PIN_STEP_ON); }
-#endif
+			ClearStepPin(steps, cnt);
 
 			if (!have) break;
 

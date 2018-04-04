@@ -133,6 +133,7 @@ public:
 /*
 
 => not used timers
+=> PWM on UNO => need for analowWrite
 
 	// 8 bit
 	static void InitTimer2(HALEvent evt);
@@ -141,23 +142,27 @@ public:
 	static void StopTimer2();
 
 	static HALEvent _TimerEvent2;
+*/ 
 
 #if !defined( __AVR_ATmega328P__)
 
 	// min 16 bit
 	static void InitTimer3(HALEvent evt);
+	static void InitTimer3OneShot(HALEvent evt);
 	static void RemoveTimer3();
 	static void StartTimer3(timer_t timer);
 	static void StopTimer3();
 
 	// min 16 bit
 	static void InitTimer4(HALEvent evt);
+	static void InitTimer4OneShot(HALEvent evt);
 	static void RemoveTimer4();
 	static void StartTimer4(timer_t timer);
 	static void StopTimer4();
 
 	// min 16 bit
 	static void InitTimer5(HALEvent evt);
+	static void InitTimer5OneShot(HALEvent evt);
 	static void RemoveTimer5();
 	static void StartTimer5(timer_t timer);
 	static void StopTimer5();
@@ -167,7 +172,7 @@ public:
 	static HALEvent _TimerEvent5;
 
 #endif
-*/
+
 #if defined(__SAM3X8E__) || defined(__SAMD21G18A__)
 
 	static void BackgroundRequest();

@@ -45,6 +45,12 @@ void TC8_Handler()
 	CHAL::_TimerEvent1();
 }
 
+void TC7_Handler()
+{
+	TC_GetStatus(DUETIMER2_TC, DUETIMER2_CHANNEL);
+	CHAL::_TimerEvent2();
+}
+
 void CAN0_Handler()
 {
 	CHAL::_BackgroundEvent();

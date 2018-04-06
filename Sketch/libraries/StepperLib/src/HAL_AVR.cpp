@@ -39,31 +39,18 @@ ISR(TIMER1_OVF_vect)
 {
 	CHAL::_TimerEvent1();
 }
-/*
-ISR(TIMER2_OVF_vect)
+
+#if !defined(__AVR_ATmega328P__)
+
+
+ISR(TIMER5_OVF_vect)
 {
 	CHAL::_TimerEvent2();
 }
 
-#if !defined(__AVR_ATmega328P__)
-
-ISR(TIMER3_OVF_vect)
-{
-	CHAL::_TimerEvent3();
-}
-
-ISR(TIMER4_OVF_vect)
-{
-	CHAL::_TimerEvent4();
-}
-
-ISR(TIMER5_OVF_vect)
-{
-	CHAL::_TimerEvent5();
-}
 
 #endif
-*/
+
 void CHAL::digitalWrite(pin_t pin, uint8_t val)
 {
 //	uint8_t timer = digitalPinToTimer(pin);

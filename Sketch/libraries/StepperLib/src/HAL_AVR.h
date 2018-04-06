@@ -37,23 +37,10 @@
 
 #define TIMER1MIN			32
 #define TIMER1MAX			0xffff
-/*
-#define TIMER2PRESCALE      1024
+
+#define TIMER2PRESCALE      8
 #define TIMER2FREQUENCE		(F_CPU/TIMER2PRESCALE)
 
-#ifndef __AVR_ATmega328P__
-
-#define TIMER3PRESCALE      1024
-#define TIMER3FREQUENCE		(F_CPU/TIMER3PRESCALE)
-
-#define TIMER4PRESCALE      1024
-#define TIMER4FREQUENCE		(F_CPU/TIMER4PRESCALE)
-
-#define TIMER5PRESCALE      1024
-#define TIMER5FREQUENCE		(F_CPU/TIMER5PRESCALE)
-
-#endif
-*/
 #define MAXINTERRUPTSPEED	(65535/7)	// maximal possible interrupt rate => steprate_t
 
 #define SPEED_MULTIPLIER_1	0
@@ -147,142 +134,53 @@ inline void CHAL::StopTimer1()
 	TIMSK1 &= ~(1<<TOIE1);					// Deaktiviert Interrupt beim Overflow des Timers 1
 	TCNT1=0;  
 }  
-/*
-////////////////////////////////////////////////////////
-
-inline void  CHAL::RemoveTimer2() {}
-
-////////////////////////////////////////////////////////
-
-inline void  CHAL::InitTimer2(HALEvent evt)
-{
-	_TimerEvent2 = evt;  
-	TCCR2A = 0x00;							// stetzt Statusregiser A Vom Timer eins auf null
-	TCCR2B = 0x00;							// stetzt Statusregiser B Vom Timer eins auf null
-	TCCR2B |= ((1 << CS22) | (1 << CS21) | (1 << CS20));	// timer laeuft mit 1/1024 des CPU Takt.
-}
-
-////////////////////////////////////////////////////////
-
-inline void CHAL::StartTimer2(timer_t timer)
-{
-	TCNT2 = (0x100 - timer);				// timer2 is 8bit
-	TIMSK2 |= (1 << TOIE2);					// Aktiviert Interrupt beim Overflow des Timers 2
-	TCCR2B |= ((1 << CS22) | (1 << CS21) | (1 << CS20));	// timer laeuft mit 1/1024 des CPU Takt.
-	TIFR2  |= (1 << TOV2);					// clear the overflow flag
-}
-
-////////////////////////////////////////////////////////
-
-inline void CHAL::StopTimer2()
-{
-	TCCR2B = 0x00;							// stetzt Statusregiser B Vom Timer eins auf null
-	TIMSK2 &= ~(1 << TOIE2);				// Deaktiviert Interrupt beim Overflow des Timers 2
-	TCNT2 = 0;
-}
 
 ////////////////////////////////////////////////////////
 
 #if !defined(__AVR_ATmega328P__)
 
 ////////////////////////////////////////////////////////
+// Timer2 => HW Timer 5
 
-inline void  CHAL::RemoveTimer3() {}
+inline void  CHAL::RemoveTimer2() {}
 
-inline void  CHAL::InitTimer3(HALEvent evt)
+inline void  CHAL::InitTimer2OneShot(HALEvent evt)
 {
-	_TimerEvent3 = evt;
-
-	TCCR3A = 0x00;							// stetzt Statusregiser A Vom Timer eins auf null
-	TCCR3B = 0x00;							// stetzt Statusregiser B Vom Timer eins auf null
-	TCCR3B |= (1<<CS32) | (1<<CS30);		// timer laeuft mit 1/1024 des CPU Takt.
-}
-
-////////////////////////////////////////////////////////
-
-inline void CHAL::StartTimer3(timer_t timer)
-{
-	TCNT3  = 0 - timer;  
-	TIMSK3 |= (1<<TOIE3);					// Aktiviert Interrupt beim Overflow des Timers 1
-	TCCR3B |= (1<<CS32) | (1<<CS30);		// timer laeuft mit 1/1024 des CPU Takt.
-	TIFR3  |= (1<<TOV3);					// clear the overflow flag
-}
-
-////////////////////////////////////////////////////////
-
-inline void CHAL::StopTimer3()
-{
-	TCCR3B = 0x00;							// stetzt Statusregiser B Vom Timer eins auf null
-	TIMSK3 &= ~(1<<TOIE3);					// Deaktiviert Interrupt beim Overflow des Timers 1
-	TCNT3=0;  
-}  
-
-////////////////////////////////////////////////////////
-
-inline void  CHAL::RemoveTimer4() {}
-
-inline void  CHAL::InitTimer4(HALEvent evt)
-{
-	_TimerEvent4 = evt;
-
-	TCCR4A = 0x00;							// stetzt Statusregiser A Vom Timer eins auf null
-	TCCR4B = 0x00;							// stetzt Statusregiser B Vom Timer eins auf null
-	TCCR4B |= (1<<CS42) | (1<<CS40);		// timer laeuft mit 1/1024 des CPU Takt.
-}
-
-////////////////////////////////////////////////////////
-
-inline void CHAL::StartTimer4(timer_t timer)
-{
-	TCNT4  = 0 - timer;  
-	TIMSK4 |= (1<<TOIE4);					// Aktiviert Interrupt beim Overflow des Timers 1
-	TCCR4B |= (1<<CS42) | (1<<CS40);		// timer laeuft mit 1/1024 des CPU Takt.
-	TIFR4  |= (1<<TOV4);					// clear the overflow flag
-}
-
-////////////////////////////////////////////////////////
-
-inline void CHAL::StopTimer4()
-{
-	TCCR4B = 0x00;							// stetzt Statusregiser B Vom Timer eins auf null
-	TIMSK4 &= ~(1<<TOIE4);					// Deaktiviert Interrupt beim Overflow des Timers 1
-	TCNT4=0;  
-}  
-
-////////////////////////////////////////////////////////
-
-inline void  CHAL::RemoveTimer5() {}
-
-inline void  CHAL::InitTimer5(HALEvent evt)
-{
-	_TimerEvent5 = evt;
+	_TimerEvent2 = evt;
 
 	TCCR5A = 0x00;							// stetzt Statusregiser A Vom Timer eins auf null
 	TCCR5B = 0x00;							// stetzt Statusregiser B Vom Timer eins auf null
-	TCCR5B |= (1<<CS52) | (1<<CS50);		// timer laeuft mit 1/1024 des CPU Takt.
+	TCCR5B |= (1<<CS51);					// timer laeuft mit 1/8 des CPU Takt.
 }
 
 ////////////////////////////////////////////////////////
 
-inline void CHAL::StartTimer5(timer_t timer)
+inline void CHAL::StartTimer2OneShot(timer_t timer)
 {
-	TCNT5  = 0 - timer;  
-	TIMSK5 |= (1<<TOIE5);					// Aktiviert Interrupt beim Overflow des Timers 1
-	TCCR5B |= (1<<CS52) | (1<<CS50);		// timer laeuft mit 1/1024 des CPU Takt.
-	TIFR5  |= (1<<TOV5);					// clear the overflow flag
+	ReStartTimer2OneShot(timer);
+	TIMSK5 |= (1<<TOIE5);					// Aktiviert Interrupt beim Overflow des Timers 
+	TCCR5B |= (1<<CS51);					// timer laeuft mit 1/8 des CPU Takt.
+}
+
+inline void CHAL::ReStartTimer2OneShot(timer_t timer)
+{
+	TCNT5 = 0 - timer;
+	TIFR5 |= (1 << TOV5);					// clear the overflow flag
 }
 
 ////////////////////////////////////////////////////////
 
-inline void CHAL::StopTimer5()
+inline void CHAL::StopTimer2()
 {
 	TCCR5B = 0x00;							// stetzt Statusregiser B Vom Timer eins auf null
-	TIMSK5 &= ~(1<<TOIE5);					// Deaktiviert Interrupt beim Overflow des Timers 1
+	TIMSK5 &= ~(1<<TOIE5);					// Deaktiviert Interrupt beim Overflow des Timers 
 	TCNT5=0;  
 }  
 
 #endif
-*/
+
+////////////////////////////////////////////////////////
+
 #define HALFastdigitalWrite(a,b) WRITE(a,b)
 #define HALFastdigitalWriteNC(a,b) _WRITE_NC(a,b)
 #define HALFastdigitalRead(a) READ(a)

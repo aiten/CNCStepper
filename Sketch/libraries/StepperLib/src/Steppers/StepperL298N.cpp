@@ -120,7 +120,7 @@ void CStepperL298N::InitMemVar()
 
 ////////////////////////////////////////////////////////
 
-void  CStepperL298N::Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp)
+void CStepperL298N::Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool)
 {
 	for (axis_t axis = 0; axis < NUM_AXIS; axis++)
 	{

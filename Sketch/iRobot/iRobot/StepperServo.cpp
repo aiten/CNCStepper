@@ -42,7 +42,7 @@ void CStepperServo::Init()
 
 ////////////////////////////////////////////////////////
 
-void CStepperServo::Step(const uint8_t /* steps */[NUM_AXIS], uint8_t /* directionUp */)
+void CStepperServo::Step(const uint8_t /* steps */[NUM_AXIS], uint8_t /* directionUp */, bool /* isSameDirection */)
 {
 	SetServo();
 }

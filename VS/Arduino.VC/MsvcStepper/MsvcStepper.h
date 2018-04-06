@@ -53,9 +53,9 @@ public:
 
 protected:
 
-	virtual void  StepBegin(const SStepBuffer* step) override;
-	virtual void  Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp) override;
-	virtual void  StepRequest(bool isr) override;
+	virtual void StepBegin(const SStepBuffer* step) override;
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override;
+	virtual void StepRequest(bool isr) override;
 
 	virtual void  SetEnable(axis_t axis, uint8_t level, bool /* force */) override { _level[axis] = level; };
 	virtual uint8_t GetEnable(axis_t axis) override		{ return _level[axis]; }

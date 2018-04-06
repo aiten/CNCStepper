@@ -117,7 +117,7 @@ static void Delay2() ALWAYSINLINE { CHAL::delayMicroseconds(1); }
 
 	////////////////////////////////////////////////////////
 
-	virtual void  Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp) override
+	virtual void  Stepuint8_t steps[NUM_AXIS], axisArray_t directionUp) override
 	{
 		// Step:   LOW to HIGH
 		// PULS must be at least 1ms

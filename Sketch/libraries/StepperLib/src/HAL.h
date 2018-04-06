@@ -48,9 +48,12 @@
 #define TIMER0VALUE(freq)	((timer_t)((unsigned long)TIMER0FREQUENCE/(unsigned long)freq))
 #define TIMER1VALUE(freq)	((timer_t)((unsigned long)TIMER1FREQUENCE/(unsigned long)freq))
 #define TIMER2VALUE(freq)	((timer_t)((unsigned long)TIMER2FREQUENCE/(unsigned long)freq))
-#define TIMER3VALUE(freq)	((timer_t)((unsigned long)TIMER3FREQUENCE/(unsigned long)freq))
-#define TIMER4VALUE(freq)	((timer_t)((unsigned long)TIMER4FREQUENCE/(unsigned long)freq))
-#define TIMER5VALUE(freq)	((timer_t)((unsigned long)TIMER5FREQUENCE/(unsigned long)freq))
+//#define TIMER3VALUE(freq)	((timer_t)((unsigned long)TIMER3FREQUENCE/(unsigned long)freq))
+//#define TIMER4VALUE(freq)	((timer_t)((unsigned long)TIMER4FREQUENCE/(unsigned long)freq))
+//#define TIMER5VALUE(freq)	((timer_t)((unsigned long)TIMER5FREQUENCE/(unsigned long)freq))
+
+#define TIMER2MICROSEC					(1.0/(float) TIMER2FREQUENCE*1000000.0)
+#define TIMER2VALUEFROMMICROSEC(msec)	((timer_t)((msec) / TIMER2MICROSEC))
 
 ////////////////////////////////////////////////////////
 
@@ -116,13 +119,13 @@ public:
 
 	typedef void(*HALEvent)();
 
-	// min 8 bit 
+	// min 8 bit, AVR: HW Timer 0
 	static void InitTimer0(HALEvent evt);
 	static void RemoveTimer0();
 	static void StartTimer0(timer_t timer);
 	static void StopTimer0();
 
-	// min 16 bit (AVR 2MHZ) 
+	// min 16 bit (AVR: 2MHZ, HW Timer1) 
 	static void InitTimer1OneShot(HALEvent evt);
 	static void RemoveTimer1();
 	static void StartTimer1OneShot(timer_t timer);
@@ -130,46 +133,17 @@ public:
 
 	static HALEvent _TimerEvent0;
 	static HALEvent _TimerEvent1;
-/*
-
-=> not used timers
-=> PWM on UNO => need for analowWrite
-
-	// 8 bit
-	static void InitTimer2(HALEvent evt);
-	static void RemoveTimer2();
-	static void StartTimer2(timer_t timer);
-	static void StopTimer2();
-
-	static HALEvent _TimerEvent2;
-*/ 
 
 #if !defined( __AVR_ATmega328P__)
 
-	// min 16 bit
-	static void InitTimer3(HALEvent evt);
-	static void InitTimer3OneShot(HALEvent evt);
-	static void RemoveTimer3();
-	static void StartTimer3(timer_t timer);
-	static void StopTimer3();
+	// min 8 bit, (AVR: HW Timer5) 
+	static void InitTimer2OneShot(HALEvent evt);
+	static void RemoveTimer2();
+	static void StartTimer2OneShot(timer_t timer);
+	static void ReStartTimer2OneShot(timer_t timer);
+	static void StopTimer2();
 
-	// min 16 bit
-	static void InitTimer4(HALEvent evt);
-	static void InitTimer4OneShot(HALEvent evt);
-	static void RemoveTimer4();
-	static void StartTimer4(timer_t timer);
-	static void StopTimer4();
-
-	// min 16 bit
-	static void InitTimer5(HALEvent evt);
-	static void InitTimer5OneShot(HALEvent evt);
-	static void RemoveTimer5();
-	static void StartTimer5(timer_t timer);
-	static void StopTimer5();
-
-	static HALEvent _TimerEvent3;
-	static HALEvent _TimerEvent4;
-	static HALEvent _TimerEvent5;
+	static HALEvent _TimerEvent2;
 
 #endif
 

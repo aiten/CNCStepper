@@ -393,7 +393,7 @@ protected:
 #endif
 
 		bool		_pause;											// PauseMove is called
-		bool		_dummy;	
+		axisArray_t	_lastDirectionUp;								// last paramter value of Steo()
 
 	} _pod;
 
@@ -656,7 +656,9 @@ protected:
 	virtual void  StepEnd() {};
 #endif
 
-	virtual void  Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp) = 0;
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) = 0;
+
+	bool IsSameDirectionUp(axisArray_t directionUp)						{ return directionUp == _pod._lastDirectionUp;  }
 
 private:
 
@@ -676,7 +678,27 @@ protected:
 	static void HandleInterrupt()								{ GetInstance()->StepRequest(true); }
 	static void HandleBackground()								{ GetInstance()->Background(); }
 
-	//////////////////////////////////////////////////////////////
-	// inline template
 
+	////////////////////////////////////////////////////////
+	// timer supportes pin for step / dir (A4998)
+protected:
+
+	static uint8_t _mysteps[NUM_AXIS];
+	static volatile uint8_t _setState;
+	static uint8_t _myCnt;
+
+	enum ESetPinState
+	{
+		NextIsDone=0,
+		NextIsSetPin,
+		NextIsClearPin,
+		NextIsClearDonePin,
+	};
+
+	static void InitStepDirTimer(const uint8_t steps[NUM_AXIS])
+	{
+		memcpy(_mysteps, steps, sizeof(_mysteps));
+		_myCnt = 1;
+		_setState = NextIsSetPin;
+	}
 };

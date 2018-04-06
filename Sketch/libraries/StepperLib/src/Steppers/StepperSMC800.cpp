@@ -162,7 +162,7 @@ void CStepperSMC800::Remove()
 
 ////////////////////////////////////////////////////////
 
-void  CStepperSMC800::Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp)
+void CStepperSMC800::Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool)
 {
 	for (axis_t axis = 0; axis < NUM_AXIS; axis++)
 	{

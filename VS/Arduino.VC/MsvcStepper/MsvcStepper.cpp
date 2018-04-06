@@ -191,7 +191,7 @@ void  CStepper::Step(axis_t axis , bool  directionUp , uint8_t count )
 */
 ////////////////////////////////////////////////////////////
 
-void CMsvcStepper::Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp)
+void CMsvcStepper::Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool /* isSameDirection */)
 {
 	for (axis_t axis=0 ; axis< NUM_AXIS; axis++)
 	{

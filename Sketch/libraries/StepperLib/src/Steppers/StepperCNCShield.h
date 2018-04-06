@@ -71,6 +71,12 @@ public:
 
 		HALFastdigitalWrite(CNCSHIELD_A_STEP_PIN, CNCSHIELD_PIN_STEP_ON);
 #endif
+
+		SetDirection(0);
+
+#ifdef USESTEPTIMER
+		CHAL::InitTimer2(HandleStepPinInterrupt);
+#endif
 	}
 
 protected:
@@ -100,45 +106,80 @@ protected:
 
 	////////////////////////////////////////////////////////
 
-	virtual void  Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp) override
+	static void SetDirection(axisArray_t directionUp)
+	{
+		if ((directionUp&(1 << X_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_X_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_X_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
+		if ((directionUp&(1 << Y_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_Y_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_Y_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
+		if ((directionUp&(1 << Z_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_Z_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_Z_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
+#if CNCSHIELD_NUM_AXIS > 3
+		if ((directionUp&(1 << A_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_A_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_A_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
+#endif
+	}
+
+	////////////////////////////////////////////////////////
+
+	static uint8_t SetStepPin(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	{
+		uint8_t pending = 0;
+		if (steps[X_AXIS]) { pending += steps[X_AXIS] - cnt;  HALFastdigitalWriteNC(CNCSHIELD_X_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
+		if (steps[Y_AXIS]) { pending += steps[Y_AXIS] - cnt;  HALFastdigitalWriteNC(CNCSHIELD_Y_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
+		if (steps[Z_AXIS]) { pending += steps[Z_AXIS] - cnt;  HALFastdigitalWriteNC(CNCSHIELD_Z_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
+#if CNCSHIELD_NUM_AXIS > 3
+		if (steps[A_AXIS]) { pending += steps[A_AXIS] - cnt; HALFastdigitalWriteNC(CNCSHIELD_A_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
+#endif
+
+		return pending;
+	}
+
+	////////////////////////////////////////////////////////
+
+	static void ClearStepPin()
+	{
+		HALFastdigitalWriteNC(CNCSHIELD_X_STEP_PIN, CNCSHIELD_PIN_STEP_ON); 
+		HALFastdigitalWriteNC(CNCSHIELD_Y_STEP_PIN, CNCSHIELD_PIN_STEP_ON); 
+		HALFastdigitalWriteNC(CNCSHIELD_Z_STEP_PIN, CNCSHIELD_PIN_STEP_ON); 
+#if CNCSHIELD_NUM_AXIS > 3
+		HALFastdigitalWriteNC(CNCSHIELD_A_STEP_PIN, CNCSHIELD_PIN_STEP_ON); 
+#endif
+	}
+
+	////////////////////////////////////////////////////////
+
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override
 	{
 		// The timing requirements for minimum pulse durations on the STEP pin are different for the two drivers. 
 		// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 
 		// they can be as short as 1 us when using the A4988.
 
-		// Step:   LOW to HIGH
+#ifdef USESTEPTIMER
 
-		if ((directionUp&(1 << X_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_X_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_X_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
-		if ((directionUp&(1 << Y_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_Y_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_Y_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
-		if ((directionUp&(1 << Z_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_Z_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_Z_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
-
-#if CNCSHIELD_NUM_AXIS > 3
-		if ((directionUp&(1 << A_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_A_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_A_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
-#endif
-
-		for (uint8_t cnt = 0;; cnt++)
+		InitStepDirTimer(steps);
+		if (!isSameDirection)
 		{
-			register bool have = false;
-			if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_X_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); have = true; }
-			if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_Y_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); have = true; }
-			if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_Z_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); have = true; }
-#if CNCSHIELD_NUM_AXIS > 3
-			if (steps[A_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_A_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); have = true; }
-#endif
+			SetDirection(directionUp);
+		}
+		HandleStepPinInterrupt();
+		CHAL::StartTimer2(TIMER2VALUEFROMMICROSEC(STEPTIMERDELAYINMICRO));
 
+#else
+
+		if (!isSameDirection)
+		{
+			SetDirection(directionUp);
+		}
+
+		for (uint8_t cnt = 1;; cnt++)
+		{
+			uint8_t pending = SetStepPin(steps, cnt);
 			Delay1(CNCSHIELD_NUM_AXIS);
+			ClearStepPin();
 
-			if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_X_STEP_PIN, CNCSHIELD_PIN_STEP_ON); }
-			if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_Y_STEP_PIN, CNCSHIELD_PIN_STEP_ON); }
-			if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_Z_STEP_PIN, CNCSHIELD_PIN_STEP_ON); }
-#if CNCSHIELD_NUM_AXIS > 3
-			if (steps[A_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_A_STEP_PIN, CNCSHIELD_PIN_STEP_ON); }
-#endif
-
-			if (!have) break;
+			if (pending == 0)
+				break;
 
 			Delay2();
 		}
+#endif
 	}
 
 public:

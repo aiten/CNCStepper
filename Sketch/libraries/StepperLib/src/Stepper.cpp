@@ -39,6 +39,10 @@ CStepper::CStepper()
 
 template<> CStepper* CSingleton<CStepper>::_instance = NULL;
 
+uint8_t CStepper::_mysteps[NUM_AXIS];
+volatile uint8_t CStepper::_setState;
+uint8_t CStepper::_myCnt;
+
 ////////////////////////////////////////////////////////
 
 void CStepper::InitMemVar()
@@ -1440,7 +1444,9 @@ inline void CStepper::StepOut()
 			break;
 	}
 
-	Step(axescount,directionUp^_pod._invertdirection);
+	directionUp = directionUp ^ _pod._invertdirection;
+	Step(axescount, directionUp, _pod._lastDirectionUp == directionUp);
+	_pod._lastDirectionUp = directionUp;
 
 	_steps.Dequeue();
 }

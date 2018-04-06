@@ -45,7 +45,7 @@ protected:
 
 	virtual void  SetEnable(axis_t axis, uint8_t level, bool force) override;
 	virtual uint8_t GetEnable(axis_t axis) override;
-	virtual void  Step(const uint8_t cnt[NUM_AXIS], axisArray_t directionUp) override;
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override;
 
 public:
 

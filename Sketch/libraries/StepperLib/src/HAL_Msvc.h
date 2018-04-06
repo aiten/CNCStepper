@@ -78,12 +78,14 @@ inline void CHAL::InitTimer1OneShot(HALEvent evt){ _TimerEvent1 = evt; }
 inline void CHAL::RemoveTimer1()			{}
 inline void CHAL::StartTimer1OneShot(timer_t)		{}
 inline void CHAL::StopTimer1()				{}
-/*
-inline void CHAL::InitTimer2(HALEvent evt){ _TimerEvent2 = evt; }
+
+inline void CHAL::InitTimer2OneShot(HALEvent evt){ _TimerEvent2 = evt; }
 inline void CHAL::RemoveTimer2()			{}
-inline void CHAL::StartTimer2(timer_t)		{}
+inline void CHAL::StartTimer2OneShot(timer_t)		{}
+inline void CHAL::ReStartTimer2OneShot(timer_t) {}
 inline void CHAL::StopTimer2()				{}
 
+/*
 inline void CHAL::InitTimer3(HALEvent evt){ _TimerEvent3 = evt; }
 inline void CHAL::RemoveTimer3()			{}
 inline void CHAL::StartTimer3(timer_t)		{}

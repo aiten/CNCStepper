@@ -58,10 +58,12 @@ inline  int pgm_read_int(const void* p) { return * ((const int*) p); }
 
 #define TIMER1MIN			4
 #define TIMER1MAX			0xffffffffl
-/*
-#define TIMER2FREQUENCE		(F_CPU/TIMER2PRESCALE)
-#define TIMER2PRESCALE      2			
 
+#define TIMER2FREQUENCE		2000000L	
+#define TIMER2PRESCALE      8			
+//#define TIMER2FREQUENCE		(F_CPU/TIMER2PRESCALE)
+
+/*
 #define TIMER3FREQUENCE		(F_CPU/TIMER3PRESCALE)
 #define TIMER3PRESCALE      2			
 
@@ -221,6 +223,10 @@ inline void CHAL::delayMicroseconds0250()
 
 ////////////////////////////////////////////////////////
 
+#define DUETIMER2_TC					TC2
+#define DUETIMER2_CHANNEL				1
+#define DUETIMER2_IRQTYPE				((IRQn_Type) ID_TC7)
+
 #define DUETIMER1_TC					TC2
 #define DUETIMER1_CHANNEL				2
 #define DUETIMER1_IRQTYPE				((IRQn_Type) ID_TC8)
@@ -312,6 +318,47 @@ inline void CHAL::StopTimer1()
 	NVIC_DisableIRQ(DUETIMER1_IRQTYPE);
 	TC_Stop(DUETIMER1_TC, DUETIMER1_CHANNEL);
 }  
+
+////////////////////////////////////////////////////////
+
+inline void  CHAL::RemoveTimer2() {}
+
+inline void CHAL::StartTimer2(timer_t timer_count)
+{
+	if (timer_count == 0) timer_count = 1;
+	TC_SetRC(DUETIMER2_TC, DUETIMER2_CHANNEL, timer_count);
+	TC_Start(DUETIMER2_TC, DUETIMER2_CHANNEL);
+}
+
+////////////////////////////////////////////////////////
+
+inline void  CHAL::InitTimer2(HALEvent evt)
+{
+	_TimerEvent0 = evt;
+
+	pmc_enable_periph_clk(DUETIMER2_IRQTYPE);
+	NVIC_SetPriority(DUETIMER2_IRQTYPE, NVIC_EncodePriority(4, 3, 0));
+
+	TC_Configure(DUETIMER2_TC, DUETIMER2_CHANNEL, TC_CMR_WAVSEL_UP_RC | TC_CMR_WAVE | TC_CMR_TCCLKS_TIMER_CLOCK1);
+
+	TC_SetRC(DUETIMER2_TC, DUETIMER2_CHANNEL, 100000L);
+	TC_Start(DUETIMER2_TC, DUETIMER2_CHANNEL);
+
+	DUETIMER2_TC->TC_CHANNEL[DUETIMER2_CHANNEL].TC_IER = TC_IER_CPCS;
+	DUETIMER2_TC->TC_CHANNEL[DUETIMER2_CHANNEL].TC_IDR = ~TC_IER_CPCS;
+	NVIC_EnableIRQ(DUETIMER2_IRQTYPE);
+}
+
+////////////////////////////////////////////////////////
+
+inline void CHAL::StopTimer2()
+{
+	NVIC_DisableIRQ(DUETIMER2_IRQTYPE);
+	TC_Stop(DUETIMER2_TC, DUETIMER2_CHANNEL);
+}
+
+////////////////////////////////////////////////////////
+
 
 #endif 
 

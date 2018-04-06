@@ -177,7 +177,7 @@ protected:
 
 	////////////////////////////////////////////////////////
 
-	virtual void  Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp) override
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override
 	{
 		// The timing requirements for minimum pulse durations on the STEP pin are different for the two drivers. 
 		// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 

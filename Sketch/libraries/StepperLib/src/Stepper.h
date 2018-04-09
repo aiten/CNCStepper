@@ -698,7 +698,7 @@ protected:
 	static void InitStepDirTimer(const uint8_t steps[NUM_AXIS])
 	{
 		memcpy(_mysteps, steps, sizeof(_mysteps));
-		_myCnt = 1;
+		_myCnt = 0;
 		_setState = NextIsSetPin;
 	}
 };

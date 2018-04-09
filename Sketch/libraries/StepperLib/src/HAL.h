@@ -173,12 +173,12 @@ public:
 	static inline void DisableInterrupts() ALWAYSINLINE;
 	static inline void EnableInterrupts() ALWAYSINLINE;
 
-	static inline void delayMicroseconds(unsigned int us) ALWAYSINLINE ;
-	static inline void delayMicroseconds0250() ALWAYSINLINE;		// delay 1/4 us (4 nop on AVR)
-	static inline void delayMicroseconds0312() ALWAYSINLINE;		// delay 0.312us (5 nop on AVR)
-	static inline void delayMicroseconds0375() ALWAYSINLINE;		// delay 0.312us (6 nop on AVR)
-	static inline void delayMicroseconds0438() ALWAYSINLINE;		// delay 0.312us (7 nop on AVR)
-	static inline void delayMicroseconds0500() ALWAYSINLINE;		// delay 1/2 (8 nop on AVR)
+	static inline void DelayMicroseconds(unsigned int us) ALWAYSINLINE ;
+	static inline void DelayMicroseconds0250() ALWAYSINLINE;		// delay 1/4 us (4 nop on AVR)
+	static inline void DelayMicroseconds0312() ALWAYSINLINE;		// delay 0.312us (5 nop on AVR)
+	static inline void DelayMicroseconds0375() ALWAYSINLINE;		// delay 0.312us (6 nop on AVR)
+	static inline void DelayMicroseconds0438() ALWAYSINLINE;		// delay 0.312us (7 nop on AVR)
+	static inline void DelayMicroseconds0500() ALWAYSINLINE;		// delay 1/2 (8 nop on AVR)
 
 	static inline irqflags_t GetSREG() ALWAYSINLINE;
 	static inline void SetSREG(irqflags_t) ALWAYSINLINE;

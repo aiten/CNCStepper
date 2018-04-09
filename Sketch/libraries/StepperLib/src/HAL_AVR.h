@@ -61,17 +61,17 @@
 ////////////////////////////////////////////////////////
 // For shorter delays use assembly language call 'nop' (no operation). Each 'nop' statement executes in one machine cycle (at 16 MHz) yielding a 62.5 ns (nanosecond) delay. 
 
-inline void CHAL::delayMicroseconds0250() {	__asm__("nop\n\tnop\n\tnop\n\tnop\n\t"); }
+inline void CHAL::DelayMicroseconds0250() {	__asm__("nop\n\tnop\n\tnop\n\tnop\n\t"); }
 
-inline void CHAL::delayMicroseconds0312() {	__asm__("nop\n\tnop\n\tnop\n\tnop\n\tnop\n\t"); }
+inline void CHAL::DelayMicroseconds0312() {	__asm__("nop\n\tnop\n\tnop\n\tnop\n\tnop\n\t"); }
 
-inline void CHAL::delayMicroseconds0375() { __asm__("nop\n\tnop\n\tnop\n\tnopn\tnop\n\tnop\n\t"); }
+inline void CHAL::DelayMicroseconds0375() { __asm__("nop\n\tnop\n\tnop\n\tnopn\tnop\n\tnop\n\t"); }
 
-inline void CHAL::delayMicroseconds0438() { __asm__("nop\n\tnop\n\tnop\n\tnopn\tnop\n\tnop\n\tnop\n\t"); }
+inline void CHAL::DelayMicroseconds0438() { __asm__("nop\n\tnop\n\tnop\n\tnopn\tnop\n\tnop\n\tnop\n\t"); }
 
-inline void CHAL::delayMicroseconds0500() {	__asm__("nop\n\tnop\n\tnop\n\tnop\n\tnop\n\tnop\n\tnop\n\tnop\n\t"); }
+inline void CHAL::DelayMicroseconds0500() {	__asm__("nop\n\tnop\n\tnop\n\tnop\n\tnop\n\tnop\n\tnop\n\tnop\n\t"); }
 
-inline void CHAL::delayMicroseconds(unsigned int us) {	::delayMicroseconds(us); }
+inline void CHAL::DelayMicroseconds(unsigned int us) {	::DelayMicroseconds(us); }
 
 inline void CHAL::DisableInterrupts()	{	cli(); }
 inline void CHAL::EnableInterrupts()	{	sei(); }

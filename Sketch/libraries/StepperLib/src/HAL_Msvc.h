@@ -57,12 +57,12 @@
 inline void CHAL::DisableInterrupts()	{	cli(); }
 inline void CHAL::EnableInterrupts()	{	sei(); }
 
-inline void CHAL::delayMicroseconds0250() {  }
-inline void CHAL::delayMicroseconds0312() {  }
-inline void CHAL::delayMicroseconds0375() {  }
-inline void CHAL::delayMicroseconds0438() {  }
-inline void CHAL::delayMicroseconds0500() {  }
-inline void CHAL::delayMicroseconds(unsigned int) {}
+inline void CHAL::DelayMicroseconds0250() {  }
+inline void CHAL::DelayMicroseconds0312() {  }
+inline void CHAL::DelayMicroseconds0375() {  }
+inline void CHAL::DelayMicroseconds0438() {  }
+inline void CHAL::DelayMicroseconds0500() {  }
+inline void CHAL::DelayMicroseconds(unsigned int) {}
 
 inline irqflags_t CHAL::GetSREG()				{ return SREG; }
 inline void CHAL::SetSREG(irqflags_t a)			{ SREG=a; }

@@ -191,12 +191,12 @@ inline bool CHAL::NeedFlushEeprom()
 
 ////////////////////////////////////////////////////////
 
-inline void CHAL::delayMicroseconds(unsigned int usec)
+inline void CHAL::DelayMicroseconds(unsigned int usec)
 {
 	::delayMicroseconds(usec);
 }
 
-inline void CHAL::delayMicroseconds0500()
+inline void CHAL::DelayMicroseconds0500()
 {
 	// uint32_t n = usec * (VARIANT_MCK / 3000000);
 	uint32_t n = 1 * (VARIANT_MCK / 3000000) / 2;
@@ -208,7 +208,7 @@ inline void CHAL::delayMicroseconds0500()
 		);
 }
 
-inline void CHAL::delayMicroseconds0250()
+inline void CHAL::DelayMicroseconds0250()
 {
 	// uint32_t n = usec * (VARIANT_MCK / 3000000);
 	uint32_t n = 1 * (VARIANT_MCK / 3000000) / 4;

@@ -155,7 +155,7 @@ protected:
 			//		if (steps[A_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_A_STEP_PIN,TB6560_PIN_STEP_ON); have = true; }
 			//		if (steps[B_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_B_STEP_PIN,TB6560_PIN_STEP_ON); have = true; }
 
-			CHAL::delayMicroseconds(7);
+			CHAL::DelayMicroseconds(7);
 
 			if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_X_STEP_PIN, TB6560_PIN_STEP_OFF); }
 			if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_Y_STEP_PIN, TB6560_PIN_STEP_OFF); }
@@ -165,7 +165,7 @@ protected:
 
 			if (!have) break;
 
-			CHAL::delayMicroseconds(7);
+			CHAL::DelayMicroseconds(7);
 		}
 
 #undef SETDIR

@@ -36,7 +36,7 @@
 
 #define RAMPS14_ENDSTOPCOUNT 6
 
-#define USESTEPTIMER
+//#define USESTEPTIMER
 #define STEPTIMERDELAYINMICRO 2
 
 ////////////////////////////////////////////////////////
@@ -176,7 +176,7 @@ protected:
 
 	////////////////////////////////////////////////////////
 	
-	static void SetDirection(axisArray_t directionUp)
+	static uint8_t SetDirection(axisArray_t directionUp)
 	{
 		if ((directionUp&(1 << X_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPS14_X_DIR_PIN, RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_X_DIR_PIN, RAMPS14_PIN_DIR_ON);
 		if ((directionUp&(1 << Y_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPS14_Y_DIR_PIN, RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_Y_DIR_PIN, RAMPS14_PIN_DIR_ON);
@@ -187,23 +187,24 @@ protected:
 		if ((directionUp&(1 << E1_AXIS)) != 0) HALFastdigitalWriteNC(RAMPS14_E1_DIR_PIN, RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_E1_DIR_PIN, RAMPS14_PIN_DIR_ON);
 #endif
 #endif
+
+		// return us direction pin must be set
+		return 0;
 	}
 
 	////////////////////////////////////////////////////////
 
-	static uint8_t SetStepPin(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	static void SetStepPin(const uint8_t steps[NUM_AXIS], uint8_t cnt)
 	{
-		uint8_t pending = 0;
-		if (steps[X_AXIS] >= cnt) { pending += steps[X_AXIS]-cnt;  HALFastdigitalWriteNC(RAMPS14_X_STEP_PIN, RAMPS14_PIN_STEP_OFF); }
-		if (steps[Y_AXIS] >= cnt) { pending += steps[Y_AXIS]-cnt;  HALFastdigitalWriteNC(RAMPS14_Y_STEP_PIN, RAMPS14_PIN_STEP_OFF); }
-		if (steps[Z_AXIS] >= cnt) { pending += steps[Z_AXIS]-cnt;  HALFastdigitalWriteNC(RAMPS14_Z_STEP_PIN, RAMPS14_PIN_STEP_OFF); }
+		if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_X_STEP_PIN, RAMPS14_PIN_STEP_OFF); }
+		if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_Y_STEP_PIN, RAMPS14_PIN_STEP_OFF); }
+		if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_Z_STEP_PIN, RAMPS14_PIN_STEP_OFF); }
 #if RAMPS14_NUM_AXIS > 3
-		if (steps[E0_AXIS] >= cnt) { pending += steps[E0_AXIS]-cnt; HALFastdigitalWriteNC(RAMPS14_E0_STEP_PIN, RAMPS14_PIN_STEP_OFF); }
+		if (steps[E0_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_E0_STEP_PIN, RAMPS14_PIN_STEP_OFF); }
 #if RAMPS14_NUM_AXIS > 4
-		if (steps[E1_AXIS] >= cnt) { pending += steps[E1_AXIS]-cnt; HALFastdigitalWriteNC(RAMPS14_E1_STEP_PIN, RAMPS14_PIN_STEP_OFF); }
+		if (steps[E1_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPS14_E1_STEP_PIN, RAMPS14_PIN_STEP_OFF); }
 #endif
 #endif
-		return pending;
 	}
 
 	////////////////////////////////////////////////////////
@@ -221,6 +222,36 @@ protected:
 #endif
 	}
 
+	static uint8_t GetPendingAxis(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	{
+		// do not optimize => it will be used as "Delay1
+		uint8_t pending = 0;
+		if (steps[X_AXIS] > cnt) { pending++;  }
+		if (steps[Y_AXIS] > cnt) { pending++; }
+		if (steps[Z_AXIS] > cnt) { pending++; }
+#if RAMPS14_NUM_AXIS > 3		    
+		if (steps[E0_AXIS] > cnt) { pending++;; }
+#if RAMPS14_NUM_AXIS > 4		    
+		if (steps[E1_AXIS] > cnt) { pending++;; }
+#endif
+#endif
+		return pending;
+	}
+
+	static bool AnyPendingAxis(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	{
+		// optimize => not used as "Delay1
+		return steps[X_AXIS] > cnt || steps[Y_AXIS] > cnt || steps[Z_AXIS] > cnt
+#if RAMPS14_NUM_AXIS > 3		    
+			|| steps[E0_AXIS] > cnt
+#if RAMPS14_NUM_AXIS > 4		    
+			|| steps[E1_AXIS] > cnt
+#endif
+#endif
+		;
+	}
+
+
 	////////////////////////////////////////////////////////
 
 	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override
@@ -233,14 +264,20 @@ protected:
 
 		while (_setState != NextIsDone)
 		{
-			HandleStepPinInterrupt();
+			_setState = MyStep(_mysteps, (EnumAsByte(ESetPinState)) _setState, _myCnt);
 			Delay1(RAMPS14_NUM_AXIS);
 		}
 
 		InitStepDirTimer(steps);
 		if (!isSameDirection)
 		{
-			SetDirection(directionUp);
+			uint8_t delaysetdirection = SetDirection(directionUp);
+			if (delaysetdirection)
+			{
+				CHAL::StartTimer2OneShot(TIMER2VALUEFROMMICROSEC(delaysetdirection));
+				// wait until interrupt
+				return;
+			}
 		}
 		HandleStepPinInterrupt();
 
@@ -248,13 +285,23 @@ protected:
 
 		if (!isSameDirection)
 		{
-			SetDirection(directionUp);
+			uint8_t delaysetdirection = SetDirection(directionUp);
+			if (delaysetdirection)
+			{
+				CHAL:DelayMicroseconds(delaysetdirection);
+			}
 		}
 
-		for (uint8_t cnt = 1;; cnt++)
+		for (uint8_t cnt = 0;;)
 		{
-			uint8_t pending = SetStepPin(steps, cnt);
+			SetStepPin(steps, cnt);
+			cnt++;
+
+			// AVR: GetPendingAxis will take 8 machine cycle per axis: 0.5 us
+			//      Delay1() may be very short (=0 if axis >= 2)
+			uint8_t pending = GetPendingAxis(steps, cnt);
 			Delay1(RAMPS14_NUM_AXIS);
+
 			ClearStepPin();
 
 			if (pending==0)
@@ -318,12 +365,15 @@ public:
 			CHAL::StartTimer2OneShot(TIMER2VALUEFROMMICROSEC(STEPTIMERDELAYINMICRO));
 	}
 
-	static EnumAsByte(ESetPinState) MyStep(uint8_t steps[NUM_AXIS], EnumAsByte(ESetPinState) state, uint8_t& cnt)
+	#endif
+
+	static EnumAsByte(ESetPinState) MyStep(const uint8_t steps[NUM_AXIS], EnumAsByte(ESetPinState) state, uint8_t& cnt)
 	{
 		if (state == NextIsSetPin)
 		{
-			state = SetStepPin(steps, cnt) ? NextIsClearPin : NextIsClearDonePin;
+			SetStepPin(steps, cnt);
 			cnt++;
+			state = AnyPendingAxis(steps, cnt) ? NextIsClearPin : NextIsClearDonePin;
 		}
 		else
 		{
@@ -332,8 +382,6 @@ public:
 		}
 		return state;
 	}
-
-	#endif
 };
 
 #endif

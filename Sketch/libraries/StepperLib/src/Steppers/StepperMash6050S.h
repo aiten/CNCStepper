@@ -105,19 +105,19 @@ protected:
 
 #if defined(__SAM3X8E__) || defined(__SAMD21G18A__)
 
-static void Delay1() ALWAYSINLINE { CHAL::delayMicroseconds(2); }
-static void Delay2() ALWAYSINLINE { CHAL::delayMicroseconds(2); }
+static void Delay1() ALWAYSINLINE { CHAL::DelayMicroseconds(2); }
+static void Delay2() ALWAYSINLINE { CHAL::DelayMicroseconds(2); }
 
 #else //AVR
 
-static void Delay1() ALWAYSINLINE { CHAL::delayMicroseconds(1); }
-static void Delay2() ALWAYSINLINE { CHAL::delayMicroseconds(1); }
+static void Delay1() ALWAYSINLINE { CHAL::DelayMicroseconds(1); }
+static void Delay2() ALWAYSINLINE { CHAL::DelayMicroseconds(1); }
 
 #endif
 
 	////////////////////////////////////////////////////////
 
-	virtual void  Stepuint8_t steps[NUM_AXIS], axisArray_t directionUp) override
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp) override
 	{
 		// Step:   LOW to HIGH
 		// PULS must be at least 1ms
@@ -130,7 +130,7 @@ static void Delay2() ALWAYSINLINE { CHAL::delayMicroseconds(1); }
 
 		if (_lastStepDirection != directionUp)
 		{
-			CHAL::delayMicroseconds(5);
+			CHAL::DelayMicroseconds(5);
 			_lastStepDirection = directionUp;
 		}
 

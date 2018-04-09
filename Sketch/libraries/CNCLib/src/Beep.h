@@ -211,9 +211,9 @@ public:
 			if (freq!=ToneNo)
 			{
 				CHAL::digitalWrite(PIN, HIGH);
-				CHAL::delayMicroseconds(tonePause);
+				CHAL::DelayMicroseconds(tonePause);
 				CHAL::digitalWrite(PIN, LOW);
-				CHAL::delayMicroseconds(tonePause);
+				CHAL::DelayMicroseconds(tonePause);
 			}
 		} while (millis() < endmillis);
 	}

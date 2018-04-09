@@ -36,8 +36,10 @@
 
 #define RAMPS14_ENDSTOPCOUNT 6
 
-//#define USESTEPTIMER
+#if defined(__SAM3X8E__)
+#define USESTEPTIMER
 #define STEPTIMERDELAYINMICRO 2
+#endif
 
 ////////////////////////////////////////////////////////
 
@@ -176,7 +178,7 @@ protected:
 
 	////////////////////////////////////////////////////////
 	
-	static uint8_t SetDirection(axisArray_t directionUp)
+	static void SetDirection(axisArray_t directionUp)
 	{
 		if ((directionUp&(1 << X_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPS14_X_DIR_PIN, RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_X_DIR_PIN, RAMPS14_PIN_DIR_ON);
 		if ((directionUp&(1 << Y_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPS14_Y_DIR_PIN, RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_Y_DIR_PIN, RAMPS14_PIN_DIR_ON);
@@ -187,9 +189,6 @@ protected:
 		if ((directionUp&(1 << E1_AXIS)) != 0) HALFastdigitalWriteNC(RAMPS14_E1_DIR_PIN, RAMPS14_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPS14_E1_DIR_PIN, RAMPS14_PIN_DIR_ON);
 #endif
 #endif
-
-		// return us direction pin must be set
-		return 0;
 	}
 
 	////////////////////////////////////////////////////////
@@ -222,20 +221,64 @@ protected:
 #endif
 	}
 
-	static uint8_t GetPendingAxis(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	////////////////////////////////////////////////////////
+
+#ifdef USESTEPTIMER
+
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override
 	{
-		// do not optimize => it will be used as "Delay1
-		uint8_t pending = 0;
-		if (steps[X_AXIS] > cnt) { pending++;  }
-		if (steps[Y_AXIS] > cnt) { pending++; }
-		if (steps[Z_AXIS] > cnt) { pending++; }
-#if RAMPS14_NUM_AXIS > 3		    
-		if (steps[E0_AXIS] > cnt) { pending++;; }
-#if RAMPS14_NUM_AXIS > 4		    
-		if (steps[E1_AXIS] > cnt) { pending++;; }
-#endif
-#endif
-		return pending;
+		// The timing requirements for minimum pulse durations on the STEP pin are different for the two drivers. 
+		// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 
+		// they can be as short as 1 us when using the A4988.
+
+		while (_setState != NextIsDone)
+		{
+			_setState = MyStep(_mysteps, (EnumAsByte(ESetPinState)) _setState, _myCnt);
+			Delay1(RAMPS14_NUM_AXIS);
+		}
+
+		InitStepDirTimer(steps);
+		if (!isSameDirection)
+		{
+			SetDirection(directionUp);
+			if (A4998DRV8825_CHANGEDIRECTIONMICROS)
+			{
+				CHAL::StartTimer2OneShot(TIMER2VALUEFROMMICROSEC(A4998DRV8825_CHANGEDIRECTIONMICROS));
+				// wait until interrupt
+				return;
+			}
+		}
+		HandleStepPinInterrupt();
+	}
+
+	static void HandleStepPinInterrupt()
+	{
+		_setState = MyStep(_mysteps, (EnumAsByte(ESetPinState)) _setState, _myCnt);
+		if (_setState == NextIsDone)
+			CHAL::StopTimer2();
+		else
+			CHAL::StartTimer2OneShot(TIMER2VALUEFROMMICROSEC(STEPTIMERDELAYINMICRO));
+	}
+
+	static EnumAsByte(ESetPinState) MyStep(const uint8_t steps[NUM_AXIS], EnumAsByte(ESetPinState) state, uint8_t& cnt)
+	{
+		if (state == NextIsSetPin)
+		{
+			SetStepPin(steps, cnt);
+			cnt++;
+			
+			state = AnyPendingAxis(steps, cnt) ? NextIsClearPin : NextIsClearDonePin;
+
+//			Delay1(RAMPS14_NUM_AXIS);
+//			ClearStepPin();
+//			state = state == NextIsClearPin ? NextIsSetPin : NextIsDone;
+		}
+		else
+		{
+			ClearStepPin();
+			state = state == NextIsClearPin ? NextIsSetPin : NextIsDone;
+		}
+		return state;
 	}
 
 	static bool AnyPendingAxis(const uint8_t steps[NUM_AXIS], uint8_t cnt)
@@ -248,11 +291,10 @@ protected:
 			|| steps[E1_AXIS] > cnt
 #endif
 #endif
-		;
+			;
 	}
 
-
-	////////////////////////////////////////////////////////
+#else
 
 	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override
 	{
@@ -260,35 +302,12 @@ protected:
 		// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 
 		// they can be as short as 1 us when using the A4988.
 
-#ifdef USESTEPTIMER
-
-		while (_setState != NextIsDone)
-		{
-			_setState = MyStep(_mysteps, (EnumAsByte(ESetPinState)) _setState, _myCnt);
-			Delay1(RAMPS14_NUM_AXIS);
-		}
-
-		InitStepDirTimer(steps);
 		if (!isSameDirection)
 		{
-			uint8_t delaysetdirection = SetDirection(directionUp);
-			if (delaysetdirection)
+			SetDirection(directionUp);
+			if (A4998DRV8825_CHANGEDIRECTIONMICROS)
 			{
-				CHAL::StartTimer2OneShot(TIMER2VALUEFROMMICROSEC(delaysetdirection));
-				// wait until interrupt
-				return;
-			}
-		}
-		HandleStepPinInterrupt();
-
-#else
-
-		if (!isSameDirection)
-		{
-			uint8_t delaysetdirection = SetDirection(directionUp);
-			if (delaysetdirection)
-			{
-				CHAL:DelayMicroseconds(delaysetdirection);
+				CHAL::DelayMicroseconds(A4998DRV8825_CHANGEDIRECTIONMICROS);
 			}
 		}
 
@@ -297,21 +316,37 @@ protected:
 			SetStepPin(steps, cnt);
 			cnt++;
 
-			// AVR: GetPendingAxis will take 8 machine cycle per axis: 0.5 us
+			// AVR: GetPendingAxis will take 6-8 machine cycle per axis: 0.5 us
 			//      Delay1() may be very short (=0 if axis >= 2)
 			uint8_t pending = GetPendingAxis(steps, cnt);
 			Delay1(RAMPS14_NUM_AXIS);
 
 			ClearStepPin();
 
-			if (pending==0)
+			if (pending == 0)
 				break;
 
 			Delay2();
 		}
+	}
+
+	static uint8_t GetPendingAxis(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	{
+		// do not optimize => it will be used as "Delay1
+		uint8_t pending = 0;
+		if (steps[X_AXIS] > cnt) { pending++; }
+		if (steps[Y_AXIS] > cnt) { pending++; }
+		if (steps[Z_AXIS] > cnt) { pending++; }
+#if RAMPS14_NUM_AXIS > 3		    
+		if (steps[E0_AXIS] > cnt) { pending++;; }
+#if RAMPS14_NUM_AXIS > 4		    
+		if (steps[E1_AXIS] > cnt) { pending++;; }
+#endif
+#endif
+		return pending;
+	}
 
 #endif
-	}
 
 public:
 
@@ -352,36 +387,6 @@ public:
 
 	////////////////////////////////////////////////////////
 
-	#ifdef USESTEPTIMER
-
-public:
-
-	static void HandleStepPinInterrupt()
-	{
-		_setState = MyStep(_mysteps, (EnumAsByte(ESetPinState)) _setState, _myCnt);
-		if (_setState == NextIsDone)
-			CHAL::StopTimer2();
-		else
-			CHAL::StartTimer2OneShot(TIMER2VALUEFROMMICROSEC(STEPTIMERDELAYINMICRO));
-	}
-
-	#endif
-
-	static EnumAsByte(ESetPinState) MyStep(const uint8_t steps[NUM_AXIS], EnumAsByte(ESetPinState) state, uint8_t& cnt)
-	{
-		if (state == NextIsSetPin)
-		{
-			SetStepPin(steps, cnt);
-			cnt++;
-			state = AnyPendingAxis(steps, cnt) ? NextIsClearPin : NextIsClearDonePin;
-		}
-		else
-		{
-			ClearStepPin();
-			state = state == NextIsClearPin ? NextIsSetPin : NextIsDone;
-		}
-		return state;
-	}
 };
 
 #endif

@@ -71,7 +71,7 @@ inline void CHAL::DelayMicroseconds0438() { __asm__("nop\n\tnop\n\tnop\n\tnopn\t
 
 inline void CHAL::DelayMicroseconds0500() {	__asm__("nop\n\tnop\n\tnop\n\tnop\n\tnop\n\tnop\n\tnop\n\tnop\n\t"); }
 
-inline void CHAL::DelayMicroseconds(unsigned int us) {	::DelayMicroseconds(us); }
+inline void CHAL::DelayMicroseconds(unsigned int us) {	::delayMicroseconds(us); }
 
 inline void CHAL::DisableInterrupts()	{	cli(); }
 inline void CHAL::EnableInterrupts()	{	sei(); }

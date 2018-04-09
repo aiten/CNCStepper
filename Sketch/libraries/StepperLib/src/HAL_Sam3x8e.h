@@ -323,21 +323,34 @@ inline void CHAL::StopTimer1()
 
 inline void  CHAL::RemoveTimer2() {}
 
-inline void CHAL::StartTimer2(timer_t timer_count)
+inline void CHAL::StartTimer2OneShot(timer_t delay)
 {
+	// convert old AVR timer delay value for SAM timers
+	delay *= 21;		// 2MhZ to 42MhZ
+
+						//	delay /= 2;			// do not know why
+						//	uint32_t timer_count = (delay * TIMER1_PRESCALE);
+
+	uint32_t timer_count = delay;
+
 	if (timer_count == 0) timer_count = 1;
 	TC_SetRC(DUETIMER2_TC, DUETIMER2_CHANNEL, timer_count);
 	TC_Start(DUETIMER2_TC, DUETIMER2_CHANNEL);
 }
 
+inline void CHAL::ReStartTimer2OneShot(timer_t delay)
+{
+	StartTimer2OneShot(delay);
+}
+
 ////////////////////////////////////////////////////////
 
-inline void  CHAL::InitTimer2(HALEvent evt)
+inline void  CHAL::InitTimer2OneShot(HALEvent evt)
 {
-	_TimerEvent0 = evt;
+	_TimerEvent2 = evt;
 
 	pmc_enable_periph_clk(DUETIMER2_IRQTYPE);
-	NVIC_SetPriority(DUETIMER2_IRQTYPE, NVIC_EncodePriority(4, 3, 0));
+	NVIC_SetPriority(DUETIMER2_IRQTYPE, NVIC_EncodePriority(0, 0, 0));
 
 	TC_Configure(DUETIMER2_TC, DUETIMER2_CHANNEL, TC_CMR_WAVSEL_UP_RC | TC_CMR_WAVE | TC_CMR_TCCLKS_TIMER_CLOCK1);
 

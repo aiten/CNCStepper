@@ -19,18 +19,29 @@
 #include <StepperLib.h>
 
 ////////////////////////////////////////////////////////
+
+unsigned int timer1value = 48000;
+unsigned int timer2value = 4;
+
 unsigned int irq_countTimer0 = 0;
 unsigned int irq_countTimer1 = 0;
+unsigned long irq_countTimer2 = 0;
 
 void HandleInterruptTimer0()
 {
   irq_countTimer0++;
 }
+
 void HandleInterruptTimer1()
 {
   irq_countTimer1++;
+  CHAL::StartTimer1OneShot(timer1value);
+}
 
-  CHAL::StartTimer1OneShot(48000);
+void HandleInterruptTimer2()
+{
+  irq_countTimer2++;
+  CHAL::ReStartTimer2OneShot(timer2value);
 }
 
 void setup()
@@ -40,31 +51,38 @@ void setup()
 
   CHAL::InitTimer0(HandleInterruptTimer0);
   CHAL::InitTimer1OneShot(HandleInterruptTimer1);
+  CHAL::InitTimer2OneShot(HandleInterruptTimer2);
 
   CHAL::StartTimer0(10000);
-  CHAL::StartTimer1OneShot(65530);
 
   {
     CCriticalRegion crit;
     // do not wait until finished
-    CHAL::StartTimer1OneShot(50000);
+    CHAL::StartTimer1OneShot(timer1value);
   }
+
+  {
+      CCriticalRegion crit;
+      CHAL::StartTimer2OneShot(timer2value);
+  }
+
   Serial.println(F("Setup done"));
 }
-
 void loop()
 {
   static unsigned int myirq_countTimer0 = 0;
   static unsigned int myirq_countTimer1 = 0;
+  static unsigned long myirq_countTimer2 = 0;
   static long starttime0 = millis();
   static long starttime1 = millis();
+  static long starttime2 = millis();
 
   // dummy
   delay(333);
 
   static int dotcount = 0;
 
-  if (myirq_countTimer0 != irq_countTimer0 || myirq_countTimer1 != irq_countTimer1)
+  if (myirq_countTimer0 != irq_countTimer0 || myirq_countTimer1 != irq_countTimer1 || myirq_countTimer2 != irq_countTimer2)
   {
     if (dotcount > 0)
       Serial.println();
@@ -75,7 +93,7 @@ void loop()
       Serial.print(myirq_countTimer0);
       Serial.print("(");
       Serial.print((millis() - starttime0) / 1000.0 / myirq_countTimer0, 6);
-      Serial.println(")");
+      Serial.print(")");
     }
     if (myirq_countTimer1 != irq_countTimer1)
     {
@@ -84,8 +102,18 @@ void loop()
       Serial.print(myirq_countTimer1);
       Serial.print("(");
       Serial.print((millis() - starttime1) / 1000.0 / myirq_countTimer1, 6);
-      Serial.println(")");
+      Serial.print(")");
     }
+    if (myirq_countTimer2 != irq_countTimer2)
+    {
+      Serial.print("Timer2=");
+      myirq_countTimer2 = irq_countTimer2;
+      Serial.print(myirq_countTimer2);
+      Serial.print("(");
+      Serial.print((millis() - starttime2) / 1000.0 / myirq_countTimer2, 6);
+      Serial.print(")");
+    }
+    Serial.println(")");
   }
   else
   {

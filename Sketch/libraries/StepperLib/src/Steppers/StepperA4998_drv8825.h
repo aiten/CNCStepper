@@ -17,6 +17,9 @@
 */
 ////////////////////////////////////////////////////////
 
+#define A4998DRV8825_CHANGEDIRECTIONMICROS	0
+
+
 #if defined(USE_A4998)
 
 static void Delay1(uint8_t) ALWAYSINLINE		{ }
@@ -31,7 +34,7 @@ static void Delay2() ALWAYSINLINE				{ CHAL::DelayMicroseconds(1); }
 
 //static void Delay1(uint8_t /* numaxis */) ALWAYSINLINE	{ CHAL::DelayMicroseconds0500(); }
 //static void Delay1(uint8_t numaxis) ALWAYSINLINE	{ if (numaxis>3) CHAL::DelayMicroseconds0312(); else CHAL::DelayMicroseconds0500();}
-static void Delay1(uint8_t numaxis) ALWAYSINLINE	{ if (numaxis<2) CHAL::DelayMicroseconds0500(); }
+static void Delay1(uint8_t numaxis) ALWAYSINLINE	{ if (numaxis<3) CHAL::DelayMicroseconds0500(); }
 static void Delay2() ALWAYSINLINE					{ CHAL::DelayMicroseconds0500(); }
 
 #endif

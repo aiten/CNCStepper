@@ -37,6 +37,11 @@
 
 #define RAMPSFD_ENDSTOPCOUNT 6
 
+#if defined(__SAM3X8E__)
+#define USESTEPTIMER
+#define STEPTIMERDELAYINMICRO 2
+#endif
+
 class CStepperRampsFD : public CStepper
 {
 private:
@@ -108,6 +113,12 @@ public:
 #pragma warning( default : 4127 )
 #endif
 
+		SetDirection(0);
+
+#ifdef USESTEPTIMER
+		CHAL::InitTimer2OneShot(HandleStepPinInterrupt);
+#endif
+
 		// init some outputs!
 
 		CHAL::pinModeInputPullUp(RAMPSFD_ESTOP_PIN);
@@ -116,9 +127,9 @@ public:
 		CHAL::pinModeOutput(RAMPSFD_FET6D2_PIN);  HALFastdigitalWrite(RAMPSFD_FET6D2_PIN, 0);
 	}
 
-protected:
-
 	////////////////////////////////////////////////////////
+
+protected:
 
 	virtual void  SetEnable(axis_t axis, uint8_t level, bool /* force */) override
 	{
@@ -163,28 +174,22 @@ protected:
 #pragma warning( default : 4127 )
 #endif
 		}
-		return 0;
+		return LevelOff;
 	}
 
 	////////////////////////////////////////////////////////
 
-#if defined(RAMPSFD_USE_A4998)
-#define USE_A4998
-#else
-#undef USE_A4998
-#endif
-#include "StepperA4998_DRV8825.h"
+	#if defined(RAMPS14_USE_A4998)
+		#define USE_A4998
+	#else
+		#undef USE_A4998
+	#endif
+	#include "StepperA4998_DRV8825.h"
 
 	////////////////////////////////////////////////////////
-
-	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override
+	
+	static void SetDirection(axisArray_t directionUp)
 	{
-		// The timing requirements for minimum pulse durations on the STEP pin are different for the two drivers. 
-		// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 
-		// they can be as short as 1 us when using the A4988.
-
-		// Step:   LOW to HIGH
-
 		if ((directionUp&(1 << X_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPSFD_X_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_X_DIR_PIN, RAMPSFD_PIN_DIR_ON);
 		if ((directionUp&(1 << Y_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPSFD_Y_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_Y_DIR_PIN, RAMPSFD_PIN_DIR_ON);
 		if ((directionUp&(1 << Z_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPSFD_Z_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_Z_DIR_PIN, RAMPSFD_PIN_DIR_ON);
@@ -193,35 +198,161 @@ protected:
 		if ((directionUp&(1 << E1_AXIS)) != 0) HALFastdigitalWriteNC(RAMPSFD_E1_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_E1_DIR_PIN, RAMPSFD_PIN_DIR_ON);
 #endif
 		if ((directionUp&(1 << E2_AXIS)) != 0) HALFastdigitalWriteNC(RAMPSFD_E2_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_E2_DIR_PIN, RAMPSFD_PIN_DIR_ON);
+	}
 
-		for (uint8_t cnt = 0;; cnt++)
-		{
-			register bool have = false;
-			if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_X_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
-			if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_Y_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
-			if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_Z_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
-			if (steps[E0_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E0_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
+	////////////////////////////////////////////////////////
+
+	static void SetStepPin(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	{
+		if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_X_STEP_PIN, RAMPSFD_PIN_STEP_OFF); }
+		if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_Y_STEP_PIN, RAMPSFD_PIN_STEP_OFF); }
+		if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_Z_STEP_PIN, RAMPSFD_PIN_STEP_OFF); }
+		if (steps[E0_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E0_STEP_PIN, RAMPSFD_PIN_STEP_OFF); }
 #ifndef RAMPSFD_DISABLE_E1
-			if (steps[E1_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E1_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
+		if (steps[E1_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E1_STEP_PIN, RAMPSFD_PIN_STEP_OFF); }
 #endif
-			if (steps[E2_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E2_STEP_PIN, RAMPSFD_PIN_STEP_OFF); have = true; }
+		if (steps[E2_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E2_STEP_PIN, RAMPSFD_PIN_STEP_OFF); }
+	}
 
+	////////////////////////////////////////////////////////
+
+	static void ClearStepPin()
+	{
+		HALFastdigitalWriteNC(RAMPSFD_X_STEP_PIN, RAMPSFD_PIN_STEP_ON);
+		HALFastdigitalWriteNC(RAMPSFD_Y_STEP_PIN, RAMPSFD_PIN_STEP_ON);
+		HALFastdigitalWriteNC(RAMPSFD_Z_STEP_PIN, RAMPSFD_PIN_STEP_ON);
+		HALFastdigitalWriteNC(RAMPSFD_E0_STEP_PIN, RAMPSFD_PIN_STEP_ON);
+#ifndef RAMPSFD_DISABLE_E1
+		HALFastdigitalWriteNC(RAMPSFD_E1_STEP_PIN, RAMPSFD_PIN_STEP_ON); 
+#endif
+		HALFastdigitalWriteNC(RAMPSFD_E2_STEP_PIN, RAMPSFD_PIN_STEP_ON); 
+	}
+
+	////////////////////////////////////////////////////////
+
+#ifdef USESTEPTIMER
+
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override
+	{
+		// The timing requirements for minimum pulse durations on the STEP pin are different for the two drivers. 
+		// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 
+		// they can be as short as 1 us when using the A4988.
+
+		while (_setState != NextIsDone)
+		{
+			_setState = MyStep(_mysteps, (EnumAsByte(ESetPinState)) _setState, _myCnt);
+			Delay1(RAMPSFD_NUM_AXIS);
+		}
+
+		InitStepDirTimer(steps);
+		if (!isSameDirection)
+		{
+			SetDirection(directionUp);
+			if (A4998DRV8825_CHANGEDIRECTIONMICROS)
+			{
+				CHAL::StartTimer2OneShot(TIMER2VALUEFROMMICROSEC(A4998DRV8825_CHANGEDIRECTIONMICROS));
+				// wait until interrupt
+				return;
+			}
+		}
+		HandleStepPinInterrupt();
+	}
+
+	static void HandleStepPinInterrupt()
+	{
+		_setState = MyStep(_mysteps, (EnumAsByte(ESetPinState)) _setState, _myCnt);
+		if (_setState == NextIsDone)
+			CHAL::StopTimer2();
+		else
+			CHAL::StartTimer2OneShot(TIMER2VALUEFROMMICROSEC(STEPTIMERDELAYINMICRO));
+	}
+
+	static EnumAsByte(ESetPinState) MyStep(const uint8_t steps[NUM_AXIS], EnumAsByte(ESetPinState) state, uint8_t& cnt)
+	{
+		if (state == NextIsSetPin)
+		{
+			SetStepPin(steps, cnt);
+			cnt++;
+			
+			state = AnyPendingAxis(steps, cnt) ? NextIsClearPin : NextIsClearDonePin;
+
+//			Delay1(RAMPSFD_NUM_AXIS);
+//			ClearStepPin();
+//			state = state == NextIsClearPin ? NextIsSetPin : NextIsDone;
+		}
+		else
+		{
+			ClearStepPin();
+			state = state == NextIsClearPin ? NextIsSetPin : NextIsDone;
+		}
+		return state;
+	}
+
+	static bool AnyPendingAxis(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	{
+		// optimize => not used as "Delay1
+		return steps[X_AXIS] > cnt || steps[Y_AXIS] > cnt || steps[Z_AXIS] > cnt
+#if RAMPS14_NUM_AXIS > 3		    
+			|| steps[E0_AXIS] > cnt
+#if RAMPS14_NUM_AXIS > 4		    
+			|| steps[E1_AXIS] > cnt
+#endif
+#endif
+			;
+	}
+
+#else
+
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override
+	{
+		// The timing requirements for minimum pulse durations on the STEP pin are different for the two drivers. 
+		// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 
+		// they can be as short as 1 us when using the A4988.
+
+		if (!isSameDirection)
+		{
+			SetDirection(directionUp);
+			if (A4998DRV8825_CHANGEDIRECTIONMICROS)
+			{
+				CHAL::DelayMicroseconds(A4998DRV8825_CHANGEDIRECTIONMICROS);
+			}
+		}
+
+		for (uint8_t cnt = 0;;)
+		{
+			SetStepPin(steps, cnt);
+			cnt++;
+
+			// AVR: GetPendingAxis will take 6-8 machine cycle per axis: 0.5 us
+			//      Delay1() may be very short (=0 if axis >= 2)
+			uint8_t pending = GetPendingAxis(steps, cnt);
 			Delay1(RAMPSFD_NUM_AXIS);
 
-			if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_X_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
-			if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_Y_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
-			if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_Z_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
-			if (steps[E0_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E0_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
-#ifndef RAMPSFD_DISABLE_E1
-			if (steps[E1_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E1_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
-#endif
-			if (steps[E2_AXIS] > cnt) { HALFastdigitalWriteNC(RAMPSFD_E2_STEP_PIN, RAMPSFD_PIN_STEP_ON); }
+			ClearStepPin();
 
-			if (!have) break;
+			if (pending == 0)
+				break;
 
 			Delay2();
 		}
 	}
+
+	static uint8_t GetPendingAxis(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	{
+		// do not optimize => it will be used as "Delay1
+		uint8_t pending = 0;
+		if (steps[X_AXIS] > cnt) { pending++; }
+		if (steps[Y_AXIS] > cnt) { pending++; }
+		if (steps[Z_AXIS] > cnt) { pending++; }
+		if (steps[E0_AXIS] > cnt) { pending++; }
+#ifndef RAMPSFD_DISABLE_E1
+		if (steps[E1_AXIS] > cnt) { pending++; }
+#endif
+		if (steps[E2_AXIS] > cnt) { pending++; }
+		return pending;
+	}
+
+#endif
 
 public:
 

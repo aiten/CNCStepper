@@ -74,6 +74,22 @@ bool CGCodeParser::GetParamOrExpression(mm1000_t* value, bool convertToInch)
 		*value = ParseParameter(convertToInch); // do not convert if already mm1000
 		return true;
 	}
+	if (_reader->GetChar() == '[')
+	{
+		_reader->GetNextChar();
+		CGCodeExpressionParser exprpars(this);
+		exprpars.Parse();
+		if (exprpars.IsError())
+		{
+			Error(exprpars.GetError());
+		}
+		else
+		{
+			*value = CMm1000::ConvertFrom(exprpars.Answer);
+			return true;
+		}
+	}
+		
 	return super::GetParamOrExpression(value, convertToInch);
 }
 

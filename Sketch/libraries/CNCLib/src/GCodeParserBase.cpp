@@ -157,12 +157,16 @@ mm1000_t CGCodeParserBase::ParseCoordinate(bool convertUnits)
 
 	bool convertToInch = convertUnits && !_modalstate.UnitisMm;
 
+#ifndef REDUCED_SIZE
+
 	mm1000_t value;
 
 	if (GetParamOrExpression(&value, convertToInch))
 	{
 		return value;
 	}
+
+#endif
 	
 	if (convertToInch)
 	{
@@ -181,6 +185,8 @@ mm1000_t CGCodeParserBase::ParseCoordinate(bool convertUnits)
 unsigned long CGCodeParserBase::GetUint32OrParam(unsigned long max)
 {
 	unsigned long param;
+
+#ifndef REDUCED_SIZE
 	mm1000_t mm1000;
 	
 	if (GetParamOrExpression(&mm1000,false))
@@ -188,6 +194,7 @@ unsigned long CGCodeParserBase::GetUint32OrParam(unsigned long max)
 		param = mm1000;
 	}
 	else
+#endif
 	{
 		param = GetUInt32();
 	}
@@ -567,11 +574,8 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 
 	feedrate_t feedrate;
 
-#ifdef REDUCED_SIZE
-	if (false)
-#else
+#ifndef REDUCED_SIZE
 	if (GetParamOrExpression(&feedrate,false))
-#endif
 	{
 		if (FEEDRATE_MIN > feedrate)
 			Error(MESSAGE(MESSAGE_PARSER_ValueLessThanMin));
@@ -579,6 +583,7 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 			Error(MESSAGE(MESSAGE_PARSER_ValueGreaterThanMax));
 	}
 	else
+#endif
 	{
 		feedrate = GetInt32Scale(FEEDRATE_MIN, FEEDRATE_MAX, FEEDRATE_SCALE, FEEDRATE_MAXSCALE);
 	}

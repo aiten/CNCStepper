@@ -66,6 +66,19 @@ void CGCodeParser::CleanupParse()
 
 ////////////////////////////////////////////////////////////
 
+bool CGCodeParser::GetParamOrExpression(mm1000_t* value, bool convertToInch)
+{
+	if (_reader->GetChar() == '#')
+	{
+		_reader->GetNextChar();
+		*value = ParseParameter(convertToInch); // do not convert if already mm1000
+		return true;
+	}
+	return super::GetParamOrExpression(value, convertToInch);
+}
+
+////////////////////////////////////////////////////////////
+
 void CGCodeParser::CommentMessage(char* start)
 {
 	bool isMsg = TryToken(start, F("(MSG,"), false, true);

@@ -227,7 +227,7 @@ protected:
 
 	void ConstantVelocity();
 
-	virtual mm1000_t ParseParameter(bool convertToInch);
+	virtual bool GetParamOrExpression(mm1000_t*, bool )		{ return false; };
 	mm1000_t ParseCoordinate(bool convertUnits);
 	mm1000_t ParseCoordinateAxis(axis_t axis);
 

@@ -157,10 +157,11 @@ mm1000_t CGCodeParserBase::ParseCoordinate(bool convertUnits)
 
 	bool convertToInch = convertUnits && !_modalstate.UnitisMm;
 
-	if (_reader->GetChar() == '#')
+	mm1000_t value;
+
+	if (GetParamOrExpression(&value, convertToInch))
 	{
-		_reader->GetNextChar();
-		return ParseParameter(convertToInch); // do not convert if already mm1000
+		return value;
 	}
 	
 	if (convertToInch)
@@ -177,21 +178,14 @@ mm1000_t CGCodeParserBase::ParseCoordinate(bool convertUnits)
 
 ////////////////////////////////////////////////////////////
 
-mm1000_t CGCodeParserBase::ParseParameter(bool)
-{
-	Error(MESSAGE(MESSAGE_GCODE_ParameterNotFound));
-	return 0;
-}
-
-////////////////////////////////////////////////////////////
-
 unsigned long CGCodeParserBase::GetUint32OrParam(unsigned long max)
 {
 	unsigned long param;
-	if (_reader->GetChar() == '#')
+	mm1000_t mm1000;
+	
+	if (GetParamOrExpression(&mm1000,false))
 	{
-		_reader->GetNextChar();
-		param = ParseParameter(false);
+		param = mm1000;
 	}
 	else
 	{
@@ -576,11 +570,9 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 #ifdef REDUCED_SIZE
 	if (false)
 #else
-	if (_reader->GetChar() == '#')
+	if (GetParamOrExpression(&feedrate,false))
 #endif
 	{
-		_reader->GetNextChar();
-		feedrate = ParseParameter(false);	// return in mm1000
 		if (FEEDRATE_MIN > feedrate)
 			Error(MESSAGE(MESSAGE_PARSER_ValueLessThanMin));
 		else if (FEEDRATE_MAX < feedrate)

@@ -195,7 +195,8 @@ protected:
 
 	bool CutterRadiosIsOn()								    { if (_modalstate.CutterRadiusCompensation) { Info(MESSAGE_GCODE_G41G43AreNotAllowedWithThisCommand); return true; } else return false; }
 
-	virtual mm1000_t ParseParameter(bool convertToInch) override;
+	virtual bool GetParamOrExpression(mm1000_t*, bool convertToInch) override;
+	mm1000_t ParseParameter(bool convertToInch);
 	param_t ParseParamNo();
 
 	mm1000_t GetParamValue(param_t paramNo, bool convertToInch);

@@ -302,7 +302,7 @@ public:
 										{
 											if (_istty)
 											{
-												ch = (char)_getch();
+												ch = (char)_getwch();
 												if (ch == '\r')
 													_last = '\n';
 											}

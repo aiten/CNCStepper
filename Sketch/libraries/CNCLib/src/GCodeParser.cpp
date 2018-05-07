@@ -91,7 +91,7 @@ bool CGCodeParser::GetParamOrExpression(mm1000_t* value, bool convertToInch)
 				count--;
 				if (count==0)
 				{
-					char ch = _reader->GetNextChar();
+					_reader->GetNextChar();
 					CStreamReader::CSetTemporary terminate(_reader->GetBuffer());
 					_reader->ResetBuffer(start);
 

@@ -76,18 +76,42 @@ bool CGCodeParser::GetParamOrExpression(mm1000_t* value, bool convertToInch)
 	}
 	if (_reader->GetChar() == '[')
 	{
-		_reader->GetNextChar();
-		CGCodeExpressionParser exprpars(this);
-		exprpars.Parse();
-		if (exprpars.IsError())
+		const char* start = _reader->GetBuffer();
+		char ch = _reader->GetNextChar();
+		uint8_t count = 1;
+
+		while (!_reader->IsEOC(ch))
 		{
-			Error(exprpars.GetError());
+			if (ch=='[')
+			{
+				count++;
+			}
+			else if (ch == ']')
+			{
+				count--;
+				if (count==0)
+				{
+					char ch = _reader->GetNextChar();
+					CStreamReader::CSetTemporary terminate(_reader->GetBuffer());
+					_reader->ResetBuffer(start);
+
+					CGCodeExpressionParser exprpars(this);
+					exprpars.Parse();
+					if (exprpars.IsError())
+					{
+						Error(exprpars.GetError());
+					}
+					else
+					{
+						*value = CMm1000::ConvertFrom(exprpars.Answer);
+					}
+					return true;
+				}
+			}
+			ch = _reader->GetNextChar();
 		}
-		else
-		{
-			*value = CMm1000::ConvertFrom(exprpars.Answer);
-			return true;
-		}
+		Error(MESSAGE_EXPR_MISSINGRPARENTHESIS);
+		return true;
 	}
 		
 	return super::GetParamOrExpression(value, convertToInch);

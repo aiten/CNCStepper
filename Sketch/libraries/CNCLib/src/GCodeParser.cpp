@@ -250,7 +250,24 @@ mm1000_t CGCodeParser::ParseParameter(bool convertToInch)
 
 ////////////////////////////////////////////////////////////
 
-static bool IsModifyParam(param_t paramNo)								{ return paramNo >= 1 && paramNo <= NUM_PARAMETER; }
+static bool IsModifyParam(param_t paramNo)
+{
+	return paramNo >= 1 && paramNo <= NUM_PARAMETERRANGE;
+}
+
+////////////////////////////////////////////////////////////
+
+uint8_t CGCodeParser::ParamNoToParamIdx(param_t paramNo)
+{
+	for (uint8_t idx = 0; idx<NUM_PARAMETER;idx++)
+	{
+		if (((uint8_t) paramNo) == _modalstate.ParamNoToIdx[idx])
+			return idx;
+	}
+
+	// return 255 of not found
+	return 255;
+}
 
 // 5161-5169 - G28 Home for (X Y Z A B C U V W)
 // 5221-5230 - Coordinate System 1, G54 (X Y Z A B C U V W R) - R denotes the XY rotation angle around the Z axis 
@@ -261,10 +278,15 @@ mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertUnits)
 {
 	if (IsModifyParam(paramNo))
 	{
-		if (convertUnits)
-			return CMm1000::ConvertFrom(25.4f*_modalstate.Parameter[paramNo - 1]);
+		uint8_t paramIdx = ParamNoToParamIdx(paramNo);
+		float paramValue = paramIdx != 255 ? _modalstate.Parameter[paramIdx] : 0.0f;
 
-		return CMm1000::ConvertFrom(_modalstate.Parameter[paramNo - 1]);
+		if (convertUnits)
+		{
+			paramValue *= 25.4f;
+		}
+
+		return CMm1000::ConvertFrom(paramValue);
 	}
 
 	const SParamInfo*param = FindParamInfoByParamNo(paramNo);
@@ -332,7 +354,37 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 
 		if (IsModifyParam(paramNo))				
 		{ 
-			_modalstate.Parameter[paramNo - 1] = exprpars.Answer; 
+			uint8_t paramIdx = ParamNoToParamIdx(paramNo);
+
+			if (paramIdx == 255)
+			{
+				if (exprpars.Answer != 0.0)
+				{
+					uint8_t idx;
+					for (idx = 0; idx<NUM_PARAMETER;idx++)
+					{
+						if (_modalstate.ParamNoToIdx[idx] == 0)
+						{
+							_modalstate.ParamNoToIdx[idx] = (uint8_t)paramNo;
+							_modalstate.Parameter[idx] = exprpars.Answer;
+							break;
+						}
+					}
+					if (idx >= NUM_PARAMETER)
+					{
+						Error(MESSAGE_GCODE_NoParamSlotAvailable);
+					}
+				}			
+			} 
+			else if (exprpars.Answer == 0.0)
+			{
+				// free slot
+				_modalstate.ParamNoToIdx[paramIdx] = 0;
+			}
+			else
+			{
+				_modalstate.Parameter[paramIdx] = exprpars.Answer;
+			}
 		}
 		else if (param != NULL)
 		{
@@ -537,6 +589,18 @@ void CGCodeParser::PrintParam(const CGCodeParser::SParamInfo* item, axis_t axis)
 
 void CGCodeParser::PrintAllParam()
 {
+	for (uint8_t idx=0;idx<NUM_PARAMETER;idx++)
+	{
+		if (_modalstate.ParamNoToIdx[idx] != 0)
+		{
+			StepperSerial.print('#');
+			StepperSerial.print((uint16_t)_modalstate.ParamNoToIdx[idx]);
+			StepperSerial.print('=');
+			mm1000_t paramvalue = GetParamValue(_modalstate.ParamNoToIdx[idx], false);
+			char tmp[16];
+			StepperSerial.println(CMm1000::ToString(paramvalue, tmp, 3));
+		}
+	}
 	const SParamInfo* item = &_paramdef[0];
 	while (item->GetParamNo() != 0)
 	{
@@ -675,13 +739,24 @@ bool CGCodeParser::MCommand(mcode_t mcode)
 void CGCodeParser::ParameterCommand()
 {
 	_reader->SkipSpaces();
-	
-	if (_reader->SkipSpaces() == '?')
+
+	char ch = _reader->SkipSpaces();
+	if (ch == '?' || ch == '!')
 	{
-		char ch = _reader->GetNextCharSkipScaces();
-		if (ch == 0)
+		char chnext = _reader->GetNextCharSkipScaces();
+		if (chnext == 0)
 		{
-			PrintAllParam();
+			if (ch == '?')
+			{
+				PrintAllParam();
+			}
+			else
+			{
+				for (uint8_t idx = 0;idx<NUM_PARAMETER;idx++)
+				{
+					_modalstate.ParamNoToIdx[idx] = 0;
+				}
+			}
 		}
 		else
 		{

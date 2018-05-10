@@ -29,10 +29,11 @@
 typedef unsigned short param_t;
 
 #define NUM_MAXPARAMNAMELENGTH 16
+#define NUM_PARAMETERRANGE	255
 
 #if defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(_MSC_VER)
 
-#define NUM_PARAMETER	16
+#define NUM_PARAMETER	16		// slotcount, map from uint8_t to < NUM_PARAMETER
 #define G54ARRAYSIZE	6
 
 #else
@@ -156,7 +157,8 @@ protected:
 		mm1000_t		G38ProbePos[NUM_AXIS];
 		mm1000_t		ToolHeigtCompensation;
 
-		float			Parameter[NUM_PARAMETER];	// this is a expression, mm or inch
+		float			Parameter[NUM_PARAMETER];		// this is a expression, mm or inch
+		uint8_t			ParamNoToIdx[NUM_PARAMETER];
 
 		void Init()	
 		{
@@ -201,6 +203,8 @@ protected:
 
 	mm1000_t GetParamValue(param_t paramNo, bool convertToInch);
 	void SetParamValue(param_t parmNo);
+
+	static uint8_t ParamNoToParamIdx(param_t parmNo);
 
 	static mm1000_t GetParamAsMm1000(mm1000_t posMm100, axis_t)					{ return posMm100; }
 	static mm1000_t GetParamAsPosition(mm1000_t posInMachine, axis_t axis)		{ return CMotionControlBase::GetInstance()->ToMm1000(axis, posInMachine); }

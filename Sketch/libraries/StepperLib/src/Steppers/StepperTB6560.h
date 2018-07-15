@@ -134,7 +134,7 @@ protected:
 
 	////////////////////////////////////////////////////////
 
-	virtual void  Stepuint8_t steps[NUM_AXIS], uint8_t directionUp) override
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override
 	{
 		// Step:   LOW to HIGH
 

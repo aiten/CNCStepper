@@ -118,17 +118,14 @@ protected:
 
 	////////////////////////////////////////////////////////
 
-	static uint8_t SetStepPin(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	static void SetStepPin(const uint8_t steps[NUM_AXIS], uint8_t cnt)
 	{
-		uint8_t pending = 0;
-		if (steps[X_AXIS]) { pending += steps[X_AXIS] - cnt;  HALFastdigitalWriteNC(CNCSHIELD_X_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
-		if (steps[Y_AXIS]) { pending += steps[Y_AXIS] - cnt;  HALFastdigitalWriteNC(CNCSHIELD_Y_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
-		if (steps[Z_AXIS]) { pending += steps[Z_AXIS] - cnt;  HALFastdigitalWriteNC(CNCSHIELD_Z_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
+		if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_X_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
+		if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_Y_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
+		if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_Z_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
 #if CNCSHIELD_NUM_AXIS > 3
-		if (steps[A_AXIS]) { pending += steps[A_AXIS] - cnt; HALFastdigitalWriteNC(CNCSHIELD_A_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
+		if (steps[A_AXIS] > cnt) { HALFastdigitalWriteNC(CNCSHIELD_A_STEP_PIN, CNCSHIELD_PIN_STEP_OFF); }
 #endif
-
-		return pending;
 	}
 
 	////////////////////////////////////////////////////////
@@ -144,6 +141,8 @@ protected:
 	}
 
 	////////////////////////////////////////////////////////
+#ifdef USESTEPTIMER
+#else
 
 	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override
 	{
@@ -151,27 +150,21 @@ protected:
 		// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 
 		// they can be as short as 1 us when using the A4988.
 
-#ifdef USESTEPTIMER
-
-		InitStepDirTimer(steps);
-		if (!isSameDirection)
-		{
-			SetDirection(directionUp);
-		}
-		HandleStepPinInterrupt();
-		CHAL::StartTimer2(TIMER2VALUEFROMMICROSEC(STEPTIMERDELAYINMICRO));
-
-#else
-
 		if (!isSameDirection)
 		{
 			SetDirection(directionUp);
 		}
 
-		for (uint8_t cnt = 1;; cnt++)
+		for (uint8_t cnt = 0;;)
 		{
-			uint8_t pending = SetStepPin(steps, cnt);
+			SetStepPin(steps, cnt);
+			cnt++;
+
+			// AVR: GetPendingAxis will take 6-8 machine cycle per axis: 0.5 us
+			//      Delay1() may be very short (=0 if axis >= 2)
+			uint8_t pending = GetPendingAxis(steps, cnt);
 			Delay1(CNCSHIELD_NUM_AXIS);
+
 			ClearStepPin();
 
 			if (pending == 0)
@@ -179,8 +172,21 @@ protected:
 
 			Delay2();
 		}
-#endif
 	}
+
+	static uint8_t GetPendingAxis(const uint8_t steps[NUM_AXIS], uint8_t cnt)
+	{
+		// do not optimize => it will be used as "Delay1
+		uint8_t pending = 0;
+		if (steps[X_AXIS] > cnt) { pending++; }
+		if (steps[Y_AXIS] > cnt) { pending++; }
+		if (steps[Z_AXIS] > cnt) { pending++; }
+#if CNCSHIELD_NUM_AXIS > 3		    
+		if (steps[E0_AXIS] > cnt) { pending++;; }
+#endif
+		return pending;
+	}
+#endif
 
 public:
 

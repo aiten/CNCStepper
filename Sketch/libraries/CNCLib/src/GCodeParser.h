@@ -305,6 +305,8 @@ protected:
 
 	void PrintAllParam();
 	void PrintParam(const SParamInfo* item, axis_t axis);
+	void PrintParamValue(const SParamInfo* item, axis_t ofs);
+	void PrintParamValue(param_t paramNo);
 
 	static const struct SParamInfo _paramdef[] PROGMEM;
 

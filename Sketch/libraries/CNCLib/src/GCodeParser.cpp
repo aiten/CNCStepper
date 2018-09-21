@@ -142,8 +142,23 @@ void CGCodeParser::CommentMessage(char* start)
 				char ch = *(start++);
 				if (ch == '#')
 				{
-					_reader->ResetBuffer(start-1);
-					StepperSerial.print(GetUint32OrParam());
+					_reader->ResetBuffer(start);
+
+					param_t paramNo = ParseParamNo();
+					const SParamInfo*item = FindParamInfoByParamNo(paramNo);
+
+					if (!IsError())
+					{
+						if (item)
+						{
+							PrintParamValue(item, (axis_t) (paramNo - item->GetParamNo()));
+						}
+						else
+						{
+							PrintParamValue(paramNo);
+						}
+					}
+
 					start = (char*) _reader->GetBuffer();
 				}
 				else
@@ -565,26 +580,47 @@ void CGCodeParser::PrintParam(const CGCodeParser::SParamInfo* item, axis_t axis)
 			ofs = axis;
 		}
 		StepperSerial.print(F(">="));
-		mm1000_t paramvalue = GetParamValue(item->GetParamNo() + ofs, false);
-		switch (item->GetValueType())
-		{
-			default:
-			case SParamInfo::EValueType::IsInt:
-				StepperSerial.print(paramvalue);
-				break;
-			case SParamInfo::EValueType::IsMm1000:
-			{
-				char tmp[16];
-				StepperSerial.print(CMm1000::ToString(paramvalue,tmp,3));
-				break;
-			}
-		}
+
+		PrintParamValue(item,ofs);
 		StepperSerial.print(F("\t\t;"));
 		StepperSerial.print(item->GetParamNo() + ofs);
 		StepperSerial.println();
 	}
 }
 
+////////////////////////////////////////////////////////////
+
+void CGCodeParser::PrintParamValue(const CGCodeParser::SParamInfo* item, axis_t ofs)
+{
+	mm1000_t paramvalue = GetParamValue(item->GetParamNo() + ofs, false);
+	switch (item->GetValueType())
+	{
+		default:
+		case SParamInfo::EValueType::IsInt:
+			StepperSerial.print(paramvalue);
+			break;
+		case SParamInfo::EValueType::IsMm1000:
+		{
+			char tmp[16];
+			StepperSerial.print(CMm1000::ToString(paramvalue, tmp, 3));
+			break;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////
+
+void CGCodeParser::PrintParamValue(param_t paramNo)
+{
+	if (IsModifyParam(paramNo))
+	{
+		uint8_t paramIdx = ParamNoToParamIdx(paramNo);
+		mm1000_t paramvalue = paramIdx != 255 ? GetParamValue(_modalstate.ParamNoToIdx[paramIdx], false) : 0;
+		char tmp[16];
+		StepperSerial.println(CMm1000::ToString(paramvalue, tmp, 3));
+	}
+}
+	
 ////////////////////////////////////////////////////////////
 
 void CGCodeParser::PrintAllParam()
@@ -596,9 +632,7 @@ void CGCodeParser::PrintAllParam()
 			StepperSerial.print('#');
 			StepperSerial.print((uint16_t)_modalstate.ParamNoToIdx[idx]);
 			StepperSerial.print('=');
-			mm1000_t paramvalue = GetParamValue(_modalstate.ParamNoToIdx[idx], false);
-			char tmp[16];
-			StepperSerial.println(CMm1000::ToString(paramvalue, tmp, 3));
+			PrintParamValue(_modalstate.ParamNoToIdx[idx]);
 		}
 	}
 	const SParamInfo* item = &_paramdef[0];

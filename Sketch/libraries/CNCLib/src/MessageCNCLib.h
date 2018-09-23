@@ -95,6 +95,7 @@
 #define MESSAGE_GCODE_SExpected						StepperMessage("3D","S expected")
 #define MESSAGE_GCODE_IJKVECTORIS0					StepperMessage("3E","Vector IJK is 0")
 #define MESSAGE_GCODE_SPECIFIED						StepperMessage("3F","IJK is specified")
+#define MESSAGE_GCODE_G90OR91						StepperMessage("40","G90 or G91 expected")
 
 ////////////////////////////////////////////////////////
 

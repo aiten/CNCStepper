@@ -916,6 +916,7 @@ void CGCodeParser::G10Command()
 	uint8_t specified = 0;
 	uint8_t l=0;
 	uint8_t p=0;
+	uint8_t g90or91 = 90;
 	SAxisMove move(false);
 
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
@@ -924,13 +925,21 @@ void CGCodeParser::G10Command()
 		if ((axis = CharToAxis(ch)) < NUM_AXIS) GetAxis(axis, move, AbsolutPosition);
 		else if (ch == 'L')					  GetUint8(l, specified, 0);
 		else if (ch == 'P')					  GetUint8(p, specified, 1);
+		else if (ch == 'G')
+		{
+			GetUint8(g90or91, specified, 7);
+			if (!IsError() && g90or91 != 90 && g90or91 != 91)
+			{
+				Error(MESSAGE_GCODE_G90OR91);
+			}
+		}
 		else break;
 
 		if (CheckError()) { return; }
 	}
 
-	if (IsBitClear(specified, 0))		{ Error(MESSAGE_GCODE_LExpected); return; }
-	if (IsBitClear(specified, 1))		{ Error(MESSAGE_GCODE_PExpected); return; }
+	if (IsBitClear(specified, 0)) { Error(MESSAGE_GCODE_LExpected); return; }
+	if (IsBitClear(specified, 1)) { Error(MESSAGE_GCODE_PExpected); return; }
 
 	switch (l)
 	{
@@ -944,7 +953,14 @@ void CGCodeParser::G10Command()
 			{
 				if (IsBitSet(move.axes, axis))
 				{
-					_modalstate.G54Pospreset[p-1][axis] = move.newpos[axis];
+					if (g90or91 == 90)
+					{
+						_modalstate.G54Pospreset[p - 1][axis] = move.newpos[axis];
+					}
+					else
+					{
+						_modalstate.G54Pospreset[p - 1][axis] += CMotionControlBase::GetInstance()->GetPosition(axis) - CalcAllPreset(axis) - move.newpos[axis];
+					}
 				}
 			}
 			break;

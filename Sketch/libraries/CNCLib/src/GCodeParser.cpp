@@ -676,9 +676,6 @@ mm1000_t CGCodeParser::GetG54PosPreset(axis_t axis)
 
 bool CGCodeParser::Command(char ch)
 {
-	if (super::Command(ch))
-		return true;
-
 	switch (ch)
 	{
 		case 'S':		// spindle speed
@@ -699,12 +696,19 @@ bool CGCodeParser::Command(char ch)
 			ParameterCommand();
 			return true;
 		}
+		case '?':
+		{
+			_reader->GetNextChar();
+			_OkMessage = PrintInfoAllPreset;
+			return true;
+		}
 
 		// case '-':
 		case '!':
 		case '&': CommandEscape(); return true;
 	}
-	return false;
+
+	return super::Command(ch);
 }
 
 ////////////////////////////////////////////////////////////
@@ -1750,6 +1754,17 @@ void CGCodeParser::PrintAbsPosition()
 void CGCodeParser::PrintRelPosition()
 {
 	PrintPosition([](axis_t axis) { return CMotionControlBase::GetInstance()->GetPosition(axis) - CGCodeParser::GetAllPreset(axis); });
+}
+
+////////////////////////////////////////////////////////////
+
+void CGCodeParser::PrintInfoAllPreset()
+{
+	StepperSerial.print(F("<MPos:"));
+	PrintPosition([](axis_t axis) { return CMotionControlBase::GetInstance()->GetPosition(axis); });
+	StepperSerial.print(F("|WCO:"));
+	PrintPosition([](axis_t axis) { return GetAllPreset(axis); });
+	StepperSerial.print('>');
 }
 
 ////////////////////////////////////////////////////////////

@@ -66,9 +66,19 @@ struct CGCodeParserBase::SModelessState CGCodeParserBase::_modlessstate;
 
 ////////////////////////////////////////////////////////////
 
-bool CGCodeParserBase::Command(char /* ch */)
+bool CGCodeParserBase::Command(char ch )
 {
-	return false; 
+	switch (ch)
+	{
+		case '?':
+		{
+			_reader->GetNextChar();
+			_OkMessage = PrintInfo;
+			return true;
+		}
+	}
+			
+	return false;
 }
 
 ////////////////////////////////////////////////////////////
@@ -347,12 +357,6 @@ void CGCodeParserBase::Parse()
 						Error(MESSAGE_GCODE_IllegalCommand);
 					return;
 				}
-				break;
-			}
-			case '?':
-			{
-				_reader->GetNextChar();
-				_OkMessage = PrintInfo;
 				break;
 			}
 

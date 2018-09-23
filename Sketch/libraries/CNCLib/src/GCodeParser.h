@@ -278,6 +278,8 @@ protected:
 	static void PrintAbsPosition();
 	static void PrintRelPosition();
 
+	static void PrintInfoAllPreset();
+
 	void SetPositionAfterG68G69()				{ CMotionControlBase::GetInstance()->SetPositionFromMachine(); }
 
 

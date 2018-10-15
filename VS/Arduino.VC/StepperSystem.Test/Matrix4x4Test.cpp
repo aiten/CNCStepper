@@ -111,9 +111,8 @@ namespace StepperSystemTest
 			{
 				CMatrix4x4<float> T1(t);
 				CMatrix4x4<float> T2(t2);
-				CMatrix4x4<float> T3;
+				CMatrix4x4<float> T3 = T2 * T1;
 
-				T3 = T2*T1;
 				T2 *= T1;
 
 				if (T2 != T3)

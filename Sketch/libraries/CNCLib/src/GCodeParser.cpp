@@ -231,7 +231,7 @@ param_t CGCodeParser::ParseParamNo()
 
 		if (param != nullptr)
 		{
-			if (param->GetAllowAxisOfs()==false && colon != nullptr)
+			if (!param->GetAllowAxisOfs() && colon != nullptr)
 			{
 				Error(MESSAGE_GCODE_NoValidVaribaleName); return 0;
 			}

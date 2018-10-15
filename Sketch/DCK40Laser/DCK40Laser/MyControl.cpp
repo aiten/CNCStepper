@@ -231,7 +231,7 @@ bool CMyControl::OnEvent(EnumAsByte(EStepperControlEvent) eventtype, uintptr_t a
 		{
 			if (CGCodeParserBase::IsSpindleOn())
 			{
-				bool newIsCutMove = addinfo != 0;
+				const bool newIsCutMove = addinfo != 0;
 				if (CGCodeParserBase::IsCutMove() != newIsCutMove)
 				{
 					CStepper::GetInstance()->IoControl(CControl::SpindleCW, newIsCutMove ? CGCodeParserBase::GetSpindleSpeed() : 0);

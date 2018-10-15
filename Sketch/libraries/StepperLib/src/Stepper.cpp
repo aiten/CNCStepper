@@ -37,7 +37,8 @@ CStepper::CStepper()
 
 ////////////////////////////////////////////////////////
 
-template <> CStepper* CSingleton<CStepper>::_instance = nullptr;
+template <>
+CStepper* CSingleton<CStepper>::_instance = nullptr;
 
 uint8_t          CStepper::_mysteps[NUM_AXIS];
 volatile uint8_t CStepper::_setState;
@@ -526,9 +527,9 @@ void CStepper::SMovement::InitStop(SMovement* mvPrev, timer_t timer, timer_t dec
 
 	mdist_t downstpes = CStepper::GetDecSteps(timer, dectimer);
 
-	for (unsigned long& dist : _distance_)
+	for (uint8_t i = 0; i < NUM_AXIS; i++)
 	{
-		dist = (mdist_t)RoundMulDivUInt(dist, downstpes, _steps);
+		_distance_[i] = (mdist_t)RoundMulDivUInt(_distance_[i], downstpes, _steps);
 	}
 
 	_state = SMovement::StateReadyMove;
@@ -804,7 +805,7 @@ void CStepper::SMovement::AdjustJunktionSpeedH2T(SMovement* mvPrev, SMovement* m
 	if (!Ramp(mvNext))
 	{
 		// modify of ramp failed => do not modify _pod._move._timerEndPossible
-		_pod._move._timerEndPossible                                = _pod._move._ramp._timerStop;
+		_pod._move._timerEndPossible                                   = _pod._move._ramp._timerStop;
 		if (mvNext != nullptr) mvNext->_pod._move._timerJunctionToPrev = _pod._move._ramp._timerStop;
 	}
 }
@@ -1175,7 +1176,7 @@ timer_t CStepper::GetTimerAccelerating(mdist_t steps, timer_t timerv0, timer_t t
 	}
 
 	unsigned long ad = a2 * steps;
-	auto    v  = steprate_t((_ulsqrt(((sqv0 + ad) / 93) * 85)));
+	auto          v  = steprate_t((_ulsqrt(((sqv0 + ad) / 93) * 85)));
 
 	return SpeedToTimer(v) + 1; // +1 	empiric tested to get better results
 }
@@ -1595,7 +1596,7 @@ void CStepper::FillStepBuffer()
 	// check if turn off stepper
 
 	unsigned long ms       = millis();
-	auto diff_sec = uint8_t(((ms - _pod._timerLastCheckEnable) / 1024)); // div 1024 is faster as 1000
+	auto          diff_sec = uint8_t(((ms - _pod._timerLastCheckEnable) / 1024)); // div 1024 is faster as 1000
 
 	if (diff_sec > 0)
 	{
@@ -1729,9 +1730,9 @@ void CStepper::SMovementState::Init(SMovement* pMovement)
 
 	steps = (steps / _count) >> 1;
 
-	for (unsigned long& add : _add)
+	for (axis_t i = 0; i < NUM_AXIS; i++)
 	{
-		add = steps;
+		_add[i] = steps;
 	}
 
 	_n    = 0;

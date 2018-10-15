@@ -202,9 +202,9 @@ protected:
 	param_t ParseParamNo();
 
 	mm1000_t GetParamValue(param_t paramNo, bool convertToInch);
-	void SetParamValue(param_t parmNo);
+	void SetParamValue(param_t paramNo);
 
-	static uint8_t ParamNoToParamIdx(param_t parmNo);
+	static uint8_t ParamNoToParamIdx(param_t paramNo);
 
 	static mm1000_t GetParamAsMm1000(mm1000_t posMm100, axis_t)					{ return posMm100; }
 	static mm1000_t GetParamAsPosition(mm1000_t posInMachine, axis_t axis)		{ return CMotionControlBase::GetInstance()->ToMm1000(axis, posInMachine); }
@@ -237,7 +237,7 @@ private:
 	void G68Ext10Command();
 	void G68Ext11Command();
 	void G68Ext12Command();
-	void G68ExtXXCommand(axis_t axis);
+	void G68ExtXXCommand(axis_t rotaxis);
 	void G69Command();
 	void G5xCommand(uint8_t idx);
 	void G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMinQ);

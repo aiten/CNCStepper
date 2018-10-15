@@ -55,13 +55,6 @@ void CMsvcStepper::OnWait(EnumAsByte(EWaitType) wait)
 
 	if (wait == MovementQueueFull && CanQueueMovement()) // doISR has finsihed move
 	{
-		static enum EDest
-		{
-			ToAcc,
-			ToRun,
-			ToDec,
-		} dest = ToAcc;
-
 		SMovement& mv = _movements._queue.Head();
 		while (!mv.IsFinished())
 		{

@@ -115,7 +115,7 @@ private:
 	bool AddPathChar(char ch, char*& buffer, uint8_t& pathlength);
 
 	bool CheckSD();
-	bool DeleteSDFile(char* buffer, bool errorifnotexists);
+	bool DeleteSDFile(char* filename, bool errorifnotexists);
 
 	static void PrintSDFileListRecurse(class File& dir, uint8_t depth, unsigned short& count, char* filenamebuffer, char seperatorchar);
 

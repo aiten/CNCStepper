@@ -134,8 +134,8 @@ private:
 public:
 
 	virtual void UnitTest() override;
-	bool         Test3D(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXISXYZ], mm1000_t dest[NUM_AXIS], mm1000_t vect[NUM_AXISXYZ], float angle, bool pintOK);
-	bool         Test2D(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXISXYZ], mm1000_t dest[NUM_AXIS], float    angle[NUM_AXISXYZ], bool pintOK);
+	bool         Test3D(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXISXYZ], mm1000_t dest[NUM_AXIS], mm1000_t vect[NUM_AXISXYZ], float angle, bool printOK);
+	bool         Test2D(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXISXYZ], mm1000_t dest[NUM_AXIS], float    angle[NUM_AXISXYZ], bool printOK);
 
 	bool Test(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXISXYZ], mm1000_t dest[NUM_AXIS], bool printOK, std::function<void()> print);
 

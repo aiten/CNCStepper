@@ -419,7 +419,9 @@ bool CMotionControl::Test(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_A
 		TransformFromMachinePosition(to_m, toorig);
 
 		for (uint8_t i = 0; i < NUM_AXIS && !isError; i++)
-			isError    = CompareMaxDiff(src[i], toorig[i]);
+		{
+			isError = CompareMaxDiff(src[i], toorig[i]);
+		}
 	}
 	else
 	{
@@ -435,7 +437,9 @@ bool CMotionControl::Test(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_A
 		DumpArray<mm1000_t, NUM_AXIS>(F("Back"), toorig, false);
 
 		if (isError)
+		{
 			printf(" ERROR");
+		}
 
 		printf("\n");
 	}

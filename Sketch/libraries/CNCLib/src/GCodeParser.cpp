@@ -289,14 +289,14 @@ uint8_t CGCodeParser::ParamNoToParamIdx(param_t paramNo)
 // 5420-5428 - Current Position including offsets in current program units (X Y Z A B C U V W)
 // customized extension
 
-mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertUnits)
+mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertToInch)
 {
 	if (IsModifyParam(paramNo))
 	{
 		uint8_t paramIdx = ParamNoToParamIdx(paramNo);
 		float paramValue = paramIdx != 255 ? _modalstate.Parameter[paramIdx] : 0.0f;
 
-		if (convertUnits)
+		if (convertToInch)
 		{
 			paramValue *= 25.4f;
 		}
@@ -629,14 +629,14 @@ void CGCodeParser::PrintParamValue(param_t paramNo)
 
 void CGCodeParser::PrintAllParam()
 {
-	for (uint8_t idx=0;idx<NUM_PARAMETER;idx++)
+	for (uint8_t paramNo : _modalstate.ParamNoToIdx)
 	{
-		if (_modalstate.ParamNoToIdx[idx] != 0)
+		if (paramNo != 0)
 		{
 			StepperSerial.print('#');
-			StepperSerial.print((uint16_t)_modalstate.ParamNoToIdx[idx]);
+			StepperSerial.print((uint16_t)paramNo);
 			StepperSerial.print('=');
-			PrintParamValue(_modalstate.ParamNoToIdx[idx]);
+			PrintParamValue(paramNo);
 		}
 	}
 	const SParamInfo* item = &_paramdef[0];
@@ -794,9 +794,9 @@ void CGCodeParser::ParameterCommand()
 			}
 			else
 			{
-				for (uint8_t idx = 0;idx<NUM_PARAMETER;idx++)
+				for (unsigned char& paramNo : _modalstate.ParamNoToIdx)
 				{
-					_modalstate.ParamNoToIdx[idx] = 0;
+					paramNo = 0;
 				}
 			}
 		}

@@ -56,7 +56,7 @@ uint8_t digitalReadFromFile(short pin)
 	char tmpname[_MAX_PATH];
 	char filename[_MAX_PATH];
 	::GetTempPathA(_MAX_PATH, tmpname);
-	sprintf_s(filename, "%s\\CNCLib_digitalReadFor_%i.txt", tmpname, (int)pin);
+	sprintf_s(filename, "%s\\CNCLib_digitalReadFor_%i.txt", tmpname, int(pin));
 
 	FILE* fin;
 	fopen_s(&fin, filename, "rt");

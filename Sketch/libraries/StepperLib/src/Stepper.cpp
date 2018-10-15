@@ -526,9 +526,9 @@ void CStepper::SMovement::InitStop(SMovement* mvPrev, timer_t timer, timer_t dec
 
 	mdist_t downstpes = CStepper::GetDecSteps(timer, dectimer);
 
-	for (uint8_t i = 0; i < NUM_AXIS; i++)
+	for (unsigned long& dist : _distance_)
 	{
-		_distance_[i] = (mdist_t)RoundMulDivUInt(_distance_[i], downstpes, _steps);
+		dist = (mdist_t)RoundMulDivUInt(dist, downstpes, _steps);
 	}
 
 	_state = SMovement::StateReadyMove;
@@ -1729,7 +1729,10 @@ void CStepper::SMovementState::Init(SMovement* pMovement)
 
 	steps = (steps / _count) >> 1;
 
-	for (axis_t i = 0; i < NUM_AXIS; i++) _add[i] = steps;
+	for (unsigned long& add : _add)
+	{
+		add = steps;
+	}
 
 	_n    = 0;
 	_rest = 0;

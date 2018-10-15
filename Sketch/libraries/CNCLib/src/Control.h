@@ -156,7 +156,7 @@ protected:
 	virtual void Initialized();									// called if Init() is done
 
 	virtual bool Parse(CStreamReader* reader, Stream* output);	// specify Parser, default parser
-	virtual bool Command(char* xbuffer, Stream* output);		// execute Command (call parser)
+	virtual bool Command(char* buffer, Stream* output);		    // execute Command (call parser)
 	virtual void Idle(unsigned int idletime);					// called after TIMEOUTCALLIDEL in idle state
 	virtual void Poll();										// call in Idle and at least e.g. 100ms (not in interrupt), see CheckIdlePoll
 	virtual void ReadAndExecuteCommand();						// read and execute commands from other source e.g. SD.File

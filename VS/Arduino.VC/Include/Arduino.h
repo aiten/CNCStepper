@@ -239,10 +239,10 @@ static uint8_t PINL3;
 
 static uint8_t SREG;
 
-inline unsigned long  pgm_read_dword(const void* p) { return *(unsigned long*)p; }
-inline unsigned short pgm_read_word(const void*  p) { return *(unsigned short*)p; }
-inline uint8_t        pgm_read_byte(const void*  p) { return *(uint8_t*)p; }
-inline const void*    pgm_read_ptr(const void*   p) { return *((void **)p); }
+inline unsigned long  pgm_read_dword(const void* p) { return *(unsigned long*)(p); }
+inline unsigned short pgm_read_word(const void*  p) { return *(unsigned short*)(p); }
+inline uint8_t        pgm_read_byte(const void*  p) { return *(uint8_t*)(p); }
+inline const void*    pgm_read_ptr(const void*   p) { return *((void **)(p)); }
 
 //extern unsigned int GetTickCount();
 #pragma warning(suppress: 28159)

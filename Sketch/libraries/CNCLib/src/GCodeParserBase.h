@@ -211,10 +211,15 @@ protected:
 		{
 			axes = 0; bitfield.all = 0;
 			if (getcurrentPosition)
+			{
 				CMotionControlBase::GetInstance()->GetPositions(newpos);
+			}
 			else
 			{
-				for (uint8_t i = 0; i < NUM_AXIS; i++) newpos[i] = 0;
+				for (long& newpo : newpos)
+				{
+					newpo = 0;
+				}
 			}
 		}
 	};
@@ -282,7 +287,7 @@ private:
 
 	void GetIJK(axis_t axis, SAxisMove& move, mm1000_t offset[2]);
 
-	void GetG92Axis(axis_t axis, uint8_t& count);
+	void GetG92Axis(axis_t axis, uint8_t& axes);
 
 	static bool G31TestProbe(uintptr_t);
 

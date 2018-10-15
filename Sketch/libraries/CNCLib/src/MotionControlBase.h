@@ -69,7 +69,10 @@ public:
 	static void InitConversionStepsPer(float stepspermm1000)
 	{
 		InitConversion(ToMm1000_StepsPer, ToMachine_StepsPer);
-		for (axis_t x = 0; x < STEPSPERMM1000_SIZE; x++) StepsPerMm1000[x] = stepspermm1000;
+		for (float& axis_stepsPerMm : StepsPerMm1000)
+		{
+			axis_stepsPerMm = stepspermm1000;
+		}
 	}
 
 	static void InitConversionBestStepsPer(float stepspermm1000);

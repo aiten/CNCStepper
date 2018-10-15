@@ -132,13 +132,13 @@ bool CHelpParser::SetSpeed()
 
 bool CHelpParser::MoveAbs()
 {
-	udist_t pos[NUM_AXIS] = { 0 };
+	udist_t position[NUM_AXIS] = { 0 };
 
-	for (uint8_t axis = 0; axis < NUM_AXIS; axis++)
+	for (unsigned long& pos : position)
 	{
 		if (IsUInt(_reader->SkipSpaces()))
 		{
-			pos[axis] = GetUInt32();
+			pos = GetUInt32();
 		}
 		else
 		{
@@ -148,7 +148,7 @@ bool CHelpParser::MoveAbs()
 
 	if (CheckEOC())
 	{
-		CStepper::GetInstance()->MoveAbs(pos);
+		CStepper::GetInstance()->MoveAbs(position);
 	}
 
 	return true;
@@ -183,13 +183,13 @@ bool CHelpParser::MoveAbs(axis_t axis)
 
 bool CHelpParser::MoveRel()
 {
-	sdist_t pos[NUM_AXIS] = { 0 };
+	sdist_t position[NUM_AXIS] = { 0 };
 
-	for (uint8_t axis = 0; axis < NUM_AXIS; axis++)
+	for (long& pos : position)
 	{
 		if (IsInt(_reader->SkipSpaces()))
 		{
-			pos[axis] = GetInt32();
+			pos = GetInt32();
 		}
 		else
 		{
@@ -199,7 +199,7 @@ bool CHelpParser::MoveRel()
 
 	if (CheckEOC())
 	{
-		CStepper::GetInstance()->MoveRel(pos);
+		CStepper::GetInstance()->MoveRel(position);
 	}
 
 	return true;

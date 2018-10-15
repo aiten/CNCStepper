@@ -44,7 +44,7 @@ public:
 
 	virtual void Init() override;
 
-	virtual uint8_t GetReferenceValue(uint8_t referenceId) override;
+	virtual uint8_t GetReferenceValue(uint8_t referenceid) override;
 	virtual bool    IsAnyReference() override { return GetReferenceValue(0) == _pod._referenceHitValue[0]; };
 
 	void MoveRel3(sdist_t dX, sdist_t dY, sdist_t dZ, steprate_t vMax = 0) { MoveRelEx(vMax, X_AXIS, dX, Y_AXIS, dY, Z_AXIS, dZ, -1); }
@@ -52,7 +52,7 @@ public:
 
 protected:
 
-	virtual void StepBegin(const SStepBuffer* step) override;
+	virtual void StepBegin(const SStepBuffer* stepbuffer) override;
 	virtual void Step(const uint8_t           steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override;
 	virtual void StepRequest(bool             isr) override;
 

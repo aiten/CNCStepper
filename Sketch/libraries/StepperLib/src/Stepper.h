@@ -250,7 +250,7 @@ public:
 #endif
 	unsigned long IdleTime() const								{ return _pod._timerStartOrOnIdle; }
 
-	void AddEvent(StepperEvent event, uintptr_t eventparam, SEvent&old );
+	void AddEvent(StepperEvent event, uintptr_t eventparam, SEvent& oldevent);
 
 	static uint8_t ToReferenceId(axis_t axis, bool minRef) { return axis * 2 + (minRef ? 0 : 1); }
 
@@ -273,7 +273,7 @@ private:
 	void SetTimeoutAndEnable(axis_t i, uint8_t timeout, uint8_t level, bool force);
 
 	void QueueMove(const mdist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], timer_t timerMax, uint8_t stepmult);
-	void QueueWait(const mdist_t dist, timer_t timerMax, bool checkCondition);
+	void QueueWait(const mdist_t dist, timer_t timerMax, bool checkWaitConditional);
 
 	void EnqueuAndStartTimer(bool waitfinish);
 	void WaitUntilCanQueue();
@@ -310,7 +310,7 @@ protected:
 
 	timer_t GetTimer(mdist_t steps, timer_t timerstart);										// calc "speed" after steps with constant a (from v0 = 0)
 	timer_t GetTimerAccelerating(mdist_t steps, timer_t timerv0, timer_t timerstart);			// calc "speed" after steps accelerating with constant a 
-	timer_t GetTimerDecelerating(mdist_t steps, timer_t timer, timer_t timerstart);				// calc "speed" after steps decelerating with constant a 
+	timer_t GetTimerDecelerating(mdist_t steps, timer_t timerv, timer_t timerstart);			// calc "speed" after steps decelerating with constant a 
 
 	static mdist_t GetAccSteps(timer_t timer, timer_t timerstart);										// from v=0
 	static mdist_t GetDecSteps(timer_t timer, timer_t timerstop)								{ return GetAccSteps(timer, timerstop); } // to v=0
@@ -500,7 +500,7 @@ protected:
 
 		bool Ramp(SMovement*mvNext);
 
-		void CalcMaxJunktionSpeed(SMovement*mvNext);
+		void CalcMaxJunktionSpeed(SMovement*mvPrev);
 
 		bool AdjustJunktionSpeedT2H(SMovement*mvPrev, SMovement*mvNext);
 		void AdjustJunktionSpeedH2T(SMovement*mvPrev, SMovement*mvNext);
@@ -537,7 +537,7 @@ protected:
 
 		void SetBacklash()										{ _backlash = true; }
 
-		void Dump(uint8_t queueidx, uint8_t options);
+		void Dump(uint8_t idx, uint8_t options);
 
 #ifdef _MSC_VER
 		char _mvMSCInfo[MOVEMENTINFOSIZE];
@@ -672,7 +672,7 @@ protected:
 	debugvirtula void InitTimer()								{ CHAL::InitTimer1OneShot(HandleInterrupt); }
 	debugvirtula void RemoveTimer()								{ CHAL::RemoveTimer1(); }
 
-	debugvirtula void StartTimer(timer_t timerB);
+	debugvirtula void StartTimer(timer_t timer);
 	debugvirtula void SetIdleTimer();
 
 	static void HandleInterrupt()								{ GetInstance()->StepRequest(true); }

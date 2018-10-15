@@ -80,7 +80,7 @@
 #define RAMPSFD_E2_DIR_PIN			47
 #define RAMPSFD_E2_ENABLE_PIN		45
 
-#define RAMPSFD_SDPOWER_PIN			-1
+#define RAMPSFD_SDPOWER_PIN			(-1)
 #define RAMPSFD_SDSS_PIN			4	
 #define RAMPSFD_LED_PIN				13	
 
@@ -120,32 +120,32 @@
 #define RAMPSFD_SERVO3_PIN			5		// D5
 #define RAMPSFD_SERVO4_PIN			3		// D3
 
-#define RAMPSFD_AUX2_1				-1		// VLogic
-#define RAMPSFD_AUX2_2				-1		// GND
+#define RAMPSFD_AUX2_1				(-1)		// VLogic
+#define RAMPSFD_AUX2_2				(-1)		// GND
 #define RAMPSFD_AUX2_3				58		// AD4
 #define RAMPSFD_AUX2_4				59		// AD5
 #define RAMPSFD_AUX2_5				60		// AD6
 #define RAMPSFD_AUX2_6				61		// AD7
 #define RAMPSFD_AUX2_7				68		// AD14 - CANRX
 #define RAMPSFD_AUX2_8				69		// AD15	- CANTX
-#define RAMPSFD_AUX2_9				-1		// UART3_TX
-#define RAMPSFD_AUX2_10				-1		// UART3_RX
+#define RAMPSFD_AUX2_9				(-1)		// UART3_TX
+#define RAMPSFD_AUX2_10				(-1)		// UART3_RX
 
-#define RAMPSFD_AUX3_1				-1		// 5V
+#define RAMPSFD_AUX3_1				(-1)		// 5V
 #define RAMPSFD_AUX3_2				49		// D49
 #define RAMPSFD_AUX3_3				4		// MISO
 #define RAMPSFD_AUX3_4				5		// MOSI
 #define RAMPSFD_AUX3_5				6		// SCK
 #define RAMPSFD_AUX3_6				7		// SPI_CS1
-#define RAMPSFD_AUX3_7				-1		// GND
-#define RAMPSFD_AUX3_8				-1		// NC
+#define RAMPSFD_AUX3_7				(-1)		// GND
+#define RAMPSFD_AUX3_8				(-1)		// NC
 #define RAMPSFD_AUX3_9				50		// D50 - MISO
 #define RAMPSFD_AUX3_10				51		// D51 - MOSI
 #define RAMPSFD_AUX3_11				52		// D52 - SCK
-#define RAMPSFD_AUX3_12				-1		// CLOGIC
+#define RAMPSFD_AUX3_12				(-1)		// CLOGIC
 
-#define RAMPSFD_AUX4_1				-1		// VLOGIC
-#define RAMPSFD_AUX4_2				-1		// GND
+#define RAMPSFD_AUX4_1				(-1)		// VLOGIC
+#define RAMPSFD_AUX4_2				(-1)		// GND
 #define RAMPSFD_AUX4_3				32		// D32
 #define RAMPSFD_AUX4_4				47		// D47
 #define RAMPSFD_AUX4_5				45		// D45

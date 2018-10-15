@@ -88,7 +88,7 @@
 
 #endif
 
-#define RAMPS14_SDPOWER				-1
+#define RAMPS14_SDPOWER				(-1)
 #define RAMPS14_LED_PIN				13
 
 #if defined(__SAM3X8E__)
@@ -120,8 +120,8 @@
 #define RAMPS14_MAX_MOSI_PIN        51		// D51
 #define RAMPS14_MAX6675_SS			53		// D53
 
-#define RAMPS14_AUX2_1				-1		// VLogic
-#define RAMPS14_AUX2_2				-1		// GND
+#define RAMPS14_AUX2_1				(-1)	// VLogic
+#define RAMPS14_AUX2_2				(-1)	// GND
 #define RAMPS14_AUX2_3				59		// AD5
 #define RAMPS14_AUX2_4				63		// AD9
 #define RAMPS14_AUX2_5				64		// A10
@@ -131,17 +131,17 @@
 #define RAMPS14_AUX2_9				66		// A12
 #define RAMPS14_AUX2_10				65		// A11
 
-#define RAMPS14_AUX3_1				-1		// 5V
+#define RAMPS14_AUX3_1				(-1)	// 5V
 #define RAMPS14_AUX3_2				49		// D49
 #define RAMPS14_AUX3_3				50		// MISO - D50
 #define RAMPS14_AUX3_4				51		// MOSI - D51
 #define RAMPS14_AUX3_5				52		// SCK  - D52
 #define RAMPS14_AUX3_6				53		// SPI_CS1 - D53
-#define RAMPS14_AUX3_7				-1		// GND
-#define RAMPS14_AUX3_8				-1		// NC
+#define RAMPS14_AUX3_7				(-1)	// GND
+#define RAMPS14_AUX3_8				(-1)	// NC
 
-#define RAMPS14_AUX4_1				-1		// VLOGIC
-#define RAMPS14_AUX4_2				-1		// GND
+#define RAMPS14_AUX4_1				(-1)	// VLOGIC
+#define RAMPS14_AUX4_2				(-1)	// GND
 #define RAMPS14_AUX4_3				32		// D32
 #define RAMPS14_AUX4_4				47		// D47
 #define RAMPS14_AUX4_5				45		// D45

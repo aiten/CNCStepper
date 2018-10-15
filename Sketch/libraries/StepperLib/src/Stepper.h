@@ -66,8 +66,8 @@ public:
 		LastStepperEvent = OnIoEvent
 	};
 
-	#define LevelToProcent(a) (a*100/255)
-	#define ProcentToLevel(a) (a*255/100)
+	#define LevelToProcent(a) ((a)*100/255)
+	#define ProcentToLevel(a) ((a)*255/100)
 
 	enum ELevel
 	{	

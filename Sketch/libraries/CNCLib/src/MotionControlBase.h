@@ -33,8 +33,8 @@
 
 ////////////////////////////////////////////////////////
 
-#define STEPRATETOFEEDRATE(a) (CMotionControlBase::GetInstance()->ToMm1000(0,a*60l))
-#define FEEDRATETOSTEPRATE(a) (CMotionControlBase::GetInstance()->ToMachine(0,a/60l))
+#define STEPRATETOFEEDRATE(a) (CMotionControlBase::GetInstance()->ToMm1000(0,(a)*60l))
+#define FEEDRATETOSTEPRATE(a) (CMotionControlBase::GetInstance()->ToMachine(0,(a)/60l))
 
 typedef mm1000_t (*ToMm1000_t)(axis_t  axis, sdist_t  val);
 typedef sdist_t (* ToMachine_t)(axis_t axis, mm1000_t val);

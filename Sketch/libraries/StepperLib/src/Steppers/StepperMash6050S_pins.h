@@ -89,7 +89,7 @@
 #define MASH6050S_C_DIR_PIN			12	
 #define MASH6050S_C_MIN_PIN			5	
 
-#define MASH6050S_SDPOWER			-1
+#define MASH6050S_SDPOWER			(-1)
 #define MASH6050S_SDSS_PIN			10		
 
 #else

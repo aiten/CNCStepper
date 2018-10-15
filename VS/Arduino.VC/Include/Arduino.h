@@ -63,7 +63,7 @@
 #define NOT_A_PIN 0
 #define NOT_A_PORT 0
 
-#define NOT_AN_INTERRUPT -1
+#define NOT_AN_INTERRUPT (-1)
 
 
 #define ISR(a) void a(void)

@@ -42,7 +42,7 @@ typedef uint8_t gcode_t;
 #define FEEDRATE_MIN_ALLOWED	STEPRATETOFEEDRATE(1)		// use VMAX => min is 1Steps/Sec because of CStepper
 #define FEEDRATE_MAX_ALLOWED	feedrate_t(9999999)			// 
 
-#define FEEDRATE_DEFAULT_G0		-feedrate_t(526518)			// VMAXTOFEEDRATE(((SPEED_MULTIPLIER_4)-5))
+#define FEEDRATE_DEFAULT_G0		(-feedrate_t(526518))		// VMAXTOFEEDRATE(((SPEED_MULTIPLIER_4)-5))
 #define FEEDRATE_DEFAULT_G1		feedrate_t(100000)			// 100mm/min
 
 #define FEEDRATE_DEFAULT_MAX_G1	feedrate_t(500000)			// 500mm/min is STEPRATETOFEEDRATE(26667) with 3200Steps/rotation(16Steps) 

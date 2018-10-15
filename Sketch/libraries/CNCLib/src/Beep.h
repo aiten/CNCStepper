@@ -25,8 +25,8 @@
 
 ////////////////////////////////////////////////////////
 
-#define FreqToTone(a)		  ((unsigned short) ((1000000/2/a)+0.5))
-#define KeyToTone(a) FreqToTone(440*pow(2.0, (a-49.0)/12.0))
+#define FreqToTone(a)		  ((unsigned short) ((1000000/2/(a))+0.5))
+#define KeyToTone(a) FreqToTone(440*pow(2.0, ((a)-49.0)/12.0))
 
 #define MilliSecToDuration(a) (a)
 

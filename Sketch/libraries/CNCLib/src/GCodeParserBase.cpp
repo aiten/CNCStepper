@@ -45,11 +45,11 @@ bool CGCodeParserBase::_exit = false;
 #define MACHINE_SCALE		3		// 1/1000mm
 
 #define COORD_SCALE_MM		SCALE_MM
-#define COORD_MIN_MM		-999999l
+#define COORD_MIN_MM		(-999999l)
 #define COORD_MAX_MM		999999l
 
 #define COORD_SCALE_INCH	SCALE_INCH
-#define COORD_MIN_INCH		-9999999l
+#define COORD_MIN_INCH		(-9999999l)
 #define COORD_MAX_INCH		9999999l
 
 #define COORD_MAXSCALE		255			// dont care about max scale => always round and skip

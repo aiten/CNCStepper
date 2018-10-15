@@ -138,7 +138,7 @@ protected:
 	{
 		// Step:   LOW to HIGH
 
-#define SETDIR(a,dirpin)		if ((directionUp&(1<<a)) != 0) HALFastdigitalWriteNC(dirpin,TB6560_PIN_DIR_OFF); else HALFastdigitalWriteNC(dirpin,TB6560_PIN_DIR_ON);
+#define SETDIR(a,dirpin)		if ((directionUp&(1<<(a))) != 0) HALFastdigitalWriteNC(dirpin,TB6560_PIN_DIR_OFF); else HALFastdigitalWriteNC(dirpin,TB6560_PIN_DIR_ON);
 
 		SETDIR(X_AXIS, TB6560_X_DIR_PIN);
 		SETDIR(Y_AXIS, TB6560_Y_DIR_PIN);

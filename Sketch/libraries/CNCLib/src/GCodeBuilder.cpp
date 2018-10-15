@@ -30,7 +30,7 @@
 
 ////////////////////////////////////////////////////////////
 
-CGCodeBuilder& CGCodeBuilder::Add(const __FlashStringHelper* cmd)
+CGCodeBuilder& CGCodeBuilder::Add(FLSTR cmd)
 {
 	strcat_P(_commandstring, (const char*) cmd);
 	return *this;

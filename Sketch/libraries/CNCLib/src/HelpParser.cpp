@@ -159,7 +159,9 @@ bool CHelpParser::MoveAbs()
 bool CHelpParser::MoveAbs(axis_t axis)
 {
 	if (axis > NUM_AXIS)
+	{
 		return true;
+	}
 
 	udist_t dist = 0;
 	char ch = _reader->SkipSpaces();
@@ -170,7 +172,9 @@ bool CHelpParser::MoveAbs(axis_t axis)
 	}
 
 	if (CheckEOC())
+	{
 		CStepper::GetInstance()->MoveAbs(axis, dist, 0);
+	}
 
 	return true;
 }
@@ -206,7 +210,9 @@ bool CHelpParser::MoveRel()
 bool CHelpParser::MoveRel(axis_t axis)
 {
 	if (axis > NUM_AXIS)
+	{
 		return true;
+	}
 
 	sdist_t dist = 0;
 	char ch = _reader->SkipSpaces();
@@ -227,7 +233,9 @@ bool CHelpParser::MoveRel(axis_t axis)
 bool CHelpParser::SetPosition(axis_t axis)
 {
 	if (axis > NUM_AXIS)
+	{
 		return true;
+	}
 
 	udist_t dist = 0;
 	char ch = _reader->SkipSpaces();
@@ -238,7 +246,9 @@ bool CHelpParser::SetPosition(axis_t axis)
 	}
 
 	if (CheckEOC())
+	{
 		CStepper::GetInstance()->SetPosition(axis, dist);
+	}
 
 	return true;
 }
@@ -248,10 +258,14 @@ bool CHelpParser::SetPosition(axis_t axis)
 bool CHelpParser::MyGoToReference(axis_t axis)
 {
 	if (axis > NUM_AXIS)
+	{
 		return true;
+	}
 
 	if (CheckEOC())
+	{
 		CControl::GetInstance()->GoToReference(axis, 0, axis != Z_AXIS);
+	}
 
 	return true;
 }
@@ -261,7 +275,9 @@ bool CHelpParser::MyGoToReference(axis_t axis)
 bool CHelpParser::CheckEOC()
 {
 	if (_reader->IsError())
+	{
 		return false;
+	}
 
 	char ch = _reader->SkipSpaces();
 	if (!_reader->IsEOC(ch))

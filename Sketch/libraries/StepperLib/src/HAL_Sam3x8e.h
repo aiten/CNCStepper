@@ -282,7 +282,7 @@ inline void CHAL::StartTimer1OneShot(timer_t delay)
 	// convert old AVR timer delay value for SAM timers
 	delay *= 21;		// 2MhZ to 42MhZ
 
-	//	delay /= 2;			// do not know why
+//	delay /= 2;			// do not know why
 	//	uint32_t timer_count = (delay * TIMER1_PRESCALE);
 
 	uint32_t timer_count = delay;
@@ -328,7 +328,7 @@ inline void CHAL::StartTimer2OneShot(timer_t delay)
 	// convert old AVR timer delay value for SAM timers
 	delay *= 21;		// 2MhZ to 42MhZ
 
-						//	delay /= 2;			// do not know why
+//	delay /= 2;			// do not know why
 						//	uint32_t timer_count = (delay * TIMER1_PRESCALE);
 
 	uint32_t timer_count = delay;
@@ -373,5 +373,4 @@ inline void CHAL::StopTimer2()
 ////////////////////////////////////////////////////////
 
 
-#endif 
-
+#endif

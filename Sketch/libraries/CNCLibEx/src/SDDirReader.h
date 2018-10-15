@@ -28,13 +28,12 @@
 
 class CSDDirReader
 {
-
 public:
 
 	////////////////////////////////////////////////////////
 
-	CSDDirReader(bool(*skip)(File*));
-	CSDDirReader(const char* dir, bool(*skip)(File*));
+	CSDDirReader(bool (*     skip)(File* ));
+	CSDDirReader(const char* dir, bool (*skip)(File*));
 	~CSDDirReader();
 
 	void Reset();
@@ -44,7 +43,7 @@ public:
 
 protected:
 
-	File _rootDir;
+	File   _rootDir;
 	bool (*_skip)(File*);
 };
 

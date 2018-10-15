@@ -32,8 +32,8 @@
 
 uint8_t ToPrecisionU10(unsigned short v)
 {
-	if (v < 1)   return 0;
-	if (v < 10)  return 1;
+	if (v < 1) return 0;
+	if (v < 10) return 1;
 	if (v < 100) return 2;
 	if (v < 1000) return 3;
 	if (v < 10000) return 4;
@@ -42,7 +42,7 @@ uint8_t ToPrecisionU10(unsigned short v)
 
 uint8_t ToPrecisionU10(unsigned long v)
 {
-	if (v < 10000) return ToPrecisionU10((unsigned short) v);
+	if (v < 10000) return ToPrecisionU10((unsigned short)v);
 	if (v < 100000) return 5;
 	if (v < 1000000) return 6;
 	if (v < 10000000) return 7;
@@ -53,8 +53,11 @@ uint8_t ToPrecisionU10(unsigned long v)
 
 uint8_t ToPrecisionS10(long v)
 {
-	if (v < 0) return ToPrecisionU10((unsigned long) -v);
-	return ToPrecisionU10((unsigned long) v);
+	if (v < 0)
+	{
+		return ToPrecisionU10((unsigned long)-v);
+	}
+	return ToPrecisionU10((unsigned long)v);
 }
 
 
@@ -82,7 +85,10 @@ uint8_t ToPrecisionU2(unsigned long v)
 
 uint8_t ToPrecisionS2(long v)
 {
-	if (v < 0) return ToPrecisionU2((unsigned long)-v);
+	if (v < 0)
+	{
+		return ToPrecisionU2((unsigned long)-v);
+	}
 	return ToPrecisionU2((unsigned long)v);
 }
 
@@ -91,8 +97,8 @@ uint8_t ToPrecisionS2(long v)
 unsigned long _ulsqrt_round(unsigned long val, bool round)
 {
 	unsigned long temp;
-	unsigned long g = 0;
-	unsigned long b = 0x8000;
+	unsigned long g     = 0;
+	unsigned long b     = 0x8000;
 	unsigned long bshft = 15;
 
 	for (uint8_t i = 0; i < 15; i++)
@@ -117,7 +123,9 @@ unsigned long _ulsqrt_round(unsigned long val, bool round)
 	}
 
 	if (round && val > g)
+	{
 		g++;
+	}
 
 	return g;
 }

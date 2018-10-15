@@ -31,18 +31,18 @@
 
 ////////////////////////////////////////////////////////////
 
-CSDDirReader::CSDDirReader(bool(*skip)(File*))
+CSDDirReader::CSDDirReader(bool (*skip)(File*))
 {
 	_rootDir = SD.open(PSTR("/"));
-	_skip = skip;
+	_skip    = skip;
 }
 
 ////////////////////////////////////////////////////////////
 
-CSDDirReader::CSDDirReader(const char* dir, bool(*skip)(File*))
+CSDDirReader::CSDDirReader(const char* dir, bool (*skip)(File*))
 {
 	_rootDir = SD.open(dir);
-	_skip = skip;
+	_skip    = skip;
 }
 
 ////////////////////////////////////////////////////////////
@@ -56,7 +56,9 @@ CSDDirReader::~CSDDirReader()
 	}
 
 	if (Current)
+	{
 		Current.close();
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -74,16 +76,20 @@ void CSDDirReader::Reset()
 bool CSDDirReader::MoveNext()
 {
 	if (!_rootDir)
+	{
 		return false;
+	}
 
 	do
 	{
 		if (Current)
+		{
 			Current.close();
+		}
 
 		Current = _rootDir.openNextFile();
-	} 
-	while (Current && _skip!=NULL && _skip(&Current));
+	}
+	while (Current && _skip != NULL && _skip(&Current));
 
 	return Current;
 }

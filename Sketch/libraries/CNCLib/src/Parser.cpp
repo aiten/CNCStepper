@@ -71,10 +71,15 @@ bool CParser::ExpectEndOfCommand()
 	// return true => not char left on input => OK
 	// return false  => error or still char available
 
-	if (IsError()) return false;
+	if (IsError())
+	{
+		return false;
+	}
 
 	if (_reader->IsEOC(SkipSpacesOrComment()))
+	{
 		return true;
+	}
 
 	Error(MESSAGE(MESSAGE_PARSER_EndOfCommandExpected));
 	return false;
@@ -82,13 +87,14 @@ bool CParser::ExpectEndOfCommand()
 
 ////////////////////////////////////////////////////////////
 
-uint8_t CParser::GetUInt8()					{ return GetUInt<uint8_t>(); }
-unsigned short CParser::GetUInt16()			{ return GetUInt<unsigned short>(); }
-unsigned long CParser::GetUInt32()			{ return GetUInt<unsigned long>(); }
-char CParser::GetInt8()						{ return GetInt<char>(); }
-short CParser::GetInt16()					{ return GetInt<short>(); }
-long CParser::GetInt32()					{ return GetInt<long>(); }
-sdist_t CParser::GetSDist()					{ return GetInt<sdist_t>(); }
+uint8_t        CParser::GetUInt8() { return GetUInt<uint8_t>(); }
+unsigned short CParser::GetUInt16() { return GetUInt<unsigned short>(); }
+unsigned long  CParser::GetUInt32() { return GetUInt<unsigned long>(); }
+
+char    CParser::GetInt8() { return GetInt<char>(); }
+short   CParser::GetInt16() { return GetInt<short>(); }
+long    CParser::GetInt32() { return GetInt<long>(); }
+sdist_t CParser::GetSDist() { return GetInt<sdist_t>(); }
 
 ////////////////////////////////////////////////////////////
 
@@ -97,12 +103,12 @@ long CParser::GetInt32Scale(long minvalue, long maxvalue, uint8_t scale, uint8_t
 	// ignore digits between scale and maxscale (first digit after scale is used for round)
 	// 1.2345 with scale=3 and maxscale=5 is ok => return 1235 (calculated with scale - round)
 
-	bool negativ;
-	long value = 0;
+	bool    negativ;
+	long    value     = 0;
 	uint8_t thisscale = 0;
-	uint8_t ch = _reader->GetChar();
+	uint8_t ch        = _reader->GetChar();
 
-	if ((negativ = CStreamReader::IsMinus(ch))!=0)
+	if ((negativ = CStreamReader::IsMinus(ch)) != 0)
 	{
 		ch = _reader->GetNextChar();
 	}
@@ -159,16 +165,24 @@ long CParser::GetInt32Scale(long minvalue, long maxvalue, uint8_t scale, uint8_t
 	else if (thisscale < scale)
 	{
 		for (; thisscale != scale; thisscale++)
+		{
 			value *= 10l;
+		}
 	}
 
 	if (negativ)
+	{
 		value = -(value);
+	}
 
 	if (value < minvalue)
+	{
 		Error(MESSAGE(MESSAGE_PARSER_ValueLessThanMin));
+	}
 	else if (value > maxvalue)
+	{
 		Error(MESSAGE(MESSAGE_PARSER_ValueGreaterThanMax));
+	}
 
 	return value;
 }
@@ -177,8 +191,8 @@ long CParser::GetInt32Scale(long minvalue, long maxvalue, uint8_t scale, uint8_t
 
 expr_t CParser::GetDouble()
 {
-	uint8_t ch = _reader->GetChar();
-	char*start = (char*)_reader->GetBuffer();
+	uint8_t ch    = _reader->GetChar();
+	char*   start = (char*)_reader->GetBuffer();
 
 	while (CStreamReader::IsDigitDot(ch))
 	{
@@ -208,11 +222,13 @@ expr_t CParser::GetDouble()
 
 ////////////////////////////////////////////////////////////
 
-bool CParser::IsToken(const __FlashStringHelper* b, bool expectdel, bool ignorecase)
+bool CParser::IsToken(FLSTR b, bool expectdel, bool ignorecase)
 {
 	const char* tmp;
 	if (!TryToken(_reader->GetBuffer(), b, expectdel, ignorecase, tmp))
+	{
 		return false;
+	}
 
 	_reader->ResetBuffer(tmp);
 
@@ -222,7 +238,7 @@ bool CParser::IsToken(const __FlashStringHelper* b, bool expectdel, bool ignorec
 
 ////////////////////////////////////////////////////////////
 
-bool CParser::TryToken(const char* buffer, const __FlashStringHelper* b, bool expectdel, bool ignorecase)
+bool CParser::TryToken(const char* buffer, FLSTR b, bool expectdel, bool ignorecase)
 {
 	const char* dummy;
 	return TryToken(buffer, b, expectdel, ignorecase, dummy);
@@ -230,16 +246,17 @@ bool CParser::TryToken(const char* buffer, const __FlashStringHelper* b, bool ex
 
 ////////////////////////////////////////////////////////////
 
-bool CParser::TryToken(const char* buffer, const __FlashStringHelper* b, bool ignorecase)
+bool CParser::TryToken(const char* buffer, FLSTR b, bool ignorecase)
 {
-	const char* p = (const char*) b;
+	const char* p = (const char*)b;
 
 	//const char* tmp = _reader->GetBuffer();
 	char c = pgm_read_byte(p);
 
 	while (c && ConvertChar(*buffer, ignorecase) == ConvertChar(c, ignorecase))
 	{
-		p++; buffer++;
+		p++;
+		buffer++;
 		c = pgm_read_byte(p);
 	}
 
@@ -248,40 +265,64 @@ bool CParser::TryToken(const char* buffer, const __FlashStringHelper* b, bool ig
 
 ////////////////////////////////////////////////////////////
 
-bool CParser::TryToken(const char* buffer, const __FlashStringHelper* b, bool expectdel, bool ignorecase, const char*&nextchar)
+bool CParser::TryToken(const char* buffer, FLSTR b, bool expectdel, bool ignorecase, const char*& nextchar)
 {
-	const char* p = (const char*) b;
+	const char* p = (const char*)b;
 
 	//const char* tmp = _reader->GetBuffer();
 	char c = pgm_read_byte(p);
 
 	while (c && ConvertChar(*buffer, ignorecase) == ConvertChar(c, ignorecase))
 	{
-		p++; buffer++;
+		p++;
+		buffer++;
 		c = pgm_read_byte(p);
 	}
 
 	switch (c)
 	{
-		case '\001':	if (!CStreamReader::IsDigit(*buffer)) return false;
+		case '\001':
+		{
+			if (!CStreamReader::IsDigit(*buffer))
+			{
+				return false;
+			}
 			c = 0;
 			break;
-		case '\002':	if (*buffer != 0 && !CStreamReader::IsSpace(*buffer) && CStreamReader::IsDigit(*buffer)) return false;
+		}
+		case '\002':
+		{
+			if (*buffer != 0 && !CStreamReader::IsSpace(*buffer) && CStreamReader::IsDigit(*buffer))
+			{
+				return false;
+			}
 			c = 0;
 			break;
-		case '\003':	if (*buffer != 0) return false;
+		}
+		case '\003':
+		{
+			if (*buffer != 0)
+			{
+				return false;
+			}
 			c = 0;
 			break;
+		}
 	}
 
-	if (c) return false;
+	if (c)
+	{
+		return false;
+	}
 
 	// check if lineend or blank
 
 	if (expectdel)
 	{
 		if (!CStreamReader::IsSpaceOrEnd(*buffer) && !CStreamReader::IsEOC(*buffer))
+		{
 			return false;
+		}
 	}
 
 	nextchar = buffer;

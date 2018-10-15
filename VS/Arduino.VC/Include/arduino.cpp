@@ -21,20 +21,26 @@ http://www.gnu.org/licenses/
 
 #define MAXDIGITALREADPINS 256
 
-uint8_t digitalReadValues[MAXDIGITALREADPINS] = { LOW };
+uint8_t digitalReadValues[MAXDIGITALREADPINS] = {LOW};
 
 uint8_t digitalRead(short pin)
 {
 	uint8_t value = digitalReadFromFile(pin);
 
 	if (value == DIGITALREADNOVALUE && digitalReadEvent != NULL)
+	{
 		value = digitalReadEvent(pin);
+	}
 
 	if (value == DIGITALREADNOVALUE && pin < MAXDIGITALREADPINS)
+	{
 		value = digitalReadValues[pin];
+	}
 
 	if (value == DIGITALREADNOVALUE)
+	{
 		value = LOW;
+	}
 
 	if (pin < MAXDIGITALREADPINS)
 	{

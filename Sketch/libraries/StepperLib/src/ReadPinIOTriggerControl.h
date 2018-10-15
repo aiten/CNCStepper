@@ -37,17 +37,18 @@ public:
 		{
 			unsigned long now = millis();
 
-			if (_timeOn == 0)	// first on
+			if (_timeOn == 0) // first on
 			{
 				_timeOn = now;
 			}
-			
+
 			return (now - _timeOn >= STABLETIME);
 		}
 
 		_timeOn = 0;
 		return false;
 	}
+
 private:
 
 	unsigned long _timeOn = 0;

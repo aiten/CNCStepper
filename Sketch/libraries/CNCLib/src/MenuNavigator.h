@@ -58,12 +58,12 @@ protected:
 
 private:
 
-	menupos_t			_itemIdx;									// current "itemIdx" in MenuDef
-	menupos_t			_position;									// current selected menu
-	menupos_t			_offset;									// start of menuitem to draw 
-	bool				_empty;										// empty - => cleared
+	menupos_t	_itemIdx;									// current "itemIdx" in MenuDef
+	menupos_t	_position;									// current selected menu
+	menupos_t	_offset;									// start of menuitem to draw 
+	bool		_empty;										// empty - => cleared
 
-	uintptr_t			_param;										// "user" value of current position  
+	uintptr_t	_param;										// "user" value of current position  
 
 };
 

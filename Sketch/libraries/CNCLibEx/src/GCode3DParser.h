@@ -38,29 +38,35 @@ private:
 
 public:
 
-	CGCode3DParser(CStreamReader* reader,Stream* output) : super(reader,output)		{  }
+	CGCode3DParser(CStreamReader* reader, Stream* output) : super(reader, output)
+	{
+	}
 
-	static File& GetExecutingFile()								{ return _state._file; }
+	static File& GetExecutingFile()							{ return _state._file; }
 
-	static unsigned long GetExecutingFilePosition()				{ return _state._printFilePos; }
-	static unsigned long GetExecutingFileLine()					{ return _state._printFileLine; }
-	static unsigned long GetExecutingFileSize()					{ return _state._printFileSize; }
-	static const char* GetExecutingFileName()					{ return _state._printfilename; }
+	static unsigned long GetExecutingFilePosition()			{ return _state._printFilePos; }
+	static unsigned long GetExecutingFileLine()				{ return _state._printFileLine; }
+	static unsigned long GetExecutingFileSize()				{ return _state._printFileSize; }
+	static const char*   GetExecutingFileName()				{ return _state._printfilename; }
 
-	static void SetExecutingFilePosition(unsigned long pos)		{ _state._printFilePos = pos; }
-	static void SetExecutingFileLine(unsigned long line)		{ _state._printFileLine = line; }
-	static void SetExecutingFileName(char* filename)			{ strcpy(_state._printfilename,filename); }
+	static void SetExecutingFilePosition(unsigned long pos) { _state._printFilePos   = pos; }
+	static void SetExecutingFileLine(unsigned long line)	{ _state._printFileLine = line; }
+	static void SetExecutingFileName(char* filename)		{ strcpy(_state._printfilename, filename); }
 
-	static void Init()											{ super::Init(); _state.Init(); }
+	static void Init()
+	{
+		super::Init();
+		_state.Init();
+	}
 
 protected:
 
 	// overrides to exend parser
 
-	virtual bool InitParse() override;						// begin parsing of a command (override for prechecks)
+	virtual bool InitParse() override; // begin parsing of a command (override for prechecks)
 	virtual bool GCommand(gcode_t gcode) override;
 	virtual bool MCommand(mcode_t mcode) override;
-	virtual bool Command(char ch) override;
+	virtual bool Command(char     ch) override;
 
 private:
 
@@ -69,20 +75,20 @@ private:
 
 	struct GCodeState
 	{
-		unsigned long		_printFilePos;
-		unsigned long		_printFileLine;
-		unsigned long		_printFileSize;
-		File				_file;
+		unsigned long _printFilePos;
+		unsigned long _printFileLine;
+		unsigned long _printFileSize;
+		File          _file;
 
-		bool				_isM28;						// SD write mode
-		char				_printfilename[MAXFILEEXTNAME + 1];
+		bool _isM28; // SD write mode
+		char _printfilename[MAXFILEEXTNAME + 1];
 
 		void Init()
 		{
-			_printFileSize = 0;
-			_printFilePos = 0;
-			_printFileLine = 0;
-			_isM28 = false;
+			_printFileSize    = 0;
+			_printFilePos     = 0;
+			_printFileLine    = 0;
+			_isM28            = false;
 			_printfilename[0] = 0;
 		}
 	};
@@ -91,32 +97,31 @@ private:
 
 	////////////////////////////////////////////////////////
 
-	void M20Command();		// List content of SD card
-	void M21Command();		// Init SD card
-	void M22Command();		// Release SD card
-	void M23Command();		// Select file on SD card
-	void M24Command();		// Start file on SD card
+	void M20Command(); // List content of SD card
+	void M21Command(); // Init SD card
+	void M22Command(); // Release SD card
+	void M23Command(); // Select file on SD card
+	void M24Command(); // Start file on SD card
 	void M25Command();
-	void M26Command();		// Set file position on SD card
-	void M27Command();		// Status of SD print - position/size 
-	void M28Command();		// Start write to SD file
-	void M29Command();		// Stop write to SD file
-	void M30Command();		// Delete file on SD
+	void M26Command(); // Set file position on SD card
+	void M27Command(); // Status of SD print - position/size 
+	void M28Command(); // Start write to SD file
+	void M29Command(); // Stop write to SD file
+	void M30Command(); // Delete file on SD
 
-	bool GetPathName(char*buffer);
-	bool GetFileName(char*&buffer, uint8_t& pathlength);
-	bool AddPathChar(char ch, char*&buffer, uint8_t& pathlength);
+	bool GetPathName(char*  buffer);
+	bool GetFileName(char*& buffer, uint8_t& pathlength);
+
+	bool AddPathChar(char ch, char*& buffer, uint8_t& pathlength);
 
 	bool CheckSD();
-	bool DeleteSDFile(char*buffer, bool errorifnotexists);
+	bool DeleteSDFile(char* buffer, bool errorifnotexists);
 
-	static void PrintSDFileListRecurse(class File& dir, uint8_t depth, unsigned short&count, char* filenamebuffer, char seperatorchar);
+	static void PrintSDFileListRecurse(class File& dir, uint8_t depth, unsigned short& count, char* filenamebuffer, char seperatorchar);
 
 protected:
 
 	static void PrintVersion();
-
 };
 
 ////////////////////////////////////////////////////////
-

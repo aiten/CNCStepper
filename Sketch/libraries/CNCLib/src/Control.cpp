@@ -145,8 +145,10 @@ void CControl::GoToReference()
 bool CControl::GoToReference(axis_t axis)
 {
 	EnumAsByte(EReverenceType) referenceType = (EReverenceType)CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].referenceType) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions)*axis);
-	if (referenceType == EReverenceType::NoReference) 
+	if (referenceType == EReverenceType::NoReference)
+	{
 		return false;
+	}
 
 	GoToReference(axis, 0, referenceType == EReverenceType::ReferenceToMin);
 	return true;
@@ -185,7 +187,9 @@ void CControl::Resurrect()
 #ifdef _USE_LCD
 	
 	if (CLcd::GetInstance())
+	{
 		CLcd::GetInstance()->ClearDiagnostic();
+	}
 
 #endif
 
@@ -274,7 +278,10 @@ bool CControl::ParseAndPrintResult(CParser *parser, Stream* output)
 		}
 	}
 
-	if (output) output->println();
+	if (output)
+	{
+		output->println();
+	}
 
 	return ret;
 }
@@ -286,7 +293,9 @@ bool CControl::Command(char* buffer, Stream* output)
 #ifdef _USE_LCD
 
 	if (CLcd::GetInstance())
+	{
 		CLcd::GetInstance()->Command(buffer);
+	}
 
 #endif
 
@@ -319,8 +328,10 @@ bool CControl::Command(char* buffer, Stream* output)
 	{
 		while (_reader.GetChar())
 		{
-			if (!Parse(&_reader,output))
+			if (!Parse(&_reader, output))
+			{
 				ret = false;
+			}
 		}
 	}
 	else if (output)
@@ -482,7 +493,7 @@ void CControl::ReadAndExecuteCommand()
 
 ////////////////////////////////////////////////////////////
 
-bool CControl::PostCommand(const __FlashStringHelper* cmd, Stream* output)
+bool CControl::PostCommand(FLSTR cmd, Stream* output)
 {
 // use _buffer to execute command
 
@@ -528,7 +539,9 @@ void CControl::TimerInterrupt()
 #ifdef _USE_LCD
 
 	if (CLcd::GetInstance())
+	{
 		CLcd::GetInstance()->TimerInterrupt();
+	}
 
 #endif
 }
@@ -543,7 +556,9 @@ void CControl::Delay(unsigned long ms)
 	{
 #ifdef _USE_LCD
 		if (CLcd::GetInstance())
+		{
 			CLcd::GetInstance()->Poll();
+		}
 #endif
 	}
 }
@@ -561,7 +576,9 @@ bool CControl::StaticStepperEvent(CStepper* /*stepper*/, uintptr_t param, EnumAs
 bool CControl::StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo)
 {
 	if (CallOnEvent(eventtype, addinfo))
+	{
 		return true;
+	}
 
 	return _oldStepperEvent.Call(CStepper::GetInstance(), eventtype, addinfo);
 }

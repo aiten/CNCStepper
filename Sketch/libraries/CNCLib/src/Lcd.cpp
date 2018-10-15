@@ -94,7 +94,7 @@ uint8_t CLcd::InitPostCommand(EnumAsByte(EGCodeSyntaxType) /* syntaxtype */, cha
 
 ////////////////////////////////////////////////////////////
 
-bool CLcd::PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, const __FlashStringHelper* cmd, Stream* output)
+bool CLcd::PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, FLSTR cmd, Stream* output)
 {
 	char buffer[32];
 

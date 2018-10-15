@@ -60,5 +60,4 @@ CHAL::HALEvent CHAL::_BackgroundEvent = IgnoreIrq;
 
 ////////////////////////////////////////////////////////
 
-#endif 
-
+#endif

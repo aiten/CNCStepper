@@ -88,7 +88,9 @@ void CHAL::FlashWriteWords(uint32_t *flash_ptr, const uint32_t *src, uint32_t n_
 		WaitReady();
 
 		while (len--)
+		{
 			*flash_ptr++ = *src++;
+		}
 
 		// Execute "WP" Write Page
 		NVMCTRL->CTRLA.reg = NVMCTRL_CTRLA_CMDEX_KEY | NVMCTRL_CTRLA_CMD_WP;
@@ -125,5 +127,4 @@ void CHAL::FlashRead(const void *flash_ptr, void *data, uint32_t size)
 
 ////////////////////////////////////////////////////////
 
-#endif 
-
+#endif

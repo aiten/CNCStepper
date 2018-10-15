@@ -58,10 +58,13 @@ void CHAL::digitalWrite(pin_t pin, uint8_t val)
 	uint8_t port = digitalPinToPort(pin);
 	volatile uint8_t *out;
 
-	if (port == NOT_A_PIN) return;
+	if (port == NOT_A_PIN)
+	{
+		return;
+	}
 
 	// If the pin that support PWM output, we need to turn it off
-	// before doing a digital write.
+// before doing a digital write.
 //	if (timer != NOT_ON_TIMER) turnOffPWM(timer);
 
 	out = portOutputRegister(port);
@@ -69,9 +72,12 @@ void CHAL::digitalWrite(pin_t pin, uint8_t val)
 	uint8_t oldSREG = SREG;
 	cli();
 
-	if (val == LOW) {
+	if (val == LOW) 
+	{
 		*out &= ~bit;
-	} else {
+	} 
+	else 
+	{
 		*out |= bit;
 	}
 
@@ -84,13 +90,19 @@ uint8_t CHAL::digitalRead(pin_t pin)
 	uint8_t bit = digitalPinToBitMask(pin);
 	uint8_t port = digitalPinToPort(pin);
 
-	if (port == NOT_A_PIN) return LOW;
+	if (port == NOT_A_PIN)
+	{
+		return LOW;
+	}
 
 	// If the pin that support PWM output, we need to turn it off
-	// before getting a digital reading.
+// before getting a digital reading.
 //	if (timer != NOT_ON_TIMER) turnOffPWM(timer);
 
-	if (*portInputRegister(port) & bit) return HIGH;
+	if (*portInputRegister(port) & bit)
+	{
+		return HIGH;
+	}
 	return LOW;
 }
 
@@ -154,16 +166,16 @@ static void turnOffPWM(uint8_t timer)
 
 #if defined(TCCR4A) && defined(COM4A1)
 	case  TIMER4A:  cbi(TCCR4A, COM4A1);    break;
-#endif					
+#endif
 #if defined(TCCR4A) && defined(COM4B1)
 	case  TIMER4B:  cbi(TCCR4A, COM4B1);    break;
 #endif
 #if defined(TCCR4A) && defined(COM4C1)
 	case  TIMER4C:  cbi(TCCR4A, COM4C1);    break;
-#endif			
+#endif
 #if defined(TCCR4C) && defined(COM4D1)
 	case TIMER4D:	cbi(TCCR4C, COM4D1);	break;
-#endif			
+#endif
 
 #if defined(TCCR5A)
 	case  TIMER5A:  cbi(TCCR5A, COM5A1);    break;
@@ -350,4 +362,3 @@ void CHAL::analogWrite8(pin_t pin, uint8_t val)
 
 #endif		//not 2560
 #endif		// AVR
-

@@ -40,11 +40,13 @@ public:
 
 	////////////////////////////////////////////////////////////
 
-	CGCodeBuilder& Add(const __FlashStringHelper* cmd);
-	CGCodeBuilder& Add(char* cmd);
-	CGCodeBuilder& AddAxisName(axis_t axis);
+	CGCodeBuilder& Add(FLSTR    cmd);
+	CGCodeBuilder& Add(char*    cmd);
 	CGCodeBuilder& Add(mm1000_t mm1000);
-	static char AxisToChar(axis_t axis);
+
+	CGCodeBuilder& AddAxisName(axis_t axis);
+	static char    AxisToChar(axis_t  axis);
+
 	CGCodeBuilder& InitCommand();
 
 	char* GetCommand()

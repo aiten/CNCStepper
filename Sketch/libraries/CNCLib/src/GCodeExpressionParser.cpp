@@ -60,7 +60,7 @@ void CGCodeExpressionParser::ScannNextToken()
 	char ch = _reader->GetChar();
 	while (ch)
 	{
-		if (ch == ';' || ch == '(')		// comment
+		if (ch == ';' || ch == '(') // comment
 		{
 			ch = _gcodeparser->SkipSpacesOrComment();
 		}

@@ -245,5 +245,4 @@ inline bool CHAL::NeedFlushEeprom()
 	return false;
 }
 
-#endif 
-
+#endif

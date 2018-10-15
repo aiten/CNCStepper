@@ -26,29 +26,29 @@ class CAnalog8IOControl
 {
 public:
 
-	void Init(uint8_t level=0)				// init and set default value
+	void Init(uint8_t level = 0) // init and set default value
 	{
 		MySetLevel(level);
 		_level = level;
 	}
 
-	void On(uint8_t level)					// Set level and turn on
+	void On(uint8_t level) // Set level and turn on
 	{
 		_level = level;
 		MySetLevel(level);
 	}
 
-	void OnMax()							// turn on at max level, same as On(255)
+	void OnMax() // turn on at max level, same as On(255)
 	{
 		On(255);
 	}
 
-	void On()								// turn on at specified level (see Level property)
+	void On() // turn on at specified level (see Level property)
 	{
 		MySetLevel(_level);
 	}
 
-	void Off()								// turn off, use On() to switch on at same value
+	void Off() // turn off, use On() to switch on at same value
 	{
 		MySetLevel(0);
 	}
@@ -79,7 +79,7 @@ public:
 
 private:
 
-	uint8_t _level;	
+	uint8_t _level;
 	uint8_t _iolevel;
 
 	void MySetLevel(uint8_t level)

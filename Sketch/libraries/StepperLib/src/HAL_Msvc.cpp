@@ -34,8 +34,8 @@
 
 ////////////////////////////////////////////////////////
 
-uint32_t CHAL::_eepromBuffer[2048] = { 0 };
-char* CHAL::_eepromFileName = NULL;
+uint32_t CHAL::_eepromBuffer[2048] = {0};
+char*    CHAL::_eepromFileName     = NULL;
 
 ////////////////////////////////////////////////////////
 
@@ -66,7 +66,7 @@ void CHAL::FlushEeprom()
 	if (_eepromFileName)
 	{
 		FILE* f = NULL;
-		fopen_s(&f,_eepromFileName, "wb+");
+		fopen_s(&f, _eepromFileName, "wb+");
 		if (f)
 		{
 			fwrite(_eepromBuffer, sizeof(_eepromBuffer), 1, f);
@@ -79,4 +79,3 @@ void CHAL::FlushEeprom()
 ////////////////////////////////////////////////////////
 
 #endif		// _MSC_VER
-

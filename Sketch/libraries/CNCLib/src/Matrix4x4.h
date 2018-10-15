@@ -38,9 +38,11 @@ public:
 	{
 		memcpy(_v, src._v, sizeof(_v));
 	}
+
 	CMatrix4x4<T>()
 	{
 	}
+
 	CMatrix4x4<T>(const T dest[MATRIX4X4SIZEX][MATRIX4X4SIZEY])
 	{
 		memcpy(_v, dest, sizeof(_v));
@@ -58,9 +60,15 @@ public:
 	static bool Compare(const T src1[MATRIX4X4SIZEX][MATRIX4X4SIZEY], const T src2[MATRIX4X4SIZEX][MATRIX4X4SIZEY])
 	{
 		for (uint8_t i = 0; i < MATRIX4X4SIZEX; i++)
+		{
 			for (uint8_t k = 0; k < MATRIX4X4SIZEY; k++)
+			{
 				if (src1[i][k] != src2[i][k])
+				{
 					return false;
+				}
+			}
+		}
 		return true;
 	}
 
@@ -82,9 +90,15 @@ public:
 	static bool Compare(const T src1[MATRIX4X4SIZEX][MATRIX4X4SIZEY], const T src2[MATRIX4X4SIZEX][MATRIX4X4SIZEY], const T epsilon)
 	{
 		for (uint8_t i = 0; i < MATRIX4X4SIZEX; i++)
+		{
 			for (uint8_t k = 0; k < MATRIX4X4SIZEY; k++)
+			{
 				if (!IsEqual(src1[i][k], src2[i][k], epsilon))
+				{
 					return false;
+				}
+			}
+		}
 		return true;
 	}
 
@@ -110,11 +124,15 @@ public:
 	{
 		Zero(dest);
 		for (uint8_t i = 0; i < MATRIX4X4SIZEX; i++)
+		{
 			for (uint8_t k = 0; k < MATRIX4X4SIZEY; k++)
+			{
 				for (uint8_t j = 0; j < MATRIX4X4SIZEX; j++)		// col/rows of src1/src2
 				{
 					dest[i][k] = dest[i][k] + src1[i][j] * src2[j][k];
 				}
+			}
+		}
 	}
 
 	CMatrix4x4<T>& operator*=(const CMatrix4x4<T>& rhs)
@@ -284,6 +302,5 @@ public:
 		InitDenavitHartenberg4Rot(_v, a);
 		return *this;
 	}
-
 };
 

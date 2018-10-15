@@ -117,7 +117,7 @@ class CHAL
 {
 public:
 
-	typedef void(*HALEvent)();
+	typedef void (*HALEvent)();
 
 	// min 8 bit, AVR: HW Timer 0
 	static void InitTimer0(HALEvent evt);
@@ -139,7 +139,7 @@ public:
 	// min 8 bit, (AVR: HW Timer5) 
 	static void InitTimer2OneShot(HALEvent evt);
 	static void RemoveTimer2();
-	static void StartTimer2OneShot(timer_t timer);
+	static void StartTimer2OneShot(timer_t   timer);
 	static void ReStartTimer2OneShot(timer_t timer);
 	static void StopTimer2();
 
@@ -174,36 +174,36 @@ public:
 	static inline void EnableInterrupts() ALWAYSINLINE;
 
 	static inline void DelayMicroseconds(unsigned int us) ALWAYSINLINE ;
-	static inline void DelayMicroseconds0250() ALWAYSINLINE;		// delay 1/4 us (4 nop on AVR)
-	static inline void DelayMicroseconds0312() ALWAYSINLINE;		// delay 0.312us (5 nop on AVR)
-	static inline void DelayMicroseconds0375() ALWAYSINLINE;		// delay 0.312us (6 nop on AVR)
-	static inline void DelayMicroseconds0438() ALWAYSINLINE;		// delay 0.312us (7 nop on AVR)
-	static inline void DelayMicroseconds0500() ALWAYSINLINE;		// delay 1/2 (8 nop on AVR)
+	static inline void DelayMicroseconds0250() ALWAYSINLINE; // delay 1/4 us (4 nop on AVR)
+	static inline void DelayMicroseconds0312() ALWAYSINLINE; // delay 0.312us (5 nop on AVR)
+	static inline void DelayMicroseconds0375() ALWAYSINLINE; // delay 0.312us (6 nop on AVR)
+	static inline void DelayMicroseconds0438() ALWAYSINLINE; // delay 0.312us (7 nop on AVR)
+	static inline void DelayMicroseconds0500() ALWAYSINLINE; // delay 1/2 (8 nop on AVR)
 
 	static inline irqflags_t GetSREG() ALWAYSINLINE;
-	static inline void SetSREG(irqflags_t) ALWAYSINLINE;
+	static inline void       SetSREG(irqflags_t) ALWAYSINLINE;
 
-	static inline void pinMode(pin_t pin, uint8_t mode);
-	static inline void pinModeInput(pin_t pin) NEVER_INLINE_AVR;
+	static inline void pinMode(pin_t            pin, uint8_t mode);
+	static inline void pinModeInput(pin_t       pin) NEVER_INLINE_AVR;
 	static inline void pinModeInputPullUp(pin_t pin) NEVER_INLINE_AVR;
-	static inline void pinModeOutput(pin_t pin) NEVER_INLINE_AVR;
+	static inline void pinModeOutput(pin_t      pin) NEVER_INLINE_AVR;
 
-	static void digitalWrite(pin_t pin, uint8_t lowOrHigh);
-	static uint8_t digitalRead(pin_t pin);
+	static void    digitalWrite(pin_t pin, uint8_t lowOrHigh);
+	static uint8_t digitalRead(pin_t  pin);
 
 	static void analogWrite8(pin_t pin, uint8_t val);
 
 	static unsigned short analogRead(pin_t pin);
 
-	static void attachInterruptPin(pin_t pin, void(*userFunc)(void), int mode) ALWAYSINLINE;
+	static void attachInterruptPin(pin_t pin, void (*userFunc)(void), int mode) ALWAYSINLINE;
 
 	static bool HaveEeprom() ALWAYSINLINE;
 	static void InitEeprom() ALWAYSINLINE;
 	static void FlushEeprom() ALWAYSINLINE;
 	static bool NeedFlushEeprom() ALWAYSINLINE;
 
-	static void eeprom_write_dword(uint32_t *  __p, uint32_t  	__value) ALWAYSINLINE;
-	static uint32_t eeprom_read_dword(const uint32_t * __p) ALWAYSINLINE;
+	static void     eeprom_write_dword(uint32_t*      __p, uint32_t __value) ALWAYSINLINE;
+	static uint32_t eeprom_read_dword(const uint32_t* __p) ALWAYSINLINE;
 	//static uint8_t eeprom_read_byte(const uint8_t * __p) ALWAYSINLINE;
 
 	static uint32_t* GetEepromBaseAdr() ALWAYSINLINE;
@@ -214,7 +214,7 @@ public:
 
 private:
 
-	static char* _eepromFileName;
+	static char*    _eepromFileName;
 	static uint32_t _eepromBuffer[2048];
 
 #else
@@ -231,7 +231,7 @@ private:
 
 public:
 
-	inline CCriticalRegion() ALWAYSINLINE :_sreg(CHAL::GetSREG()) {  CHAL::DisableInterrupts(); };
+	inline CCriticalRegion() ALWAYSINLINE : _sreg(CHAL::GetSREG()) { CHAL::DisableInterrupts(); };
 	inline ~CCriticalRegion() ALWAYSINLINE { CHAL::SetSREG(_sreg); }
 };
 

@@ -25,7 +25,7 @@ class CDummyIOControl
 {
 public:
 
-	void Init(uint8_t = 0)			// digital and analog
+	void Init(uint8_t = 0)		// digital and analog
 	{
 	}
 
@@ -37,11 +37,11 @@ public:
 	{
 	}
 
-	void On(uint8_t  = 0)			// same signature as CAnalog8IOControl
+	void On(uint8_t = 0)		// same signature as CAnalog8IOControl
 	{
 	}
 
-	void SetLevel(uint8_t)	
+	void SetLevel(uint8_t)
 	{
 	}
 
@@ -50,7 +50,7 @@ public:
 		return 0;
 	}
 
-	bool IsOn() const				// default is off, e.g. for "kill"
+	bool IsOn() const			// default is off, e.g. for "kill"
 	{
 		return false;
 	}

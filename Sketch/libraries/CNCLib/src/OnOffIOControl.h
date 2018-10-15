@@ -50,7 +50,7 @@ public:
 
 	void On(uint8_t isOn)
 	{
-		Set(isOn !=0);
+		Set(isOn != 0);
 	}
 
 	void On()
@@ -73,7 +73,7 @@ public:
 		return IsOn();
 	}
 
-	void Poll()		// dummy
+	void Poll() // dummy
 	{
 	}
 };

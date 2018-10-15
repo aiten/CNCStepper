@@ -30,8 +30,9 @@
 char CStreamReader::SkipSpaces()
 {
 	while (IsSpace(*_buffer))
+	{
 		_buffer++;
+	}
 
 	return GetChar();
 }
-

@@ -35,14 +35,12 @@
 
 ////////////////////////////////////////////////////////
 
-typedef float expr_t;			// type for expression parser
+typedef float expr_t;       // type for expression parser
+typedef long  mm1000_t;     // 1/1000 mm
+typedef long  feedrate_t;   // mm_1000 / min
+typedef long  inch100000_t; // 1/100000 inch
 
-typedef long mm1000_t;			// 1/1000 mm
-typedef long feedrate_t;		// mm_1000 / min
-
-typedef long inch100000_t;		// 1/100000 inch
-
-#define NUM_AXISXYZ			3			// 3dimensions
+#define NUM_AXISXYZ		3	// 3dimensions
 
 #define SCALE_FEEDRATE	3
 #define SCALE_MM		3

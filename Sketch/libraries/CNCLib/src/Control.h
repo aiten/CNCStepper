@@ -138,7 +138,7 @@ public:
 
 	//////////////////////////////////////////
 
-	bool PostCommand(const __FlashStringHelper* cmd, Stream* output=NULL);
+	bool PostCommand(FLSTR cmd, Stream* output=NULL);
 	bool PostCommand(char* cmd, Stream* output=NULL);
 
 	//////////////////////////////////////////

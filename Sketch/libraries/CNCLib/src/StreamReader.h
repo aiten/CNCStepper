@@ -28,46 +28,69 @@ class CStreamReader
 {
 public:
 
-	void Init(char* buffer)					{ _buffer = buffer; _error = 0; }
+	void Init(char* buffer)
+	{
+		_buffer = buffer;
+		_error  = 0;
+	}
 
-	bool IsError() const					{ return _error != 0; }
-	error_t GetError() const				{ return _error; }
+	bool    IsError() const { return _error != 0; }
+	error_t GetError() const { return _error; }
 
 	char SkipSpaces();
-	char SkipSpacesToUpper()				{ return Toupper(SkipSpaces()); }
-	char GetNextCharSkipScaces()			{ _buffer++; return SkipSpaces(); }		// move to next and skip spaces
+	char SkipSpacesToUpper() { return Toupper(SkipSpaces()); }
 
-	char GetCharToUpper()					{ return (char)Toupper(*_buffer); }
-	char GetChar()							{ return *_buffer; }
-	char GetNextChar()						{ return *(++_buffer); }					// skip current and move to next
-	char GetNextCharToUpper()				{ return Toupper(GetNextChar()); }			// skip current and move to next
+	char GetNextCharSkipScaces()
+	{
+		_buffer++;
+		return SkipSpaces();
+	} // move to next and skip spaces
 
-	bool IsNextChar(const char ch)			{ if (ch!=GetChar()) return false; GetNextChar(); return true; }
+	char GetCharToUpper()				{ return (char)Toupper(*_buffer); }
+	char GetChar()						{ return *_buffer; }
+	char GetNextChar()					{ return *(++_buffer); }                  // skip current and move to next
+	char GetNextCharToUpper()			{ return Toupper(GetNextChar()); } // skip current and move to next
 
-	void MoveToEnd()						{ while (*_buffer) _buffer++; }				// move to "no more char in stream"
+	bool IsNextChar(const char ch)
+	{
+		if (ch != GetChar()) return false;
+		GetNextChar();
+		return true;
+	}
 
-	const char*	GetBuffer()					{ return _buffer; }
-	void ResetBuffer(const char* buffer)	{ _buffer = buffer; }
+	void MoveToEnd()					{ while (*_buffer) _buffer++; } // move to "no more char in stream"
 
-	static char Toupper(char ch)			{ return IsLowerAZ(ch) ? ch + 'A' - 'a' : ch; }
-	static bool IsEOC(char ch)				{ return ch == 0 || ch == ';'; }			// is EndOfCommand
+	const char* GetBuffer()				{ return _buffer; }
+	void        ResetBuffer(const char* buffer) { _buffer = buffer; }
 
-	static bool IsSpace(char ch)			{ return ch == ' ' || ch == '\t' || ch == '\r'; }
-	static bool IsSpaceOrEnd(char ch)		{ return ch == 0 || IsSpace(ch); }
+	static char Toupper(char ch)		{ return IsLowerAZ(ch) ? ch + 'A' - 'a' : ch; }
+	static bool IsEOC(char   ch)		{ return ch == 0 || ch == ';'; } // is EndOfCommand
 
-	static bool IsMinus(char ch)			{ return ch == '-'; }
-	static bool IsDot(char ch)				{ return ch == '.'; }
-	static bool IsDigit(char ch)			{ return ch>='0'&&ch<='9'; }
-	static bool IsDigitDot(char ch)			{ return IsDigit(ch) || IsDot(ch); }
+	static bool IsSpace(char      ch)	{ return ch == ' ' || ch == '\t' || ch == '\r'; }
+	static bool IsSpaceOrEnd(char ch)	{ return ch == 0 || IsSpace(ch); }
 
-	static bool IsAlpha(char ch)			{ ch = Toupper(ch); return ch == '_' || IsUpperAZ(ch); }
-	static bool IsLowerAZ(char ch)			{ return ch >= 'a' && ch <= 'z'; }
-	static bool IsUpperAZ(char ch)			{ return ch >= 'A' && ch <= 'Z'; }
+	static bool IsMinus(char    ch)		{ return ch == '-'; }
+	static bool IsDot(char      ch)		{ return ch == '.'; }
+	static bool IsDigit(char    ch)		{ return ch >= '0' && ch <= '9'; }
+	static bool IsDigitDot(char ch)		{ return IsDigit(ch) || IsDot(ch); }
 
-	void Error(error_t error)				{ _error = error; MoveToEnd(); }
+	static bool IsAlpha(char ch)
+	{
+		ch = Toupper(ch);
+		return ch == '_' || IsUpperAZ(ch);
+	}
+
+	static bool IsLowerAZ(char ch)		{ return ch >= 'a' && ch <= 'z'; }
+	static bool IsUpperAZ(char ch)		{ return ch >= 'A' && ch <= 'Z'; }
+
+	void Error(error_t error)
+	{
+		_error = error;
+		MoveToEnd();
+	}
 
 	const char* _buffer;
-	error_t _error;
+	error_t     _error;
 
 	class CSetTemporary
 	{
@@ -76,12 +99,22 @@ public:
 		char  _oldch;
 
 	public:
-		CSetTemporary(const char*buffer)			{ _buffer = (char*)buffer;  _oldch = *_buffer;  *_buffer = 0; }
-		CSetTemporary(const char*buffer, char ch)	{ _buffer = (char*)buffer;  _oldch = *_buffer;  *_buffer = ch; }
-		~CSetTemporary()							{ *_buffer = _oldch; }
+		CSetTemporary(const char* buffer)
+		{
+			_buffer  = (char*)buffer;
+			_oldch   = *_buffer;
+			*_buffer = 0;
+		}
+
+		CSetTemporary(const char* buffer, char ch)
+		{
+			_buffer  = (char*)buffer;
+			_oldch   = *_buffer;
+			*_buffer = ch;
+		}
+
+		~CSetTemporary() { *_buffer = _oldch; }
 	};
 };
 
 ////////////////////////////////////////////////////////
-
-

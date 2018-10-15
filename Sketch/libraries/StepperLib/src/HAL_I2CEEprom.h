@@ -34,7 +34,7 @@ public:
 		Wire.begin();
 	}
 
-	#define I2C24C256ADR 0x50
+#define I2C24C256ADR 0x50
 
 	static byte i2c_eeprom_read_byte(unsigned int eeaddress)
 	{
@@ -44,7 +44,7 @@ public:
 	static uint32_t i2c_eeprom_read_dword(unsigned int eeaddress)
 	{
 		uint32_t data;
-		i2c_eeprom_read_buffer(I2C24C256ADR, eeaddress, (byte*) &data, sizeof(data));
+		i2c_eeprom_read_buffer(I2C24C256ADR, eeaddress, (byte*)&data, sizeof(data));
 		return data;
 	}
 
@@ -56,11 +56,11 @@ public:
 	////////////////////////////////
 	// see: http://playground.arduino.cc/Code/I2CEEPROM
 
-	static void i2c_eeprom_write_byte(int deviceaddress, unsigned int eeaddress, byte data) 
+	static void i2c_eeprom_write_byte(int deviceaddress, unsigned int eeaddress, byte data)
 	{
 		int rdata = data;
 		Wire.beginTransmission(deviceaddress);
-		Wire.write((int)(eeaddress >> 8)); // MSB
+		Wire.write((int)(eeaddress >> 8));   // MSB
 		Wire.write((int)(eeaddress & 0xFF)); // LSB
 		Wire.write(rdata);
 		Wire.endTransmission();
@@ -71,7 +71,7 @@ public:
 	static void i2c_eeprom_write_page(int deviceaddress, unsigned int eeaddresspage, byte* data, byte length)
 	{
 		Wire.beginTransmission(deviceaddress);
-		Wire.write((int)(eeaddresspage >> 8)); // MSB
+		Wire.write((int)(eeaddresspage >> 8));   // MSB
 		Wire.write((int)(eeaddresspage & 0xFF)); // LSB
 		byte c;
 		for (c = 0; c < length; c++)
@@ -83,7 +83,7 @@ public:
 	{
 		byte rdata = 0xFF;
 		Wire.beginTransmission(deviceaddress);
-		Wire.write((int)(eeaddress >> 8)); // MSB
+		Wire.write((int)(eeaddress >> 8));   // MSB
 		Wire.write((int)(eeaddress & 0xFF)); // LSB
 		Wire.endTransmission();
 		Wire.requestFrom(deviceaddress, 1);
@@ -92,15 +92,15 @@ public:
 	}
 
 	// maybe let's not read more than 30 or 32 bytes at a time!
-	static void i2c_eeprom_read_buffer(int deviceaddress, unsigned int eeaddress, byte *buffer, int length)
+	static void i2c_eeprom_read_buffer(int deviceaddress, unsigned int eeaddress, byte* buffer, int length)
 	{
 		Wire.beginTransmission(deviceaddress);
-		Wire.write((int)(eeaddress >> 8)); // MSB
+		Wire.write((int)(eeaddress >> 8));   // MSB
 		Wire.write((int)(eeaddress & 0xFF)); // LSB
 		Wire.endTransmission();
 		Wire.requestFrom(deviceaddress, length);
 		int c;
-		for (c = 0; c < length; c++)
+		for (c                              = 0; c < length; c++)
 			if (Wire.available()) buffer[c] = Wire.read();
 	}
 };

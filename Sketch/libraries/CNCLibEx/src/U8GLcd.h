@@ -64,8 +64,8 @@ public:
 		DrawLoopQueryTimerout
 	};
 
-	typedef bool(CU8GLcd::*DrawFunction)(EnumAsByte(EDrawLoopType) type, uintptr_t data);
-	typedef void(CU8GLcd::*ButtonFunction)();
+	typedef bool (CU8GLcd::*DrawFunction)(EnumAsByte(EDrawLoopType) type, uintptr_t data);
+	typedef void (CU8GLcd::*ButtonFunction)();
 
 protected:
 
@@ -77,12 +77,12 @@ protected:
 
 protected:
 
-	virtual class U8G2& GetU8G() = 0;
+	virtual class U8G2&    GetU8G() = 0;
 	virtual class CMenu3D& GetMenu() = 0;
 
 	uint8_t GetPageCount();
 
-	inline void DrawString(uint8_t x, uint8_t y, const __FlashStringHelper* s)
+	inline void DrawString(uint8_t x, uint8_t y, FLSTR s)
 	{
 #ifdef USE_U8G2_LIB
 		GetU8G().setCursor(x, y);
@@ -103,7 +103,7 @@ protected:
 
 #ifndef _MSC_VER
 
-	inline void Print(const __FlashStringHelper* s)
+	inline void Print(FLSTR s)
 	{
 		GetU8G().print(s);
 	}
@@ -114,7 +114,7 @@ protected:
 	{
 		GetU8G().print(s);
 	}
-	#
+#
 	inline void Print(char ch)
 	{
 		GetU8G().print(ch);
@@ -144,7 +144,7 @@ protected:
 
 	struct SPageDef
 	{
-		DrawFunction draw;
+		DrawFunction   draw;
 		ButtonFunction buttonpress;
 	};
 
@@ -166,10 +166,15 @@ protected:
 
 	void QueueCommandHistory(char ch);
 
-	unsigned long DrawLoop(DrawFunction drawfnc)						{ _curretDraw = drawfnc; return DrawLoop(); }
+	unsigned long DrawLoop(DrawFunction drawfnc)
+	{
+		_curretDraw = drawfnc;
+		return DrawLoop();
+	}
+
 	unsigned long DrawLoop();
 
-	virtual bool DrawLoopDefault(EnumAsByte(EDrawLoopType) type,uintptr_t data);
+	virtual bool DrawLoopDefault(EnumAsByte(EDrawLoopType) type, uintptr_t data);
 
 	void SetMenuPage();
 
@@ -183,36 +188,37 @@ protected:
 	void ButtonPressShowMenu();
 	void ButtonPressSpeedOverride();
 
-	bool DrawLoopScreenSaver(EnumAsByte(EDrawLoopType) type, uintptr_t data);
-	bool DrawLoopSplash(EnumAsByte(EDrawLoopType) type,uintptr_t data);
-	bool DrawLoopDebug(EnumAsByte(EDrawLoopType) type,uintptr_t data);	
-	bool DrawLoopPosAbs(EnumAsByte(EDrawLoopType) type,uintptr_t data);
-	bool DrawLoopPos(EnumAsByte(EDrawLoopType) type, uintptr_t data);
-	bool DrawLoopRotate2D(EnumAsByte(EDrawLoopType) type, uintptr_t data);
-	bool DrawLoopRotate3D(EnumAsByte(EDrawLoopType) type, uintptr_t data);
+	bool DrawLoopScreenSaver(EnumAsByte(EDrawLoopType)   type, uintptr_t data);
+	bool DrawLoopSplash(EnumAsByte(EDrawLoopType)        type, uintptr_t data);
+	bool DrawLoopDebug(EnumAsByte(EDrawLoopType)         type, uintptr_t data);
+	bool DrawLoopPosAbs(EnumAsByte(EDrawLoopType)        type, uintptr_t data);
+	bool DrawLoopPos(EnumAsByte(EDrawLoopType)           type, uintptr_t data);
+	bool DrawLoopRotate2D(EnumAsByte(EDrawLoopType)      type, uintptr_t data);
+	bool DrawLoopRotate3D(EnumAsByte(EDrawLoopType)      type, uintptr_t data);
 	bool DrawLoopSpeedOverride(EnumAsByte(EDrawLoopType) type, uintptr_t data);
-	bool DrawLoopPreset(EnumAsByte(EDrawLoopType) type, uintptr_t data);
-	bool DrawLoopStartSD(EnumAsByte(EDrawLoopType) type,uintptr_t data);
-	bool DrawLoopError(EnumAsByte(EDrawLoopType) type,uintptr_t data);
-    bool DrawLoopCommandHis(EnumAsByte(EDrawLoopType) type,uintptr_t data);
-	bool DrawLoopMenu(EnumAsByte(EDrawLoopType) type,uintptr_t data);
+	bool DrawLoopPreset(EnumAsByte(EDrawLoopType)        type, uintptr_t data);
+	bool DrawLoopStartSD(EnumAsByte(EDrawLoopType)       type, uintptr_t data);
+	bool DrawLoopError(EnumAsByte(EDrawLoopType)         type, uintptr_t data);
+	bool DrawLoopCommandHis(EnumAsByte(EDrawLoopType)    type, uintptr_t data);
+	bool DrawLoopMenu(EnumAsByte(EDrawLoopType)          type, uintptr_t data);
 
 private:
 
-	DrawFunction				_curretDraw=NULL;
+	DrawFunction _curretDraw = NULL;
 
-	EnumAsByte(ERotaryFocus)	_rotaryFocus=RotaryMainPage;
+	EnumAsByte(ERotaryFocus) _rotaryFocus = RotaryMainPage;
 
-	uint8_t						_currentpage;
+	uint8_t _currentpage;
 
-	int8_t						_screensaveX = 2;
-	int8_t						_screensaveY = 0;
-	int8_t						_screensaveXDiff = 1;
-	int8_t						_screensaveYDiff = 1;
-	unsigned long				_screensaveTime = 0;
+	int8_t _screensaveX     = 2;
+	int8_t _screensaveY     = 0;
+	int8_t _screensaveXDiff = 1;
+	int8_t _screensaveYDiff = 1;
 
-	uint8_t						_SDFileCount = 255;
-	int8_t						_addMenuItems = 0;
+	unsigned long _screensaveTime = 0;
+
+	uint8_t _SDFileCount  = 255;
+	int8_t  _addMenuItems = 0;
 
 	CRingBufferQueue<char, 128> _commandHis;
 
@@ -222,30 +228,30 @@ protected:
 
 	void SetRotaryPin(pin_t pin1, pin_t pin2, pin_t pinPush, uint8_t onValuePush);
 
-	void CallRotaryButtonTick();
-	static void CallRotaryButtonTickISR() { ((CU8GLcd*)CLcd::GetInstance())->CallRotaryButtonTick(); }
+	void        CallRotaryButtonTick();
+	static void CallRotaryButtonTickISR()				{ ((CU8GLcd*)CLcd::GetInstance())->CallRotaryButtonTick(); }
 
 	CRotaryButton<rotarypos_t, CU8GLcd_ROTARY_ACCURACY> _rotarybutton;
-	CPushButton									_rotarypushbutton;
+	CPushButton                                         _rotarypushbutton;
 
-	unsigned long				_rotaryEventTime = 0;
+	unsigned long _rotaryEventTime = 0;
 
-	uint8_t						_lcd_numaxis = NUM_AXIS;
-	uint8_t						_charHeight = 10;
-	uint8_t						_charWidth = 6;
+	uint8_t _lcd_numaxis = NUM_AXIS;
+	uint8_t _charHeight  = 10;
+	uint8_t _charWidth   = 6;
 
-	const uint8_t*				_font = u8g_font_6x10;
+	const uint8_t* _font = u8g_font_6x10;
 
-	uint8_t ToRow(uint8_t row) { return  (row + 1)*(_charHeight); }
-	uint8_t ToCol(uint8_t col) { return (col)*(_charWidth); }
+	uint8_t ToRow(uint8_t row)							{ return (row + 1) * (_charHeight); }
+	uint8_t ToCol(uint8_t col)							{ return (col) * (_charWidth); }
 
-	uint8_t TotalRows() { return CU8GLcd_LCD_GROW / _charHeight; }
-	uint8_t TotalCols() { return CU8GLcd_LCD_GCOL / _charWidth; }
+	uint8_t TotalRows()									{ return CU8GLcd_LCD_GROW / _charHeight; }
+	uint8_t TotalCols()									{ return CU8GLcd_LCD_GCOL / _charWidth; }
 
-	uint8_t HeadLineOffset() { return 2; }
-	uint8_t PosLineOffset() { return (_lcd_numaxis > 5 ? 0 : 1); }
+	uint8_t HeadLineOffset()							{ return 2; }
+	uint8_t PosLineOffset()								{ return (_lcd_numaxis > 5 ? 0 : 1); }
 
-	static char* DrawPos(axis_t axis, mm1000_t pos, char *tmp, uint8_t precision);		// draw mm100 or inch
+	static char* DrawPos(axis_t axis, mm1000_t pos, char* tmp, uint8_t precision); // draw mm100 or inch
 
 #if defined(__AVR_ARCH__)
 
@@ -253,11 +259,10 @@ protected:
     static DrawFunction GetDrawFunction(const void* adr);
 
 #else
-	static ButtonFunction GetButtonPress(const ButtonFunction* adr)	{ return *adr; }
-    static DrawFunction GetDrawFunction(const DrawFunction* adr)	{ return *adr; };
+	static ButtonFunction GetButtonPress(const ButtonFunction* adr) { return *adr; }
+	static DrawFunction   GetDrawFunction(const DrawFunction*  adr) { return *adr; };
 
 #endif
-
 };
 
 ////////////////////////////////////////////////////////

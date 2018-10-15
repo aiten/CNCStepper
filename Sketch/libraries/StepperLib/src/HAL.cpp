@@ -29,12 +29,14 @@
 
 unsigned short CHAL::analogRead(pin_t pin)
 {
-	return (unsigned short) ::analogRead(pin);
+	return (unsigned short)::analogRead(pin);
 }
 
 ////////////////////////////////////////////////////////
 
-static void IgnoreIrq() {}
+static void IgnoreIrq()
+{
+}
 
 CHAL::HALEvent CHAL::_TimerEvent0 = IgnoreIrq;
 CHAL::HALEvent CHAL::_TimerEvent1 = IgnoreIrq;
@@ -47,6 +49,6 @@ CHAL::HALEvent CHAL::_TimerEvent2 = IgnoreIrq;
 
 #ifdef _MSC_VER
 
-std::function<uint8_t(short)> digitalReadEvent=NULL;
+std::function<uint8_t(short)> digitalReadEvent = NULL;
 
 #endif

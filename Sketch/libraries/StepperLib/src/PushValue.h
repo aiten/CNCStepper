@@ -33,7 +33,7 @@ public:
 
 	CPushValue(T* remember, T newValue)
 	{
-		_Value = remember;
+		_Value    = remember;
 		_oldValue = *remember;
 		*remember = newValue;
 	}

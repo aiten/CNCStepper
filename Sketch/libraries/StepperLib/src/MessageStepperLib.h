@@ -58,4 +58,3 @@
 #define MESSAGE_STEPPER_MoveReferenceFailed			StepperMessage("4","MoveReference failed")
 
 #define MESSAGE_STEPPER_MoveAwayFromReference		StepperMessage("5","Move away from reference")
-

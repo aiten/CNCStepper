@@ -72,7 +72,7 @@ public:
 			}
 		}
 
-		uint8_t FindMenuIdx(uintptr_t param, bool (*check)(const SMenuItemDef*, uintptr_t param)) const
+		uint8_t FindMenuIdx(uintptr_t param, bool (*check)(const SMenuItemDef*, uintptr_t)) const
 		{
 			const SMenuItemDef* item = &GetItems()[0];
 

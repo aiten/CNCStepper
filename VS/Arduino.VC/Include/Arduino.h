@@ -257,10 +257,13 @@ inline void delay(unsigned long ms) { Sleep(ms); }
 class Stream
 {
 public:
+
 	Stream()
 	{
 		_istty = _isatty(STDIO) != 0;
 	}
+
+	virtual ~Stream() = default;
 
 	void SetIdle(void (*pIdle)()) { _pIdle = pIdle; }
 

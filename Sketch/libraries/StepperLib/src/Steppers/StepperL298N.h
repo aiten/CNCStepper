@@ -74,8 +74,6 @@ private:
 	uint8_t _stepIdx[NUM_AXIS];
 	bool _fullStepMode;
 
-	void InitMemVar();
-
 	void  SetPhase(axis_t axis);
 
 	void  SetPhase(axis_t axis, uint8_t bitmask);

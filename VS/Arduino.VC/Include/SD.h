@@ -89,6 +89,8 @@ public:
 
 	MyDirFile() { _refcount = 0; }
 
+	virtual ~MyDirFile() = default;
+
 	int  _refcount;
 	void IncRef() { _refcount++; };
 

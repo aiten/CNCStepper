@@ -49,6 +49,6 @@ CHAL::HALEvent CHAL::_TimerEvent2 = IgnoreIrq;
 
 #ifdef _MSC_VER
 
-std::function<uint8_t(short)> digitalReadEvent = NULL;
+std::function<uint8_t(short)> digitalReadEvent = nullptr;
 
 #endif

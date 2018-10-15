@@ -76,7 +76,11 @@ void CStepperL298N::Init()
 {
 	super::Init();
 
-	InitMemVar();
+	for (unsigned char& stepIdx : _stepIdx)
+	{
+		stepIdx = 0;
+	}
+	_fullStepMode = false;
 
 	uint8_t i;
 
@@ -108,17 +112,6 @@ void CStepperL298N::Init()
 			CHAL::pinMode(_pinRef[i], INPUT_PULLUP);
 		}
 	}
-}
-
-////////////////////////////////////////////////////////
-
-void CStepperL298N::InitMemVar()
-{
-	for (unsigned char& stepIdx : _stepIdx)
-	{
-		stepIdx = 0;
-	}
-	_fullStepMode  = false;
 }
 
 ////////////////////////////////////////////////////////

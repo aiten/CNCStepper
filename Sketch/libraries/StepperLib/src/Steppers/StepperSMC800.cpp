@@ -97,23 +97,16 @@ void CStepperSMC800::OutSMC800Cmd(const uint8_t val)
 
 ////////////////////////////////////////////////////////
 
-void CStepperSMC800::InitMemVar()
-{
-	uint8_t i;
-	for (i = 0; i < SMC800_NUM_AXIS; i++) _stepIdx[i] = 0;
-	for (i = 0; i < SMC800_NUM_AXIS; i++) _level[i]   = LevelOff;
-	for (i = 0; i < NUM_AXIS; i++) _fullStepMode[i]   = false;
-
-	_pod._idleLevel = Level20P;
-}
-
-////////////////////////////////////////////////////////
-
 void CStepperSMC800::Init()
 {
 	super::Init();
 
-	InitMemVar();
+	uint8_t i;
+	for (i = 0; i < SMC800_NUM_AXIS; i++) _stepIdx[i] = 0;
+	for (i = 0; i < SMC800_NUM_AXIS; i++) _level[i] = LevelOff;
+	for (i = 0; i < NUM_AXIS; i++) _fullStepMode[i] = false;
+
+	_pod._idleLevel = Level20P;
 
 #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 

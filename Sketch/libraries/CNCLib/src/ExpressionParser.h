@@ -124,8 +124,6 @@ protected:
 
 	expr_t Factorial(expr_t value);
 	expr_t Sign(expr_t value);
-
-	bool SaveAssign(char* buffer, char* current, char ch, uint8_t max);
 };
 
 ////////////////////////////////////////////////////////

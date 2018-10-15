@@ -241,13 +241,12 @@ protected:
 	unsigned short GetUint16OrParam()						{ return (unsigned short)GetUint32OrParam(65535); };
 	uint8_t GetUint8OrParam()								{ return uint8_t(GetUint32OrParam(255)); };
 
-	mm1000_t GetRelativePosition(mm1000_t pos, axis_t axis)	{ return pos - CalcAllPreset(axis); }
-	mm1000_t GetRelativePosition(axis_t axis)				{ return GetRelativePosition(CMotionControlBase::GetInstance()->GetPosition(axis), axis); }
+	//mm1000_t GetRelativePosition(mm1000_t pos, axis_t axis)	{ return pos - CalcAllPreset(axis); }
+	//mm1000_t GetRelativePosition(axis_t axis)				{ return GetRelativePosition(CMotionControlBase::GetInstance()->GetPosition(axis), axis); }
 
 	bool CheckAxisSpecified(axis_t axis, uint8_t& axes);
 	axis_t CharToAxis(char axis);
 	axis_t CharToAxisOffset(char axis);
-	char AxisToChar(axis_t axis);
 
 	uint8_t GetSubCode();
 

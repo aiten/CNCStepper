@@ -58,11 +58,9 @@ protected:
 
 private:
 
-	void InitMemVar();
-
 	uint8_t _stepIdx[SMC800_NUM_AXIS];
 	uint8_t _level[SMC800_NUM_AXIS];
-	bool		  _fullStepMode[NUM_AXIS];
+	bool	_fullStepMode[NUM_AXIS];
 
 	void   SetPhase(axis_t axis);
 	static void OutSMC800Cmd(const uint8_t val);

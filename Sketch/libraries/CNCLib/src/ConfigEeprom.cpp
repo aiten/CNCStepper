@@ -136,7 +136,9 @@ bool CConfigEeprom::ParseConfig(CParser* parser)
 			return true;
 		case 'w':
 			if (!CHAL::HaveEeprom() || !CHAL::NeedFlushEeprom() || !_eepromcanwrite)
+			{
 				return false;
+			}
 			_eepromcanwrite = false;
 			Flush();
 			parser->GetReader()->GetNextChar();

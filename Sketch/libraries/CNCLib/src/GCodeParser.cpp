@@ -451,7 +451,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 }
 ////////////////////////////////////////////////////////////
 
-const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfo(uintptr_t param, bool(*check)(const SParamInfo*, uintptr_t param))
+const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfo(uintptr_t param, bool(*check)(const SParamInfo*, uintptr_t))
 {
 	const SParamInfo* item = &_paramdef[0];
 	while (item->GetParamNo() != 0)

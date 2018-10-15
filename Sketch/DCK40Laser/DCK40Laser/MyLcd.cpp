@@ -73,7 +73,7 @@ PROGMEM const CU8GLcd::SPageDef CU8GLcd::_pagedef[] =
 	{ &CU8GLcd::DrawLoopError,	&CU8GLcd::ButtonPressShowMenu },
 	{ &CU8GLcd::DrawLoopCommandHis, &CU8GLcd::ButtonPressShowMenu },
 	{ &CU8GLcd::DrawLoopMenu,	&CU8GLcd::ButtonPressMenuPage },
-	{ NULL, NULL }
+	{nullptr, nullptr }
 };
 
 ////////////////////////////////////////////////////////////

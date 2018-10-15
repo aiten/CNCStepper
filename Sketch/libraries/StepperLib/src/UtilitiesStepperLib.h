@@ -117,7 +117,7 @@ extern udiv_t udiv(unsigned short __num, unsigned short __denom) __asm__("__udiv
 template <typename T, uint8_t sz>
 void                          DumpArray(FLSTR head, const T pos[sz], bool newline)
 {
-	if (head != NULL)
+	if (head != nullptr)
 	{
 		StepperSerial.print(head);
 		StepperSerial.print(F("="));
@@ -143,7 +143,7 @@ void                          DumpArray(FLSTR head, const T pos[sz], bool newlin
 template <typename T>
 void DumpType(FLSTR head, T value, bool newline)
 {
-	if (head != NULL)
+	if (head != nullptr)
 	{
 		StepperSerial.print(head);
 		StepperSerial.print(F("="));

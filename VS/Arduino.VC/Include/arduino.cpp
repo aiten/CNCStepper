@@ -27,7 +27,7 @@ uint8_t digitalRead(short pin)
 {
 	uint8_t value = digitalReadFromFile(pin);
 
-	if (value == DIGITALREADNOVALUE && digitalReadEvent != NULL)
+	if (value == DIGITALREADNOVALUE && digitalReadEvent != nullptr)
 	{
 		value = digitalReadEvent(pin);
 	}

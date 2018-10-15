@@ -98,7 +98,7 @@ public:
 
 	struct SEvent 
 	{
-		SEvent()																						{ _event = NULL;  _eventParam = 0; }
+		SEvent()																						{ _event = nullptr;  _eventParam = 0; }
 		StepperEvent  _event;
 		uintptr_t 	  _eventParam;
 		bool Call(CStepper*stepper, EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo)	{ if (_event) return _event(stepper, _eventParam, eventtype, addinfo); return true; }
@@ -120,13 +120,13 @@ public:
 
 	virtual void Init();
 
-	bool IsError()												{ return _pod._error != 0; };
+	bool IsError()												{ return _pod._error != nullptr; };
 	error_t GetError()											{ return _pod._error; }
-	void ClearError()											{ _pod._error = 0; }
+	void ClearError()											{ _pod._error = nullptr; }
 
-	bool IsFatalError()											{ return _pod._fatalerror != 0; };
+	bool IsFatalError()											{ return _pod._fatalerror != nullptr; };
 	error_t GetFatalError()										{ return _pod._fatalerror; }
-	void ClearFatalError()										{ _pod._fatalerror = 0; }
+	void ClearFatalError()										{ _pod._fatalerror = nullptr; }
 
 
 	void SetMaxSpeed(axis_t axis, steprate_t vMax)				{ _pod._timerMax[axis] = SpeedToTimer(vMax); }

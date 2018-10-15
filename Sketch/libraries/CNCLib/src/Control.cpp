@@ -29,7 +29,7 @@
 
 ////////////////////////////////////////////////////////////
 
-template<> CControl* CSingleton<CControl>::_instance = NULL;
+template<> CControl* CSingleton<CControl>::_instance = nullptr;
 
 ////////////////////////////////////////////////////////
 
@@ -268,7 +268,7 @@ bool CControl::ParseAndPrintResult(CParser *parser, Stream* output)
 	{
 		// => not in "else" if "OK" should be sent after "Error:"
 		if (output) output->print(MESSAGE_OK);
-		if (parser->GetOkMessage() != NULL)
+		if (parser->GetOkMessage() != nullptr)
 		{
 			if (output)
 			{

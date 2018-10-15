@@ -183,7 +183,7 @@ param_t CGCodeParser::ParseParamNo()
 		_reader->GetNextChar();
 		char ch = _reader->SkipSpacesToUpper();
 		const char* start = _reader->GetBuffer();
-		const char* colon = NULL;
+		const char* colon = nullptr;
 
 		if (!CStreamReader::IsAlpha(ch))
 		{
@@ -194,7 +194,7 @@ param_t CGCodeParser::ParseParamNo()
 		{
 			if (ch == ':')
 			{
-				if (colon != NULL)
+				if (colon != nullptr)
 				{
 					Error(MESSAGE_GCODE_NoValidVaribaleName); return 0;
 				}
@@ -217,7 +217,7 @@ param_t CGCodeParser::ParseParamNo()
 		CStreamReader::CSetTemporary terminate(end);
 		axis_t a=X_AXIS;
 
-		if (colon != NULL)
+		if (colon != nullptr)
 		{
 			if (colon[2] != 0 || (a = CharToAxis(CStreamReader::Toupper(colon[1]))) >= NUM_AXIS)
 			{
@@ -229,9 +229,9 @@ param_t CGCodeParser::ParseParamNo()
 
 		const SParamInfo* param = FindParamInfoByText(start);
 
-		if (param != NULL)
+		if (param != nullptr)
 		{
-			if (param->GetAllowAxisOfs()==false && colon != NULL)
+			if (param->GetAllowAxisOfs()==false && colon != nullptr)
 			{
 				Error(MESSAGE_GCODE_NoValidVaribaleName); return 0;
 			}
@@ -306,7 +306,7 @@ mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertUnits)
 
 	const SParamInfo*param = FindParamInfoByParamNo(paramNo);
 
-	if (param != NULL)
+	if (param != nullptr)
 	{
 		axis_t axis = (axis_t) (paramNo - param->GetParamNo());
 		switch (param->GetParamNo())
@@ -401,7 +401,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 				_modalstate.Parameter[paramIdx] = exprpars.Answer;
 			}
 		}
-		else if (param != NULL)
+		else if (param != nullptr)
 		{
 			axis_t axis = (axis_t)(paramNo - param->GetParamNo());
 			switch (param->GetParamNo())
@@ -454,7 +454,7 @@ const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfo(uintptr_t param, boo
 		item++;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 ////////////////////////////////////////////////////////////
@@ -464,7 +464,7 @@ const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfoByText(const char* te
 	return FindParamInfo((uintptr_t) text, [](const SParamInfo* p, uintptr_t x) -> bool
 	{
 		const char* text = p->GetText();
-		return text != NULL && strcasecmp_P((const char*)x, text) == 0;
+		return text != nullptr && strcasecmp_P((const char*)x, text) == 0;
 	});
 }
 
@@ -559,7 +559,7 @@ const CGCodeParser::SParamInfo CGCodeParser::_paramdef[] PROGMEM =
 #endif
 
 	{ PARAMSTART_FEEDRATE,	_feedrate, false,			CGCodeParser::SParamInfo::IsMm1000 },
-	{ 0,NULL,false }
+	{ 0, nullptr,false }
 };
 
 ////////////////////////////////////////////////////////////
@@ -568,7 +568,7 @@ void CGCodeParser::PrintParam(const CGCodeParser::SParamInfo* item, axis_t axis)
 {
 	const char* paramname = item->GetText();
 	StepperSerial.print('#');
-	if (paramname != NULL)
+	if (paramname != nullptr)
 	{
 		StepperSerial.print('<');
 		StepperSerial.print(paramname);

@@ -345,7 +345,7 @@ public:
 
 private:
 
-	void (*_pIdle)() = NULL;
+	void (*_pIdle)() = nullptr;
 	char   _last     = 0;
 	bool   _istty;
 };

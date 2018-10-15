@@ -37,7 +37,7 @@ CStepper::CStepper()
 
 ////////////////////////////////////////////////////////
 
-template <> CStepper* CSingleton<CStepper>::_instance = NULL;
+template <> CStepper* CSingleton<CStepper>::_instance = nullptr;
 
 uint8_t          CStepper::_mysteps[NUM_AXIS];
 volatile uint8_t CStepper::_setState;
@@ -761,7 +761,7 @@ void CStepper::SMovement::AdjustJunktionSpeedH2T(SMovement* mvPrev, SMovement* m
 {
 	if (!IsActiveMove()) return; // Move became inactive by ISR or "WaitState"/"IoControl"
 
-	if (mvPrev == NULL || IsRunOrDownMove()) // no prev or processing (can be if the ISR has switchted to the next move)
+	if (mvPrev == nullptr || IsRunOrDownMove()) // no prev or processing (can be if the ISR has switchted to the next move)
 	{
 		// first "now" executing move
 		if (IsRunOrUpMove())
@@ -791,7 +791,7 @@ void CStepper::SMovement::AdjustJunktionSpeedH2T(SMovement* mvPrev, SMovement* m
 		}
 	}
 
-	if (mvNext != NULL)
+	if (mvNext != nullptr)
 	{
 #ifdef _MSC_VER
 		assert(mvNext->IsActiveMove());
@@ -805,7 +805,7 @@ void CStepper::SMovement::AdjustJunktionSpeedH2T(SMovement* mvPrev, SMovement* m
 	{
 		// modify of ramp failed => do not modify _pod._move._timerEndPossible
 		_pod._move._timerEndPossible                                = _pod._move._ramp._timerStop;
-		if (mvNext != NULL) mvNext->_pod._move._timerJunctionToPrev = _pod._move._ramp._timerStop;
+		if (mvNext != nullptr) mvNext->_pod._move._timerJunctionToPrev = _pod._move._ramp._timerStop;
 	}
 }
 
@@ -817,7 +817,7 @@ bool CStepper::SMovement::AdjustJunktionSpeedT2H(SMovement* mvPrev, SMovement* m
 {
 	if (!IsActiveMove()) return !IsSkipForOptimizing(); // Move became inactive by ISR or "wait" move or ignore "IOControl
 
-	if (mvNext == NULL)
+	if (mvNext == nullptr)
 	{
 		// last element in queue, v(end) = 0, we have to stop
 		_pStepper->_movements._timerStartPossible = _pStepper->GetTimer(_steps, GetDownTimerDec());
@@ -829,7 +829,7 @@ bool CStepper::SMovement::AdjustJunktionSpeedT2H(SMovement* mvPrev, SMovement* m
 		_pStepper->_movements._timerStartPossible = _pStepper->GetTimerAccelerating(_steps, _pStepper->_movements._timerStartPossible, GetDownTimerDec());
 	}
 
-	if (mvPrev != NULL)
+	if (mvPrev != nullptr)
 	{
 		_pod._move._timerRun = _pod._move._timerMax;
 
@@ -960,14 +960,14 @@ CStepper::SMovement* CStepper::GetNextMovement(uint8_t idx)
 
 	if (_movements._queue.IsEmpty())
 	{
-		return NULL;
+		return nullptr;
 	}
 	while (true)
 	{
 		idx = _movements._queue.H2TInc(idx);
 		if (!_movements._queue.H2TTest(idx))
 		{
-			return NULL;
+			return nullptr;
 		}
 
 		if (!_movements._queue.Buffer[idx].IsSkipForOptimizing())
@@ -986,14 +986,14 @@ CStepper::SMovement* CStepper::GetPrevMovement(uint8_t idx)
 
 	if (_movements._queue.IsEmpty())
 	{
-		return NULL;
+		return nullptr;
 	}
 	while (true)
 	{
 		idx = _movements._queue.T2HInc(idx);
 		if (!_movements._queue.T2HTest(idx))
 		{
-			return NULL;
+			return nullptr;
 		}
 
 		if (!_movements._queue.Buffer[idx].IsActiveIo())
@@ -1426,7 +1426,7 @@ void CStepper::EmergencyStopResurrect()
 {
 	AbortMove(); // make sure nothing is running
 	_pod._emergencyStop = false;
-	_pod._fatalerror    = 0;
+	_pod._fatalerror    = nullptr;
 }
 
 ////////////////////////////////////////////////////////
@@ -2078,7 +2078,7 @@ void CStepper::SetEnableAll(uint8_t level)
 
 void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], steprate_t vMax)
 {
-	_pod._error = 0;
+	_pod._error = nullptr;
 	register axis_t i;
 
 #if USESLIP

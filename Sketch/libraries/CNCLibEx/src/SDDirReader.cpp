@@ -89,7 +89,7 @@ bool CSDDirReader::MoveNext()
 
 		Current = _rootDir.openNextFile();
 	}
-	while (Current && _skip != NULL && _skip(&Current));
+	while (Current && _skip != nullptr && _skip(&Current));
 
 	return Current;
 }

@@ -34,7 +34,7 @@ CMsvcStepper::CMsvcStepper()
 	DelayOptimization = true;;
 	SplitFile         = true;
 	UseSpeedSign      = false;
-	_TimerEvents      = NULL;
+	_TimerEvents      = nullptr;
 	CacheSize         = _STORETIMEVALUES;
 	_oldCacheSize     = -1;
 }
@@ -229,9 +229,9 @@ void CMsvcStepper::InitTest(const char* filename)
 	if (_oldCacheSize != CacheSize)
 	{
 		delete[] _TimerEvents;
-		_TimerEvents = NULL;
+		_TimerEvents = nullptr;
 	}
-	if (_TimerEvents == NULL)
+	if (_TimerEvents == nullptr)
 	{
 		_TimerEvents  = new STimerEvent[CacheSize];
 		_oldCacheSize = CacheSize;

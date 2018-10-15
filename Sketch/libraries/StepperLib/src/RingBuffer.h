@@ -143,7 +143,7 @@ public:
 
 	T* GetPrev(uint8_t idx)
 	{
-		if (idx == _head) return NULL;
+		if (idx == _head) return nullptr;
 		idx = PrevIndex(idx);
 		return IsInQueue(idx) ? &Buffer[idx] : NULL;
 	}

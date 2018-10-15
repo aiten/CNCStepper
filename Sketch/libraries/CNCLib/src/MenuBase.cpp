@@ -102,7 +102,7 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef* def)
 	const SMenuDef* posMenu = (const SMenuDef*)def->GetParam2();
 	SetMenu(newMenu);
 
-	if (posMenu != NULL)
+	if (posMenu != nullptr)
 	{
 		// param2 != NULL => find index
 		GetNavigator().SetPosition(newMenu->FindMenuIdx((uintptr_t)def, [](const SMenuItemDef* def, uintptr_t param) -> bool

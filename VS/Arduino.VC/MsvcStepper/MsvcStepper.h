@@ -95,8 +95,8 @@ public:
 
 	// Test extensions
 
-	void InitTest(const char* filename = NULL);
-	void EndTest(const char*  filename = NULL);
+	void InitTest(const char* filename = nullptr);
+	void EndTest(const char*  filename = nullptr);
 
 	bool DelayOptimization;
 	bool SplitFile;

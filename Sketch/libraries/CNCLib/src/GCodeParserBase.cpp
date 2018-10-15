@@ -351,7 +351,7 @@ void CGCodeParserBase::Parse()
 			case '$':
 			{
 				_reader->GetNextChar();
-				if (CSingleton<CConfigEeprom>::GetInstance() == NULL || !CSingleton<CConfigEeprom>::GetInstance()->ParseConfig(this) )
+				if (CSingleton<CConfigEeprom>::GetInstance() == nullptr || !CSingleton<CConfigEeprom>::GetInstance()->ParseConfig(this) )
 				{
 					if (!IsError())
 						Error(MESSAGE_GCODE_IllegalCommand);

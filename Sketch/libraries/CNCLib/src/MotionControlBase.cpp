@@ -39,7 +39,7 @@ ToMachine_t CMotionControlBase::_ToMachine;
 /////////////////////////////////////////////////////////
 
 template <>
-CMotionControlBase* CSingleton<CMotionControlBase>::_instance = NULL;
+CMotionControlBase* CSingleton<CMotionControlBase>::_instance = nullptr;
 
 /////////////////////////////////////////////////////////
 

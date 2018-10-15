@@ -42,13 +42,13 @@ public:
 	{
 		_reader    = reader;
 		_output    = output;
-		_error     = 0;
-		_OkMessage = NULL;
+		_error     = nullptr;
+		_OkMessage = nullptr;
 	};
 
 	void ParseCommand();
 
-	bool    IsError()							{ return _error != 0; };
+	bool    IsError()							{ return _error != nullptr; };
 	error_t GetError()							{ return _error; }
 
 	typedef void (*PrintOKMessage)();

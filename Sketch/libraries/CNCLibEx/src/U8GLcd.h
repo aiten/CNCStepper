@@ -204,7 +204,7 @@ protected:
 
 private:
 
-	DrawFunction _curretDraw = NULL;
+	DrawFunction _curretDraw = nullptr;
 
 	EnumAsByte(ERotaryFocus) _rotaryFocus = RotaryMainPage;
 

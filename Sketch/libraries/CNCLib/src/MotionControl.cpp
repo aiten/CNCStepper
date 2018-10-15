@@ -32,7 +32,7 @@
 
 CMotionControl::CMotionControl()
 {
-	SetOffset2D(NULL);
+	SetOffset2D(nullptr);
 }
 
 /////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ void CMotionControl::SetRotate2D(axis_t axis, float rad)
 
 void CMotionControl::SetOffset2D(const mm1000_t ofs[NUM_AXISXYZ])
 {
-	if (ofs != NULL)
+	if (ofs != nullptr)
 	{
 		memcpy(_rotateOffset2D, ofs, sizeof(_rotateOffset2D));
 	}

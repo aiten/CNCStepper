@@ -31,10 +31,10 @@ public:
 	void Init(char* buffer)
 	{
 		_buffer = buffer;
-		_error  = 0;
+		_error  = nullptr;
 	}
 
-	bool    IsError() const { return _error != 0; }
+	bool    IsError() const { return _error != nullptr; }
 	error_t GetError() const { return _error; }
 
 	char SkipSpaces();

@@ -35,7 +35,7 @@
 ////////////////////////////////////////////////////////
 
 uint32_t CHAL::_eepromBuffer[2048] = {0};
-char*    CHAL::_eepromFileName     = NULL;
+char*    CHAL::_eepromFileName     = nullptr;
 
 ////////////////////////////////////////////////////////
 
@@ -50,7 +50,7 @@ void CHAL::InitEeprom()
 {
 	if (_eepromFileName)
 	{
-		FILE* f = NULL;
+		FILE* f = nullptr;
 		fopen_s(&f, _eepromFileName, "rb+");
 
 		if (f)
@@ -65,7 +65,7 @@ void CHAL::FlushEeprom()
 {
 	if (_eepromFileName)
 	{
-		FILE* f = NULL;
+		FILE* f = nullptr;
 		fopen_s(&f, _eepromFileName, "wb+");
 		if (f)
 		{

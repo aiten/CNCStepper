@@ -29,7 +29,7 @@ class CMenuBase
 {
 public:
 
-	CMenuBase() { SetMenu(NULL); }
+	CMenuBase() { SetMenu(nullptr); }
 
 	struct SMenuItemDef;
 	struct SMenuDef;
@@ -68,7 +68,7 @@ public:
 
 			for (uint8_t x = 0;; x++)
 			{
-				if (items[x].GetText() == NULL) return x;
+				if (items[x].GetText() == nullptr) return x;
 			}
 		}
 
@@ -76,7 +76,7 @@ public:
 		{
 			const SMenuItemDef* item = &GetItems()[0];
 
-			for (uint8_t x = 0; item->GetText() != NULL; x++, item++)
+			for (uint8_t x = 0; item->GetText() != nullptr; x++, item++)
 			{
 				if (check(item, param)) return x;
 			}
@@ -114,14 +114,14 @@ protected:
 
 	//////////////////////////////////////////
 
-	bool PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, FLSTR cmd, Stream* output = NULL) { return CLcd::GetInstance()->PostCommand(syntaxtype, cmd, output); }
-	bool PostCommand(char*                        cmd, Stream*      output              = NULL) { return CLcd::GetInstance()->PostCommand(cmd, output); }
+	bool PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, FLSTR cmd, Stream* output = nullptr) { return CLcd::GetInstance()->PostCommand(syntaxtype, cmd, output); }
+	bool PostCommand(char*                        cmd, Stream*      output              = nullptr) { return CLcd::GetInstance()->PostCommand(cmd, output); }
 
 	uint8_t InitPostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, char* cmd) { return CLcd::GetInstance()->InitPostCommand(syntaxtype, cmd); }
 
 	//////////////////////////////////////////
 
-	const SMenuDef* _main = NULL;
+	const SMenuDef* _main = nullptr;
 
 private:
 

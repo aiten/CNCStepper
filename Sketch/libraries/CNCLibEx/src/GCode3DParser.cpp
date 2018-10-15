@@ -348,7 +348,7 @@ void CGCode3DParser::M28Command()
 		// create folders
 		char* lastslash = strrchr(filename, '/');
 
-		if (lastslash != NULL && lastslash != filename)
+		if (lastslash != nullptr && lastslash != filename)
 		{
 			*lastslash = 0;
 			if (!SD.exists(filename))

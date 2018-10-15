@@ -102,7 +102,7 @@ const CMyMenu::SMenuItemDef CMyMenu::_mainMenuItems[] PROGMEM =
 	{ _mSD, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t) &_SDMenu },
 	{ _mExtra, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t) &_extraMenu },
 	{ _mEnd, (MenuFunction) &CMyMenu::MenuButtonPressEnd },
-	{ NULL, 0 }
+	{nullptr, nullptr }
 };
 
 ////////////////////////////////////////////////////////////
@@ -129,7 +129,7 @@ const CMyMenu::SMenuItemDef CMyMenu::_moveMenuItems[] PROGMEM =
 	{ _mHome,	&CMenuBase::MenuButtonPressMove, (menuparam_t)MoveHome },
 	{ _mG92,	&CMenuBase::MenuButtonPressMoveG92 },
 	{ _mBack,   &CMenuBase::MenuButtonPressMenuBack, (menuparam_t)&_mainMenu },
-	{ NULL, 0 }
+	{nullptr, nullptr }
 };
 
 ////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ const CMyMenu::SMenuItemDef CMyMenu::_rotateMenuItems[] PROGMEM =
 	{ _mRYZ,  &CMenuBase::MenuButtonPressRotate, (menuparam_t)RotateSetYZ },
 	{ _mRX,   &CMenuBase::MenuButtonPressRotate, (menuparam_t)RotateSetX },
 	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t)&_mainMenu },
-	{ NULL, 0 }
+	{nullptr, nullptr }
 };
 
 ////////////////////////////////////////////////////////////
@@ -152,7 +152,7 @@ const CMyMenu::SMenuItemDef CMyMenu::_SDSelectMenuItems[] PROGMEM =
 {
 	{ (const char*)(MENUENTRY_SDFILES), (MenuFunction)&CMenu3D::MenuButtonPressSDSelect },
 	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t) &_SDMenu },
-	{ NULL, 0 }
+	{nullptr, nullptr }
 };
 
 const CMyMenu::SMenuItemDef CMyMenu::_SDMenuItems[] PROGMEM =
@@ -161,7 +161,7 @@ const CMyMenu::SMenuItemDef CMyMenu::_SDMenuItems[] PROGMEM =
 	{ _mSDStart, (MenuFunction)&CMenu3D::MenuButtonPressSDStart },
 	{ _mSDSelect, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_SDSelectMenu },
 	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t)&_mainMenu },
-	{ NULL, 0 }
+	{nullptr, nullptr }
 };
 
 
@@ -180,7 +180,7 @@ const CMyMenu::SMenuItemDef CMyMenu::_extraMenuItems[] PROGMEM =
 	{ _mHold,	(MenuFunction)&CMyMenu::MenuButtonPressHold },
 	{ _mResume,	(MenuFunction)&CMyMenu::MenuButtonPressResume },
 	{ _mBack,	 &CMenuBase::MenuButtonPressMenuBack, (menuparam_t) &_mainMenu },
-	{ NULL, 0 }
+	{nullptr, nullptr }
 };
 
 ////////////////////////////////////////////////////////////

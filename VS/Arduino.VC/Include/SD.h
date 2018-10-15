@@ -111,7 +111,7 @@ public:
 
 	MyFile()
 	{
-		_f = NULL;
+		_f = nullptr;
 	}
 
 	FILE* _f;
@@ -121,9 +121,9 @@ public:
 	virtual void close() override
 	{
 		if (_f) fclose(_f);
-		_f = NULL;
+		_f = nullptr;
 	};
-	virtual bool isopen() override { return _f != NULL; }
+	virtual bool isopen() override { return _f != nullptr; }
 
 	virtual void open(int mode) override
 	{
@@ -132,7 +132,7 @@ public:
 		else
 		{
 			fopen_s(&_f, _OSfilename, "wb");
-			if (_f != NULL)
+			if (_f != nullptr)
 			{
 				fclose(_f);
 				fopen_s(&_f, _OSfilename, "r+");
@@ -149,7 +149,7 @@ public:
 
 	MyDir()
 	{
-		_dir = NULL;
+		_dir = nullptr;
 	}
 
 	virtual bool IsFile() override { return false; };
@@ -157,9 +157,9 @@ public:
 	virtual void close() override
 	{
 		if (_dir) FindClose(_dir);
-		_dir = NULL;
+		_dir = nullptr;
 	};
-	virtual bool isopen() override { return _dir != NULL; }
+	virtual bool isopen() override { return _dir != nullptr; }
 
 	HANDLE           _dir;
 	bool             _dirEof;
@@ -187,11 +187,11 @@ private:
 
 	MyDirFile* _dirfile;
 
-	bool IsDirHandle() const { return _dirfile != NULL && !_dirfile->IsFile(); };
-	bool IsFileHandle() const { return _dirfile != NULL && _dirfile->IsFile(); };
+	bool IsDirHandle() const { return _dirfile != nullptr && !_dirfile->IsFile(); };
+	bool IsFileHandle() const { return _dirfile != nullptr && _dirfile->IsFile(); };
 
-	MyFile* GetF() { return IsFileHandle() ? ((MyFile*)_dirfile) : NULL; }
-	MyDir*  GetD() { return IsDirHandle() ? ((MyDir*)_dirfile) : NULL; }
+	MyFile* GetF() { return IsFileHandle() ? ((MyFile*)_dirfile) : nullptr; }
+	MyDir*  GetD() { return IsDirHandle() ? ((MyDir*)_dirfile) : nullptr; }
 
 
 public:
@@ -221,10 +221,10 @@ public:
 		{
 			_dirfile->DecRef();
 		}
-		_dirfile = NULL;
+		_dirfile = nullptr;
 	}
 
-	File() { _dirfile = NULL; }
+	File() { _dirfile = nullptr; }
 
 	void close()
 	{
@@ -232,7 +232,7 @@ public:
 		{
 			_dirfile->close();
 			_dirfile->DecRef();
-			_dirfile = NULL;
+			_dirfile = nullptr;
 		}
 	}
 
@@ -255,7 +255,7 @@ public:
 		_dirfile->open(mode);
 	}
 
-	operator bool() { return _dirfile != NULL && _dirfile->isopen(); }
+	operator bool() { return _dirfile != nullptr && _dirfile->isopen(); }
 
 	virtual int  available() override { return feof(GetF()->_f) ? 0 : 1; }
 	virtual char read() override { return (char)fgetc(GetF()->_f); }
@@ -309,7 +309,7 @@ inline File MyDir::openNextFile()
 			if (!FindNextFileA(_dir, &ffd))
 			{
 				FindClose(_dir);
-				_dir    = NULL;
+				_dir    = nullptr;
 				_dirEof = true;
 				break;
 			}
@@ -330,7 +330,7 @@ inline File MyDir::openNextFile()
 			if (!FindNextFileA(_dir, &ffd))
 			{
 				FindClose(_dir);
-				_dir    = NULL;
+				_dir    = nullptr;
 				_dirEof = true;
 			}
 		}

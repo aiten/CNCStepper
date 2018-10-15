@@ -96,8 +96,8 @@ namespace StepperSystemTest
 			fopen_s(&fsrc, pathname_src, "rt");
 			fopen_s(&fdest, pathname_dest, "rt");
 
-			Assert::IsTrue(fsrc != NULL);
-			Assert::IsTrue(fdest != NULL);
+			Assert::IsTrue(fsrc != nullptr);
+			Assert::IsTrue(fdest != nullptr);
 
 			char lines[512];
 			char lined[512];
@@ -107,7 +107,7 @@ namespace StepperSystemTest
 			while (src)
 			{
 				char* dest = fgets(lined, sizeof(lined), fdest);
-				Assert::IsTrue(dest != NULL);
+				Assert::IsTrue(dest != nullptr);
 				if (strcmp(src, dest) != 0)
 				{
 					Assert::Fail();

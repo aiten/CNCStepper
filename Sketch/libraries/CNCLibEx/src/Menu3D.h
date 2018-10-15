@@ -40,7 +40,7 @@ public:
 
 protected:
 
-	const SMenuDef* _SDMenuDef = NULL;
+	const SMenuDef* _SDMenuDef = nullptr;
 };
 
 #define MENUENTRY_SDFILES ((FLSTR)1)

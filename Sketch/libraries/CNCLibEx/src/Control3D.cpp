@@ -119,7 +119,7 @@ void CControl3D::ReadAndExecuteCommand()
 		}
 		else
 		{
-			FileReadAndExecuteCommand(&file,NULL); // one line!!! Output goes to NULL
+			FileReadAndExecuteCommand(&file, nullptr); // one line!!! Output goes to NULL
 
 			if (file.available() == 0)
 			{

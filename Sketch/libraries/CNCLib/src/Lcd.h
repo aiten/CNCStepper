@@ -86,8 +86,8 @@ public:
 	void OKBeep() { Beep(SPlayTone::PlayOK, true); }
 	void ErrorBeep() { Beep(SPlayTone::PlayError, true); }
 
-	bool PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, FLSTR cmd, Stream* output = NULL);
-	bool PostCommand(char*                        cmd, Stream*      output              = NULL);
+	bool PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, FLSTR cmd, Stream* output = nullptr);
+	bool PostCommand(char*                        cmd, Stream*      output              = nullptr);
 
 	virtual uint8_t InitPostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, char* cmd);
 
@@ -102,13 +102,13 @@ public:
 
 	void Diagnostic(FLSTR diag) { _diagnostics = diag; }
 
-	bool  IsDiagnostic() { return _diagnostics != NULL; };
+	bool  IsDiagnostic() { return _diagnostics != nullptr; };
 	FLSTR GetDiagnostic() { return _diagnostics; }
-	void  ClearDiagnostic() { _diagnostics = NULL; }
+	void  ClearDiagnostic() { _diagnostics = nullptr; }
 
 private:
 
-	FLSTR _diagnostics = NULL;
+	FLSTR _diagnostics = nullptr;
 };
 
 ////////////////////////////////////////////////////////

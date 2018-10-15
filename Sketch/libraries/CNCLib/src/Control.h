@@ -138,8 +138,8 @@ public:
 
 	//////////////////////////////////////////
 
-	bool PostCommand(FLSTR cmd, Stream* output=NULL);
-	bool PostCommand(char* cmd, Stream* output=NULL);
+	bool PostCommand(FLSTR cmd, Stream* output= nullptr);
+	bool PostCommand(char* cmd, Stream* output= nullptr);
 
 	//////////////////////////////////////////
 

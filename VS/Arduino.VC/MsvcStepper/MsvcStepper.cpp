@@ -343,7 +343,7 @@ void CMsvcStepper::WriteTestResults(const char* filename)
 			{
 				//				speed[j] = sumtime[j] / count[j];
 				//				sprintf(speed[j],"%i",outspeed / count[j]);
-				int speed = (int)(__int64(outspeed) * __int64(_TimerEvents[i].Axis[x].Distance) / __int64(_TimerEvents[i].Steps));
+				int speed = int(__int64(outspeed) * __int64(_TimerEvents[i].Axis[x].Distance) / __int64(_TimerEvents[i].Steps));
 				if (UseSpeedSign && _TimerEvents[i].Axis[x].MoveAxis < 0)
 				{
 					speed = -speed;

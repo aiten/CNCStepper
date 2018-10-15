@@ -214,7 +214,7 @@ bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 					Print(dirreader.Current.name());
 					if (isSelectedMenu)
 					{
-						GetMenu().GetNavigator().SetParam((uintptr_t)fileidx);
+						GetMenu().GetNavigator().SetParam(uintptr_t(fileidx));
 					}
 				}
 			}

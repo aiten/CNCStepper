@@ -130,7 +130,7 @@ private:
 	static void Out(int16_t lvl)
 	{
 		CHAL::digitalWrite(DIRPIN, lvl >= 0);
-		CHAL::analogWrite8(PWMPIN, (uint8_t)abs(lvl));
+		CHAL::analogWrite8(PWMPIN, uint8_t(abs(lvl)));
 	}
 
 	unsigned long _nexttime; // time to modify level

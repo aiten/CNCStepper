@@ -302,7 +302,7 @@ protected:
 		const char* GetText()   const { return (const char*)pgm_read_ptr(&this->_text); }
 		param_t GetParamNo()    const { return pgm_read_word(&this->_paramNo); }
 		bool GetAllowAxisOfs()  const { return pgm_read_byte(&this->_allowaxisofs) != 0; }
-		uint8_t GetValueType()	const { return (uint8_t) pgm_read_byte(&this->_valuetype); }
+		uint8_t GetValueType()	const { return uint8_t(pgm_read_byte(&this->_valuetype)); }
 	};
 
 	void PrintAllParam();

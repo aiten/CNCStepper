@@ -217,7 +217,7 @@ expr_t CParser::GetDouble()
 
 	// temporary terminat buffer with '\00'
 	CStreamReader::CSetTemporary terminate(_reader->GetBuffer());
-	return (expr_t)strtod(start, nullptr);
+	return expr_t(strtod(start, nullptr));
 }
 
 ////////////////////////////////////////////////////////////

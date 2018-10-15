@@ -151,7 +151,7 @@ void CGCodeParser::CommentMessage(char* start)
 					{
 						if (item)
 						{
-							PrintParamValue(item, (axis_t) (paramNo - item->GetParamNo()));
+							PrintParamValue(item, axis_t(paramNo - item->GetParamNo()));
 						}
 						else
 						{
@@ -276,8 +276,10 @@ uint8_t CGCodeParser::ParamNoToParamIdx(param_t paramNo)
 {
 	for (uint8_t idx = 0; idx<NUM_PARAMETER;idx++)
 	{
-		if (((uint8_t) paramNo) == _modalstate.ParamNoToIdx[idx])
+		if (uint8_t(paramNo) == _modalstate.ParamNoToIdx[idx])
+		{
 			return idx;
+		}
 	}
 
 	// return 255 of not found
@@ -380,7 +382,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 					{
 						if (_modalstate.ParamNoToIdx[idx] == 0)
 						{
-							_modalstate.ParamNoToIdx[idx] = (uint8_t)paramNo;
+							_modalstate.ParamNoToIdx[idx] = uint8_t(paramNo);
 							_modalstate.Parameter[idx] = exprpars.Answer;
 							break;
 						}
@@ -406,15 +408,15 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 			auto axis = axis_t(paramNo - param->GetParamNo());
 			switch (param->GetParamNo())
 			{
-				case PARAMSTART_BACKLASH:			{ CStepper::GetInstance()->SetBacklash(axis, (mdist_t)GetParamAsMachine(mm1000, axis));	break;  }
-				case PARAMSTART_BACKLASH_FEEDRATE:	{ CStepper::GetInstance()->SetBacklash((steprate_t)GetParamAsFeedrate(mm1000, axis)); break; }
+				case PARAMSTART_BACKLASH:			{ CStepper::GetInstance()->SetBacklash(axis, mdist_t(GetParamAsMachine(mm1000, axis)));	break;  }
+				case PARAMSTART_BACKLASH_FEEDRATE:	{ CStepper::GetInstance()->SetBacklash(steprate_t(GetParamAsFeedrate(mm1000, axis))); break; }
 				case PARAMSTART_CONTROLLERFAN:		{ CControl::GetInstance()->IOControl(CControl::ControllerFan, (unsigned short)intvalue);	break;  }
 				case PARAMSTART_RAPIDMOVEFEED:		{ SetG0FeedRate(-CFeedrate1000::ConvertFrom(exprpars.Answer)); break;	}
 				case PARAMSTART_MAX:				{ CStepper::GetInstance()->SetLimitMax(axis, GetParamAsMachine(mm1000, axis));	break;	}
 				case PARAMSTART_MIN:				{ CStepper::GetInstance()->SetLimitMin(axis, GetParamAsMachine(mm1000, axis));	break;	}
-				case PARAMSTART_ACC:				{ CStepper::GetInstance()->SetAcc(axis, (steprate_t)intvalue); break;	}
-				case PARAMSTART_DEC:				{ CStepper::GetInstance()->SetDec(axis, (steprate_t)intvalue); break;	}
-				case PARAMSTART_JERK:				{ CStepper::GetInstance()->SetJerkSpeed(axis, (steprate_t)intvalue); break; }
+				case PARAMSTART_ACC:				{ CStepper::GetInstance()->SetAcc(axis, steprate_t(intvalue)); break;	}
+				case PARAMSTART_DEC:				{ CStepper::GetInstance()->SetDec(axis, steprate_t(intvalue)); break;	}
+				case PARAMSTART_JERK:				{ CStepper::GetInstance()->SetJerkSpeed(axis, steprate_t(intvalue)); break; }
 
 				case PARAMSTART_G54OFFSET + 0 * PARAMSTART_G54FF_OFFSET:
 				case PARAMSTART_G54OFFSET + 1 * PARAMSTART_G54FF_OFFSET:
@@ -476,9 +478,9 @@ const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfoByText(const char* te
 
 const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfoByParamNo(param_t paramNo)
 {
-	return FindParamInfo((uintptr_t) paramNo, [](const SParamInfo* p, uintptr_t x) -> bool
+	return FindParamInfo(uintptr_t(paramNo), [](const SParamInfo* p, uintptr_t x) -> bool
 	{
-		auto findparamNo = (param_t)x;
+		auto findparamNo = param_t(x);
 		return p->GetParamNo() == findparamNo ||	// exact same paramno
 			(p->GetAllowAxisOfs() && p->GetParamNo() <= findparamNo && p->GetParamNo() + NUM_AXIS > findparamNo);	// diff with axis
 	});
@@ -634,7 +636,7 @@ void CGCodeParser::PrintAllParam()
 		if (paramNo != 0)
 		{
 			StepperSerial.print('#');
-			StepperSerial.print((uint16_t)paramNo);
+			StepperSerial.print(uint16_t(paramNo));
 			StepperSerial.print('=');
 			PrintParamValue(paramNo);
 		}
@@ -891,7 +893,7 @@ void CGCodeParser::GetL81(SAxisMove& move, uint8_t& l)
 		Error(MESSAGE_GCODE_LmustBe1_255);
 		return;
 	}
-	l = (uint8_t)myL;
+	l = uint8_t(myL);
 }
 
 ////////////////////////////////////////////////////////////
@@ -1292,7 +1294,7 @@ void CGCodeParser::G68ExtXXCommand(axis_t rotaxis)
 		if (CheckError()) { return; }
 	}
 
-	float pos1=(float) (move.newpos[rotaxis] - CMotionControl::GetInstance()->GetOffset2D(rotaxis));
+	float pos1 = float(move.newpos[rotaxis] - CMotionControl::GetInstance()->GetOffset2D(rotaxis));
 	float pos2;
 	float angle;
 
@@ -1310,7 +1312,7 @@ void CGCodeParser::G68ExtXXCommand(axis_t rotaxis)
 	if (IsBitSet(move.GetIJK(),axis3))
 	{
 		// calc angle
-		pos2 = (float)(move.newpos[axis2] -  CMotionControl::GetInstance()->GetOffset2D(axis2) - vect[axis3]) ;
+		pos2 = float(move.newpos[axis2] -  CMotionControl::GetInstance()->GetOffset2D(axis2) - vect[axis3]) ;
 		angle = atan2(pos2,pos1);
 		CMotionControl::GetInstance()->SetRotate2D(axis3,angle);
 		pos1 = hypotf(pos1,pos2);	// correction for 2nd rotation axis
@@ -1318,7 +1320,7 @@ void CGCodeParser::G68ExtXXCommand(axis_t rotaxis)
 	if (IsBitSet(move.GetIJK(),axis2))
 	{
 		// calc angle
-		pos2 = (float)(move.newpos[axis3] -  CMotionControl::GetInstance()->GetOffset2D(axis3) - vect[axis2]);
+		pos2 = float(move.newpos[axis3] -  CMotionControl::GetInstance()->GetOffset2D(axis3) - vect[axis2]);
 		angle = atan2(pos2,pos1);
 		CMotionControl::GetInstance()->SetRotate2D(axis2,angle);
 	}
@@ -1505,7 +1507,7 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 
 void CGCodeParser::G73Command()
 {
-	super::_modalstate.LastCommand = (LastCommandCB) &CGCodeParser::G73Command;
+	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G73Command);
 
 	SAxisMove move(true);
 	G8xCommand(move, false, true, true);
@@ -1515,7 +1517,7 @@ void CGCodeParser::G73Command()
 
 void CGCodeParser::G81Command()
 {
-	super::_modalstate.LastCommand = (LastCommandCB) &CGCodeParser::G81Command;
+	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G81Command);
 
 	SAxisMove move(true);
 	G8xCommand(move, false, false, false);
@@ -1525,7 +1527,7 @@ void CGCodeParser::G81Command()
 
 void CGCodeParser::G82Command()
 {
-	super::_modalstate.LastCommand = (LastCommandCB) &CGCodeParser::G82Command;
+	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G82Command);
 	
 	SAxisMove move(true);
 	G8xCommand(move, true, false, false);
@@ -1535,7 +1537,7 @@ void CGCodeParser::G82Command()
 
 void CGCodeParser::G83Command()
 {
-	super::_modalstate.LastCommand = (LastCommandCB) &CGCodeParser::G83Command;
+	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G83Command);
 
 	SAxisMove move(true);
 	G8xCommand(move, false, true, false);

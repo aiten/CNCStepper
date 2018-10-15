@@ -81,7 +81,7 @@ struct ControlData
 #else
 	CDummyIOControl _spindle;
 	CDummyIOControl _spindleDir;
-	inline uint8_t ConvertSpindleSpeedToIO(unsigned short level) { return (uint8_t)level; }
+	inline uint8_t ConvertSpindleSpeedToIO(unsigned short level) { return uint8_t(level); }
 #endif  
 
 #ifdef COOLANT_PIN
@@ -167,7 +167,7 @@ struct ControlData
 											return true;
 #endif
 			case CControl::Coolant:			_coolant.Set(level > 0); return true;
-			case CControl::ControllerFan:	_controllerfan.SetLevel((uint8_t)level); return true;
+			case CControl::ControllerFan:	_controllerfan.SetLevel(uint8_t(level)); return true;
 		}
 		return false;
 	}

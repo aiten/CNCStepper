@@ -409,10 +409,10 @@ expr_t CExpressionParser::EvalOperator(EnumAsByte(ETokenType) operatorSy, const 
 	switch (operatorSy)
 	{
 		// level 2
-		case AndSy:           return (expr_t)(static_cast<long>(lhs)& static_cast<long>(rhs));
-		case OrSy:            return (expr_t)(static_cast<long>(lhs) | static_cast<long>(rhs));
-		case BitShiftLeftSy:  return (expr_t)(static_cast<long>(lhs) << static_cast<long>(rhs));
-		case BitShiftRightSy: return (expr_t)(static_cast<long>(lhs) >> static_cast<long>(rhs));
+		case AndSy:           return expr_t(static_cast<long>(lhs)& static_cast<long>(rhs));
+		case OrSy:            return expr_t(static_cast<long>(lhs) | static_cast<long>(rhs));
+		case BitShiftLeftSy:  return expr_t(static_cast<long>(lhs) << static_cast<long>(rhs));
+		case BitShiftRightSy: return expr_t(static_cast<long>(lhs) >> static_cast<long>(rhs));
 
 			// level 3
 		case EqualSy:			return lhs == rhs;
@@ -429,8 +429,8 @@ expr_t CExpressionParser::EvalOperator(EnumAsByte(ETokenType) operatorSy, const 
 			// level 5
 		case MultiplySy:		return lhs * rhs;
 		case DivideSy:			return lhs / rhs;
-		case ModuloSy:			return (expr_t)(static_cast<long>(lhs) % static_cast<long>(rhs));
-		case XOrSy:				return (expr_t)(static_cast<long>(lhs) ^ static_cast<long>(rhs));
+		case ModuloSy:			return expr_t(static_cast<long>(lhs) % static_cast<long>(rhs));
+		case XOrSy:				return expr_t(static_cast<long>(lhs) ^ static_cast<long>(rhs));
 
 			// level 6
 		case PowSy:				return pow(lhs, rhs);

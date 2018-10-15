@@ -200,12 +200,12 @@ public:
 
 	uint8_t NextIndex(uint8_t idx) const
 	{
-		return (uint8_t)((idx + 1)) % (maxsize);
+		return uint8_t((idx + 1)) % (maxsize);
 	}
 
 	uint8_t NextIndex(uint8_t idx, uint8_t count) const
 	{
-		return (uint8_t)((idx + count)) % (maxsize);
+		return uint8_t((idx + count)) % (maxsize);
 	}
 
 	uint8_t PrevIndex(uint8_t idx) const

@@ -43,7 +43,7 @@ CControl::CControl()
 void CControl::Init()
 {
 	CStepper::GetInstance()->Init();
-	CStepper::GetInstance()->AddEvent(StaticStepperEvent, (uintptr_t) this, _oldStepperEvent);
+	CStepper::GetInstance()->AddEvent(StaticStepperEvent, uintptr_t(this), _oldStepperEvent);
 
 #ifdef _USE_LCD
 	
@@ -84,9 +84,9 @@ void CControl::InitFromEeprom()
 	if (jerkspeed == 0) jerkspeed = 1024;
 	
 	CStepper::GetInstance()->SetDefaultMaxSpeed(
-		((steprate_t)CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate))),
-		((steprate_t)CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, acc))),
-		((steprate_t)CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, dec))),
+		steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate))),
+		steprate_t(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, acc))),
+		steprate_t(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, dec))),
 		jerkspeed);
 
 	for (uint8_t axis = 0; axis < NUM_AXIS; axis++)
@@ -123,7 +123,7 @@ void CControl::InitFromEeprom()
 uint8_t CControl::ConvertSpindleSpeedToIO8(unsigned short maxspeed, unsigned short level) 
 { 
 	if (level >= maxspeed) return 255;
-	return (uint8_t)MulDivU32(level, 255, maxspeed); 
+	return uint8_t(MulDivU32(level, 255, maxspeed)); 
 }
 
 ////////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ void CControl::GoToReference()
 
 bool CControl::GoToReference(axis_t axis)
 {
-	EnumAsByte(EReverenceType) referenceType = (EReverenceType)CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].referenceType) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions)*axis);
+	EnumAsByte(EReverenceType) referenceType = EReverenceType(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].referenceType) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions)*axis));
 	if (referenceType == EReverenceType::NoReference)
 	{
 		return false;
@@ -160,7 +160,7 @@ bool CControl::GoToReference(axis_t axis, steprate_t steprate, bool toMinRef)
 {
 	if (steprate == 0)
 	{
-		steprate = (steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, refmovesteprate));
+		steprate = steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, refmovesteprate)));
 	}
 	// goto min/max
 	return CStepper::GetInstance()->MoveReference(
@@ -348,7 +348,7 @@ bool CControl::Command(char* buffer, Stream* output)
 bool CControl::IsEndOfCommandChar(char ch)
 {
 	//return ch == '\n' || ch == '\r' || ch == -1;
-	return ch == '\n' || ch == (char) -1;
+	return ch == '\n' || ch == char(-1);
 }
 
 ////////////////////////////////////////////////////////////
@@ -587,7 +587,7 @@ bool CControl::StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventtype, uintp
 
 bool CControl::CallOnEvent(uint8_t eventtype, uintptr_t param)
 {
-	return OnEvent((EnumAsByte(EStepperControlEvent)) eventtype, param);
+	return OnEvent(EnumAsByte(EStepperControlEvent)(eventtype), param);
 }
 
 ////////////////////////////////////////////////////////////
@@ -598,7 +598,7 @@ bool CControl::OnEvent(EnumAsByte(EStepperControlEvent) eventtype, uintptr_t add
 	{
 		case OnWaitEvent:
 
-			if (CStepper::WaitTimeCritical > (CStepper::EWaitType) (unsigned int)addinfo)
+			if (CStepper::WaitTimeCritical > CStepper::EWaitType((unsigned int)addinfo))
 			{
 				CheckIdlePoll(false);
 			}

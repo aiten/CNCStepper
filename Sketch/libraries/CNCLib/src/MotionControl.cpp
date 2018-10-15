@@ -157,9 +157,9 @@ bool CMotionControl::TransformPosition(const mm1000_t src[NUM_AXIS], mm1000_t de
 
 	if (_rotateEnabled2D)
 	{
-		auto x = (float)(dest[X_AXIS] - _rotateOffset2D[X_AXIS]);
-		auto y = (float)(dest[Y_AXIS] - _rotateOffset2D[Y_AXIS]);
-		auto z = (float)(dest[Z_AXIS] - _rotateOffset2D[Z_AXIS]);
+		auto x = float(dest[X_AXIS] - _rotateOffset2D[X_AXIS]);
+		auto y = float(dest[Y_AXIS] - _rotateOffset2D[Y_AXIS]);
+		auto z = float(dest[Z_AXIS] - _rotateOffset2D[Z_AXIS]);
 
 		if (IsBitSet(_rotateEnabled2D, X_AXIS))
 		{
@@ -403,7 +403,7 @@ bool CMotionControl::Test2D(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM
 	});
 }
 
-bool CMotionControl::Test(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXIS], mm1000_t dest[NUM_AXIS], bool printOK, std::function<void()> print)
+bool CMotionControl::Test(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXIS], mm1000_t dest[NUM_AXIS], bool printOK, const std::function<void()> print)
 {
 	udist_t  to_m[NUM_AXIS];
 	mm1000_t toorig[NUM_AXIS];

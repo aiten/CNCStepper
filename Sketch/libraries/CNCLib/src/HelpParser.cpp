@@ -109,13 +109,13 @@ bool CHelpParser::SetSpeed()
 
 	if (IsUInt(_reader->GetChar()))
 	{
-		max = (steprate_t)GetUInt32();
+		max = steprate_t(GetUInt32());
 		if (IsUInt(_reader->SkipSpaces()))
 		{
-			acc = (steprate_t)GetUInt32();
+			acc = steprate_t(GetUInt32());
 			if (IsUInt(_reader->SkipSpaces()))
 			{
-				dec = (steprate_t)GetUInt32();
+				dec = steprate_t(GetUInt32());
 			}
 		}
 	}

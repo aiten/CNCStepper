@@ -105,7 +105,7 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef* def)
 	if (posMenu != nullptr)
 	{
 		// param2 != NULL => find index
-		GetNavigator().SetPosition(newMenu->FindMenuIdx((uintptr_t)def, [](const SMenuItemDef* def, uintptr_t param) -> bool
+		GetNavigator().SetPosition(newMenu->FindMenuIdx(uintptr_t(def), [](const SMenuItemDef* def, uintptr_t param) -> bool
 		{
 			return def->GetButtonPress() == &CMenuBase::MenuButtonPressSetMenu && // must be setMenu
 				def->GetParam1() == ((const SMenuItemDef*)param)->GetParam2();    // param1 or new menu must be param2 of "Back from"
@@ -124,7 +124,7 @@ void CMenuBase::MenuButtonPressMenuBack(const SMenuItemDef* def)
 
 	SetMenu(newMenu);
 
-	GetNavigator().SetPosition(GetMenuDef()->FindMenuIdx((uintptr_t)oldMenu, [](const SMenuItemDef* def, uintptr_t oldMenu) -> bool
+	GetNavigator().SetPosition(GetMenuDef()->FindMenuIdx(uintptr_t(oldMenu), [](const SMenuItemDef* def, uintptr_t oldMenu) -> bool
 	{
 		return def->GetParam1() == oldMenu && def->GetButtonPress() == &CMenuBase::MenuButtonPressSetMenu;
 	}));
@@ -146,7 +146,7 @@ uint8_t CMenuBase::FindMenuIndexBack()
 
 void CMenuBase::MenuButtonPressSetCommand(const SMenuItemDef* def)
 {
-	PostCommand(EGCodeSyntaxType::GCodeBasic, (FLSTR)def->GetParam1());
+	PostCommand(EGCodeSyntaxType::GCodeBasic, FLSTR(def->GetParam1()));
 	CLcd::GetInstance()->OKBeep();
 }
 
@@ -210,7 +210,7 @@ void CMenuBase::MenuButtonPressRotate(const SMenuItemDef* def)
 
 void CMenuBase::MenuButtonPressProbe(const SMenuItemDef* def)
 {
-	MenuButtonPressProbe((axis_t)(unsigned int)def->GetParam1());
+	MenuButtonPressProbe(axis_t((unsigned int)def->GetParam1()));
 }
 
 ////////////////////////////////////////////////////////////
@@ -235,7 +235,7 @@ void CMenuBase::MenuButtonPressProbe(axis_t axis)
 
 		builder.Add(F("g92 "))
 		       .AddAxisName(axis)
-		       .Add(- (mm1000_t)CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].probesize) + ofs));
+		       .Add(- mm1000_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].probesize) + ofs)));
 
 		PostCommand(builder.GetCommand());
 
@@ -255,7 +255,7 @@ void CMenuBase::MenuButtonPressProbe(axis_t axis)
 
 void CMenuBase::MenuButtonPressHome(const SMenuItemDef* def)
 {
-	MenuButtonPressHomeA((axis_t)(unsigned int)def->GetParam1());
+	MenuButtonPressHomeA(axis_t((unsigned int)def->GetParam1()));
 }
 
 void CMenuBase::MenuButtonPressHomeA(axis_t axis)

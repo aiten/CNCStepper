@@ -204,7 +204,7 @@ public:
 	static void Beep(ETone freq, unsigned short duration)
 	{
 		unsigned long endmillis = millis() + duration;
-		unsigned int tonePause = (unsigned int)freq;
+		unsigned int tonePause = static_cast<unsigned int>(freq);
 
 		do
 		{
@@ -220,12 +220,12 @@ public:
 
 	static void PlayPGM(const SPlayTone* list)
 	{
-		ETone freq = (ETone)pgm_read_int(&list->Tone);
+		ETone freq = ETone(pgm_read_int(&list->Tone));
 		while (freq != 0)
 		{
 			Beep(freq, pgm_read_word(&list->Duration));
 			list++;
-			freq = (ETone)pgm_read_int(&list->Tone);
+			freq = ETone(pgm_read_int(&list->Tone));
 		}
 	}
 

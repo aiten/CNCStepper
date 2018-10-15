@@ -118,7 +118,7 @@ public:
 	{
 		range_t rpage        = GetPos() % pages;
 		if (rpage < 0) rpage = pages + rpage;
-		return (rotarypage_t)rpage;
+		return rotarypage_t(rpage);
 	}
 
 	void SetPin(pin_t pin1, pin_t pin2)

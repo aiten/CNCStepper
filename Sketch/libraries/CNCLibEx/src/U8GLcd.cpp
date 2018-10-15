@@ -135,7 +135,7 @@ uint8_t CU8GLcd::GetPage()
 
 void CU8GLcd::SetRotaryFocusMainPage()
 {
-	_rotarybutton.SetPageIdx((rotarypos_t)_currentpage);
+	_rotarybutton.SetPageIdx(rotarypos_t(_currentpage));
 	_rotarybutton.SetMinMax(0, GetPageCount() - 1, true);
 	_rotaryFocus = RotaryMainPage;
 }
@@ -278,7 +278,7 @@ unsigned long CU8GLcd::DrawLoop()
 			while (GetU8G().nextPage());
 		}
 
-		(this->*curretDraw)(DrawLoopQueryTimerout, (uintptr_t)&timeout);
+		(this->*curretDraw)(DrawLoopQueryTimerout, uintptr_t(&timeout));
 	}
 	return timeout;
 }
@@ -713,7 +713,7 @@ void CU8GLcd::ButtonPressSpeedOverride()
 	else
 	{
 		_rotarybutton.SetMinMax(1, ToPageIdx(100), false);
-		_rotarybutton.SetPageIdx((rotarypos_t)ToPageIdx(CStepper::SpeedOverrideToP(CStepper::GetInstance()->GetSpeedOverride())));
+		_rotarybutton.SetPageIdx(rotarypos_t(ToPageIdx(CStepper::SpeedOverrideToP(CStepper::GetInstance()->GetSpeedOverride()))));
 		_rotaryFocus = RotarySlider;
 		OKBeep();
 	}

@@ -67,7 +67,7 @@ void CStepper::InitMemVar()
 	for (i = 0; i < NUM_REFERENCE; i++) { _pod._referenceHitValue[i] = 255; }
 
 	_pod._checkReference = true;
-	_pod._timerbacklash  = (timer_t)-1;
+	_pod._timerbacklash  = timer_t(-1);
 
 	_pod._limitCheck = true;
 	_pod._idleLevel  = LevelOff;
@@ -355,7 +355,7 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 			unsigned long axistimer = MulDivU32(_pod._move._timerMax, _steps, d);
 			if (axistimer < (unsigned long)pStepper->_pod._timerMax[i])
 			{
-				timerMax             = (timer_t)MulDivU32(pStepper->_pod._timerMax[i], d, _steps);
+				timerMax             = timer_t(MulDivU32(pStepper->_pod._timerMax[i], d, _steps));
 				_pod._move._timerMax = max(timerMax, _pod._move._timerMax);
 			}
 		}
@@ -407,7 +407,7 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 			{
 				if (calcfullsteps)
 				{
-					multiplier = (uint8_t)(_distance_[i] / calcfullsteps); // should fit in unsinged char!
+					multiplier = uint8_t(_distance_[i] / calcfullsteps); // should fit in unsinged char!
 					if (multiplier > maxMultiplier)
 					{
 						multiplier = maxMultiplier;
@@ -419,7 +419,7 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 
 					if (multiplier != maxMultiplier)
 					{
-						_distance_[i] = (mdist_t)MulDivU32(_distance_[i], maxMultiplier, multiplier);
+						_distance_[i] = mdist_t(MulDivU32(_distance_[i], maxMultiplier, multiplier));
 					}
 					else if (_distance_[i] != _steps)
 					{
@@ -435,14 +435,14 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 					mdist_t s = (mdist_t)((distinit + distsum) / ((unsigned long)_steps) * multiplier);
 #else
 					unsigned long distinit = _steps / maxMultiplier / 2;
-					uint64_t      distsum  = ((uint64_t)_distance_[i]) * ((uint64_t)calcfullsteps);
-					auto          s        = mdist_t(((distinit + distsum) / ((uint64_t)_steps) * multiplier));
+					uint64_t      distsum  = uint64_t(_distance_[i]) * uint64_t(calcfullsteps);
+					auto          s        = mdist_t(((distinit + distsum) / uint64_t(_steps) * multiplier));
 #endif
-					axisdiff = (uint8_t)(dist[i] - s); // must be in range 0..7
+					axisdiff = uint8_t(dist[i] - s); // must be in range 0..7
 				}
 				else
 				{
-					axisdiff = (uint8_t)dist[i]; // must be in range 0..7
+					axisdiff = uint8_t(dist[i]); // must be in range 0..7
 				}
 			}
 
@@ -494,21 +494,21 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 
 	_state = StateReadyMove;
 
-	_pod._move._timerJunctionToPrev = (timer_t)-1; // force optimization
+	_pod._move._timerJunctionToPrev = timer_t(-1); // force optimization
 
 	bool prevIsMove = mvPrev && mvPrev->IsActiveMove();
 	if (prevIsMove)
 	{
 		CalcMaxJunktionSpeed(mvPrev);
-		_pod._move._timerEndPossible = (timer_t)-1;
+		_pod._move._timerEndPossible = timer_t(-1);
 	}
 	else
 	{
 		_pod._move._timerEndPossible = _pStepper->GetTimer(_steps, GetUpTimerAcc());
 	}
 
-	_pod._move._ramp.RampUp(this, _pod._move._timerRun, (timer_t)-1);
-	_pod._move._ramp.RampDown(this, (timer_t)-1);
+	_pod._move._ramp.RampUp(this, _pod._move._timerRun, timer_t(-1));
+	_pod._move._ramp.RampDown(this, timer_t(-1));
 	_pod._move._ramp.RampRun(this);
 
 	//pStepper->Dump(DumpAll);
@@ -529,7 +529,7 @@ void CStepper::SMovement::InitStop(SMovement* mvPrev, timer_t timer, timer_t dec
 
 	for (uint8_t i = 0; i < NUM_AXIS; i++)
 	{
-		_distance_[i] = (mdist_t)RoundMulDivUInt(_distance_[i], downstpes, _steps);
+		_distance_[i] = mdist_t(RoundMulDivUInt(_distance_[i], downstpes, _steps));
 	}
 
 	_state = SMovement::StateReadyMove;
@@ -539,7 +539,7 @@ void CStepper::SMovement::InitStop(SMovement* mvPrev, timer_t timer, timer_t dec
 	_pod._move._ramp._timerRun = timer;
 
 	_pod._move._ramp.RampUp(this, timer, timer);
-	_pod._move._ramp.RampDown(this, (timer_t)-1);
+	_pod._move._ramp.RampDown(this, timer_t(-1));
 }
 
 ////////////////////////////////////////////////////////
@@ -578,7 +578,7 @@ mdist_t CStepper::SMovement::GetDistance(axis_t axis)
 		uint8_t maxMultiplier = GetMaxStepMultiplier();
 		if (multiplier != maxMultiplier)
 		{
-			return (mdist_t)MulDivU32(_distance_[axis], multiplier, maxMultiplier);
+			return mdist_t(MulDivU32(_distance_[axis], multiplier, maxMultiplier));
 		}
 	}
 	return _distance_[axis];
@@ -593,7 +593,7 @@ uint8_t CStepper::SMovement::GetMaxStepMultiplier()
 
 	for (uint8_t i = 0;; i++)
 	{
-		maxmultiplier = max(maxmultiplier, ((uint8_t)count) % 8);
+		maxmultiplier = max(maxmultiplier, uint8_t(count) % 8);
 		if (i == NUM_AXIS - 1)
 		{
 			break;
@@ -933,7 +933,7 @@ void CStepper::SMovement::CalcMaxJunktionSpeed(SMovement* mvPrev)
 			else
 			{
 				// different direction, add speed
-				vdiff = (long)(v1) + (long)(v2);
+				vdiff = long(v1) + long(v2);
 
 				if (mainaxis >= NUM_AXIS)
 				{
@@ -1074,14 +1074,14 @@ void CStepper::OnWait(EnumAsByte(EWaitType) wait)
 
 void CStepper::OnError(error_t error)
 {
-	CallEvent(OnErrorEvent, (uintptr_t)error);
+	CallEvent(OnErrorEvent, uintptr_t(error));
 }
 
 ////////////////////////////////////////////////////////
 
 void CStepper::OnWarning(error_t warning)
 {
-	CallEvent(OnWarningEvent, (uintptr_t)warning);
+	CallEvent(OnWarningEvent, uintptr_t(warning));
 	StepperSerial.print(MESSAGE_WARNING);
 	StepperSerial.println(warning);
 }
@@ -1090,7 +1090,7 @@ void CStepper::OnWarning(error_t warning)
 
 void CStepper::OnInfo(error_t info)
 {
-	CallEvent(OnInfoEvent, (uintptr_t)info);
+	CallEvent(OnInfoEvent, uintptr_t(info));
 	StepperSerial.print((MESSAGE_INFO));
 	StepperSerial.println(info);
 }
@@ -1209,7 +1209,7 @@ timer_t CStepper::GetTimerDecelerating(mdist_t steps, timer_t timerv, timer_t ti
 	unsigned long ad = a2 * steps;
 	if (sqv0 < ad)
 	{
-		return (timer_t)-1;
+		return timer_t(-1);
 	}
 
 	auto v = steprate_t((_ulsqrt(((sqv0 - ad) / 93) * 85)));
@@ -1243,7 +1243,7 @@ mdist_t CStepper::GetAccSteps(timer_t timer, timer_t timerstart)
 		sqB = MulDivU32(sqB, 93, 85);
 	}
 
-	return (mdist_t)(sqB / sqA2); // ceil
+	return mdist_t(sqB / sqA2); // ceil
 }
 
 ////////////////////////////////////////////////////////
@@ -1338,7 +1338,7 @@ void CStepper::AbortMove()
 
 void CStepper::PauseMove()
 {
-	if (_pod._pause == false)
+	if (!_pod._pause)
 	{
 		_pod._pause = true;
 
@@ -1863,7 +1863,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 			}
 			if (_state == SMovement::StateReadyIo)
 			{
-				pStepper->CallEvent(OnIoEvent, (uintptr_t)&_pod._io);
+				pStepper->CallEvent(OnIoEvent, uintptr_t(&_pod._io));
 				// pState->_n = _steps; => done by Init()
 				// this will end move immediately
 			}
@@ -1895,7 +1895,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 			{
 				// last step with multiplier
 				pStepper->_steps.NextTail().Init(_lastStepDirCount);
-				count = (uint8_t)(_steps - n); // must fit in unsinged char
+				count = uint8_t(_steps - n); // must fit in unsinged char
 			}
 			else
 			{
@@ -1954,7 +1954,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 					};
 					unsigned short mul = pgm_read_word(&corrtab[pState->_count - 2][0]);
 					unsigned short div = pgm_read_word(&corrtab[pState->_count - 2][1]);
-					pState->_timer     = (timer_t)MulDivU32(pState->_timer, mul, div);
+					pState->_timer     = timer_t(MulDivU32(pState->_timer, mul, div));
 				}
 				else if (pState->_count <= 1 && _pod._move._ramp._nUpOffset == 0 && _state == StateUpDec)
 				{
@@ -2032,7 +2032,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 			}
 			else
 			{
-				t = (timer_t)tl;
+				t = timer_t(tl);
 			}
 		}
 
@@ -2095,7 +2095,7 @@ void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool direct
 		if (_pod._limitCheck)
 		{
 			// check limit
-			if (newC > (long)GetLimitMax(i) || newC < (long)GetLimitMin(i))
+			if (newC > long(GetLimitMax(i)) || newC < long(GetLimitMin(i)))
 			{
 				Error(MESSAGE(MESSAGE_STEPPER_RangeLimit));
 				//				StepperSerial.print(F("Error: range limit")); StepperSerial.print(_limitMin[i]); StepperSerial.print(F("<")); StepperSerial.print(newC);; StepperSerial.print(F("<")); StepperSerial.print(_limitMax[i]);
@@ -2134,7 +2134,7 @@ void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool direct
 
 	timer_t timerMax = vMax == 0 ? _pod._timerMaxDefault : SpeedToTimer(vMax);
 
-	while (timerMax == (timer_t)-1)
+	while (timerMax == timer_t(-1))
 	{
 		stepmul++;
 		timerMax = SpeedToTimer(vMax * stepmul);
@@ -2178,7 +2178,7 @@ void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool direct
 		{
 			udist_t newxtpos = RoundMulDivU32(dist[i], j, movecount);
 
-			d[i]   = (mdist_t)(newxtpos - pos[i]);
+			d[i]   = mdist_t(newxtpos - pos[i]);
 			pos[i] = newxtpos;
 		}
 
@@ -2191,7 +2191,7 @@ void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool direct
 
 	for (i = 0; i < NUM_AXIS; i++)
 	{
-		d[i] = (mdist_t)(dist[i] - pos[i]);
+		d[i] = mdist_t(dist[i] - pos[i]);
 	}
 
 	QueueMove(d, directionUp, timerMax, stepmul);
@@ -2270,7 +2270,7 @@ bool CStepper::MoveReference(axis_t axis, uint8_t referenceid, bool toMin, stepr
 	CPushValue<bool>    OldLimitCheck(&_pod._limitCheck, false);
 	CPushValue<bool>    OldWaitFinishMove(&_pod._waitFinishMove, false);
 	CPushValue<bool>    OldCheckForReference(&_pod._checkReference, false);
-	CPushValue<timer_t> OldBacklashenabled(&_pod._timerbacklash, ((timer_t)-1));
+	CPushValue<timer_t> OldBacklashenabled(&_pod._timerbacklash, (timer_t(-1)));
 
 	if (vMax == 0)
 	{
@@ -2532,16 +2532,16 @@ timer_t CStepper::SpeedToTimer(steprate_t speed) const
 {
 	if (speed == 0)
 	{
-		return (timer_t)-1;
+		return timer_t(-1);
 	}
 
 	unsigned long timer = TIMER1FREQUENCE / speed;
-	if (timer > ((timer_t)-1))
+	if (timer > (timer_t(-1)))
 	{
-		return (timer_t)-1;
+		return timer_t(-1);
 	}
 
-	return (timer_t)timer;
+	return timer_t(timer);
 }
 
 ////////////////////////////////////////////////////////
@@ -2599,7 +2599,7 @@ void CStepper::Dump(uint8_t options)
 			StepperSerial.print(i == 0 ? F("L") : F(":L"));
 			StepperSerial.print(i);
 			StepperSerial.print(F("="));
-			StepperSerial.print((int)GetEnable(i));
+			StepperSerial.print(int(GetEnable(i)));
 		}
 		StepperSerial.println();
 

@@ -169,7 +169,7 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 		}
 	}
 
-	float radius = hypot((float)offset0, (float)offset1);
+	float radius = hypot(float(offset0), float(offset1));
 
 	auto     r_axis0  = float(-offset0); // Radius vector from center to current location
 	auto     r_axis1  = float(-offset1);
@@ -204,10 +204,10 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 
 #if defined(_MSC_VER)
 #pragma warning (suppress:4189)
-	float mm1000_of_travel = hypot(angular_travel * radius, (float)abs(linear_travel_max));
+	float mm1000_of_travel = hypot(angular_travel * radius, float(abs(linear_travel_max)));
 	mm1000_of_travel;
 #endif
-	if (hypot(angular_travel * radius, (float)abs(linear_travel_max)) < 1)
+	if (hypot(angular_travel * radius, float(abs(linear_travel_max))) < 1)
 	{
 		return;
 	}
@@ -263,8 +263,8 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 
 			// Update arc_target location
 
-			current[axis_0] = (mm1000_t)(center_axis0 + r_axis0);
-			current[axis_1] = (mm1000_t)(center_axis1 + r_axis1);
+			current[axis_0] = mm1000_t(center_axis0 + r_axis0);
+			current[axis_1] = mm1000_t(center_axis1 + r_axis1);
 
 			for (axis_t x = 0; x < NUM_AXIS; x++)
 			{
@@ -484,22 +484,22 @@ float CMotionControlBase::StepsPerMm1000[STEPSPERMM1000_SIZE];
 
 mm1000_t CMotionControlBase::ToMm1000_StepsPer(axis_t /* axis */, sdist_t val)
 {
-	return (mm1000_t)(val / StepsPerMm1000[0]);
+	return mm1000_t(val / StepsPerMm1000[0]);
 }
 
 sdist_t CMotionControlBase::ToMachine_StepsPer(axis_t /* axis */, mm1000_t val)
 {
-	return (sdist_t)(val * StepsPerMm1000[0]);
+	return sdist_t(val * StepsPerMm1000[0]);
 }
 
 ////////////////////////////////////////////////////////
 
 mm1000_t CMotionControlBase::ToMm1000_StepsPerEx(axis_t axis, sdist_t val)
 {
-	return (mm1000_t)(val / StepsPerMm1000[axis]);
+	return mm1000_t(val / StepsPerMm1000[axis]);
 }
 
 sdist_t CMotionControlBase::ToMachine_StepsPerEx(axis_t axis, mm1000_t val)
 {
-	return (sdist_t)(val * StepsPerMm1000[axis]);
+	return sdist_t(val * StepsPerMm1000[axis]);
 }

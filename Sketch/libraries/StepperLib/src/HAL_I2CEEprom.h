@@ -60,8 +60,8 @@ public:
 	{
 		int rdata = data;
 		Wire.beginTransmission(deviceaddress);
-		Wire.write((int)(eeaddress >> 8));   // MSB
-		Wire.write((int)(eeaddress & 0xFF)); // LSB
+		Wire.write(int(eeaddress >> 8));   // MSB
+		Wire.write(int(eeaddress & 0xFF)); // LSB
 		Wire.write(rdata);
 		Wire.endTransmission();
 	}
@@ -71,8 +71,8 @@ public:
 	static void i2c_eeprom_write_page(int deviceaddress, unsigned int eeaddresspage, byte* data, byte length)
 	{
 		Wire.beginTransmission(deviceaddress);
-		Wire.write((int)(eeaddresspage >> 8));   // MSB
-		Wire.write((int)(eeaddresspage & 0xFF)); // LSB
+		Wire.write(int(eeaddresspage >> 8));   // MSB
+		Wire.write(int(eeaddresspage & 0xFF)); // LSB
 		byte c;
 		for (c = 0; c < length; c++)
 			Wire.write(data[c]);
@@ -83,8 +83,8 @@ public:
 	{
 		byte rdata = 0xFF;
 		Wire.beginTransmission(deviceaddress);
-		Wire.write((int)(eeaddress >> 8));   // MSB
-		Wire.write((int)(eeaddress & 0xFF)); // LSB
+		Wire.write(int(eeaddress >> 8));   // MSB
+		Wire.write(int(eeaddress & 0xFF)); // LSB
 		Wire.endTransmission();
 		Wire.requestFrom(deviceaddress, 1);
 		if (Wire.available()) rdata = Wire.read();
@@ -95,8 +95,8 @@ public:
 	static void i2c_eeprom_read_buffer(int deviceaddress, unsigned int eeaddress, byte* buffer, int length)
 	{
 		Wire.beginTransmission(deviceaddress);
-		Wire.write((int)(eeaddress >> 8));   // MSB
-		Wire.write((int)(eeaddress & 0xFF)); // LSB
+		Wire.write(int(eeaddress >> 8));   // MSB
+		Wire.write(int(eeaddress & 0xFF)); // LSB
 		Wire.endTransmission();
 		Wire.requestFrom(deviceaddress, length);
 		int c;

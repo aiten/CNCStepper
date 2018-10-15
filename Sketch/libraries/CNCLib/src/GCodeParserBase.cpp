@@ -628,7 +628,9 @@ bool CGCodeParserBase::LastCommand()
 	const char* old = _reader->GetBuffer();
 
 	if (_modalstate.LastCommand != NULL)
+	{
 		(*this.*_modalstate.LastCommand)();
+	}
 
 	if (old == _reader->GetBuffer())
 	{
@@ -831,7 +833,7 @@ bool CGCodeParserBase::G31TestProbe(uintptr_t param)
 	// => continue move to probe position
 	// return false if probe is on (probe switch is pressed)
 
-	return (uint8_t) CControl::GetInstance()->IOControl(CControl::Probe) == (uint8_t)param;
+	return uint8_t(CControl::GetInstance()->IOControl(CControl::Probe)) == uint8_t(param);
 }
 
 void CGCodeParserBase::G31Command(bool probevalue)

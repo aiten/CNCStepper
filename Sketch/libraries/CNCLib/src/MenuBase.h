@@ -47,11 +47,11 @@ public:
 		menuparam_t  _param2;
 		menuparam_t  _param3;
 	public:
-		FLSTR        GetText() const { return (FLSTR)pgm_read_ptr(&this->_text); }
+		FLSTR        GetText() const { return FLSTR(pgm_read_ptr(&this->_text)); }
 		MenuFunction GetButtonPress() const;
-		menuparam_t  GetParam1() const { return (menuparam_t)pgm_read_ptr(&this->_param1); }
-		menuparam_t  GetParam2() const { return (menuparam_t)pgm_read_ptr(&this->_param2); }
-		menuparam_t  GetParam3() const { return (menuparam_t)pgm_read_ptr(&this->_param3); }
+		menuparam_t  GetParam1() const { return menuparam_t(pgm_read_ptr(&this->_param1)); }
+		menuparam_t  GetParam2() const { return menuparam_t(pgm_read_ptr(&this->_param2)); }
+		menuparam_t  GetParam3() const { return menuparam_t(pgm_read_ptr(&this->_param3)); }
 	};
 
 	struct SMenuDef
@@ -85,10 +85,10 @@ public:
 		}
 
 	public:
-		FLSTR               GetText() const { return (FLSTR)pgm_read_ptr(&this->_text); }
+		FLSTR               GetText() const { return FLSTR(pgm_read_ptr(&this->_text)); }
 		const SMenuItemDef* GetItems() const { return (const SMenuItemDef*)pgm_read_ptr(&this->_items); }
-		menuparam_t         GetParam1() const { return (menuparam_t)pgm_read_ptr(&this->_param1); }
-		menuparam_t         GetParam2() const { return (menuparam_t)pgm_read_ptr(&this->_param2); }
+		menuparam_t         GetParam1() const { return menuparam_t(pgm_read_ptr(&this->_param1)); }
+		menuparam_t         GetParam2() const { return menuparam_t(pgm_read_ptr(&this->_param2)); }
 	};
 
 public:

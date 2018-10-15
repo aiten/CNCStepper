@@ -28,7 +28,7 @@ class CStreamReader
 {
 public:
 
-	void Init(char* buffer)
+	void Init(const char* buffer)
 	{
 		_buffer = buffer;
 		_error  = nullptr;
@@ -46,7 +46,7 @@ public:
 		return SkipSpaces();
 	} // move to next and skip spaces
 
-	char GetCharToUpper()				{ return (char)Toupper(*_buffer); }
+	char GetCharToUpper()				{ return char(Toupper(*_buffer)); }
 	char GetChar()						{ return *_buffer; }
 	char GetNextChar()					{ return *(++_buffer); }                  // skip current and move to next
 	char GetNextCharToUpper()			{ return Toupper(GetNextChar()); } // skip current and move to next

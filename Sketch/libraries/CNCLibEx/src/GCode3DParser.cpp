@@ -76,18 +76,6 @@ bool CGCode3DParser::InitParse()
 
 ////////////////////////////////////////////////////////////
 
-bool CGCode3DParser::GCommand(gcode_t gcode)
-{
-	if (super::GCommand(gcode))
-	{
-		return true;
-	}
-
-	return false;
-}
-
-////////////////////////////////////////////////////////////
-
 bool CGCode3DParser::MCommand(mcode_t mcode)
 {
 	if (super::MCommand(mcode))
@@ -110,18 +98,6 @@ bool CGCode3DParser::MCommand(mcode_t mcode)
 		case 30: M30Command();	return true;
 		case 115: _OkMessage = PrintVersion;
 			return true;
-	}
-
-	return false;
-}
-
-////////////////////////////////////////////////////////////
-
-bool CGCode3DParser::Command(char ch)
-{
-	if (super::Command(ch))
-	{
-		return true;
 	}
 
 	return false;

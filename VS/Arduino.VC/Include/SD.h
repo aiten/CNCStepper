@@ -190,9 +190,8 @@ private:
 	bool IsDirHandle() const { return _dirfile != nullptr && !_dirfile->IsFile(); };
 	bool IsFileHandle() const { return _dirfile != nullptr && _dirfile->IsFile(); };
 
-	MyFile* GetF() { return IsFileHandle() ? ((MyFile*)(_dirfile)) : nullptr; }
-	MyDir*  GetD() { return IsDirHandle() ? ((MyDir*)(_dirfile)) : nullptr; }
-
+	MyFile* GetF() { return IsFileHandle() ? static_cast<MyFile*>(_dirfile) : nullptr; }
+	MyDir*  GetD() { return IsDirHandle() ? static_cast<MyDir*>(_dirfile) : nullptr; }
 
 public:
 

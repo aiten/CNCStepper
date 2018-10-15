@@ -239,7 +239,7 @@ protected:
 	unsigned long GetUint32OrParam(unsigned long max);
 	unsigned long GetUint32OrParam()						{ return GetUint32OrParam(0xffffffffl); };
 	unsigned short GetUint16OrParam()						{ return (unsigned short)GetUint32OrParam(65535); };
-	uint8_t GetUint8OrParam()								{ return (uint8_t)GetUint32OrParam(255); };
+	uint8_t GetUint8OrParam()								{ return uint8_t(GetUint32OrParam(255)); };
 
 	mm1000_t GetRelativePosition(mm1000_t pos, axis_t axis)	{ return pos - CalcAllPreset(axis); }
 	mm1000_t GetRelativePosition(axis_t axis)				{ return GetRelativePosition(CMotionControlBase::GetInstance()->GetPosition(axis), axis); }

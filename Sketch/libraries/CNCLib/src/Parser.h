@@ -170,7 +170,7 @@ private:
 		while (CStreamReader::IsDigit(_reader->GetChar()))
 		{
 			T old = value;
-			value *= (T)10;
+			value *= T(10);
 			value += _reader->GetChar() - '0';
 			if (old > value)
 			{
@@ -188,7 +188,7 @@ private:
 		bool negativ;
 		if ((negativ = CStreamReader::IsMinus(_reader->GetChar())) != 0)
 			_reader->GetNextChar();
-		auto value = (T)GetUInt<T>();
+		auto value = T(GetUInt<T>());
 		return negativ ? -value : value;
 	}
 

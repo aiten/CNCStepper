@@ -40,10 +40,10 @@ extern uint8_t ToPrecisionS2(long          );
 
 ////////////////////////////////////////////////////////
 
-template <class T> bool IsBitSet(T t, uint8_t bit) { return (t & (((T)1) << bit)) != 0; };
-template <class T> bool IsBitClear(T t, uint8_t bit) { return (t & (((T)1) << bit)) == 0; };
-template <class T> void BitSet(T& t, uint8_t bit) { t |= ((T)1) << bit; };
-template <class T> void BitClear(T& t, uint8_t bit) { t &= ~(((T)1) << bit); };
+template <class T> bool IsBitSet(T t, uint8_t bit) { return (t & ((T(1)) << bit)) != 0; };
+template <class T> bool IsBitClear(T t, uint8_t bit) { return (t & ((T(1)) << bit)) == 0; };
+template <class T> void BitSet(T& t, uint8_t bit) { t |= (T(1)) << bit; };
+template <class T> void BitClear(T& t, uint8_t bit) { t &= ~((T(1)) << bit); };
 
 ////////////////////////////////////////////////////////
 
@@ -54,7 +54,7 @@ inline unsigned int RoundMulDivUInt(unsigned int v, unsigned int m, unsigned int
 
 inline uint8_t RoundMulDivU8(uint8_t v, uint8_t m, uint8_t d)
 {
-	return (uint8_t)(((unsigned int)v * m + d / 2) / d);
+	return uint8_t(((unsigned int)v * m + d / 2) / d);
 }
 
 inline unsigned long RoundMulDivU32(unsigned long v, unsigned long m, unsigned long d)

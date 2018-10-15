@@ -111,7 +111,7 @@ protected:
 					sud = ldiv(sud.quot, 10);
 					if (x <= scale)
 					{
-						tmp[precision--] = '0' + (uint8_t)sud.rem;
+						tmp[precision--] = '0' + uint8_t(sud.rem);
 					}
 				}
 				tmp[precision--] = '.';
@@ -120,7 +120,7 @@ protected:
 			do
 			{
 				ud               = ldiv(ud.quot, 10);
-				tmp[precision--] = '0' + (uint8_t)ud.rem;
+				tmp[precision--] = '0' + uint8_t(ud.rem);
 			}
 			while (ud.quot != 0);
 
@@ -129,7 +129,7 @@ protected:
 				tmp[precision--] = '-';
 			}
 
-			while (precision != ((uint8_t)-1))
+			while (precision != uint8_t(-1))
 			{
 				tmp[precision--] = ' ';
 			}
@@ -152,12 +152,12 @@ private:
 		{
 			switch (scale)
 			{
-				case 0: return -(long)(SCALEMASK / 2);
-				case 1: return -(long)(SCALEMASK / 20);
-				case 2: return -(long)(SCALEMASK / 200);
-				case 3: return -(long)(SCALEMASK / 2000);
-				case 4: return -(long)(SCALEMASK / 20000);
-				case 5: return -(long)(SCALEMASK / 200000);
+				case 0: return -long(SCALEMASK / 2);
+				case 1: return -long(SCALEMASK / 20);
+				case 2: return -long(SCALEMASK / 200);
+				case 3: return -long(SCALEMASK / 2000);
+				case 4: return -long(SCALEMASK / 20000);
+				case 5: return -long(SCALEMASK / 200000);
 				default: return 0;
 			}
 		}
@@ -175,10 +175,10 @@ private:
 
 public:
 
-	static T Cast(expr_t v) { return (T)v; } // do not use lrint => convert to double first
+	static T Cast(expr_t v) { return T(v); } // do not use lrint => convert to double first
 
-	static float DegreeToRAD(T v) { return (float)(v / (SCALEMASK * 180.0 / M_PI)); }
-	static T     FromRAD(float v) { return Cast((float)(v * SCALEMASK * 180 / M_PI)); }
+	static float DegreeToRAD(T v) { return float(v / (SCALEMASK * 180.0 / M_PI)); }
+	static T     FromRAD(float v) { return Cast(float(v * SCALEMASK * 180 / M_PI)); }
 
 	static expr_t ConvertTo(T        v) { return expr_t(v) / SCALEMASK; }
 	static T      ConvertFrom(expr_t v) { return T(v * SCALEMASK); }
@@ -195,7 +195,7 @@ private:
 public:
 
 	static char* ToString(mm1000_t pos, char* tmp, uint8_t precision, uint8_t scale); // right aligned
-	static char* ToString(mm1000_t pos, char* tmp, uint8_t scale) { return SkipSpaces(ToString(pos, tmp, 11, scale)); };
+	static char* ToString(mm1000_t pos, char* tmp, uint8_t scale) { return SkipSpaces(ToString(pos, tmp, 11, scale)); }
 
 	char* ToString(char* tmp, uint8_t precision, uint8_t scale) { return ToString(_value, tmp, precision, scale); } // right aligned
 	char* ToString(char* tmp, uint8_t scale) { return ToString(_value, tmp, scale); }
@@ -215,9 +215,8 @@ private:
 
 public:
 
-	static char* ToString(inch100000_t v, char* tmp, uint8_t precision, uint8_t scale); // right aligned
-	static char* ToString(inch100000_t v, char* tmp, uint8_t scale) { return SkipSpaces(ToString(v, tmp, 11, scale)); }
-	;
+	static char* ToString(inch100000_t pos, char* tmp, uint8_t precision, uint8_t scale); // right aligned
+	static char* ToString(inch100000_t pos, char* tmp, uint8_t scale) { return SkipSpaces(ToString(pos, tmp, 11, scale)); }
 
 	char* ToString(char* tmp, uint8_t precision, uint8_t scale) { return ToString(_value, tmp, precision, scale); } // right aligned
 	char* ToString(char* tmp, uint8_t scale) { return ToString(_value, tmp, scale); }

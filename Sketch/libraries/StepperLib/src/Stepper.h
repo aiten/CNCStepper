@@ -143,8 +143,8 @@ public:
 	void SetSpeedOverride(EnumAsByte(ESpeedOverride) speed)		{ _pod._speedoverride = speed; }
 	EnumAsByte(ESpeedOverride) GetSpeedOverride()				{ return _pod._speedoverride; }
 
-	static uint8_t SpeedOverrideToP(EnumAsByte(ESpeedOverride) speed)	  {	return RoundMulDivU8((uint8_t) speed, 100, SpeedOverride100P);	}
-	static  EnumAsByte(ESpeedOverride) PToSpeedOverride(uint8_t speedP) { return (EnumAsByte(ESpeedOverride)) RoundMulDivU8(speedP, SpeedOverride100P, 100); }
+	static uint8_t SpeedOverrideToP(EnumAsByte(ESpeedOverride) speed)	{ return RoundMulDivU8(uint8_t(speed), 100, SpeedOverride100P);	}
+	static  EnumAsByte(ESpeedOverride) PToSpeedOverride(uint8_t speedP) { return EnumAsByte(ESpeedOverride)(RoundMulDivU8(speedP, SpeedOverride100P, 100)); }
 
 	void SetUsual(steprate_t vMax);
 
@@ -157,7 +157,7 @@ public:
 	bool IsCheckForReference()  const							{ return _pod._checkReference; }
 
 	void SetBacklash(steprate_t speed)			                { _pod._timerbacklash = SpeedToTimer(speed); };
-	bool IsSetBacklash()  const									{ return ((timer_t)-1) != _pod._timerbacklash; }
+	bool IsSetBacklash()  const									{ return timer_t(-1) != _pod._timerbacklash; }
 	steprate_t GetBacklash()									{ return TimerToSpeed(_pod._timerbacklash); };
 
 	bool IsBusy()  const										{ return _pod._timerRunning; };
@@ -262,7 +262,7 @@ public:
 	virtual void SetEnable(axis_t axis, uint8_t level, bool force) = 0;
 	virtual uint8_t GetEnable(axis_t axis) = 0;
 
-	static uint8_t ConvertLevel(bool enable)				{ return enable ? (uint8_t)(LevelMax) : (uint8_t)(LevelOff); }
+	static uint8_t ConvertLevel(bool enable)				{ return enable ? uint8_t(LevelMax) : uint8_t(LevelOff); }
 
 	void Dump(uint8_t options);							// options ==> EDumpOptions with bits
 
@@ -281,8 +281,11 @@ private:
 
 	long CalcNextPos(udist_t current, udist_t dist, bool directionUp)
 	{
-		if (directionUp) return (sdist_t)current + (sdist_t)dist;
-		return (sdist_t)current - (sdist_t)dist;
+		if (directionUp)
+		{
+			return sdist_t(current) + sdist_t(dist);
+		}
+		return sdist_t(current) - sdist_t(dist);
 	}
 
 	inline void StepOut();

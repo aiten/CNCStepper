@@ -148,7 +148,7 @@ protected:
 
 		for (uint8_t cnt = 0;; cnt++)
 		{
-			register bool have = false;
+			bool have = false;
 			if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_X_STEP_PIN, TB6560_PIN_STEP_ON); have = true; }
 			if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_Y_STEP_PIN, TB6560_PIN_STEP_ON); have = true; }
 			if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_Z_STEP_PIN, TB6560_PIN_STEP_ON); have = true; }

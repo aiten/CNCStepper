@@ -169,8 +169,8 @@ protected:
 			ToolSelected = 1;
 			IsG98 = true;
 //POD		_debuglevel = 0;
-//POD		for (register uint8_t i = 0; i < NUM_AXIS; i++) G54Pospreset[i] = 0;
-//POD		for (register uint8_t i = 0; i < NUM_PARAMETER; i++) Parameter[i] = 0;
+//POD		for (uint8_t i = 0; i < NUM_AXIS; i++) G54Pospreset[i] = 0;
+//POD		for (uint8_t i = 0; i < NUM_PARAMETER; i++) Parameter[i] = 0;
 //POD		ToolHeigtCompensation = 0;
 		}
 	};

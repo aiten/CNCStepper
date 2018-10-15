@@ -47,7 +47,7 @@ uint8_t          CStepper::_myCnt;
 
 void CStepper::InitMemVar()
 {
-	register axis_t i;
+	axis_t i;
 
 	_pod = POD(); //POD init object with 0
 
@@ -328,7 +328,7 @@ void CStepper::EnqueuAndStartTimer(bool waitfinish)
 
 void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_t steps, const mdist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], timer_t timerMax)
 {
-	register axis_t i;
+	axis_t i;
 
 	// memset(this, 0, sizeof(SMovement)); => set al memvars!!!
 
@@ -573,8 +573,8 @@ mdist_t CStepper::SMovement::GetDistance(axis_t axis)
 {
 	if (_distance_[axis])
 	{
-		register uint8_t multiplier    = GetStepMultiplier(axis);
-		register uint8_t maxMultiplier = GetMaxStepMultiplier();
+		uint8_t multiplier    = GetStepMultiplier(axis);
+		uint8_t maxMultiplier = GetMaxStepMultiplier();
 		if (multiplier != maxMultiplier)
 		{
 			return (mdist_t)MulDivU32(_distance_[axis], multiplier, maxMultiplier);
@@ -587,10 +587,10 @@ mdist_t CStepper::SMovement::GetDistance(axis_t axis)
 
 uint8_t CStepper::SMovement::GetMaxStepMultiplier()
 {
-	register DirCount_t count         = _dirCount;
-	register uint8_t    maxmultiplier = 0;
+	DirCount_t count         = _dirCount;
+	uint8_t    maxmultiplier = 0;
 
-	for (register uint8_t i = 0;; i++)
+	for (uint8_t i = 0;; i++)
 	{
 		maxmultiplier = max(maxmultiplier, ((uint8_t)count) % 8);
 		if (i == NUM_AXIS - 1)
@@ -1474,7 +1474,7 @@ inline void CStepper::StepOut()
 		countit = false;
 	}
 
-	for (register uint8_t i = 0;; i++)
+	for (uint8_t i = 0;; i++)
 	{
 #if defined (__AVR_ARCH__)
 		if (i % 2 == 1)
@@ -1815,7 +1815,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 {
 	// return false if buffer full and nothing calculated.
 
-	register axis_t i;
+	axis_t i;
 	do
 	{
 		CStepper*       pStepper = _pStepper;
@@ -1865,8 +1865,8 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 			}
 		}
 
-		register mdist_t n     = pState->_n;
-		register uint8_t count = pState->_count;
+		mdist_t n     = pState->_n;
+		uint8_t count = pState->_count;
 
 		if (_steps <= n)
 		{
@@ -1895,8 +1895,8 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 			}
 			else
 			{
-				register DirCount_t stepcount = 0;
-				register DirCount_t mask      = 15;
+				DirCount_t stepcount = 0;
+				DirCount_t mask      = 15;
 
 				if (_backlash)
 				{
@@ -2068,7 +2068,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 
 void CStepper::SetEnableAll(uint8_t level)
 {
-	for (register axis_t i = 0; i < NUM_AXIS; ++i)
+	for (axis_t i = 0; i < NUM_AXIS; ++i)
 	{
 		SetEnable(i, level, true);
 	}
@@ -2079,15 +2079,15 @@ void CStepper::SetEnableAll(uint8_t level)
 void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], steprate_t vMax)
 {
 	_pod._error = nullptr;
-	register axis_t i;
+	axis_t i;
 
 #if USESLIP
-	register signed char slip;
+	signed char slip;
 #endif
 
 	for (i = 0; i < NUM_AXIS; i++)
 	{
-		register long newC = CalcNextPos(_pod._calculatedpos[i], dist[i], directionUp[i]);
+		long newC = CalcNextPos(_pod._calculatedpos[i], dist[i], directionUp[i]);
 		if (_pod._limitCheck)
 		{
 			// check limit
@@ -2391,7 +2391,7 @@ void CStepper::MoveAbs(const udist_t d[NUM_AXIS], steprate_t vMax)
 	udist_t dist[NUM_AXIS];
 	bool    directionUp[NUM_AXIS];
 
-	for (register axis_t i = 0; i < NUM_AXIS; ++i)
+	for (axis_t i = 0; i < NUM_AXIS; ++i)
 	{
 		directionUp[i] = d[i] >= _pod._calculatedpos[i];
 		if (directionUp[i])
@@ -2413,7 +2413,7 @@ void CStepper::MoveRel(const sdist_t d[NUM_AXIS], steprate_t vMax)
 	udist_t dist[NUM_AXIS];
 	bool    directionUp[NUM_AXIS];
 
-	for (register axis_t i = 0; i < NUM_AXIS; ++i)
+	for (axis_t i = 0; i < NUM_AXIS; ++i)
 	{
 		directionUp[i] = d[i] >= 0;
 		dist[i]        = abs(d[i]);

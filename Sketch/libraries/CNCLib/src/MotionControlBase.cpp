@@ -301,7 +301,7 @@ steprate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate
 		bool     useOverrun = false;
 		uint8_t  axiscount  = 0;
 
-		for (register axis_t x = 0; x < NUM_AXIS; x++)
+		for (axis_t x = 0; x < NUM_AXIS; x++)
 		{
 			mm1000_t dist = GetPosition(x);
 			dist          = to[x] > dist ? (to[x] - dist) : (dist - to[x]);

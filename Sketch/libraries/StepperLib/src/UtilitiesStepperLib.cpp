@@ -65,7 +65,7 @@ uint8_t ToPrecisionS10(long v)
 
 uint8_t ToPrecisionU2(unsigned short v)
 {
-	register uint8_t i = 0;
+	uint8_t i = 0;
 	for (; v != 0; i++)
 	{
 		v /= 2;
@@ -75,7 +75,7 @@ uint8_t ToPrecisionU2(unsigned short v)
 
 uint8_t ToPrecisionU2(unsigned long v)
 {
-	register uint8_t i = 0;
+	uint8_t i = 0;
 	for (; v != 0; i++)
 	{
 		v /= 2;

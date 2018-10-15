@@ -78,7 +78,7 @@ void CStepperL298N::Init()
 
 	InitMemVar();
 
-	register uint8_t i;
+	uint8_t i;
 
 	for (i = 0; i < NUM_AXIS; i++)
 	{
@@ -204,7 +204,7 @@ void CStepperL298N::SetPhase(axis_t axis)
 {
 	if (IsActive(axis))
 	{
-		register uint8_t bitmask;
+		uint8_t bitmask;
 
 		if (Is4Pin(axis))
 		{

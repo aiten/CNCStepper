@@ -161,7 +161,7 @@ protected:
 			Plane_axis_1 = Y_AXIS;
 			Plane_axis_2 = Z_AXIS;
 			UnitConvert = 1+2+4 + 64+128;				// inch to mm 
-//POD		for (register uint8_t i = 0; i < NUM_AXIS; i++) G92Pospreset[i] = 0;
+//POD		for (uint8_t i = 0; i < NUM_AXIS; i++) G92Pospreset[i] = 0;
 		}
 	};
 
@@ -214,7 +214,7 @@ protected:
 				CMotionControlBase::GetInstance()->GetPositions(newpos);
 			else
 			{
-				for (register uint8_t i = 0; i < NUM_AXIS; i++) newpos[i] = 0;
+				for (uint8_t i = 0; i < NUM_AXIS; i++) newpos[i] = 0;
 			}
 		}
 	};

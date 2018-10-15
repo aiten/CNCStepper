@@ -81,13 +81,11 @@ void CHelpParser::Parse()
 
 #ifndef REDUCED_SIZE
 	
-	uint8_t i;
-
 	if (IsToken(F("-"), true, false))
 	{
 		if (CheckEOC())
 		{
-			for (i = 0; i < NUM_AXIS - 1; i++)
+			for (uint8_t i = 0; i < NUM_AXIS - 1; i++)
 			{
 				StepperSerial.print(CStepper::GetInstance()->GetCurrentPosition(i)); StepperSerial.print(F(":"));
 			}

@@ -2465,11 +2465,10 @@ void CStepper::Dump(uint8_t options)
 
 	if (options&DumpMovements)
 	{
-		uint8_t idx;
 		uint8_t idxnochange = _movements._queue.H2TInit();
 
 		i = 0;
-		for (idx = idxnochange; _movements._queue.H2TTest(idx); idx = _movements._queue.H2TInc(idx))
+		for (uint8_t idx = idxnochange; _movements._queue.H2TTest(idx); idx = _movements._queue.H2TInc(idx))
 		{
 			_movements._queue.Buffer[idx].Dump(i++, options);
 		}

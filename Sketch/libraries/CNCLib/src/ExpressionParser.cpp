@@ -191,9 +191,8 @@ expr_t CExpressionParser::ParseLevel1()
 		if (GetTokenType() == AssignSy)
 		{
 			// assignment
-			expr_t ans;
 			GetNextToken();
-			ans = ParseLevel2();
+			expr_t ans = ParseLevel2();
 
 			AssignVariable(state_now._varName, ans);
 
@@ -497,7 +496,6 @@ bool CExpressionParser::EvalVariable(const char* var_name, expr_t& answer)
 
 expr_t CExpressionParser::Factorial(expr_t value)
 {
-	expr_t res;
 	int v = static_cast<int>(value);
 
 	if (value != static_cast<expr_t>(v))
@@ -506,7 +504,7 @@ expr_t CExpressionParser::Factorial(expr_t value)
 		return 0;
 	}
 
-	res = (expr_t)v;
+	expr_t res = (expr_t)v;
 	v--;
 	while (v > 1)
 	{

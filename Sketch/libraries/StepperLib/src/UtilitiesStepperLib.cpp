@@ -94,8 +94,8 @@ unsigned long _ulsqrt_round(unsigned long val, bool round)
 	unsigned long g = 0;
 	unsigned long b = 0x8000;
 	unsigned long bshft = 15;
-	uint8_t i;
-	for (i = 0; i < 15; i++)
+
+	for (uint8_t i = 0; i < 15; i++)
 	{
 		temp = g;
 		temp = temp + (b >> 1);

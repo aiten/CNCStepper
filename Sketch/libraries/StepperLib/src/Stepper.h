@@ -321,7 +321,7 @@ protected:
 	static mdist_t GetSteps(timer_t timer1, timer_t timer2, timer_t timerstart, timer_t timerstop);		// from v1 to v2 (v1<v2 uses acc, dec otherwise)
 
 	unsigned long GetAccelerationFromTimer(mdist_t timerV0);
-	unsigned long GetAccelerationFromSpeed(steprate_t speedV0)									{ return GetAccelerationFromSpeed(SpeedToTimer(speedV0)); }
+	unsigned long GetAccelerationFromSpeed(steprate_t speedV0)									{ return GetAccelerationFromTimer(SpeedToTimer(speedV0)); }
 
 	timer_t SpeedToTimer(steprate_t speed) const;
 	steprate_t TimerToSpeed(timer_t timer) const;

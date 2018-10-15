@@ -224,18 +224,14 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 		float cos_T = float(1.0 - 0.5*theta_per_segment*theta_per_segment);
 		float sin_T = theta_per_segment;
 
-		float sin_Ti;
-		float cos_Ti;
-		float r_axisi;
-		unsigned short i;
 		uint8_t count = 0;
 
-		for (i = 1; i < segments; i++)
+		for (unsigned short i = 1; i < segments; i++)
 		{
 			if (count < arc_correction)
 			{
 				// Apply vector rotation matrix 
-				r_axisi = r_axis0*sin_T + r_axis1*cos_T;
+				float r_axisi = r_axis0*sin_T + r_axis1*cos_T;
 				r_axis0 = r_axis0*cos_T - r_axis1*sin_T;
 				r_axis1 = r_axisi;
 				count++;
@@ -244,8 +240,8 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 			{
 				// Arc correction to radius vector. Computed only every N_ARC_CORRECTION increments.
 				// Compute exact location by applying transformation matrix from initial radius vector(=-offset).
-				cos_Ti = cos(i*theta_per_segment);
-				sin_Ti = sin(i*theta_per_segment);
+				float cos_Ti = cos(i*theta_per_segment);
+				float sin_Ti = sin(i*theta_per_segment);
 				r_axis0 = -offset0 * cos_Ti + offset1 * sin_Ti;
 				r_axis1 = -offset0 * sin_Ti - offset1 * cos_Ti;
 				count = 0;

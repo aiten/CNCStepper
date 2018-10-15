@@ -113,8 +113,7 @@ void CStepperL298N::Init()
 
 void CStepperL298N::InitMemVar()
 {
-	register uint8_t i;
-	for (i = 0; i < NUM_AXIS; i++)	_stepIdx[i] = 0;
+	for (uint8_t i = 0; i < NUM_AXIS; i++)	_stepIdx[i] = 0;
 	_fullStepMode = false;
 }
 

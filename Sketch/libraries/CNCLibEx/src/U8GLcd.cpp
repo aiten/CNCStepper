@@ -643,8 +643,6 @@ bool CU8GLcd::DrawLoopPreset(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	if (type==DrawLoopQueryTimerout)	{ *((unsigned long*)data) = 200000; return true; }
 	if (type!=DrawLoopDraw)				return DrawLoopDefault(type,data);
 
-	mm1000_t ps;
-
 	const __FlashStringHelper* zeroShiftName[] PROGMEM = { F("G53"), F("G54"), F("G55"), F("G56"), F("G57"), F("G58"), F("G59") };
 
 	SetPosition(ToCol(0), ToRow(0) - HeadLineOffset());  Print(F("Preset: ")); Print(zeroShiftName[CGCodeParser::GetZeroPresetIdx()]); Print(F(" G92 Height"));
@@ -653,6 +651,8 @@ bool CU8GLcd::DrawLoopPreset(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 
 	for (uint8_t i = 0; i < _lcd_numaxis; i++)
 	{
+		mm1000_t ps;
+
 		SetPosition(ToCol(0), ToRow(i + 1) + PosLineOffset());
 		Print(CGCodeBuilder::AxisToChar(i));
 		ps = CGCodeParser::GetG54PosPreset(i);

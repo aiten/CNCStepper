@@ -79,7 +79,6 @@ public:
 		// table must be sorted!!!!
 		// binary serach
 
-		index_t c;
 		index_t left = 0;
 		index_t right = _tabelSize - 1;
 
@@ -87,7 +86,7 @@ public:
 
 		while (true)
 		{
-			c = left + ((right - left) / 2);
+			index_t c = left + ((right - left) / 2);
 
 			TInput val = GetInput(c);
 

@@ -188,8 +188,8 @@ private:
 
 	CStepper::SEvent _oldStepperEvent;
 
-	bool			_dummy;										// see gcode m01 & m02
-	bool			_printFromSDFile;
+	bool			_dummy;
+	bool			_printFromSDFile;					
 
 	char			_buffer[SERIALBUFFERSIZE];					// serial input buffer
 

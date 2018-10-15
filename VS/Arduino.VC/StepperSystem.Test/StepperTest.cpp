@@ -52,9 +52,9 @@ namespace StepperSystemTest
 
 		char* AddFileName(char*dest, const char* start, const char*filename)
 		{
-			strcpy_s(dest,sizeof(dest), start);
-			strcat_s(dest, sizeof(dest), "Test_");
-			strcat_s(dest, sizeof(dest), filename);
+			strcpy_s(dest, _MAX_PATH, start);
+			strcat_s(dest, _MAX_PATH, "Test_");
+			strcat_s(dest, _MAX_PATH, filename);
 
 			return dest;
 		}

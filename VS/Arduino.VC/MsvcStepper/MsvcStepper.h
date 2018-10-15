@@ -131,7 +131,7 @@ private:
 	void InitCache()
 	{
 		_eventIdx = 0;
-		memset(_TimerEvents, 0, sizeof(_TimerEvents)*CacheSize);
+		memset(_TimerEvents, 0, sizeof(STimerEvent)*CacheSize);
 	}
 
 	int          _exportIdx;

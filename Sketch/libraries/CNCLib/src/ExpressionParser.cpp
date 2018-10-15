@@ -114,11 +114,11 @@ void CExpressionParser::ScannNextToken()
 	// check for variables or functions
 	if (IsIdentStart(ch))
 	{
-		char*start = (char*)_reader->GetBuffer();
+		auto start = (char*)_reader->GetBuffer();
 
 		ReadIdent();
 
-		char*end = (char*)_reader->GetBuffer();
+		auto end = (char*)_reader->GetBuffer();
 		ch = _reader->SkipSpaces();
 
 		// temporary terminat buffer with '\00'
@@ -504,7 +504,7 @@ expr_t CExpressionParser::Factorial(expr_t value)
 		return 0;
 	}
 
-	expr_t res = (expr_t)v;
+	auto res = expr_t(v);
 	v--;
 	while (v > 1)
 	{

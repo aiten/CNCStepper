@@ -98,8 +98,8 @@ bool CMenuBase::Select(menupos_t idx)
 
 void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef* def)
 {
-	const SMenuDef* newMenu = (const SMenuDef*)def->GetParam1();
-	const SMenuDef* posMenu = (const SMenuDef*)def->GetParam2();
+	auto newMenu = (const SMenuDef*)def->GetParam1();
+	auto posMenu = (const SMenuDef*)def->GetParam2();
 	SetMenu(newMenu);
 
 	if (posMenu != nullptr)
@@ -119,7 +119,7 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef* def)
 
 void CMenuBase::MenuButtonPressMenuBack(const SMenuItemDef* def)
 {
-	const SMenuDef*        newMenu = (const SMenuDef*)def->GetParam1();
+	auto newMenu = (const SMenuDef*)def->GetParam1();
 	const struct SMenuDef* oldMenu = GetMenuDef();
 
 	SetMenu(newMenu);
@@ -154,8 +154,8 @@ void CMenuBase::MenuButtonPressSetCommand(const SMenuItemDef* def)
 
 void CMenuBase::MenuButtonPressMove(const SMenuItemDef* def)
 {
-	axis_t  axis = (axis_t)(unsigned int)GetMenuDef()->GetParam1();
-	uint8_t dist = (uint8_t)(unsigned int)def->GetParam1();
+	auto axis = axis_t((unsigned int)GetMenuDef()->GetParam1());
+	auto dist = uint8_t((unsigned int)def->GetParam1());
 
 	if (dist == MoveHome)
 	{
@@ -192,7 +192,7 @@ void CMenuBase::MenuButtonPressMove(const SMenuItemDef* def)
 
 void CMenuBase::MenuButtonPressRotate(const SMenuItemDef* def)
 {
-	uint8_t req = (uint8_t)(unsigned int)def->GetParam1();
+	auto req = uint8_t((unsigned int)def->GetParam1());
 
 	switch (req)
 	{
@@ -279,7 +279,7 @@ void CMenuBase::MenuButtonPressHomeA(axis_t axis)
 
 void CMenuBase::MenuButtonPressMoveG92(const SMenuItemDef*)
 {
-	axis_t axis = (axis_t)(unsigned int)GetMenuDef()->GetParam1();
+	auto axis = axis_t((unsigned int)GetMenuDef()->GetParam1());
 
 	CGCodeBuilder builder;
 	InitPostCommand(EGCodeSyntaxType::GCode, builder.GetCommand());

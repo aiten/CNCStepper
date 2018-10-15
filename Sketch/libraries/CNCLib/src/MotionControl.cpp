@@ -103,9 +103,9 @@ void CMotionControl::TransformFromMachinePosition(const udist_t src[NUM_AXIS], m
 
 	if (_rotateEnabled2D)
 	{
-		float x = (float)(dest[X_AXIS] - _rotateOffset2D[X_AXIS]);
-		float y = (float)(dest[Y_AXIS] - _rotateOffset2D[Y_AXIS]);
-		float z = (float)(dest[Z_AXIS] - _rotateOffset2D[Z_AXIS]);
+		auto x = float(dest[X_AXIS] - _rotateOffset2D[X_AXIS]);
+		auto y = float(dest[Y_AXIS] - _rotateOffset2D[Y_AXIS]);
+		auto z = float(dest[Z_AXIS] - _rotateOffset2D[Z_AXIS]);
 
 		if (IsBitSet(_rotateEnabled2D, Z_AXIS))
 		{
@@ -157,9 +157,9 @@ bool CMotionControl::TransformPosition(const mm1000_t src[NUM_AXIS], mm1000_t de
 
 	if (_rotateEnabled2D)
 	{
-		float x = (float)(dest[X_AXIS] - _rotateOffset2D[X_AXIS]);
-		float y = (float)(dest[Y_AXIS] - _rotateOffset2D[Y_AXIS]);
-		float z = (float)(dest[Z_AXIS] - _rotateOffset2D[Z_AXIS]);
+		auto x = (float)(dest[X_AXIS] - _rotateOffset2D[X_AXIS]);
+		auto y = (float)(dest[Y_AXIS] - _rotateOffset2D[Y_AXIS]);
+		auto z = (float)(dest[Z_AXIS] - _rotateOffset2D[Z_AXIS]);
 
 		if (IsBitSet(_rotateEnabled2D, X_AXIS))
 		{
@@ -186,9 +186,9 @@ bool CMotionControl::TransformPosition(const mm1000_t src[NUM_AXIS], mm1000_t de
 
 void CMotionControl::SRotate3D::Set(float rad, const mm1000_t vect[NUM_AXISXYZ])
 {
-	float n1 = (float)vect[0];
-	float n2 = (float)-vect[1]; // Y_AXIS 
-	float n3 = (float)vect[2];
+	auto n1 = float(vect[0]);
+	auto n2 = float(-vect[1]); // Y_AXIS 
+	auto n3 = float(vect[2]);
 
 	float vectorlenght = sqrt(n1 * n1 + n2 * n2 + n3 * n3);
 
@@ -229,9 +229,9 @@ void CMotionControl::SRotate3D::Rotate(float& x, float& y, float& z)
 
 void CMotionControl::SRotate3D::Rotate(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXISXYZ], mm1000_t dest[NUM_AXIS])
 {
-	float x = (float)(src[X_AXIS] - ofs[X_AXIS]);
-	float y = (float)(src[Y_AXIS] - ofs[Y_AXIS]);
-	float z = (float)(src[Z_AXIS] - ofs[Z_AXIS]);
+	auto x = float(src[X_AXIS] - ofs[X_AXIS]);
+	auto y = float(src[Y_AXIS] - ofs[Y_AXIS]);
+	auto z = float(src[Z_AXIS] - ofs[Z_AXIS]);
 
 	Rotate(x, y, z);
 

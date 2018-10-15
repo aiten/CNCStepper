@@ -118,7 +118,7 @@ uint8_t CU8GLcd::GetPage()
 {
 	if (_rotaryFocus == RotaryMainPage)
 	{
-		uint8_t page = (uint8_t)_rotarybutton.GetPageIdx(GetPageCount());
+		auto page = uint8_t(_rotarybutton.GetPageIdx(GetPageCount()));
 
 		if (page != _currentpage)
 		{

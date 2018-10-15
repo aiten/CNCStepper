@@ -188,7 +188,7 @@ private:
 		bool negativ;
 		if ((negativ = CStreamReader::IsMinus(_reader->GetChar())) != 0)
 			_reader->GetNextChar();
-		T value = (T)GetUInt<T>();
+		auto value = (T)GetUInt<T>();
 		return negativ ? -value : value;
 	}
 

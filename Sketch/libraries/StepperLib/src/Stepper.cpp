@@ -98,11 +98,11 @@ void CStepper::SetUsual(steprate_t vMax)
 	const steprate_t defdec   = 380;
 	const steprate_t defjerk  = 1000;
 
-	steprate_t    jerk = (steprate_t)MulDivU32(vMax, defjerk, defspeed);
+	auto          jerk = steprate_t(MulDivU32(vMax, defjerk, defspeed));
 	unsigned long sqrt = _ulsqrt_round(vMax * 10000l / defspeed);
 
-	steprate_t acc = steprate_t(sqrt * defacc / 100l);
-	steprate_t dec = steprate_t(sqrt * defdec / 100l);
+	auto acc = steprate_t(sqrt * defacc / 100l);
+	auto dec = steprate_t(sqrt * defdec / 100l);
 
 	// acc and dec must not be y 62 => this is to slow
 	if (dec < 62) dec = 62;
@@ -370,13 +370,13 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 		mdist_t d = dist[i];
 		if (d)
 		{
-			timer_t accdec = (timer_t)MulDivU32(pStepper->_pod._timerAcc[i], d, _steps);
+			auto accdec = timer_t(MulDivU32(pStepper->_pod._timerAcc[i], d, _steps));
 			if (accdec > _pod._move._timerAcc)
 			{
 				_pod._move._timerAcc = accdec;
 			}
 
-			accdec = (timer_t)MulDivU32(pStepper->_pod._timerDec[i], d, _steps);
+			accdec = timer_t(MulDivU32(pStepper->_pod._timerDec[i], d, _steps));
 			if (accdec > _pod._move._timerDec)
 			{
 				_pod._move._timerDec = accdec;
@@ -435,7 +435,7 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 #else
 					unsigned long distinit = _steps / maxMultiplier / 2;
 					uint64_t      distsum  = ((uint64_t)_distance_[i]) * ((uint64_t)calcfullsteps);
-					mdist_t       s        = (mdist_t)((distinit + distsum) / ((uint64_t)_steps) * multiplier);
+					auto          s        = mdist_t(((distinit + distsum) / ((uint64_t)_steps) * multiplier));
 #endif
 					axisdiff = (uint8_t)(dist[i] - s); // must be in range 0..7
 				}
@@ -1144,7 +1144,7 @@ timer_t CStepper::GetTimer(mdist_t steps, timer_t timerstart)
 	}
 
 	unsigned long ad = a2 * steps;
-	steprate_t    v  = (steprate_t)(_ulsqrt(((ad) / 93) * 85));
+	auto          v  = steprate_t((_ulsqrt(((ad) / 93) * 85)));
 
 	return SpeedToTimer(v) + 1; // +1 	empiric tested to get better results
 }
@@ -1175,7 +1175,7 @@ timer_t CStepper::GetTimerAccelerating(mdist_t steps, timer_t timerv0, timer_t t
 	}
 
 	unsigned long ad = a2 * steps;
-	steprate_t    v  = (steprate_t)(_ulsqrt(((sqv0 + ad) / 93) * 85));
+	auto    v  = steprate_t((_ulsqrt(((sqv0 + ad) / 93) * 85)));
 
 	return SpeedToTimer(v) + 1; // +1 	empiric tested to get better results
 }
@@ -1211,7 +1211,7 @@ timer_t CStepper::GetTimerDecelerating(mdist_t steps, timer_t timerv, timer_t ti
 		return (timer_t)-1;
 	}
 
-	steprate_t v = (steprate_t)(_ulsqrt(((sqv0 - ad) / 93) * 85));
+	auto v = steprate_t((_ulsqrt(((sqv0 - ad) / 93) * 85)));
 
 	return SpeedToTimer(v) + 1; // +1 	empiric tested to get better results
 }
@@ -1595,7 +1595,7 @@ void CStepper::FillStepBuffer()
 	// check if turn off stepper
 
 	unsigned long ms       = millis();
-	uint8_t       diff_sec = (uint8_t)((ms - _pod._timerLastCheckEnable) / 1024); // div 1024 is faster as 1000
+	auto diff_sec = uint8_t(((ms - _pod._timerLastCheckEnable) / 1024)); // div 1024 is faster as 1000
 
 	if (diff_sec > 0)
 	{

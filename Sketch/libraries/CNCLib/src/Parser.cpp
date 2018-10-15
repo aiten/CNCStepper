@@ -192,7 +192,7 @@ long CParser::GetInt32Scale(long minvalue, long maxvalue, uint8_t scale, uint8_t
 expr_t CParser::GetDouble()
 {
 	uint8_t ch    = _reader->GetChar();
-	char*   start = (char*)_reader->GetBuffer();
+	auto    start = (char*)_reader->GetBuffer();
 
 	while (CStreamReader::IsDigitDot(ch))
 	{
@@ -248,7 +248,7 @@ bool CParser::TryToken(const char* buffer, FLSTR b, bool expectdel, bool ignorec
 
 bool CParser::TryToken(const char* buffer, FLSTR b, bool ignorecase)
 {
-	const char* p = (const char*)b;
+	auto p = (const char*)b;
 
 	//const char* tmp = _reader->GetBuffer();
 	char c = pgm_read_byte(p);
@@ -267,7 +267,7 @@ bool CParser::TryToken(const char* buffer, FLSTR b, bool ignorecase)
 
 bool CParser::TryToken(const char* buffer, FLSTR b, bool expectdel, bool ignorecase, const char*& nextchar)
 {
-	const char* p = (const char*)b;
+	auto p = (const char*)b;
 
 	//const char* tmp = _reader->GetBuffer();
 	char c = pgm_read_byte(p);

@@ -497,7 +497,7 @@ bool CControl::PostCommand(FLSTR cmd, Stream* output)
 {
 // use _buffer to execute command
 
-	const char* cmd1 = (const char*)cmd;
+	auto cmd1 = (const char*)(cmd);
 	uint8_t idx = _bufferidx;
 	uint8_t idxprogmem = 0;
 

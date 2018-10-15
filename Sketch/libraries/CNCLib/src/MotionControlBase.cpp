@@ -171,8 +171,8 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 
 	float radius = hypot((float)offset0, (float)offset1);
 
-	float    r_axis0  = (float)-offset0; // Radius vector from center to current location
-	float    r_axis1  = (float)-offset1;
+	auto     r_axis0  = float(-offset0); // Radius vector from center to current location
+	auto     r_axis1  = float(-offset1);
 	mm1000_t rt_axis0 = to[axis_0] - center_axis0;
 	mm1000_t rt_axis1 = to[axis_1] - center_axis1;
 
@@ -216,7 +216,7 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 	//
 	// segments for full circle => (CONST_K * r * M_PI * b + CONST_D)		(r in mm, b ...2?)
 
-	unsigned short segments = (unsigned short)abs(floor((CMm1000::ConvertTo((const mm1000_t)(2 * SEGMENTS_K * M_PI)) * radius + SEGMENTS_D) * angular_travel / (2.0 * M_PI)));
+	auto segments = (unsigned short)(abs(floor((CMm1000::ConvertTo((const mm1000_t)(2 * SEGMENTS_K * M_PI)) * radius + SEGMENTS_D) * angular_travel / (2.0 * M_PI))));
 
 #if defined(_MSC_VER)
 	double segments_full = CMm1000::ConvertTo((const mm1000_t)(2 * SEGMENTS_K * M_PI)) * radius + SEGMENTS_D;
@@ -228,7 +228,7 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 	{
 		float theta_per_segment = angular_travel / segments;
 
-		signed char arc_correction             = (signed char)(ARCCORRECTION / theta_per_segment);
+		auto arc_correction     = (signed char)(ARCCORRECTION / theta_per_segment);
 		if (arc_correction < 0)
 		{
 			arc_correction = -arc_correction;
@@ -364,11 +364,18 @@ steprate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate
 steprate_t CMotionControlBase::FeedRateToStepRate(axis_t axis, feedrate_t feedrate)
 {
 	// 60 because of min=>sec (feedrate in mm1000/min)
-	if (feedrate < 0) feedrate = -feedrate;
+	if (feedrate < 0)
+	{
+		feedrate = -feedrate;
+	}
+
 	// feedrate => 32bit, steprate can be 16 bit
 	feedrate_t steprate32 = _ToMachine(axis, feedrate / 60);
-	if (steprate32 > STEPRATE_MAX) return STEPRATE_MAX;
-	steprate_t steprate = (steprate_t)steprate32;
+	if (steprate32 > STEPRATE_MAX)
+	{
+		return STEPRATE_MAX;
+	}
+	auto steprate = steprate_t(steprate32);
 	return steprate ? steprate : 1;
 }
 
@@ -377,7 +384,7 @@ steprate_t CMotionControlBase::FeedRateToStepRate(axis_t axis, feedrate_t feedra
 feedrate_t CMotionControlBase::StepRateToFeedRate(axis_t axis, steprate_t steprate)
 {
 	// 60 because of min=>sec (feedrate in mm1000/min)
-	feedrate_t feedrate = (feedrate_t)_ToMm1000(axis, steprate * 60l);
+	auto feedrate = feedrate_t(_ToMm1000(axis, steprate * 60l));
 	return feedrate ? feedrate : 1;
 }
 

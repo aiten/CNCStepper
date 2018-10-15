@@ -107,7 +107,7 @@ void CGCodeParserBase::CleanupParse()
 void CGCodeParserBase::SkipCommentNested()
 {
 	uint8_t cnt = 0;
-	char*start = (char*)_reader->GetBuffer();
+	auto start = (char*)_reader->GetBuffer();
 
 	for (char ch = _reader->GetChar(); ch; ch = _reader->GetNextChar())
 	{
@@ -710,9 +710,9 @@ void CGCodeParserBase::G0203Command(bool isG02)
 	if (move.bitfield.bit.R)
 	{
 		// Calculate the change in position along each selected axis
-		float x = (float)(move.newpos[_modalstate.Plane_axis_0] - CMotionControlBase::GetInstance()->GetPosition(_modalstate.Plane_axis_0));
-		float y = (float)(move.newpos[_modalstate.Plane_axis_1] - CMotionControlBase::GetInstance()->GetPosition(_modalstate.Plane_axis_1));
-		float r = (float)radius;
+		auto x = float(move.newpos[_modalstate.Plane_axis_0] - CMotionControlBase::GetInstance()->GetPosition(_modalstate.Plane_axis_0));
+		auto y = float(move.newpos[_modalstate.Plane_axis_1] - CMotionControlBase::GetInstance()->GetPosition(_modalstate.Plane_axis_1));
+		auto r = float(radius);
 
 		if (x == 0.0 && y == 0.0)						{ Error(MESSAGE(MESSAGE_GCODE_360withRandMissingAxes)); return; }
 
@@ -929,7 +929,7 @@ void CGCodeParserBase::G92Command()
 void CGCodeParserBase::SpindleSpeedCommand()
 {
 	_reader->SkipSpaces();
-	short speed = (short) GetUint32OrParam(MAXSPINDLE_SPEED);
+	auto speed = short(GetUint32OrParam(MAXSPINDLE_SPEED));
 
 #ifndef REDUCED_SIZE
 	if (IsError()) return;

@@ -98,7 +98,7 @@ bool CLcd::PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, FLSTR cmd, Strea
 {
 	char buffer[32];
 
-	const char* cmd1 = (const char*)cmd;
+	auto cmd1 = (const char*)cmd;
 	uint8_t idx = InitPostCommand(syntaxtype, buffer);
 	uint8_t idxprogmem = 0;
 

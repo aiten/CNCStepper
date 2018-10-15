@@ -308,7 +308,7 @@ mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertUnits)
 
 	if (param != nullptr)
 	{
-		axis_t axis = (axis_t) (paramNo - param->GetParamNo());
+		auto axis = axis_t(paramNo - param->GetParamNo());
 		switch (param->GetParamNo())
 		{
 			case PARAMSTART_G28HOME:
@@ -338,7 +338,7 @@ mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertUnits)
 			case PARAMSTART_G54OFFSET + 4 * PARAMSTART_G54FF_OFFSET:
 			case PARAMSTART_G54OFFSET + 5 * PARAMSTART_G54FF_OFFSET:
 			{
-				uint8_t idx = (uint8_t)((param->GetParamNo() - PARAMSTART_G54OFFSET) / PARAMSTART_G54FF_OFFSET);
+				auto idx = uint8_t((param->GetParamNo() - PARAMSTART_G54OFFSET) / PARAMSTART_G54FF_OFFSET);
 				if (idx < G54ARRAYSIZE)
 					return GetParamAsMm1000(_modalstate.G54Pospreset[idx][axis], axis);
 				break;
@@ -403,7 +403,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 		}
 		else if (param != nullptr)
 		{
-			axis_t axis = (axis_t)(paramNo - param->GetParamNo());
+			auto axis = axis_t(paramNo - param->GetParamNo());
 			switch (param->GetParamNo())
 			{
 				case PARAMSTART_BACKLASH:			{ CStepper::GetInstance()->SetBacklash(axis, (mdist_t)GetParamAsMachine(mm1000, axis));	break;  }
@@ -423,7 +423,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 				case PARAMSTART_G54OFFSET + 4 * PARAMSTART_G54FF_OFFSET:
 				case PARAMSTART_G54OFFSET + 5 * PARAMSTART_G54FF_OFFSET:
 				{
-					uint8_t idx = (uint8_t)((param->GetParamNo() - PARAMSTART_G54OFFSET) / PARAMSTART_G54FF_OFFSET);
+					auto idx = uint8_t((param->GetParamNo() - PARAMSTART_G54OFFSET) / PARAMSTART_G54FF_OFFSET);
 					if (idx < G54ARRAYSIZE)
 					{
 						_modalstate.G54Pospreset[idx][axis] = mm1000;
@@ -431,7 +431,11 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 					break;
 				}
 
-				default:							Error(MESSAGE_GCODE_ParameterReadOnly);	return;
+				default:
+				{
+					Error(MESSAGE_GCODE_ParameterReadOnly);
+					return;
+				}
 			}
 		}
 		else
@@ -474,7 +478,7 @@ const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfoByParamNo(param_t par
 {
 	return FindParamInfo((uintptr_t) paramNo, [](const SParamInfo* p, uintptr_t x) -> bool
 	{
-		param_t findparamNo = (param_t)x;
+		auto findparamNo = (param_t)x;
 		return p->GetParamNo() == findparamNo ||	// exact same paramno
 			(p->GetAllowAxisOfs() && p->GetParamNo() <= findparamNo && p->GetParamNo() + NUM_AXIS > findparamNo);	// diff with axis
 	});

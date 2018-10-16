@@ -9,12 +9,12 @@ public:
 	~CDenavitHartenberg();
 
 
-	void ToPosition(float in[NUM_AXIS], float out[3]);
-	void FromPosition(float in[3], float out[NUM_AXIS], float epsilon);
+	void ToPosition(float   in[NUM_AXIS], float out[3]);
+	void FromPosition(float in[3], float        out[NUM_AXIS], float epsilon);
 
 protected:
 
-	 void InitMatrix(CMatrix4x4<float>&m, float in[NUM_AXIS]);
+	void InitMatrix(CMatrix4x4<float>& m, float in[NUM_AXIS]);
 
 private:
 
@@ -26,9 +26,9 @@ private:
 		float changetoprev;
 	};
 
-	void TestConvert(CMatrix4x4<float>&m, float inout[4], bool out=false);
+	void TestConvert(CMatrix4x4<float>& m, float inout[4], bool out = false);
 
-	float SearchMinOld(float pos[3], float inout[NUM_AXIS], uint8_t idx, struct SSearchDef& def , float epsilon);
+	float SearchMinOld(float pos[3], float inout[NUM_AXIS], uint8_t idx, struct SSearchDef& def, float epsilon);
 
 	float CalcDist(float pos[3], float in[NUM_AXIS]);
 
@@ -38,6 +38,4 @@ private:
 #define MAXSIZE 4
 
 	bool Jacobi(double a[][MAXSIZE], double b[], int n, int maxiter, double tol, double x[]);
-
 };
-

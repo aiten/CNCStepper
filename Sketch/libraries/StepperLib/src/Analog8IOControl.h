@@ -21,8 +21,7 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PIN>
-class CAnalog8IOControl
+template <pin_t PIN> class CAnalog8IOControl
 {
 public:
 
@@ -73,9 +72,7 @@ public:
 		return _iolevel;
 	}
 
-	void Poll()
-	{
-	}
+	void Poll() { }
 
 private:
 

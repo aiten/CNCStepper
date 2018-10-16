@@ -21,8 +21,7 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PIN>
-class CAnalog8InvertIOControl
+template <pin_t PIN> class CAnalog8InvertIOControl
 {
 public:
 

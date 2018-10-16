@@ -153,6 +153,7 @@ namespace StepperSystemTest
 		TEST_METHOD(RotaryAccuracCWTest)
 		{
 			const int ACCURACY = 4;
+
 			CRotaryButton<signed int, ACCURACY> rotary;
 
 			int i;

@@ -44,8 +44,8 @@ namespace StepperSystemTest
 			spindle.Init(0);
 
 			Assert::AreEqual(false, spindle.IsOn());
-			Assert::AreEqual((uint8_t) 0, spindle.GetLevel());
-			Assert::AreEqual((uint8_t) 0, spindle.GetIOLevel());
+			Assert::AreEqual((uint8_t)0, spindle.GetLevel());
+			Assert::AreEqual((uint8_t)0, spindle.GetIOLevel());
 
 			spindle.On(0);
 			Assert::AreEqual((uint8_t)0, spindle.GetLevel());
@@ -156,7 +156,6 @@ namespace StepperSystemTest
 			spindle.SetLevel(111);
 			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
 			Assert::AreEqual((uint8_t)111, spindle.GetLevel());
-
 		}
 
 		TEST_METHOD(AnalogIOSmoothFadeTest)
@@ -241,7 +240,6 @@ namespace StepperSystemTest
 			spindle.SetLevel(111);
 			Assert::AreEqual((int16_t)100, spindle.GetIOLevel());
 			Assert::AreEqual((int16_t)111, spindle.GetLevel());
-
 		}
 
 		TEST_METHOD(Analog9IOSmoothFadeTest)

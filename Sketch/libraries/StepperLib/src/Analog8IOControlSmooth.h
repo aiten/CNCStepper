@@ -21,8 +21,7 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PWMPIN>
-class CAnalog8IOControlSmooth
+template <pin_t PWMPIN> class CAnalog8IOControlSmooth
 {
 public:
 

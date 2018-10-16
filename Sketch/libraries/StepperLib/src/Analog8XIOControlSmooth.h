@@ -21,8 +21,7 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PWMPIN, pin_t DIRPIN>
-class CAnalog8XIOControlSmooth
+template <pin_t PWMPIN, pin_t DIRPIN> class CAnalog8XIOControlSmooth
 {
 public:
 

@@ -37,29 +37,18 @@
 
 CMyStepper Stepper;
 CMyControl Control;
-CPlotter Plotter;
+CPlotter   Plotter;
 
 ////////////////////////////////////////////////////////////
 
 void setup()
-{  
-  StepperSerial.begin(USBBAUDRATE);
+{
+	StepperSerial.begin(USBBAUDRATE);
 }
 
 ////////////////////////////////////////////////////////////
 
 void loop()
 {
-  Control.Run();
+	Control.Run();
 }
-
-
-
-
-
-
-
-
-
-
-

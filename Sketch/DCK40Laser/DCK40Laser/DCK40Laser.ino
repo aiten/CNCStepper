@@ -1,4 +1,3 @@
-
 /*
   This file is part of CNCLib - A library for stepper motors.
 
@@ -42,8 +41,7 @@ void setup()
 
 void loop()
 {
-  Control.Run();
+	Control.Run();
 }
 
 ////////////////////////////////////////////////////////////
-  

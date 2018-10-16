@@ -1,4 +1,3 @@
-
 /*
   This file is part of CNCLib - A library for stepper motors.
 
@@ -32,7 +31,7 @@
 ////////////////////////////////////////////////////////////
 
 //LiquidCrystal_I2C lcd(0x3f, 2, 1, 0, 4, 5, 6, 7, 3);
-LiquidCrystal_I2C lcd(0x3f, 16,2);
+LiquidCrystal_I2C lcd(0x3f, 16, 2);
 
 ////////////////////////////////////////////////////////////
 
@@ -119,7 +118,7 @@ void WatchDogController::Loop()
 
 	if (millis() > _lastBlink)
 	{
-		_lastBlink = millis() + ALIVE_BLINK_RATE;
+		_lastBlink  = millis() + ALIVE_BLINK_RATE;
 		_blinkWasOn = !_blinkWasOn;
 		digitalWrite(ALIVE_PIN, _blinkWasOn ? HIGH : LOW);
 	}
@@ -127,14 +126,14 @@ void WatchDogController::Loop()
 	if (_currentFlow != _lastFlow)
 	{
 		_drawLCDRequest = true;
-		_lastFlow = _currentFlow;
+		_lastFlow       = _currentFlow;
 		Serial.println(_lastFlow);
 	}
 
 	if (abs(_currentTemp - _lastTemp) > 1)
 	{
 		_drawLCDRequest = true;
-		_lastTemp = _currentTemp;
+		_lastTemp       = _currentTemp;
 		Serial.println(_currentTemp);
 	}
 
@@ -153,8 +152,8 @@ void WatchDogController::Loop()
 float WatchDogController::ReadTemp()
 {
 	const unsigned char maxcount = WATERTEMP_OVERSAMPLING;
-	int wtemp = 0;
-	for (int i = 0; i < maxcount; i++)
+	int                 wtemp    = 0;
+	for (int            i        = 0; i < maxcount; i++)
 		wtemp += analogRead(WATERTEMP_PIN);
 
 	//	return temp10k.Lookup((float)wtemp / maxcount);
@@ -173,7 +172,7 @@ bool WatchDogController::IsWatchDogWaterFlowOn()
 
 bool WatchDogController::IsWatchDogTempOn()
 {
-	float wtemp = _currentTemp = ReadTemp();
+	float       wtemp  = _currentTemp = ReadTemp();
 	static bool tempOn = false;
 
 	if (tempOn)
@@ -189,7 +188,7 @@ bool WatchDogController::IsWatchDogTempOn()
 bool WatchDogController::IsWatchDogSW1On()
 {
 	bool old = _sw1On;
-	_sw1On = digitalRead(INPUT1_PIN) == LOW;
+	_sw1On   = digitalRead(INPUT1_PIN) == LOW;
 	if (_sw1On != old)
 		_drawLCDRequest = true;
 
@@ -200,7 +199,7 @@ bool WatchDogController::IsWatchDogSW1On()
 bool WatchDogController::IsWatchDogSW2On()
 {
 	bool old = _sw2On;
-	_sw2On = digitalRead(INPUT2_PIN) == LOW;
+	_sw2On   = digitalRead(INPUT2_PIN) == LOW;
 	if (_sw2On != old)
 		_drawLCDRequest = true;
 
@@ -212,7 +211,7 @@ bool WatchDogController::IsWatchDogSW2On()
 bool WatchDogController::IsWatchDogSW3On()
 {
 	bool old = _sw3On;
-	_sw3On = digitalRead(INPUT3_PIN) == LOW;
+	_sw3On   = digitalRead(INPUT3_PIN) == LOW;
 	if (_sw3On != old)
 		_drawLCDRequest = true;
 
@@ -235,7 +234,7 @@ bool WatchDogController::IsWatchDogOn()
 
 	// now test
 
-	return isWaterFlowOn && isWaterTempOn && isSW1On && isSW2On&& isSW3On;
+	return isWaterFlowOn && isWaterTempOn && isSW1On && isSW2On && isSW3On;
 }
 
 ////////////////////////////////////////////////////////////
@@ -266,11 +265,11 @@ void WatchDogController::DrawLcd()
 	lcd.print(_lastTemp, 1);
 	_drawLCDRequest = false;
 
-	unsigned int min  = _secActive / 60;
-	unsigned int sec  = _secActive % 60;
+	unsigned int min = _secActive / 60;
+	unsigned int sec = _secActive % 60;
 	lcd.setCursor(10, 0);
-  if (min < 100)
-    lcd.print(' ');
+	if (min < 100)
+		lcd.print(' ');
 	if (min < 10)
 		lcd.print(' ');
 	lcd.print(min);
@@ -279,5 +278,3 @@ void WatchDogController::DrawLcd()
 		lcd.print('0');
 	lcd.print(sec);
 }
-
-

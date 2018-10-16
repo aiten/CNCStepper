@@ -1,4 +1,4 @@
- ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 /*
   This file is part of CNCLib - A library for stepper motors.
 
@@ -44,20 +44,20 @@
 
 ////////////////////////////////////////////////////////////
 
-CMyControl Control;
+CMyControl  Control;
 CGCodeTools GCodeTools;
 
 CMyMotionControl MotionControl;
-CConfigEeprom Eprom;
+CConfigEeprom    Eprom;
 
-HardwareSerial& StepperSerial = Serial;
+HardwareSerial&                 StepperSerial                    = Serial;
 const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 {
 	EPROM_SIGNATURE,
 	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
-	GetInfo1a(),GetInfo1b(),
+	GetInfo1a(), GetInfo1b(),
 	0,
-	STEPPERDIRECTION,0,0,SPINDEL_FADETIMEDELAY,
+	STEPPERDIRECTION, 0, 0,SPINDEL_FADETIMEDELAY,
 	SPINDLE_MAXSPEED,
 	CNC_JERKSPEED,
 	CNC_MAXSPEED,
@@ -65,11 +65,11 @@ const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 	CNC_DEC,
 	STEPRATERATE_REFMOVE,
 	MOVEAWAYFROMREF_MM1000,
-	X_STEPSPERMM/1000.0,
+	X_STEPSPERMM / 1000.0,
 	{
-		{ X_MAXSIZE,     X_USEREFERENCE, REFMOVE_1_AXIS,  X_REFERENCEHITVALUE_MIN, X_REFERENCEHITVALUE_MAX },
-		{ Y_MAXSIZE,     Y_USEREFERENCE, REFMOVE_2_AXIS,  Y_REFERENCEHITVALUE_MIN, Y_REFERENCEHITVALUE_MAX },
-		{ Z_MAXSIZE,     Z_USEREFERENCE, REFMOVE_3_AXIS,  Z_REFERENCEHITVALUE_MIN, Z_REFERENCEHITVALUE_MAX },
+		{ X_MAXSIZE, X_USEREFERENCE, REFMOVE_1_AXIS, X_REFERENCEHITVALUE_MIN, X_REFERENCEHITVALUE_MAX },
+		{ Y_MAXSIZE, Y_USEREFERENCE, REFMOVE_2_AXIS, Y_REFERENCEHITVALUE_MIN, Y_REFERENCEHITVALUE_MAX },
+		{ Z_MAXSIZE, Z_USEREFERENCE, REFMOVE_3_AXIS, Z_REFERENCEHITVALUE_MIN, Z_REFERENCEHITVALUE_MAX },
 #if NUM_AXIS > 3
 		{ A_MAXSIZE,     A_USEREFERENCE, REFMOVE_4_AXIS,  A_REFERENCEHITVALUE_MIN, A_REFERENCEHITVALUE_MAX },
 #endif
@@ -118,7 +118,6 @@ void CMyControl::Init()
 #ifdef MYUSE_LCD
 	InitSD(SD_ENABLE_PIN);
 #endif
-
 }
 
 ////////////////////////////////////////////////////////////
@@ -139,20 +138,20 @@ bool CMyControl::IsKill()
 
 void CMyControl::GoToReference()
 {
-  CStepper::GetInstance()->SetPosition(X_AXIS, INIT_PULS1);
-  CStepper::GetInstance()->SetPosition(Y_AXIS, INIT_PULS2);
-  CStepper::GetInstance()->SetPosition(Z_AXIS, INIT_PULS3);
-  CStepper::GetInstance()->SetPosition(A_AXIS, CENTER_LIMIT);
+	CStepper::GetInstance()->SetPosition(X_AXIS, INIT_PULS1);
+	CStepper::GetInstance()->SetPosition(Y_AXIS, INIT_PULS2);
+	CStepper::GetInstance()->SetPosition(Z_AXIS, INIT_PULS3);
+	CStepper::GetInstance()->SetPosition(A_AXIS, CENTER_LIMIT);
 
-  ((CStepperServo*)CStepper::GetInstance())->SetServo();
+	((CStepperServo*)CStepper::GetInstance())->SetServo();
 }
 
 ////////////////////////////////////////////////////////////
 
 bool CMyControl::Parse(CStreamReader* reader, Stream* output)
 {
-	CMyParser gcode(reader,output);
-	return ParseAndPrintResult(&gcode,output);
+	CMyParser gcode(reader, output);
+	return ParseAndPrintResult(&gcode, output);
 }
 
 ////////////////////////////////////////////////////////////

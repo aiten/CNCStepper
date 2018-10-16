@@ -38,11 +38,11 @@
 ////////////////////////////////////////////////////////
 
 #define X_MAXSIZE 300000				// in mm1000_t
-#define Y_MAXSIZE 300000 
-#define Z_MAXSIZE 300000 
-#define A_MAXSIZE 1000 
-#define B_MAXSIZE 1000 
-#define C_MAXSIZE 1000 
+#define Y_MAXSIZE 300000
+#define Z_MAXSIZE 300000
+#define A_MAXSIZE 1000
+#define B_MAXSIZE 1000
+#define C_MAXSIZE 1000
 
 #define STEPPERDIRECTION 0		// set bit to invert direction of each axis
 
@@ -134,4 +134,3 @@
 #include <MessageCNCLib.h>
 
 #define MESSAGE_MYCONTROL_Starting					F("iRobotCNC:" __DATE__ )
-

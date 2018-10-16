@@ -22,14 +22,12 @@
 
 ////////////////////////////////////////////////////////
 
-CStepperServo::CStepperServo()
-{
-}
+CStepperServo::CStepperServo() {}
 
 ////////////////////////////////////////////////////////
 
 void CStepperServo::Init()
-{	
+{
 	super::Init();
 
 	_pod._idleLevel = LevelMax;		// no Idle
@@ -51,12 +49,12 @@ void CStepperServo::Step(const uint8_t /* steps */[NUM_AXIS], uint8_t /* directi
 
 void CStepperServo::SetServo()
 {
-	for (axis_t i = 0; i<NUM_AXIS; i++)
+	for (axis_t i = 0; i < NUM_AXIS; i++)
 	{
 		udist_t pos;
-		if (i==Y_AXIS)
+		if (i == Y_AXIS)
 		{
-			pos = udist_t(MAX_LIMIT)+udist_t(MIN_LIMIT)-GetCurrentPosition(i);
+			pos = udist_t(MAX_LIMIT) + udist_t(MIN_LIMIT) - GetCurrentPosition(i);
 		}
 		else
 		{
@@ -70,14 +68,12 @@ void CStepperServo::SetServo()
 			_servo[i].write(pos);
 			_lastPos[i] = pos;
 		}
-	} 
+	}
 }
 
 ////////////////////////////////////////////////////////
 
-void CStepperServo::SetEnable(axis_t /* axis */, uint8_t /* level */, bool /* force */)
-{
-}
+void CStepperServo::SetEnable(axis_t /* axis */, uint8_t /* level */, bool /* force */) {}
 
 ////////////////////////////////////////////////////////
 
@@ -95,7 +91,7 @@ uint8_t CStepperServo::GetReferenceValue(uint8_t /* referenceid */)
 
 ////////////////////////////////////////////////////////
 
-bool  CStepperServo::IsAnyReference()
+bool CStepperServo::IsAnyReference()
 {
 	return false;
 }

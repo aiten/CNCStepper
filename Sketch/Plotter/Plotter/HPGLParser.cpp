@@ -46,7 +46,7 @@ CHPGLParser::SState CHPGLParser::_state;
 
 ////////////////////////////////////////////////////////////
 
-mm1000_t CHPGLParser::HPGLToMM1000X(long xx)
+mm1000_t CHPGLParser::HPGLToMM1000X(int32_t xx)
 {
 	// HPGL unit is 1/40 mm => 0.025mm
 	return (xx + _state._HPOffsetX) * 25;
@@ -54,7 +54,7 @@ mm1000_t CHPGLParser::HPGLToMM1000X(long xx)
 
 ////////////////////////////////////////////////////////////
 
-mm1000_t CHPGLParser::HPGLToMM1000Y(long yy)
+mm1000_t CHPGLParser::HPGLToMM1000Y(int32_t yy)
 {
 	return (yy + _state._HPOffsetY) * 25;
 }
@@ -130,7 +130,7 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 
 	while (IsInt(_reader->GetChar()))
 	{
-		long xIn = GetInt32();
+		int32_t xIn = GetInt32();
 
 		//all blank or colon
 
@@ -149,7 +149,7 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 			return;
 		}
 
-		long yIn = GetInt32();
+		int32_t yIn = GetInt32();
 
 		if (_reader->IsError())	goto ERROR_MISSINGARGUMENT;
 
@@ -203,7 +203,7 @@ void CHPGLParser::PenVelocityNormalCommand()
 
 void CHPGLParser::PenVelocityCommand()
 { 
-	long velocityCmPerSec = GetInt32Scale(10, 1000000, 3, 255);
+	int32_t velocityCmPerSec = GetInt32Scale(10, 1000000, 3, 255);
 
 	if (IsError()) return;
 

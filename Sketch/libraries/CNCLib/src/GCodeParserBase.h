@@ -129,8 +129,8 @@ protected:
 #ifdef REDUCED_SIZE
 		uint16_t		LineNumber;
 #else
-		long ReceivedLineNumber;
-		long LineNumber;
+		int32_t ReceivedLineNumber;
+		int32_t LineNumber;
 #endif
 
 		uint8_t Plane_axis_0;			// x
@@ -236,7 +236,7 @@ protected:
 			}
 			else
 			{
-				for (long& newpo : newpos)
+				for (int32_t& newpo : newpos)
 				{
 					newpo = 0;
 				}

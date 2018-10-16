@@ -53,8 +53,9 @@ public:
 protected:
 
 	virtual void StepBegin(const SStepBuffer* stepbuffer) override;
-	virtual void Step(const uint8_t           steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override;
-	virtual void StepRequest(bool             isr) override;
+
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override;
+	virtual void StepRequest(bool   isr) override;
 
 	virtual void    SetEnable(axis_t axis, uint8_t level, bool /* force */) override { _level[axis] = level; };
 	virtual uint8_t GetEnable(axis_t axis) override { return _level[axis]; }
@@ -131,7 +132,7 @@ private:
 	void InitCache()
 	{
 		_eventIdx = 0;
-		memset(_TimerEvents, 0, sizeof(STimerEvent)*CacheSize);
+		memset(_TimerEvents, 0, sizeof(STimerEvent) * CacheSize);
 	}
 
 	int          _exportIdx;
@@ -139,12 +140,12 @@ private:
 	STimerEvent* _TimerEvents;
 	int          _oldCacheSize;
 
-	int       _sumtime[NUM_AXIS_MVC];
-	int       _count[NUM_AXIS_MVC];
-	int       _total[NUM_AXIS_MVC];
-	char      _speed[NUM_AXIS_MVC][20];
-	long long _totaltime;
-	int       _lasttimer;
+	int     _sumtime[NUM_AXIS_MVC];
+	int     _count[NUM_AXIS_MVC];
+	int     _total[NUM_AXIS_MVC];
+	char    _speed[NUM_AXIS_MVC][20];
+	int64_t _totaltime;
+	int     _lasttimer;
 
 	int _refMovestart;
 

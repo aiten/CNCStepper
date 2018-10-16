@@ -279,7 +279,7 @@ private:
 	void WaitUntilCanQueue();
 	bool StartMovement();
 
-	long CalcNextPos(udist_t current, udist_t dist, bool directionUp)
+	int32_t CalcNextPos(udist_t current, udist_t dist, bool directionUp)
 	{
 		if (directionUp)
 		{

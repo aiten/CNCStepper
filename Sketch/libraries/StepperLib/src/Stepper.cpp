@@ -876,7 +876,7 @@ void CStepper::SMovement::CalcMaxJunktionSpeed(SMovement* mvPrev)
 	{
 		if (s1 == mvPrev->GetDistance(mainaxis) && s2 == GetDistance(mainaxis) && mvPrev->GetDirectionUp(mainaxis) == GetDirectionUp(mainaxis))
 		{
-			_pod._move._timerMaxJunction = (long(mvPrev->_pod._move._timerMax) + long(_pod._move._timerMax)) / 2;
+			_pod._move._timerMaxJunction = (int32_t(mvPrev->_pod._move._timerMax) + int32_t(_pod._move._timerMax)) / 2;
 			break;
 		}
 	}
@@ -892,7 +892,7 @@ void CStepper::SMovement::CalcMaxJunktionSpeed(SMovement* mvPrev)
 
 		if (mainaxis >= NUM_AXIS)
 		{
-		//_pod._move._timerMaxJunction = (long(mvPrev->_timerMax) + long(_timerMax)) / 2;
+		//_pod._move._timerMaxJunction = (int32_t(mvPrev->_timerMax) + int32_t(_timerMax)) / 2;
 		//return;
 		}
 		*/
@@ -916,14 +916,14 @@ void CStepper::SMovement::CalcMaxJunktionSpeed(SMovement* mvPrev)
 			}
 
 
-			long vdiff;
+			int32_t vdiff;
 
 			if (v1 == 0 || v2 == 0 || mvPrev->GetDirectionUp(i) == GetDirectionUp(i))
 			{
 				// same direction (v1 and v2 not 0)
 				vdiff = v1 > v2 ? v1 - v2 : v2 - v1;
 
-				if (vdiff > long(_pStepper->_pod._maxJerkSpeed[i]))
+				if (vdiff > int32_t(_pStepper->_pod._maxJerkSpeed[i]))
 				{
 					// reduce total speed by ratio maxJerk <=> current jerk
 					timerMaxJunction             = _pStepper->SpeedToTimer(steprate_t(RoundMulDivUInt(_pStepper->TimerToSpeed(timerMaxJunction_), _pStepper->_pod._maxJerkSpeed[i], steprate_t(vdiff))));
@@ -933,7 +933,7 @@ void CStepper::SMovement::CalcMaxJunktionSpeed(SMovement* mvPrev)
 			else
 			{
 				// different direction, add speed
-				vdiff = long(v1) + long(v2);
+				vdiff = int32_t(v1) + int32_t(v2);
 
 				if (mainaxis >= NUM_AXIS)
 				{
@@ -941,7 +941,7 @@ void CStepper::SMovement::CalcMaxJunktionSpeed(SMovement* mvPrev)
 				}
 				else
 				{
-					if (vdiff > long(_pStepper->_pod._maxJerkSpeed[i]))
+					if (vdiff > int32_t(_pStepper->_pod._maxJerkSpeed[i]))
 					{
 						// reduce total speed by ratio maxJerk <=> current jerk
 						timerMaxJunction             = _pStepper->SpeedToTimer(steprate_t(RoundMulDivUInt(_pStepper->TimerToSpeed(timerMaxJunction_), _pStepper->_pod._maxJerkSpeed[i], steprate_t(vdiff))));
@@ -2091,11 +2091,11 @@ void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool direct
 
 	for (i = 0; i < NUM_AXIS; i++)
 	{
-		long newC = CalcNextPos(_pod._calculatedpos[i], dist[i], directionUp[i]);
+		int32_t newC = CalcNextPos(_pod._calculatedpos[i], dist[i], directionUp[i]);
 		if (_pod._limitCheck)
 		{
 			// check limit
-			if (newC > long(GetLimitMax(i)) || newC < long(GetLimitMin(i)))
+			if (newC > int32_t(GetLimitMax(i)) || newC < int32_t(GetLimitMin(i)))
 			{
 				Error(MESSAGE(MESSAGE_STEPPER_RangeLimit));
 				//				StepperSerial.print(F("Error: range limit")); StepperSerial.print(_limitMin[i]); StepperSerial.print(F("<")); StepperSerial.print(newC);; StepperSerial.print(F("<")); StepperSerial.print(_limitMax[i]);

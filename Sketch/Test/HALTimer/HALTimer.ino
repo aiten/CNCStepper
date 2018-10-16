@@ -73,9 +73,9 @@ void loop()
   static unsigned int myirq_countTimer0 = 0;
   static unsigned int myirq_countTimer1 = 0;
   static uint32_t myirq_countTimer2 = 0;
-  static long starttime0 = millis();
-  static long starttime1 = millis();
-  static long starttime2 = millis();
+  static int32_t starttime0 = millis();
+  static int32_t starttime1 = millis();
+  static int32_t starttime2 = millis();
 
   // dummy
   delay(333);

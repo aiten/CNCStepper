@@ -37,8 +37,8 @@ public:
 
 	virtual void Parse() override;
 
-	static mm1000_t HPGLToMM1000X(long xx);
-	static mm1000_t HPGLToMM1000Y(long yy);
+	static mm1000_t HPGLToMM1000X(int32_t xx);
+	static mm1000_t HPGLToMM1000Y(int32_t yy);
 
 	static void Init() { super::Init(); _state.Init(); }
 

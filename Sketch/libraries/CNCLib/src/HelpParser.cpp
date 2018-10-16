@@ -185,7 +185,7 @@ bool CHelpParser::MoveRel()
 {
 	sdist_t position[NUM_AXIS] = { 0 };
 
-	for (long& pos : position)
+	for (int32_t& pos : position)
 	{
 		if (IsInt(_reader->SkipSpaces()))
 		{

@@ -199,7 +199,7 @@ namespace StepperSystemTest
 			TestIo();
 */
 /*
-			// very long running!!!!
+			// very int32_t running!!!!
 			TestDiffMultiplierAbs();
 			TestDiffMultiplierLoop();
 

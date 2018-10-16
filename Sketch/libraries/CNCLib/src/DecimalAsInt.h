@@ -36,7 +36,7 @@ protected:
 
 	// make a wrapper to the function to avoid inline => protected
 
-	static char* ToString(long pos, char* tmp, uint8_t precision, uint8_t scale)
+	static char* ToString(int32_t pos, char* tmp, uint8_t precision, uint8_t scale)
 	{
 		const bool isNegativ = pos < 0;
 
@@ -151,18 +151,18 @@ protected:
 
 private:
 
-	static long AddForRound(uint8_t scale, bool isNegativ)
+	static int32_t AddForRound(uint8_t scale, bool isNegativ)
 	{
 		if (isNegativ)
 		{
 			switch (scale)
 			{
-				case 0: return -long(SCALEMASK / 2);
-				case 1: return -long(SCALEMASK / 20);
-				case 2: return -long(SCALEMASK / 200);
-				case 3: return -long(SCALEMASK / 2000);
-				case 4: return -long(SCALEMASK / 20000);
-				case 5: return -long(SCALEMASK / 200000);
+				case 0: return -int32_t(SCALEMASK / 2);
+				case 1: return -int32_t(SCALEMASK / 20);
+				case 2: return -int32_t(SCALEMASK / 200);
+				case 3: return -int32_t(SCALEMASK / 2000);
+				case 4: return -int32_t(SCALEMASK / 20000);
+				case 5: return -int32_t(SCALEMASK / 200000);
 				default: return 0;
 			}
 		}

@@ -36,9 +36,9 @@
 ////////////////////////////////////////////////////////
 
 typedef float expr_t;       // type for expression parser
-typedef long  mm1000_t;     // 1/1000 mm
-typedef long  feedrate_t;   // mm_1000 / min
-typedef long  inch100000_t; // 1/100000 inch
+typedef int32_t  mm1000_t;     // 1/1000 mm
+typedef int32_t  feedrate_t;   // mm_1000 / min
+typedef int32_t  inch100000_t; // 1/100000 inch
 
 #define NUM_AXISXYZ		3	// 3dimensions
 

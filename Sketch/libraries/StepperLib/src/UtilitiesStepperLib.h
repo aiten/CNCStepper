@@ -32,11 +32,11 @@
 
 extern uint8_t ToPrecisionU10(uint32_t );
 extern uint8_t ToPrecisionU10(uint16_t);
-extern uint8_t ToPrecisionS10(long          v);
+extern uint8_t ToPrecisionS10(int32_t);
 
-extern uint8_t ToPrecisionU2(uint32_t );
+extern uint8_t ToPrecisionU2(uint32_t);
 extern uint8_t ToPrecisionU2(uint16_t);
-extern uint8_t ToPrecisionS2(long          );
+extern uint8_t ToPrecisionS2(int32_t);
 
 ////////////////////////////////////////////////////////
 
@@ -62,7 +62,7 @@ inline uint32_t RoundMulDivU32(uint32_t v, uint32_t m, uint32_t d)
 	return (v * m + d / 2) / d;
 }
 
-inline long RoundMulDivI32(long v, long m, long d)
+inline int32_t RoundMulDivI32(int32_t v, int32_t m, int32_t d)
 {
 	return (v * m + d / 2) / d;
 }
@@ -72,7 +72,7 @@ inline uint32_t MulDivU32(uint32_t v, uint32_t m, uint32_t d)
 	return (v * m) / d;
 }
 
-inline long MulDivI32(long v, long m, long d)
+inline int32_t MulDivI32(int32_t v, int32_t m, int32_t d)
 {
 	return (v * m) / d;
 }

@@ -93,18 +93,18 @@ uint32_t  CParser::GetUInt32() { return GetUInt<uint32_t>(); }
 
 char    CParser::GetInt8() { return GetInt<char>(); }
 short   CParser::GetInt16() { return GetInt<short>(); }
-long    CParser::GetInt32() { return GetInt<long>(); }
+int32_t    CParser::GetInt32() { return GetInt<int32_t>(); }
 sdist_t CParser::GetSDist() { return GetInt<sdist_t>(); }
 
 ////////////////////////////////////////////////////////////
 
-long CParser::GetInt32Scale(long minvalue, long maxvalue, uint8_t scale, uint8_t maxscale)
+int32_t CParser::GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale, uint8_t maxscale)
 {
 	// ignore digits between scale and maxscale (first digit after scale is used for round)
 	// 1.2345 with scale=3 and maxscale=5 is ok => return 1235 (calculated with scale - round)
 
 	bool    negativ;
-	long    value     = 0;
+	int32_t    value     = 0;
 	uint8_t thisscale = 0;
 	uint8_t ch        = _reader->GetChar();
 

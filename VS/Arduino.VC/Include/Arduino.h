@@ -270,7 +270,7 @@ public:
 	void print(char          c) { printf("%c", c); };
 	void print(unsigned int  ui) { printf("%u", ui); };
 	void print(int           i) { printf("%i", i); };
-	void print(long          l) { printf("%li", l); };
+//	void print(int32_t          l) { printf("%li", l); };
 //	void print(uint32_t ul) { printf("%lu", ul); };
 
 	void print(uint32_t ul, uint8_t base)
@@ -286,7 +286,7 @@ public:
 	void println(unsigned int  ui) { printf("%u\n", ui); };
 	void println(char          c) { printf("%c\n", c); };
 	void println(int           i) { printf("%i\n", i); };
-	void println(long          l) { printf("%li\n", l); };
+//	void println(int32_t          l) { printf("%li\n", l); };
 //	void println(uint32_t ul) { printf("%lu\n", ul); };
 
 	void println(uint32_t ul, uint8_t base)

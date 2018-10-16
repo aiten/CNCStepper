@@ -51,7 +51,7 @@ uint8_t ToPrecisionU10(uint32_t v)
 	return 10;
 }
 
-uint8_t ToPrecisionS10(long v)
+uint8_t ToPrecisionS10(int32_t v)
 {
 	if (v < 0)
 	{
@@ -83,7 +83,7 @@ uint8_t ToPrecisionU2(uint32_t v)
 	return i;
 }
 
-uint8_t ToPrecisionS2(long v)
+uint8_t ToPrecisionS2(int32_t v)
 {
 	if (v < 0)
 	{

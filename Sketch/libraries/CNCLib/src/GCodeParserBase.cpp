@@ -854,7 +854,7 @@ void CGCodeParserBase::G0203Command(bool isG02)
 
 	if (move.bitfield.bit.R)
 	{
-		// Calculate the change in position along each selected axis
+		// Calculate the change in position aint32_t each selected axis
 		auto x = float(move.newpos[_modalstate.Plane_axis_0] - CMotionControlBase::GetInstance()->GetPosition(_modalstate.Plane_axis_0));
 		auto y = float(move.newpos[_modalstate.Plane_axis_1] - CMotionControlBase::GetInstance()->GetPosition(_modalstate.Plane_axis_1));
 		auto r = float(radius);

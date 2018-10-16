@@ -28,7 +28,6 @@ private:
 	static T* _instance;
 
 public:
-	virtual ~CSingleton() = default;
 
 	CSingleton()
 	{

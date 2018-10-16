@@ -21,8 +21,7 @@
 
 //////////////////////////////////////////
 
-template <class T>
-class CMatrix3x3
+template <class T> class CMatrix3x3
 {
 private:
 

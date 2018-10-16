@@ -81,7 +81,7 @@ struct ControlData
 #else
 	CDummyIOControl _spindle;
 	CDummyIOControl _spindleDir;
-	inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return uint8_t(level); }
+	inline uint8_t  ConvertSpindleSpeedToIO(uint16_t level) { return uint8_t(level); }
 #endif
 
 #ifdef COOLANT_PIN

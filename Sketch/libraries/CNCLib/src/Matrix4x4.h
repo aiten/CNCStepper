@@ -25,11 +25,10 @@
 #define MATRIX4X4SIZEY	4
 
 
-template <class T>
-class CMatrix4x4
+template <class T> class CMatrix4x4
 {
 private:
-	
+
 	T _v[MATRIX4X4SIZEX][MATRIX4X4SIZEY];
 
 public:
@@ -39,9 +38,7 @@ public:
 		memcpy(_v, src._v, sizeof(_v));
 	}
 
-	CMatrix4x4<T>()
-	{
-	}
+	CMatrix4x4<T>() { }
 
 	CMatrix4x4<T>(const T dest[MATRIX4X4SIZEX][MATRIX4X4SIZEY])
 	{
@@ -50,8 +47,9 @@ public:
 
 	static void Zero(T dest[MATRIX4X4SIZEX][MATRIX4X4SIZEY])
 	{
-		memset(dest, 0, sizeof(T)*MATRIX4X4SIZEX*MATRIX4X4SIZEY);
+		memset(dest, 0, sizeof(T) * MATRIX4X4SIZEX * MATRIX4X4SIZEY);
 	}
+
 	void Zero()
 	{
 		Zero(_v);
@@ -138,7 +136,7 @@ public:
 	CMatrix4x4<T>& operator*=(const CMatrix4x4<T>& rhs)
 	{
 		CMatrix4x4<T> src2(*this);
-		Mul( src2._v, rhs._v,  _v);
+		Mul(src2._v, rhs._v, _v);
 		return *this;
 	}
 
@@ -177,17 +175,19 @@ public:
 
 	// rot1*trans2*trans3*rot4
 
-	static void InitDenavitHartenberg(T dest[4][4], float a, float alpha,  float d, float theta)
+	static void InitDenavitHartenberg(T dest[4][4], float a, float alpha, float d, float theta)
 	{
 		float costheta = cos(theta);
 		float sintheta = sin(theta);
 		float cosalpha = cos(alpha);
 		float sinalpha = sin(alpha);
 		
+		// @formatter:off — disable formatter after this line
 		dest[0][0] = costheta;	dest[0][1] = -sintheta*cosalpha; dest[0][2] = sintheta*sinalpha;   dest[0][3] = a*costheta;
 		dest[1][0] = sintheta;	dest[1][1] = costheta*cosalpha;  dest[1][2] = -costheta*sinalpha;  dest[1][3] = a*sintheta;
 		dest[2][0] = 0;			dest[2][1] = sinalpha;			 dest[2][2] = cosalpha;			   dest[2][3] = d;
 		dest[3][0] = 0;			dest[3][1] = 0;					 dest[3][2] = 0;				   dest[3][3] = 1.0;
+		// @formatter:on — enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenberg(float a, float alpha, float d, float theta)
@@ -203,10 +203,12 @@ public:
 		float cosalpha = cos(alpha);
 		float sinalpha = sin(alpha);
 
+		// @formatter:off — disable formatter after this line
 		dest[0][0] = costheta;				dest[0][1] = sintheta;			 dest[0][2] = 0;		dest[0][3] = -a;
 		dest[1][0] = -sintheta*cosalpha;	dest[1][1] = costheta*cosalpha;  dest[1][2] = sinalpha; dest[1][3] = -d*sinalpha;
 		dest[2][0] = sintheta*sinalpha;		dest[2][1] = -costheta*sinalpha; dest[2][2] = cosalpha;	dest[2][3] = -d*cosalpha;
 		dest[3][0] = 0;						dest[3][1] = 0;					 dest[3][2] = 0;		dest[3][3] = 1.0;
+		// @formatter:on — enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenbergInverse(float a, float alpha, float d, float theta)
@@ -216,16 +218,18 @@ public:
 	}
 
 	// einer Rotation \theta_n(Gelenkwinkel) um die z_{ n - 1 }-Achse, damit die x_{ n - 1 }-Achse parallel zu der x_n - Achse liegt
-	
+
 	static void InitDenavitHartenberg1Rot(T dest[4][4], float theta)
 	{
 		float costheta = cos(theta);
 		float sintheta = sin(theta);
 
+		// @formatter:off — disable formatter after this line
 		dest[0][0] = costheta;	dest[0][1] = -sintheta;			dest[0][2] = 0;		dest[0][3] = 0;
 		dest[1][0] = sintheta;	dest[1][1] = costheta;			dest[1][2] = 0;		dest[1][3] = 0;
 		dest[2][0] = 0;			dest[2][1] = 0;					dest[2][2] = 1;		dest[2][3] = 0;
 		dest[3][0] = 0;			dest[3][1] = 0;					dest[3][2] = 0;		dest[3][3] = 1;
+		// @formatter:on — enable formatter after this line
 	}
 
 
@@ -240,10 +244,12 @@ public:
 		float costheta = cos(theta);
 		float sintheta = sin(theta);
 
+		// @formatter:off — disable formatter after this line
 		dest[0][0] = costheta;	dest[0][1] = -sintheta;			dest[0][2] = 0;		dest[0][3] = a*costheta;
 		dest[1][0] = sintheta;	dest[1][1] = costheta;			dest[1][2] = 0;		dest[1][3] = a*sintheta;
 		dest[2][0] = 0;			dest[2][1] = 0;					dest[2][2] = 1;		dest[2][3] = 0;
 		dest[3][0] = 0;			dest[3][1] = 0;					dest[3][2] = 0;		dest[3][3] = 1;
+		// @formatter:on — enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenberg1Rot3Trans(float a, float theta)
@@ -256,10 +262,12 @@ public:
 
 	static void InitDenavitHartenberg2Trans(T dest[4][4], float d)
 	{
+		// @formatter:off — disable formatter after this line
 		dest[0][0] = 1;			dest[0][1] = 0;				dest[0][2] = 0;		dest[0][3] = 0;
 		dest[1][0] = 0;			dest[1][1] = 1;				dest[1][2] = 0;		dest[1][3] = 0;
 		dest[2][0] = 0;			dest[2][1] = 0;				dest[2][2] = 1;		dest[2][3] = d;
 		dest[3][0] = 0;			dest[3][1] = 0;				dest[3][2] = 0;		dest[3][3] = 1;
+		// @formatter:on — enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenberg2Trans(float d)
@@ -272,10 +280,12 @@ public:
 
 	static void InitDenavitHartenberg3Trans(T dest[4][4], float a)
 	{
+		// @formatter:off — disable formatter after this line
 		dest[0][0] = 1;			dest[0][1] = 0;				dest[0][2] = 0;		dest[0][3] = a;
 		dest[1][0] = 0;			dest[1][1] = 1;				dest[1][2] = 0;		dest[1][3] = 0;
 		dest[2][0] = 0;			dest[2][1] = 0;				dest[2][2] = 1;		dest[2][3] = 0;
 		dest[3][0] = 0;			dest[3][1] = 0;				dest[3][2] = 0;		dest[3][3] = 1;
+		// @formatter:on — enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenberg3Trans(float a)
@@ -291,10 +301,12 @@ public:
 		float cosalpha = cos(alpha);
 		float sinalpha = sin(alpha);
 
+		// @formatter:off — disable formatter after this line
 		dest[0][0] = 1;			dest[0][1] = 0;				dest[0][2] = 0;				dest[0][3] = 0;
 		dest[1][0] = 0;			dest[1][1] = cosalpha;		dest[1][2] = -sinalpha;		dest[1][3] = 0;
 		dest[2][0] = 0;			dest[2][1] = sinalpha;		dest[2][2] = cosalpha;		dest[2][3] = 0;
 		dest[3][0] = 0;			dest[3][1] = 0;				dest[3][2] = 0;				dest[3][3] = 1;
+		// @formatter:on — enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenberg4Rot(float a)
@@ -303,4 +315,3 @@ public:
 		return *this;
 	}
 };
-

@@ -57,7 +57,7 @@ void CExpressionParser::Parse()
 void CExpressionParser::GetNextToken()
 {
 	_state._detailtoken = NothingSy;
-	if (IsError())	return;
+	if (IsError()) return;
 
 	char ch = _reader->SkipSpaces();
 
@@ -76,6 +76,8 @@ void CExpressionParser::GetNextToken()
 void CExpressionParser::ScannNextToken()
 {
 	char ch = _reader->GetChar();
+
+	// @formatter:off — disable formatter after this line
 	if (IsToken(F("||"), false, false))	{ _state._detailtoken = XOrSy;			 return; }
 	if (IsToken(F("<<"), false, false))	{ _state._detailtoken = BitShiftLeftSy;  return; }
 	if (IsToken(F(">>"), false, false))	{ _state._detailtoken = BitShiftRightSy; return; }
@@ -102,12 +104,13 @@ void CExpressionParser::ScannNextToken()
 		case '!': _state._detailtoken = FactorialSy;	_reader->GetNextChar(); return;
 		case '=': _state._detailtoken = AssignSy;		_reader->GetNextChar(); return;
 	}
+	// @formatter:on — enable formatter after this line
 
 	// check for a value
 	if (CStreamReader::IsDigitDot(ch))
 	{
 		_state._detailtoken = FloatSy;
-		_state._number = GetDouble();
+		_state._number      = GetDouble();
 		return;
 	}
 
@@ -119,7 +122,7 @@ void CExpressionParser::ScannNextToken()
 		ReadIdent();
 
 		auto end = (char*)_reader->GetBuffer();
-		ch = _reader->SkipSpaces();
+		ch       = _reader->SkipSpaces();
 
 		// temporary terminat buffer with '\00'
 		CStreamReader::CSetTemporary terminate(end);
@@ -129,6 +132,7 @@ void CExpressionParser::ScannNextToken()
 
 		if (ch == _LeftParenthesis)
 		{
+			// @formatter:off — disable formatter after this line
 			if (TryToken(start, F("ABS"), true))		{ _state._detailtoken = AbsSy; return; }
 			if (TryToken(start, F("EXP"), true))		{ _state._detailtoken = ExpSy; return; }
 			if (TryToken(start, F("SIGN"), true))		{ _state._detailtoken = SignSy; return; }
@@ -146,6 +150,7 @@ void CExpressionParser::ScannNextToken()
 			if (TryToken(start, F("FIX"), true))		{ _state._detailtoken = FixSy; return; }
 			if (TryToken(start, F("FUP"), true))		{ _state._detailtoken = FupSy; return; }
 			if (TryToken(start, F("ROUND"), true))		{ _state._detailtoken = RoundSy; return; }
+			// @formatter:on — enable formatter after this line
 
 			Error(MESSAGE_EXPR_UNKNOWN_FUNCTION);
 			return;
@@ -153,7 +158,7 @@ void CExpressionParser::ScannNextToken()
 		else
 		{
 			_state._detailtoken = VariableSy;
-			_state._variableOK = EvalVariable(start, _state._number);
+			_state._variableOK  = EvalVariable(start, _state._number);
 		}
 		return;
 	}
@@ -184,7 +189,7 @@ expr_t CExpressionParser::ParseLevel1()
 	if (GetTokenType() == VariableSy)
 	{
 		// copy current state
-		const char* e_now = _reader->GetBuffer();
+		const char*  e_now     = _reader->GetBuffer();
 		SParserState state_now = _state;
 
 		GetNextToken();
@@ -221,13 +226,13 @@ expr_t CExpressionParser::ParseLevel1()
 
 expr_t CExpressionParser::ParseLevel2()
 {
-	expr_t ans = ParseLevel3();
+	expr_t                 ans        = ParseLevel3();
 	EnumAsByte(ETokenType) operatorSy = GetTokenType();
 
 	while (operatorSy == AndSy || operatorSy == OrSy || operatorSy == BitShiftLeftSy || operatorSy == BitShiftRightSy)
 	{
 		GetNextToken();
-		ans = EvalOperator(operatorSy, ans, ParseLevel3());
+		ans        = EvalOperator(operatorSy, ans, ParseLevel3());
 		operatorSy = GetTokenType();
 	}
 
@@ -239,13 +244,13 @@ expr_t CExpressionParser::ParseLevel2()
 
 expr_t CExpressionParser::ParseLevel3()
 {
-	expr_t ans = ParseLevel4();
+	expr_t                 ans        = ParseLevel4();
 	EnumAsByte(ETokenType) operatorSy = GetTokenType();
 
 	while (operatorSy == EqualSy || operatorSy == UnEqualSy || operatorSy == LessSy || operatorSy == LessEqualSy || operatorSy == GreaterSy || operatorSy == GreaterEqualSy)
 	{
 		GetNextToken();
-		ans = EvalOperator(operatorSy, ans, ParseLevel4());
+		ans        = EvalOperator(operatorSy, ans, ParseLevel4());
 		operatorSy = GetTokenType();
 	}
 
@@ -257,13 +262,13 @@ expr_t CExpressionParser::ParseLevel3()
 
 expr_t CExpressionParser::ParseLevel4()
 {
-	expr_t ans = ParseLevel5();
+	expr_t                 ans        = ParseLevel5();
 	EnumAsByte(ETokenType) operatorSy = GetTokenType();
 
 	while (operatorSy == PlusSy || operatorSy == MinusSy)
 	{
 		GetNextToken();
-		ans = EvalOperator(operatorSy, ans, ParseLevel5());
+		ans        = EvalOperator(operatorSy, ans, ParseLevel5());
 		operatorSy = GetTokenType();
 	}
 
@@ -275,13 +280,13 @@ expr_t CExpressionParser::ParseLevel4()
 
 expr_t CExpressionParser::ParseLevel5()
 {
-	expr_t ans = ParseLevel6();
+	expr_t                 ans        = ParseLevel6();
 	EnumAsByte(ETokenType) operatorSy = GetTokenType();
 
 	while (operatorSy == MultiplySy || operatorSy == DivideSy || operatorSy == ModuloSy || operatorSy == XOrSy)
 	{
 		GetNextToken();
-		ans = EvalOperator(operatorSy, ans, ParseLevel6());
+		ans        = EvalOperator(operatorSy, ans, ParseLevel6());
 		operatorSy = GetTokenType();
 	}
 
@@ -293,13 +298,13 @@ expr_t CExpressionParser::ParseLevel5()
 
 expr_t CExpressionParser::ParseLevel6()
 {
-	expr_t ans = ParseLevel7();
+	expr_t                 ans        = ParseLevel7();
 	EnumAsByte(ETokenType) operatorSy = GetTokenType();
 
 	while (operatorSy == PowSy)
 	{
 		GetNextToken();
-		ans = EvalOperator(operatorSy, ans, ParseLevel7());
+		ans        = EvalOperator(operatorSy, ans, ParseLevel7());
 		operatorSy = GetTokenType();
 	}
 
@@ -311,7 +316,7 @@ expr_t CExpressionParser::ParseLevel6()
 
 expr_t CExpressionParser::ParseLevel7()
 {
-	expr_t ans = ParseLevel8();
+	expr_t                 ans        = ParseLevel8();
 	EnumAsByte(ETokenType) operatorSy = GetTokenType();
 
 	while (operatorSy == FactorialSy)
@@ -319,7 +324,7 @@ expr_t CExpressionParser::ParseLevel7()
 		GetNextToken();
 		// factorial does not need a value right from the
 		// operator, so zero is filled in.
-		ans = EvalOperator(operatorSy, ans, 0.0);
+		ans        = EvalOperator(operatorSy, ans, 0.0);
 		operatorSy = GetTokenType();
 	}
 
@@ -404,8 +409,9 @@ expr_t CExpressionParser::ParseNumber()
 ////////////////////////////////////////////////////////////
 // evaluate an operator for given valuess
 
-expr_t CExpressionParser::EvalOperator(EnumAsByte(ETokenType) operatorSy, const expr_t &lhs, const expr_t &rhs)
+expr_t CExpressionParser::EvalOperator(EnumAsByte(ETokenType) operatorSy, const expr_t& lhs, const expr_t& rhs)
 {
+	// @formatter:off — disable formatter after this line
 	switch (operatorSy)
 	{
 		// level 2
@@ -438,6 +444,7 @@ expr_t CExpressionParser::EvalOperator(EnumAsByte(ETokenType) operatorSy, const 
 			// level 7
 		case FactorialSy:		return Factorial(lhs);
 	}
+	// @formatter:on — enable formatter after this line
 
 	ErrorAdd(MESSAGE_EXPR_ILLEGAL_OPERATOR);
 	return 0;
@@ -446,8 +453,9 @@ expr_t CExpressionParser::EvalOperator(EnumAsByte(ETokenType) operatorSy, const 
 ////////////////////////////////////////////////////////////
 // evaluate a function
 
-expr_t CExpressionParser::EvalFunction(EnumAsByte(ETokenType) operatorSy, const expr_t &value)
+expr_t CExpressionParser::EvalFunction(EnumAsByte(ETokenType) operatorSy, const expr_t& value)
 {
+	// @formatter:off — disable formatter after this line
 	switch (operatorSy)
 	{
 			// arithmetic
@@ -474,6 +482,7 @@ expr_t CExpressionParser::EvalFunction(EnumAsByte(ETokenType) operatorSy, const 
 		case FupSy:  return ceil(value);
 		case RoundSy:  return round(value);
 	}
+	// @formatter:on — enable formatter after this line
 
 	ErrorAdd(MESSAGE_EXPR_ILLEGAL_FUNCTION);
 	return 0;
@@ -486,8 +495,10 @@ bool CExpressionParser::EvalVariable(const char* var_name, expr_t& answer)
 	_state._varName = var_name;
 
 	// check for built-in variables
+	// @formatter:off — disable formatter after this line
 	if (TryToken(var_name, F("E"), true))  { answer = (expr_t) 2.7182818284590452353602874713527; return true; }
 	if (TryToken(var_name, F("PI"), true)) { answer = (expr_t) 3.1415926535897932384626433832795; return true; }
+	// @formatter:on — enable formatter after this line
 
 	return false;
 }

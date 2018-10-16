@@ -64,7 +64,7 @@ protected:
 
 	virtual void TimerInterrupt() override;
 	virtual bool Parse(CStreamReader* reader, Stream* output) override;
-	virtual void Idle(unsigned int idletime) override;
+	virtual void Idle(unsigned int    idletime) override;
 
 	virtual bool IsKill() override;
 	virtual void Poll() override;
@@ -76,22 +76,22 @@ public:
 	struct SMyCNCEeprom
 	{
 		CConfigEeprom::SCNCEeprom _std;
-		feedrate_t	pendownFeedrate;
-		feedrate_t	penupFeedrate;
+		feedrate_t                pendownFeedrate;
+		feedrate_t                penupFeedrate;
 
-		feedrate_t	movependownFeedrate;
-		feedrate_t	movepenupFeedrate;
-		feedrate_t	movepenchangeFeedrate;
+		feedrate_t movependownFeedrate;
+		feedrate_t movepenupFeedrate;
+		feedrate_t movepenchangeFeedrate;
 
-		mm1000_t	pendownpos;
-		mm1000_t	penuppos;
+		mm1000_t pendownpos;
+		mm1000_t penuppos;
 
-		mm1000_t	penchangepos_x;
-		mm1000_t	penchangepos_y;
-		mm1000_t	penchangepos_z;
+		mm1000_t penchangepos_x;
+		mm1000_t penchangepos_y;
+		mm1000_t penchangepos_z;
 
-		mm1000_t	penchangepos_x_ofs;
-		mm1000_t	penchangepos_y_ofs;
+		mm1000_t penchangepos_x_ofs;
+		mm1000_t penchangepos_y_ofs;
 
 		uint16_t penchangeServoClampOpenPos;
 		uint16_t penchangeServoClampClosePos;
@@ -113,14 +113,3 @@ private:
 ////////////////////////////////////////////////////////
 
 extern CMyControl Control;
-
-
-
-
-
-
-
-
-
-
-

@@ -62,17 +62,17 @@ PROGMEM const CU8GLcd::SPageDef CU8GLcd::_pagedef[] =
 {
 	{ &CU8GLcd::DrawLoopSplash, &CU8GLcd::ButtonPressShowMenu },
 	{ &CU8GLcd::DrawLoopPosAbs, &CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopPos,	&CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopRotate2D,	&CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopRotate3D,	&CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopDebug,  &CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopSpeedOverride,  &CU8GLcd::ButtonPressSpeedOverride },
+	{ &CU8GLcd::DrawLoopPos, &CU8GLcd::ButtonPressShowMenu },
+	{ &CU8GLcd::DrawLoopRotate2D, &CU8GLcd::ButtonPressShowMenu },
+	{ &CU8GLcd::DrawLoopRotate3D, &CU8GLcd::ButtonPressShowMenu },
+	{ &CU8GLcd::DrawLoopDebug, &CU8GLcd::ButtonPressShowMenu },
+	{ &CU8GLcd::DrawLoopSpeedOverride, &CU8GLcd::ButtonPressSpeedOverride },
 	{ &CU8GLcd::DrawLoopPreset, &CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopStartSD,&CU8GLcd::ButtonPressStartSDPage },
-	{ &CU8GLcd::DrawLoopError,	&CU8GLcd::ButtonPressShowMenu },
+	{ &CU8GLcd::DrawLoopStartSD, &CU8GLcd::ButtonPressStartSDPage },
+	{ &CU8GLcd::DrawLoopError, &CU8GLcd::ButtonPressShowMenu },
 	{ &CU8GLcd::DrawLoopCommandHis, &CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopMenu,	&CU8GLcd::ButtonPressMenuPage },
-	{nullptr, nullptr }
+	{ &CU8GLcd::DrawLoopMenu, &CU8GLcd::ButtonPressMenuPage },
+	{ nullptr, nullptr }
 };
 
 ////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ void CMyLcd::Init()
 	_lcd_numaxis = LCD_NUMAXIS;
 
 	CBeep<(CAT(BOARDNAME, _LCD_BEEPER))>::Init();
-	
+
 	super::Init();
 
 	SetRotaryPin(ROTARY_EN1,ROTARY_EN2, ROTARY_ENC, ROTARY_ENC_ON);
@@ -92,7 +92,7 @@ void CMyLcd::Init()
 
 ////////////////////////////////////////////////////////////
 
-void CMyLcd::Beep(const SPlayTone* play,bool fromProgMem)
+void CMyLcd::Beep(const SPlayTone* play, bool fromProgMem)
 {
 	if (fromProgMem)
 	{
@@ -108,14 +108,13 @@ void CMyLcd::Beep(const SPlayTone* play,bool fromProgMem)
 
 bool CMyLcd::DrawLoopDefault(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
-	if (type==DrawLoopHeader)
+	if (type == DrawLoopHeader)
 	{
 		DrawString(ToCol(0), ToRow(0), MESSAGE_LCD_HEADLINE);
 		return true;
 	}
 
-	return super::DrawLoopDefault(type,data);
+	return super::DrawLoopDefault(type, data);
 }
 
 ////////////////////////////////////////////////////////////
-

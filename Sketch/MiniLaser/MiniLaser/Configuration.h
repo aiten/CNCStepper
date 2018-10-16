@@ -34,11 +34,11 @@
 ////////////////////////////////////////////////////////
 
 #define X_MAXSIZE 36000				// in mm1000_t
-#define Y_MAXSIZE 36000 
-#define Z_MAXSIZE 10000 
-#define A_MAXSIZE 50000 
-#define B_MAXSIZE 360000 
-#define C_MAXSIZE 360000 
+#define Y_MAXSIZE 36000
+#define Z_MAXSIZE 10000
+#define A_MAXSIZE 50000
+#define B_MAXSIZE 360000
+#define C_MAXSIZE 360000
 
 ////////////////////////////////////////////////////////
 
@@ -123,4 +123,3 @@
 ////////////////////////////////////////////////////////
 
 #define MESSAGE_MYCONTROL_Starting					F("MiniL:" __DATE__ )
-

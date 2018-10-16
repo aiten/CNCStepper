@@ -29,7 +29,7 @@
 //#define LCD_TYPE  1         // LCD_2004_LiquidCrystal_I2C
 #define LCD_TYPE  2         // LCD_12864_u8g
 
-#define PENTYPE_ZAXIS 0 
+#define PENTYPE_ZAXIS 0
 #define PENTYPE_SERVO 1
 
 #define PENTYPE PENTYPE_SERVO
@@ -55,9 +55,9 @@
 #define X_MAXSIZE 510000		//515mm
 #define Y_MAXSIZE 295000		//295mm
 #define Z_MAXSIZE 8000			//8
-#define A_MAXSIZE 360000 
-#define B_MAXSIZE 360000 
-#define C_MAXSIZE 360000 
+#define A_MAXSIZE 360000
+#define B_MAXSIZE 360000
+#define C_MAXSIZE 360000
 
 ////////////////////////////////////////////////////////
 
@@ -195,4 +195,3 @@ error;
 ////////////////////////////////////////////////////////
 
 #define MESSAGE_MYCONTROL_Starting F("Plotter(HA) is starting ... (" __DATE__ ", " __TIME__ ")")
-

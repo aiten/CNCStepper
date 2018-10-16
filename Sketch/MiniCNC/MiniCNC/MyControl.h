@@ -45,11 +45,11 @@ private:
 
 public:
 
-	CMyControl()				 { }
+	CMyControl() { }
 
 	virtual void Kill() override;
 
-	virtual void IOControl(uint8_t tool, uint16_t level) override;
+	virtual void     IOControl(uint8_t tool, uint16_t level) override;
 	virtual uint16_t IOControl(uint8_t tool) override;
 
 protected:
@@ -74,4 +74,3 @@ private:
 ////////////////////////////////////////////////////////
 
 extern CMyControl Control;
-

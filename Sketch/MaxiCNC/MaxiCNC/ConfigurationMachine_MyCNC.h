@@ -38,11 +38,11 @@
 ////////////////////////////////////////////////////////
 
 #define X_MAXSIZE 134000				// in mm1000_t
-#define Y_MAXSIZE 134000 
-#define Z_MAXSIZE 83000 
-#define A_MAXSIZE 360000 
-#define B_MAXSIZE 360000 
-#define C_MAXSIZE 360000 
+#define Y_MAXSIZE 134000
+#define Z_MAXSIZE 83000
+#define A_MAXSIZE 360000
+#define B_MAXSIZE 360000
+#define C_MAXSIZE 360000
 
 ////////////////////////////////////////////////////////
 
@@ -170,4 +170,3 @@
 #define MESSAGE_MYCONTROL_Starting			F("My-CNC(HA) Ramps FD is starting ... (" __DATE__ ", " __TIME__ ")")
 #define MESSAGE_LCD_HEADLINE						F("My-CNC RampsFD-M")
 #endif
-

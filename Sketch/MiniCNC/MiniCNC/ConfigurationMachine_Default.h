@@ -22,11 +22,11 @@
 ////////////////////////////////////////////////////////
 
 #define X_MAXSIZE 100000        // in mm1000_t
-#define Y_MAXSIZE 100000 
-#define Z_MAXSIZE 50000 
-#define A_MAXSIZE 360000 
-#define B_MAXSIZE 360000 
-#define C_MAXSIZE 360000 
+#define Y_MAXSIZE 100000
+#define Z_MAXSIZE 50000
+#define A_MAXSIZE 360000
+#define B_MAXSIZE 360000
+#define C_MAXSIZE 360000
 
 ////////////////////////////////////////////////////////
 // NoReference, ReferenceToMin, ReferenceToMax
@@ -73,4 +73,3 @@
 #define STEPRATERATE_REFMOVE    (CNC_MAXSPEED/3)
 
 ////////////////////////////////////////////////////////
-

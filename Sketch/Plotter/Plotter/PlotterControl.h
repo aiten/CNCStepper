@@ -31,20 +31,30 @@ public:
 	void Initialized();
 
 	void Idle(unsigned int idletime);
-	void Resume(bool restorePenDown);
+	void Resume(bool       restorePenDown);
 	bool IsResumePenDown() const { return _isPenDownTimeout; }
 
 	void PenDown();
 	void PenUp();
 	void PenUpNow();
 
-	void DelayPenUp() { _isDelayPen = true; _isDelayPenDown = false; }
-	void DelayPenDown() { _isDelayPen = true; _isDelayPenDown = true; }
+	void DelayPenUp()
+	{
+		_isDelayPen     = true;
+		_isDelayPenDown = false;
+	}
+
+	void DelayPenDown()
+	{
+		_isDelayPen     = true;
+		_isDelayPenDown = true;
+	}
+
 	void DelayPenNow();    // go
 
-	bool IsPenDown() { return _isPenDown; }
+	bool    IsPenDown() { return _isPenDown; }
 	uint8_t GetPen() { return _pen; }
-	bool SetPen(uint8_t pen);
+	bool    SetPen(uint8_t pen);
 
 private:
 
@@ -54,13 +64,13 @@ private:
 	bool _isPenDownTimeout;
 
 	uint8_t _pen;
-	bool _havePen;
+	bool    _havePen;
 
 	bool MoveToPenPosition(feedrate_t feedrate, mm1000_t pos);
 
 	bool PenToDepot();
-	bool PenFromDepot(uint8_t pen);
-	bool ToPenChangePos(uint8_t pen);
+	bool PenFromDepot(uint8_t    pen);
+	bool ToPenChangePos(uint8_t  pen);
 	bool OffPenChangePos(uint8_t pen);
 
 	mm1000_t ConvertConfigPos(mm1000_t pos, axis_t axis);
@@ -69,13 +79,3 @@ private:
 ////////////////////////////////////////////////////////
 
 extern CPlotter Plotter;
-
-
-
-
-
-
-
-
-
-

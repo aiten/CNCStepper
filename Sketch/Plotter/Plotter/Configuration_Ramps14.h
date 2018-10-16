@@ -60,7 +60,7 @@
 
 //#define EMERGENCY_ENDSTOP 5
 
-#define FEEDRATE_REFMOVE  CStepper::GetInstance()->GetDefaultVmax() / 4  
+#define FEEDRATE_REFMOVE  CStepper::GetInstance()->GetDefaultVmax() / 4
 
 ////////////////////////////////////////////////////////
 
@@ -84,13 +84,3 @@
 #endif
 
 ////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-

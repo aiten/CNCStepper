@@ -107,8 +107,8 @@ public:
 	void OKBeep() { return CLcd::GetInstance()->OKBeep(); };
 	void ErrorBeep() { return CLcd::GetInstance()->ErrorBeep(); };
 
-	const SMenuDef* GetMenuDef() const		{ return _current; }
-	const SMenuDef* GetMainMenuDef() const	{ return _main; }
+	const SMenuDef* GetMenuDef() const { return _current; }
+	const SMenuDef* GetMainMenuDef() const { return _main; }
 
 protected:
 

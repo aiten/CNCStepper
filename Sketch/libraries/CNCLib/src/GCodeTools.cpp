@@ -26,8 +26,7 @@
 
 ////////////////////////////////////////////////////////
 
-template <>
-CGCodeTools* CSingleton<CGCodeTools>::_instance = nullptr;
+template <> CGCodeTools* CSingleton<CGCodeTools>::_instance = nullptr;
 
 ////////////////////////////////////////////////////////
 
@@ -37,37 +36,37 @@ CGCodeTools* CSingleton<CGCodeTools>::_instance = nullptr;
 
 const CGCodeTools::STools CGCodeTools::_tools[] PROGMEM =
 {
-	{1, EndMill, 100, 20000},
-	{2, EndMill, 200, 20000},
-	{3, EndMill, 300, 20000},
-	{4, EndMill, 400, 20000},
-	{5, EndMill, 500, 20000},
-	{6, EndMill, 600, 20000},
-	{7, EndMill, 700, 20000},
-	{8, EndMill, 800, 20000},
-	{9, EndMill, 900, 20000},
-	{10, EndMill, 1000, 20000},
-	{11, EndMill, 1100, 20000},
-	{12, EndMill, 1200, 20000},
-	{13, EndMill, 1300, 20000},
-	{14, EndMill, 1400, 20000},
-	{15, EndMill, 1500, 20000},
-	{16, EndMill, 1600, 20000},
-	{17, EndMill, 1700, 20000},
-	{18, EndMill, 1800, 20000},
-	{19, EndMill, 1900, 20000},
-	{20, EndMill, 2000, 20000},
-	{21, EndMill, 2100, 20000},
-	{22, EndMill, 2200, 20000},
-	{23, EndMill, 2300, 20000},
-	{24, EndMill, 2400, 20000},
-	{25, EndMill, 2500, 20000},
-	{26, EndMill, 2600, 20000},
-	{27, EndMill, 2700, 20000},
-	{28, EndMill, 2800, 20000},
-	{29, EndMill, 2900, 20000},
-	{30, EndMill, 3000, 20000},
-	{0xffff}
+	{ 1, EndMill, 100, 20000 },
+	{ 2, EndMill, 200, 20000 },
+	{ 3, EndMill, 300, 20000 },
+	{ 4, EndMill, 400, 20000 },
+	{ 5, EndMill, 500, 20000 },
+	{ 6, EndMill, 600, 20000 },
+	{ 7, EndMill, 700, 20000 },
+	{ 8, EndMill, 800, 20000 },
+	{ 9, EndMill, 900, 20000 },
+	{ 10, EndMill, 1000, 20000 },
+	{ 11, EndMill, 1100, 20000 },
+	{ 12, EndMill, 1200, 20000 },
+	{ 13, EndMill, 1300, 20000 },
+	{ 14, EndMill, 1400, 20000 },
+	{ 15, EndMill, 1500, 20000 },
+	{ 16, EndMill, 1600, 20000 },
+	{ 17, EndMill, 1700, 20000 },
+	{ 18, EndMill, 1800, 20000 },
+	{ 19, EndMill, 1900, 20000 },
+	{ 20, EndMill, 2000, 20000 },
+	{ 21, EndMill, 2100, 20000 },
+	{ 22, EndMill, 2200, 20000 },
+	{ 23, EndMill, 2300, 20000 },
+	{ 24, EndMill, 2400, 20000 },
+	{ 25, EndMill, 2500, 20000 },
+	{ 26, EndMill, 2600, 20000 },
+	{ 27, EndMill, 2700, 20000 },
+	{ 28, EndMill, 2800, 20000 },
+	{ 29, EndMill, 2900, 20000 },
+	{ 30, EndMill, 3000, 20000 },
+	{ 0xffff }
 };
 
 ////////////////////////////////////////////////////////

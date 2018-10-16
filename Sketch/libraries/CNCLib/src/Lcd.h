@@ -37,17 +37,13 @@ class CLcd : public CSingleton<CLcd>
 
 public:
 
-	CLcd()
-	{
-	}
+	CLcd() { }
 
 	enum EDrawType
 	{
-		DrawFirst,
-		// draw after splash
-		DrawForceAll,
-		// draw now
-		DrawAll // draw with timeout
+		DrawFirst,		// draw after splash
+		DrawForceAll,	// draw now
+		DrawAll			// draw with timeout
 	};
 
 	virtual void Init();
@@ -59,11 +55,11 @@ public:
 
 	static void InvalidateLcd()
 	{
-#ifdef _USE_LCD
+		#ifdef _USE_LCD
 
 		if (CLcd::GetInstance())
 			CLcd::GetInstance()->Invalidate();
-#endif
+		#endif
 	}
 
 protected:
@@ -102,9 +98,9 @@ public:
 
 	void Diagnostic(FLSTR diag) { _diagnostics = diag; }
 
-	bool  IsDiagnostic() const		{ return _diagnostics != nullptr; };
-	FLSTR GetDiagnostic() const		{ return _diagnostics; }
-	void  ClearDiagnostic()			{ _diagnostics = nullptr; }
+	bool  IsDiagnostic() const { return _diagnostics != nullptr; };
+	FLSTR GetDiagnostic() const { return _diagnostics; }
+	void  ClearDiagnostic() { _diagnostics = nullptr; }
 
 private:
 

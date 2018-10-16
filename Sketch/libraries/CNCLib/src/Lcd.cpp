@@ -27,14 +27,14 @@
 
 ////////////////////////////////////////////////////////////
 
-template<> CLcd* CSingleton<CLcd>::_instance = nullptr;
+template <> CLcd* CSingleton<CLcd>::_instance = nullptr;
 
 ////////////////////////////////////////////////////////////
 
 void CLcd::Init()
 {
 	_nextdrawtime = Splash() + millis();
-	_splash = true;
+	_splash       = true;
 
 	DrawRequest(CLcd::DrawForceAll);		//first draw doesnt return fast! call at init time
 }
@@ -55,15 +55,11 @@ void CLcd::Invalidate()
 
 ////////////////////////////////////////////////////////////
 
-void CLcd::TimerInterrupt()
-{
-}
+void CLcd::TimerInterrupt() {}
 
 ////////////////////////////////////////////////////////////
 
-void CLcd::Command(char* /* buffer */)
-{
-}
+void CLcd::Command(char* /* buffer */) {}
 
 ////////////////////////////////////////////////////////////
 
@@ -77,9 +73,9 @@ void CLcd::DrawRequest(EDrawType draw)
 		Draw(DrawFirst);
 	}
 
-	if (_invalidate || draw==DrawForceAll || _nextdrawtime < millis())
+	if (_invalidate || draw == DrawForceAll || _nextdrawtime < millis())
 	{
-		_invalidate = false;
+		_invalidate   = false;
 		_nextdrawtime = Draw(draw) + millis();
 	}
 }
@@ -98,8 +94,8 @@ bool CLcd::PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, FLSTR cmd, Strea
 {
 	char buffer[32];
 
-	auto cmd1 = (const char*)cmd;
-	uint8_t idx = InitPostCommand(syntaxtype, buffer);
+	auto    cmd1       = (const char*)cmd;
+	uint8_t idx        = InitPostCommand(syntaxtype, buffer);
 	uint8_t idxprogmem = 0;
 
 	for (; idx < sizeof(buffer); idx++, idxprogmem++)
@@ -119,11 +115,10 @@ bool CLcd::PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, FLSTR cmd, Strea
 
 bool CLcd::PostCommand(char* cmd, Stream* output)
 {
-	if (!CControl::GetInstance()->PostCommand(cmd,output))
+	if (!CControl::GetInstance()->PostCommand(cmd, output))
 	{
 		ErrorBeep();
 		return false;
 	}
 	return true;
 }
-

@@ -61,12 +61,12 @@ bool CGCodeParserBase::_exit = false;
 
 ////////////////////////////////////////////////////////////
 
-struct CGCodeParserBase::SModalState CGCodeParserBase::_modalstate;
+struct CGCodeParserBase::SModalState    CGCodeParserBase::_modalstate;
 struct CGCodeParserBase::SModelessState CGCodeParserBase::_modlessstate;
 
 ////////////////////////////////////////////////////////////
 
-bool CGCodeParserBase::Command(char ch )
+bool CGCodeParserBase::Command(char ch)
 {
 	switch (ch)
 	{
@@ -77,7 +77,7 @@ bool CGCodeParserBase::Command(char ch )
 			return true;
 		}
 	}
-			
+
 	return false;
 }
 
@@ -86,7 +86,9 @@ bool CGCodeParserBase::Command(char ch )
 bool CGCodeParserBase::InitParse()
 {
 	if (!super::InitParse())
+	{
 		return false;
+	}
 
 	CStepper::GetInstance()->ClearError();
 	CMotionControlBase::GetInstance()->ClearError();
@@ -106,14 +108,14 @@ void CGCodeParserBase::CleanupParse()
 
 void CGCodeParserBase::SkipCommentNested()
 {
-	uint8_t cnt = 0;
-	auto start = (char*)_reader->GetBuffer();
+	uint8_t cnt   = 0;
+	auto    start = (char*)_reader->GetBuffer();
 
 	for (char ch = _reader->GetChar(); ch; ch = _reader->GetNextChar())
 	{
 		switch (ch)
 		{
-			case ')': 
+			case ')':
 			{
 				cnt--;
 				if (cnt == 0)
@@ -124,7 +126,11 @@ void CGCodeParserBase::SkipCommentNested()
 				}
 				break;
 			}
-			case '(': cnt++; break;
+			case '(':
+			{
+				cnt++;
+				break;
+			}
 		}
 	}
 
@@ -144,9 +150,17 @@ char CGCodeParserBase::SkipSpacesOrComment()
 {
 	switch (_reader->SkipSpaces())
 	{
-		case '(':	SkipCommentNested();	break;
+		case '(':
+		{
+			SkipCommentNested();
+			break;
+		}
 		case '*':
-		case ';':	SkipCommentSingleLine(); break;
+		case ';':
+		{
+			SkipCommentSingleLine();
+			break;
+		}
 	}
 
 	return _reader->GetChar();
@@ -167,7 +181,7 @@ mm1000_t CGCodeParserBase::ParseCoordinate(bool convertUnits)
 
 	bool convertToInch = convertUnits && !_modalstate.UnitisMm;
 
-#ifndef REDUCED_SIZE
+	#ifndef REDUCED_SIZE
 
 	mm1000_t value;
 
@@ -176,8 +190,8 @@ mm1000_t CGCodeParserBase::ParseCoordinate(bool convertUnits)
 		return value;
 	}
 
-#endif
-	
+	#endif
+
 	if (convertToInch)
 	{
 		// mm are is CDecimalAsInt with scale 3
@@ -196,15 +210,15 @@ unsigned long CGCodeParserBase::GetUint32OrParam(unsigned long max)
 {
 	unsigned long param;
 
-#ifndef REDUCED_SIZE
+	#ifndef REDUCED_SIZE
 	mm1000_t mm1000;
-	
-	if (GetParamOrExpression(&mm1000,false))
+
+	if (GetParamOrExpression(&mm1000, false))
 	{
 		param = mm1000;
 	}
 	else
-#endif
+	#endif
 	{
 		param = GetUInt32();
 	}
@@ -224,7 +238,9 @@ uint8_t CGCodeParserBase::GetSubCode()
 	// subcode must follow immediately
 
 	if (_reader->GetChar() != '.' || !IsUInt(_reader->GetNextChar()))
+	{
 		return 255;
+	}
 
 	return GetUInt8();
 }
@@ -240,20 +256,22 @@ bool CGCodeParserBase::ParseLineNumber()
 			Error(MESSAGE(MESSAGE_GCODE_LinenumberExpected));
 			return false;
 		}
-#ifdef REDUCED_SIZE
+
+		#ifdef REDUCED_SIZE
 		_modalstate.LineNumber = GetUInt16();
-#else
+		#else
 		_modalstate.LineNumber = GetInt32();
-#endif
+		#endif
+
 		_reader->SkipSpaces();
 
 		_OkMessage = []()
 		{
 			StepperSerial.print(_modalstate.LineNumber);
-#ifndef REDUCED_SIZE
+			#ifndef REDUCED_SIZE
 			StepperSerial.print(':');
 			StepperSerial.print(_modalstate.ReceivedLineNumber);
-#endif
+			#endif
 		};
 	}
 	return true;
@@ -262,7 +280,7 @@ bool CGCodeParserBase::ParseLineNumber()
 ////////////////////////////////////////////////////////////
 
 void CGCodeParserBase::MoveStart(bool cutmove)
-{ 
+{
 	CControl::GetInstance()->CallOnEvent(CControl::OnStartCut, cutmove);
 	_modalstate.CutMove = cutmove;
 }
@@ -281,7 +299,7 @@ void CGCodeParserBase::ConstantVelocity()
 
 void CGCodeParserBase::Wait(unsigned long ms)
 {
-	CStepper::GetInstance()->Wait(ms/10);
+	CStepper::GetInstance()->Wait(ms / 10);
 }
 
 ////////////////////////////////////////////////////////////
@@ -289,25 +307,25 @@ void CGCodeParserBase::Wait(unsigned long ms)
 void CGCodeParserBase::Sync()
 {
 	CStepper::GetInstance()->WaitBusy();
-#ifdef _USE_LCD
+	#ifdef _USE_LCD
 	CControl::GetInstance()->Delay(0);
-#endif
+	#endif
 }
 
 ////////////////////////////////////////////////////////////
 
-mm1000_t CGCodeParserBase::CalcAllPreset(axis_t axis)			
-{ 
-	return GetG92PosPreset(axis); 
+mm1000_t CGCodeParserBase::CalcAllPreset(axis_t axis)
+{
+	return GetG92PosPreset(axis);
 }
 
 ////////////////////////////////////////////////////////////
 
 void CGCodeParserBase::Parse()
 {
-#ifndef REDUCED_SIZE
+	#ifndef REDUCED_SIZE
 	_modalstate.ReceivedLineNumber++;
-#endif
+	#endif
 	do
 	{
 		char ch = _reader->GetCharToUpper();
@@ -318,21 +336,30 @@ void CGCodeParserBase::Parse()
 			case ' ':
 			case '(':
 			case '*':
-			case ';':	SkipSpacesOrComment(); break;
+			case ';':
+			{
+				SkipSpacesOrComment();
+				break;
+			}
 			case 'N':
 			{
-				if (!ParseLineNumber())		return;
+				if (!ParseLineNumber())
+				{
+					return;
+				}
 				break;
 			}
 			case 'G':
 			{
 				if (!IsUInt(_reader->GetNextChar()))
 				{
-					Error(MESSAGE(MESSAGE_GCODE_CommandExpected));		return;
+					Error(MESSAGE(MESSAGE_GCODE_CommandExpected));
+					return;
 				}
 				if (!GCommand(GetGCode()))
 				{
-					Error(MESSAGE(MESSAGE_GCODE_UnsupportedGCommand));	return;
+					Error(MESSAGE(MESSAGE_GCODE_UnsupportedGCommand));
+					return;
 				}
 				break;
 			}
@@ -340,30 +367,39 @@ void CGCodeParserBase::Parse()
 			{
 				if (!IsUInt(_reader->GetNextChar()))
 				{
-					Error(MESSAGE(MESSAGE_GCODE_MCodeExpected));		return;
+					Error(MESSAGE(MESSAGE_GCODE_MCodeExpected));
+					return;
 				}
 				if (!MCommand(GetMCode()))
 				{
-					Error(MESSAGE(MESSAGE_GCODE_UnspportedMCodeIgnored));	return;
+					Error(MESSAGE(MESSAGE_GCODE_UnspportedMCodeIgnored));
+					return;
 				}
 				break;
 			}
 			case '$':
 			{
 				_reader->GetNextChar();
-				if (CSingleton<CConfigEeprom>::GetInstance() == nullptr || !CSingleton<CConfigEeprom>::GetInstance()->ParseConfig(this) )
+				if (CSingleton<CConfigEeprom>::GetInstance() == nullptr || !CSingleton<CConfigEeprom>::GetInstance()->ParseConfig(this))
 				{
 					if (!IsError())
+					{
 						Error(MESSAGE_GCODE_IllegalCommand);
+					}
 					return;
 				}
 				break;
 			}
 
 			default:
-#ifdef _MSC_VER
-				if (IsToken(F("X"), true, false)) { _exit = true; return; }
-#endif
+			{
+				#ifdef _MSC_VER
+				if (IsToken(F("X"), true, false))
+				{
+					_exit = true;
+					return;
+				}
+				#endif
 				if (!Command(ch))
 				{
 					if (!LastCommand())
@@ -373,11 +409,15 @@ void CGCodeParserBase::Parse()
 					}
 				}
 				break;
+			}
 		}
 
-		if (CheckError()) return;
-
-	} while (_reader->GetChar() != 0);
+		if (CheckError())
+		{
+			return;
+		}
+	}
+	while (_reader->GetChar() != 0);
 }
 
 ////////////////////////////////////////////////////////////
@@ -386,23 +426,40 @@ bool CGCodeParserBase::GCommand(uint8_t gcode)
 {
 	switch (gcode)
 	{
-		case 0:		G00Command(); return true;
-		case 1:		G01Command(); return true;
-		case 2:		G02Command(); return true;
-		case 3:		G03Command(); return true;
-		case 4:		G04Command(); return true;
-		case 17:	G171819Command(X_AXIS, Y_AXIS, Z_AXIS); return true;
-		case 18:	G171819Command(X_AXIS, Z_AXIS, Y_AXIS); return true;
-		case 19:	G171819Command(Y_AXIS, Z_AXIS, X_AXIS); return true;
-		case 20:	G20Command(); return true;
-		case 21:	G21Command();  return true;
-		case 28:	G28Command(); return true;
-		case 31:	G31Command(_modalstate.ProbeOnValue); return true;
-		case 61:	G61Command(); return true;
-		case 64:	G64Command(); return true;
-		case 90:	G90Command(); return true;
-		case 91:	G91Command(); return true;
-		case 92:	G92Command(); return true;
+		case 0: G00Command();
+			return true;
+		case 1: G01Command();
+			return true;
+		case 2: G02Command();
+			return true;
+		case 3: G03Command();
+			return true;
+		case 4: G04Command();
+			return true;
+		case 17: G171819Command(X_AXIS, Y_AXIS, Z_AXIS);
+			return true;
+		case 18: G171819Command(X_AXIS, Z_AXIS, Y_AXIS);
+			return true;
+		case 19: G171819Command(Y_AXIS, Z_AXIS, X_AXIS);
+			return true;
+		case 20: G20Command();
+			return true;
+		case 21: G21Command();
+			return true;
+		case 28: G28Command();
+			return true;
+		case 31: G31Command(_modalstate.ProbeOnValue);
+			return true;
+		case 61: G61Command();
+			return true;
+		case 64: G64Command();
+			return true;
+		case 90: G90Command();
+			return true;
+		case 91: G91Command();
+			return true;
+		case 92: G92Command();
+			return true;
 	}
 	return false;
 }
@@ -413,20 +470,36 @@ bool CGCodeParserBase::MCommand(mcode_t mcode)
 {
 	switch (mcode)
 	{
-		// Spindle (+laser)
+			// Spindle (+laser)
 		case 106:
-		case 3:	M0304Command(true);		return true;
-		case 4:	M0304Command(false);	return true;
+		case 3: 
+		{
+			M0304Command(true);
+			return true;
+		}
+		case 4: 
+		{
+			M0304Command(false);
+			return true;
+		}
 		case 107:
-		case 5: M05Command();			return true;
+		case 5: 
+		{
+			M05Command();
+			return true;
+		}
 
 		// coolant
-		case 7:	M07Command();		return true;
-		case 9:	M09Command();		return true;
+		case 7: M07Command();
+			return true;
+		case 9: M09Command();
+			return true;
 
 		// probe config
-		case 100:	_modalstate.ProbeOnValue = false; return true;
-		case 101:	_modalstate.ProbeOnValue = true; return true;
+		case 100: _modalstate.ProbeOnValue = false;
+			return true;
+		case 101: _modalstate.ProbeOnValue = true;
+			return true;
 	}
 	return false;
 }
@@ -439,9 +512,9 @@ mm1000_t CGCodeParserBase::ParseCoordinate(axis_t axis, mm1000_t relpos, EnumAsB
 	switch (posType)
 	{
 		default:
-		case AbsolutWithZeroShiftPosition:	return mm + CalcAllPreset(axis);
-		case AbsolutPosition:				return mm; 
-		case RelativPosition:				return relpos + mm;
+		case AbsolutWithZeroShiftPosition: return mm + CalcAllPreset(axis);
+		case AbsolutPosition: return mm;
+		case RelativPosition: return relpos + mm;
 	}
 }
 
@@ -501,7 +574,7 @@ axis_t CGCodeParserBase::CharToAxisOffset(char axis)
 
 ////////////////////////////////////////////////////////////
 
-void CGCodeParserBase::GetUint8(uint8_t& value, uint8_t&specified, uint8_t bit)
+void CGCodeParserBase::GetUint8(uint8_t& value, uint8_t& specified, uint8_t bit)
 {
 	if (IsBitSet(specified, bit))
 	{
@@ -520,7 +593,9 @@ void CGCodeParserBase::GetUint8(uint8_t& value, uint8_t&specified, uint8_t bit)
 void CGCodeParserBase::GetAxis(axis_t axis, SAxisMove& move, EnumAsByte(EAxisPosType) posType)
 {
 	if (!CheckAxisSpecified(axis, move.axes))
+	{
 		return;
+	}
 
 	_reader->GetNextChar();
 
@@ -532,14 +607,20 @@ void CGCodeParserBase::GetAxis(axis_t axis, SAxisMove& move, EnumAsByte(EAxisPos
 void CGCodeParserBase::GetIJK(axis_t axis, SAxisMove& move, mm1000_t offset[2])
 {
 	if (!CheckAxisSpecified(axis, move.bitfield.all))
+	{
 		return;
+	}
 
 	_reader->GetNextChar();
 
 	if (axis == _modalstate.Plane_axis_0)
+	{
 		offset[0] = ParseCoordinateAxis(axis);
+	}
 	else if (axis == _modalstate.Plane_axis_1)
+	{
 		offset[1] = ParseCoordinateAxis(axis);
+	}
 	else
 	{
 		Error(MESSAGE(MESSAGE_GCODE_AxisOffsetMustNotBeSpecified));
@@ -574,20 +655,28 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 	}
 	move.bitfield.bit.F = true;
 
-	if (!_modalstate.FeedRatePerUnit) { ErrorNotImplemented(); return; }
+	if (!_modalstate.FeedRatePerUnit)
+	{
+		ErrorNotImplemented();
+		return;
+	}
 
 	feedrate_t feedrate;
 
-#ifndef REDUCED_SIZE
-	if (GetParamOrExpression(&feedrate,false))
+	#ifndef REDUCED_SIZE
+	if (GetParamOrExpression(&feedrate, false))
 	{
 		if (FEEDRATE_MIN > feedrate)
+		{
 			Error(MESSAGE(MESSAGE_PARSER_ValueLessThanMin));
+		}
 		else if (FEEDRATE_MAX < feedrate)
+		{
 			Error(MESSAGE(MESSAGE_PARSER_ValueGreaterThanMax));
+		}
 	}
 	else
-#endif
+	#endif
 	{
 		feedrate = GetInt32Scale(FEEDRATE_MIN, FEEDRATE_MAX, FEEDRATE_SCALE, FEEDRATE_MAXSCALE);
 	}
@@ -595,16 +684,26 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 
 	if (!_modalstate.UnitisMm)
 	{
-//		feedrate = MulDivI32(feedrate, 254, 10);
+		//		feedrate = MulDivI32(feedrate, 254, 10);
 		feedrate = MulDivI32(feedrate, 127, 5);
 	}
 
-	if (CheckError()) { return; }
+	if (CheckError())
+	{
+		return;
+	}
 
 	feedrate_t minfeedrate = FEEDRATE_MIN_ALLOWED;
 
-	if (feedrate < minfeedrate)				  feedrate = minfeedrate;
-	if (feedrate > _modalstate.G1MaxFeedRate) feedrate = _modalstate.G1MaxFeedRate;
+	if (feedrate < minfeedrate)
+	{
+		feedrate = minfeedrate;
+	}
+
+	if (feedrate > _modalstate.G1MaxFeedRate)
+	{
+		feedrate = _modalstate.G1MaxFeedRate;
+	}
 
 	SetG1FeedRate(feedrate);
 }
@@ -614,7 +713,9 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 void CGCodeParserBase::GetG92Axis(axis_t axis, uint8_t& axes)
 {
 	if (!CheckAxisSpecified(axis, axes))
+	{
 		return;
+	}
 
 	_reader->GetNextChar();
 	_modalstate.G92Pospreset[axis] = 0;	// clear this => can use CalcAllPreset
@@ -653,26 +754,39 @@ void CGCodeParserBase::G0001Command(bool isG00)
 
 
 	_modalstate.LastCommand = isG00 ? &CGCodeParserBase::G00Command : &CGCodeParserBase::G01Command;
-	bool useG0Feed = isG00;
+	bool useG0Feed          = isG00;
 
 	SAxisMove move(true);
 
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS) GetAxis(axis, move, _modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
-		else if (ch == 'F' && !isG00) GetFeedrate(move);
-		else if (ch == 'F' && isG00) {
-										if (IsInt(_reader->GetNextCharSkipScaces())) 
-										{ 
-											Error(MESSAGE(MESSAGE_GCODE_FeedrateWithG0)); 
-											return; 
-										}
-										useG0Feed = false; 
-									  }
-		else break;
+		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		{
+			GetAxis(axis, move, _modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+		}
+		else if (ch == 'F' && !isG00)
+		{
+			GetFeedrate(move);
+		}
+		else if (ch == 'F' && isG00)
+		{
+			if (IsInt(_reader->GetNextCharSkipScaces()))
+			{
+				Error(MESSAGE(MESSAGE_GCODE_FeedrateWithG0));
+				return;
+			}
+			useG0Feed = false;
+		}
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return; }
+		if (CheckError())
+		{
+			return;
+		}
 	}
 
 	if (move.axes)
@@ -690,24 +804,53 @@ void CGCodeParserBase::G0203Command(bool isG02)
 	_modalstate.LastCommand = isG02 ? &CGCodeParserBase::G02Command : &CGCodeParserBase::G03Command;
 
 	SAxisMove move(true);
-	mm1000_t radius;
-	mm1000_t offset[2] = { 0, 0 };
+	mm1000_t  radius;
+	mm1000_t  offset[2] = { 0, 0 };
 
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS)				GetAxis(axis, move, _modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
-		else if ((axis = CharToAxisOffset(ch)) < NUM_AXIS)	GetIJK(axis, move, offset);
-		else if (ch == 'R')									GetRadius(move, radius);
-		else if (ch == 'F')									GetFeedrate(move);
-		else break;
+		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		{
+			GetAxis(axis, move, _modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+		}
+		else if ((axis = CharToAxisOffset(ch)) < NUM_AXIS)
+		{
+			GetIJK(axis, move, offset);
+		}
+		else if (ch == 'R')
+		{
+			GetRadius(move, radius);
+		}
+		else if (ch == 'F')
+		{
+			GetFeedrate(move);
+		}
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return; }
+		if (CheckError())
+		{
+			return;
+		}
 	}
 
-	if (move.bitfield.bit.R && move.GetIJK())		{ Error(MESSAGE(MESSAGE_GCODE_IJKandRspecified)); return; }
-	if (!move.bitfield.bit.R && !move.GetIJK())		{ Error(MESSAGE(MESSAGE_GCODE_MissingIKJorR)); return; }
-	if (CheckError()) { return; }
+	if (move.bitfield.bit.R && move.GetIJK())
+	{
+		Error(MESSAGE(MESSAGE_GCODE_IJKandRspecified));
+		return;
+	}
+	if (!move.bitfield.bit.R && !move.GetIJK())
+	{
+		Error(MESSAGE(MESSAGE_GCODE_MissingIKJorR));
+		return;
+	}
+	if (CheckError())
+	{
+		return;
+	}
 
 	if (move.bitfield.bit.R)
 	{
@@ -716,12 +859,20 @@ void CGCodeParserBase::G0203Command(bool isG02)
 		auto y = float(move.newpos[_modalstate.Plane_axis_1] - CMotionControlBase::GetInstance()->GetPosition(_modalstate.Plane_axis_1));
 		auto r = float(radius);
 
-		if (x == 0.0 && y == 0.0)						{ Error(MESSAGE(MESSAGE_GCODE_360withRandMissingAxes)); return; }
+		if (x == 0.0 && y == 0.0)
+		{
+			Error(MESSAGE(MESSAGE_GCODE_360withRandMissingAxes));
+			return;
+		}
 
 		// First, use h_x2_div_d to compute 4*h^2 to check if it is negative or r is smaller
 		// than d. If so, the sqrt of a negative number is complex and error out.
-		float h_x2_div_d = 4 * r*r - x*x - y*y;
-		if (h_x2_div_d < 0)								{ Error(MESSAGE(MESSAGE_GCODE_STATUS_ARC_RADIUS_ERROR)); return; }
+		float h_x2_div_d = 4 * r * r - x * x - y * y;
+		if (h_x2_div_d < 0)
+		{
+			Error(MESSAGE(MESSAGE_GCODE_STATUS_ARC_RADIUS_ERROR));
+			return;
+		}
 
 		// Finish computing h_x2_div_d.
 		h_x2_div_d = -sqrt(h_x2_div_d) / hypot(x, y); // == -(h * 2 / d)
@@ -736,8 +887,8 @@ void CGCodeParserBase::G0203Command(bool isG02)
 		}
 
 		// Complete the operation by calculating the actual center of the arc
-		offset[0] = mm1000_t(0.5*(x - (y*h_x2_div_d)));
-		offset[1] = mm1000_t(0.5*(y + (x*h_x2_div_d)));
+		offset[0] = mm1000_t(0.5 * (x - (y * h_x2_div_d)));
+		offset[1] = mm1000_t(0.5 * (y + (x * h_x2_div_d)));
 	}
 
 	MoveStart(true);
@@ -749,13 +900,14 @@ void CGCodeParserBase::G0203Command(bool isG02)
 
 unsigned long CGCodeParserBase::GetDweel()
 {
-	const char*current = _reader->GetBuffer();
+	const char*   current = _reader->GetBuffer();
 	unsigned long dweelms = GetUint32OrParam();
+	
 	if (_reader->GetChar() == '.')
 	{
 		// this is "sec" and not "ms"
 		_reader->ResetBuffer(current);
-		dweelms = GetInt32Scale(0,1000000,3,255);
+		dweelms = GetInt32Scale(0, 1000000, 3, 255);
 	}
 	return dweelms;
 }
@@ -772,9 +924,14 @@ void CGCodeParserBase::G04Command()
 		dweelms = GetDweel();
 	}
 
-#ifndef REDUCED_SIZE
-	if (!ExpectEndOfCommand())		{ return; }
-#endif
+	#ifndef REDUCED_SIZE
+	
+	if (!ExpectEndOfCommand())
+	{
+		return;
+	}
+	
+	#endif
 
 	Wait(dweelms);
 }
@@ -797,15 +954,29 @@ void CGCodeParserBase::G28Command()
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS) GetAxis(axis, move, AbsolutPosition);
-		else break;
+		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		{
+			GetAxis(axis, move, AbsolutPosition);
+		}
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return; }
+		if (CheckError())
+		{
+			return;
+		}
 	}
 
-#ifndef REDUCED_SIZE
-	if (!ExpectEndOfCommand())		{ return; }
-#endif
+	#ifndef REDUCED_SIZE
+	
+	if (!ExpectEndOfCommand())
+	{
+		return;
+	}
+	
+	#endif
 
 	if (move.axes == 0)
 	{
@@ -818,7 +989,9 @@ void CGCodeParserBase::G28Command()
 			if (IsBitSet(move.axes, axis))
 			{
 				if (!CControl::GetInstance()->GoToReference(axis))
+				{
 					CStepper::GetInstance()->SetPosition(axis, CMotionControlBase::GetInstance()->ToMachine(axis, move.newpos[axis]));
+				}
 			}
 		}
 	}
@@ -844,11 +1017,23 @@ void CGCodeParserBase::G31Command(bool probevalue)
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS) GetAxis(axis, move, _modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
-		else if (ch == 'F') GetFeedrate(move);
-		else break;
+		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		{
+			GetAxis(axis, move, _modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+		}
+		else if (ch == 'F')
+		{
+			GetFeedrate(move);
+		}
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return; }
+		if (CheckError())
+		{
+			return;
+		}
 	}
 
 	ProbeCommand(move, probevalue);
@@ -858,18 +1043,18 @@ void CGCodeParserBase::G31Command(bool probevalue)
 
 bool CGCodeParserBase::ProbeCommand(SAxisMove& move, bool probevalue)
 {
-	if (move.axes==0)
+	if (move.axes == 0)
 	{
 		Error(MESSAGE(MESSAGE_GCODE_NoAxesForProbe));
 		return false;
 	}
 
-	if ((move.axes&7) == 0)
+	if ((move.axes & 7) == 0)
 	{
 		Error(MESSAGE(MESSAGE_GCODE_ProbeOnlyForXYZ));
 		return false;
 	}
-	
+
 	Sync();
 
 	if (!G31TestProbe(probevalue))
@@ -897,9 +1082,11 @@ void CGCodeParserBase::G91Command()
 
 	switch (subcode)
 	{
-		case 1:		break;	//OK (I,J,K relative) = default
-		case 255:	_modalstate.IsAbsolut = false; break;
-		default:	ErrorNotImplemented(); break;
+		case 1: break;	//OK (I,J,K relative) = default
+		case 255: _modalstate.IsAbsolut = false;
+			break;
+		default: ErrorNotImplemented();
+			break;
 	}
 }
 
@@ -912,18 +1099,30 @@ void CGCodeParserBase::G92Command()
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS) GetG92Axis(axis, axes);
-		else break;
+		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		{
+			GetG92Axis(axis, axes);
+		}
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return; }
+		if (CheckError())
+		{
+			return;
+		}
 	}
 
 	if (axes == 0)
 	{
-		for (axes = 0; axes < NUM_AXIS; axes++) _modalstate.G92Pospreset[axes] = 0;
+		for (axes = 0; axes < NUM_AXIS; axes++)
+		{
+			_modalstate.G92Pospreset[axes] = 0;
+		}
 	}
 
-	CLcd::InvalidateLcd(); 
+	CLcd::InvalidateLcd();
 }
 
 ////////////////////////////////////////////////////////////
@@ -933,9 +1132,14 @@ void CGCodeParserBase::SpindleSpeedCommand()
 	_reader->SkipSpaces();
 	auto speed = short(GetUint32OrParam(MAXSPINDLE_SPEED));
 
-#ifndef REDUCED_SIZE
-	if (IsError()) return;
-#endif
+	#ifndef REDUCED_SIZE
+	
+	if (IsError())
+	{
+		return;
+	}
+
+	#endif
 
 	_modalstate.SpindleSpeed = speed;
 }
@@ -969,7 +1173,9 @@ void CGCodeParserBase::PrintPosition(mm1000_t (*GetPos)(axis_t axis))
 	for (uint8_t i = 0; i < NUM_AXIS; i++)
 	{
 		if (i != 0)
+		{
 			StepperSerial.print(':');
+		}
 
 		PrintPosition(GetPos(i));
 	}
@@ -980,7 +1186,7 @@ void CGCodeParserBase::PrintPosition(mm1000_t (*GetPos)(axis_t axis))
 void CGCodeParserBase::PrintPosition(mm1000_t pos)
 {
 	int16_t  div = pos / 1000;
-	uint16_t  rem = abs(int16_t(pos % 1000));
+	uint16_t rem = abs(int16_t(pos % 1000));
 
 	StepperSerial.print(div);
 	StepperSerial.print('.');
@@ -988,8 +1194,10 @@ void CGCodeParserBase::PrintPosition(mm1000_t pos)
 	if (rem < 100)
 	{
 		StepperSerial.print('0');
-		if (rem < 10) 
+		if (rem < 10)
+		{
 			StepperSerial.print('0');
+		}
 	}
 
 	StepperSerial.print(rem);

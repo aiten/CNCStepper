@@ -40,7 +40,7 @@
 
 CMenuBase::MenuFunction CMenuBase::SMenuItemDef::GetButtonPress() const
 {
-#if defined(__AVR_ARCH__)
+	#if defined(__AVR_ARCH__)
 
 	struct ButtonFunctionWrapper
 	{
@@ -51,11 +51,11 @@ CMenuBase::MenuFunction CMenuBase::SMenuItemDef::GetButtonPress() const
 
 	return x.fnc;
 
-#else
+	#else
 
 	return _buttonpress;
 
-#endif
+	#endif
 }
 
 ////////////////////////////////////////////////////////////
@@ -83,8 +83,9 @@ FLSTR CMenuBase::GetText()
 
 bool CMenuBase::Select(menupos_t idx)
 {
-	const SMenuItemDef* item = &GetMenuDef()->GetItems()[idx];
-	MenuFunction        fnc  = item->GetButtonPress();
+	auto item = &GetMenuDef()->GetItems()[idx];
+	auto fnc  = item->GetButtonPress();
+
 	if (fnc != NULL)
 	{
 		(this->*fnc)(item);
@@ -100,6 +101,7 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef* def)
 {
 	auto newMenu = (const SMenuDef*)def->GetParam1();
 	auto posMenu = (const SMenuDef*)def->GetParam2();
+	
 	SetMenu(newMenu);
 
 	if (posMenu != nullptr)
@@ -120,7 +122,7 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef* def)
 void CMenuBase::MenuButtonPressMenuBack(const SMenuItemDef* def)
 {
 	auto newMenu = (const SMenuDef*)def->GetParam1();
-	const struct SMenuDef* oldMenu = GetMenuDef();
+	auto oldMenu = GetMenuDef();
 
 	SetMenu(newMenu);
 
@@ -171,16 +173,26 @@ void CMenuBase::MenuButtonPressMove(const SMenuItemDef* def)
 
 	switch (dist)
 	{
-		case MoveP100: builder.Add(F("100"));	break;
-		case MoveP10:  builder.Add(F("10"));	break;
-		case MoveP1:   builder.Add(F("1"));		break;
-		case MoveP01:  builder.Add(F("0.1"));	break;
-		case MoveP001: builder.Add(F("0.01"));	break;
-		case MoveM001: builder.Add(F("-0.01"));	break;
-		case MoveM01:  builder.Add(F("-0.1"));	break;
-		case MoveM1:   builder.Add(F("-1"));	break;
-		case MoveM10:  builder.Add(F("-10"));	break;
-		case MoveM100: builder.Add(F("-100"));	break;
+		case MoveP100: builder.Add(F("100"));
+			break;
+		case MoveP10: builder.Add(F("10"));
+			break;
+		case MoveP1: builder.Add(F("1"));
+			break;
+		case MoveP01: builder.Add(F("0.1"));
+			break;
+		case MoveP001: builder.Add(F("0.01"));
+			break;
+		case MoveM001: builder.Add(F("-0.01"));
+			break;
+		case MoveM01: builder.Add(F("-0.1"));
+			break;
+		case MoveM1: builder.Add(F("-1"));
+			break;
+		case MoveM10: builder.Add(F("-10"));
+			break;
+		case MoveM100: builder.Add(F("-100"));
+			break;
 	}
 
 	builder.Add(F(" g90"));
@@ -196,10 +208,14 @@ void CMenuBase::MenuButtonPressRotate(const SMenuItemDef* def)
 
 	switch (req)
 	{
-		case RotateClear:  PostCommand(EGCodeSyntaxType::GCode, F("g68.10"));break;
-		case RotateOffset: PostCommand(EGCodeSyntaxType::GCode, F("g68.11"));break;
-		case RotateSetYZ:  PostCommand(EGCodeSyntaxType::GCode, F("g68.13 j0k0"));break;
-		case RotateSetX:   PostCommand(EGCodeSyntaxType::GCode, F("g68.14 i0"));break;
+		case RotateClear: PostCommand(EGCodeSyntaxType::GCode, F("g68.10"));
+			break;
+		case RotateOffset: PostCommand(EGCodeSyntaxType::GCode, F("g68.11"));
+			break;
+		case RotateSetYZ: PostCommand(EGCodeSyntaxType::GCode, F("g68.13 j0k0"));
+			break;
+		case RotateSetX: PostCommand(EGCodeSyntaxType::GCode, F("g68.14 i0"));
+			break;
 		default: CLcd::GetInstance()->ErrorBeep();
 			return;
 	}
@@ -268,8 +284,10 @@ void CMenuBase::MenuButtonPressHomeA(axis_t axis)
 
 	switch (axis)
 	{
-		case Z_AXIS: builder.Add(F("#5163"));	break;
-		default: builder.Add(F("0"));			break;
+		case Z_AXIS: builder.Add(F("#5163"));
+			break;
+		default: builder.Add(F("0"));
+			break;
 	}
 	PostCommand(builder.GetCommand());
 	CLcd::GetInstance()->OKBeep();

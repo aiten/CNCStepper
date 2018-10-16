@@ -55,9 +55,9 @@ class CMotionControlBase : public CSingleton<CMotionControlBase>
 public:
 
 #ifdef REDUCED_SIZE
-#define STEPSPERMM1000_SIZE 1
+	#define STEPSPERMM1000_SIZE 1
 #else
-#define STEPSPERMM1000_SIZE NUM_AXIS
+	#define STEPSPERMM1000_SIZE NUM_AXIS
 #endif
 
 	static void InitConversion(ToMm1000_t toMm1000, ToMachine_t toMachine)
@@ -76,22 +76,22 @@ public:
 	}
 
 	static void InitConversionBestStepsPer(float stepspermm1000);
-	static void SetConversionStepsPerEx()								{ InitConversion(ToMm1000_StepsPerEx, ToMachine_StepsPerEx); }
+	static void SetConversionStepsPerEx() { InitConversion(ToMm1000_StepsPerEx, ToMachine_StepsPerEx); }
 
 	static void SetConversionStepsPerEx(axis_t axis, float stepspermm1000)
 	{
 		StepsPerMm1000[axis] = stepspermm1000;;
 	}
 
-	static mm1000_t ToMm1000(axis_t  axis, sdist_t  val)				{ return _ToMm1000(axis, val); }
-	static sdist_t  ToMachine(axis_t axis, mm1000_t val)				{ return _ToMachine(axis, val); }
+	static mm1000_t ToMm1000(axis_t  axis, sdist_t  val) { return _ToMm1000(axis, val); }
+	static sdist_t  ToMachine(axis_t axis, mm1000_t val) { return _ToMachine(axis, val); }
 
 	static void ToMachine(const mm1000_t mm1000[NUM_AXIS], udist_t   machine[NUM_AXIS]) { for (axis_t x = 0; x < NUM_AXIS; x++) { machine[x] = _ToMachine(x, mm1000[x]); } };
-	static void ToMm1000(const udist_t   machine[NUM_AXIS], mm1000_t mm1000[NUM_AXIS])	{ for (axis_t  x = 0; x < NUM_AXIS; x++) { mm1000[x]  = _ToMm1000(x, machine[x]); } };
+	static void ToMm1000(const udist_t   machine[NUM_AXIS], mm1000_t mm1000[NUM_AXIS]) { for (axis_t  x = 0; x < NUM_AXIS; x++) { mm1000[x]  = _ToMm1000(x, machine[x]); } };
 
-	bool    IsError() const		{ return _error != nullptr; };
-	error_t GetError() const	{ return _error; }
-	void    ClearError()		{ _error = nullptr; }
+	bool    IsError() const { return _error != nullptr; };
+	error_t GetError() const { return _error; }
+	void    ClearError() { _error = nullptr; }
 
 protected:
 
@@ -100,8 +100,8 @@ protected:
 
 	mm1000_t _current[NUM_AXIS];
 
-	void Error(error_t error)		{ _error = error; }
-	void Error()					{ Error(MESSAGE_UNKNOWNERROR); }
+	void Error(error_t error) { _error = error; }
+	void Error() { Error(MESSAGE_UNKNOWNERROR); }
 
 private:
 
@@ -116,18 +116,16 @@ public:
 
 public:
 
-#ifdef _MSC_VER
+	#ifdef _MSC_VER
 
-	virtual void UnitTest()
-	{
-	};
+	virtual void UnitTest() { };
 
 	CMotionControlBase()
 	{
 		memset(&_current, 0, sizeof(_current));
 	}
 
-#endif
+	#endif
 
 	////////////////////////////////////////
 	// all positions are logical-pos

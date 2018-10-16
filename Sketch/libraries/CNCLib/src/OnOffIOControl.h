@@ -21,8 +21,7 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PIN, uint8_t ONVALUE, uint8_t OFFVALUE>
-class COnOffIOControl
+template <pin_t PIN, uint8_t ONVALUE, uint8_t OFFVALUE> class COnOffIOControl
 {
 public:
 
@@ -74,8 +73,7 @@ public:
 	}
 
 	void Poll() // dummy
-	{
-	}
+	{ }
 };
 
 ////////////////////////////////////////////////////////

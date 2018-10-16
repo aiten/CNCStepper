@@ -190,8 +190,7 @@ struct SPlayTone
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PIN>
-class CBeep
+template <pin_t PIN> class CBeep
 {
 public:
 

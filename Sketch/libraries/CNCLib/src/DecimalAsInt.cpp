@@ -77,6 +77,7 @@ char* CSDist::ToString(sdist_t v, char* tmp, uint8_t precision)
 	else
 	{
 		precision = precision - x;
+
 		for (x = 0; x < precision; x++)
 		{
 			tmp[x] = ' ';

@@ -21,8 +21,7 @@
 
 ////////////////////////////////////////////////////////
 
-template <class range_t, uint8_t ACCURACY>
-class CRotaryButton
+template <class range_t, uint8_t ACCURACY> class CRotaryButton
 {
 public:
 
@@ -103,16 +102,16 @@ public:
 		_overrunpos = overrun;
 	}
 
-	range_t GetMin() const						{ return _minpos; }
-	range_t GetMax() const						{ return _maxpos; }
-	bool    GetOverrrunMode() const				{ return _overrunpos; }
+	range_t GetMin() const { return _minpos; }
+	range_t GetMax() const { return _maxpos; }
+	bool    GetOverrrunMode() const { return _overrunpos; }
 
-	range_t GetFullRangePos() const				{ return _pos; }
+	range_t GetFullRangePos() const { return _pos; }
 
-	range_t GetPos() const						{ return (_pos + ((_pos > 0) ? ACCURACY / 2 : -(ACCURACY / 2))) / ACCURACY; }
-	void    SetPos(range_t pos)					{ _pos = pos * ACCURACY; }
+	range_t GetPos() const { return (_pos + ((_pos > 0) ? ACCURACY / 2 : -(ACCURACY / 2))) / ACCURACY; }
+	void    SetPos(range_t pos) { _pos = pos * ACCURACY; }
 
-	void SetPageIdx(rotarypage_t page)			{ SetPos(page); }
+	void SetPageIdx(rotarypage_t page) { SetPos(page); }
 
 	rotarypage_t GetPageIdx(rotarypage_t pages)
 	{
@@ -141,7 +140,7 @@ protected:
 		return (pinBValue) ? 1 : 2;
 	}
 
-	volatile range_t _pos    = 0;
+	volatile range_t _pos = 0;
 
 	range_t _minpos = 0;
 	range_t _maxpos = 127 / ACCURACY;

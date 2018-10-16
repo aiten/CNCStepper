@@ -57,7 +57,7 @@ public:
 #ifdef REDUCED_SIZE
 	#define STEPSPERMM1000_SIZE 1
 #else
-	#define STEPSPERMM1000_SIZE NUM_AXIS
+#define STEPSPERMM1000_SIZE NUM_AXIS
 #endif
 
 	static void InitConversion(ToMm1000_t toMm1000, ToMachine_t toMachine)
@@ -116,7 +116,7 @@ public:
 
 public:
 
-	#ifdef _MSC_VER
+#ifdef _MSC_VER
 
 	virtual void UnitTest() { };
 
@@ -125,7 +125,7 @@ public:
 		memset(&_current, 0, sizeof(_current));
 	}
 
-	#endif
+#endif
 
 	////////////////////////////////////////
 	// all positions are logical-pos

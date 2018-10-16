@@ -46,10 +46,10 @@ public:
 		return SkipSpaces();
 	} // move to next and skip spaces
 
-	char GetCharToUpper()				{ return char(Toupper(*_buffer)); }
-	char GetChar()						{ return *_buffer; }
-	char GetNextChar()					{ return *(++_buffer); }                  // skip current and move to next
-	char GetNextCharToUpper()			{ return Toupper(GetNextChar()); } // skip current and move to next
+	char GetCharToUpper() { return char(Toupper(*_buffer)); }
+	char GetChar() { return *_buffer; }
+	char GetNextChar() { return *(++_buffer); }                  // skip current and move to next
+	char GetNextCharToUpper() { return Toupper(GetNextChar()); } // skip current and move to next
 
 	bool IsNextChar(const char ch)
 	{
@@ -58,21 +58,21 @@ public:
 		return true;
 	}
 
-	void MoveToEnd()					{ while (*_buffer) _buffer++; } // move to "no more char in stream"
+	void MoveToEnd() { while (*_buffer) _buffer++; } // move to "no more char in stream"
 
-	const char* GetBuffer()				{ return _buffer; }
+	const char* GetBuffer() { return _buffer; }
 	void        ResetBuffer(const char* buffer) { _buffer = buffer; }
 
-	static char Toupper(char ch)		{ return IsLowerAZ(ch) ? ch + 'A' - 'a' : ch; }
-	static bool IsEOC(char   ch)		{ return ch == 0 || ch == ';'; } // is EndOfCommand
+	static char Toupper(char ch) { return IsLowerAZ(ch) ? ch + 'A' - 'a' : ch; }
+	static bool IsEOC(char   ch) { return ch == 0 || ch == ';'; } // is EndOfCommand
 
-	static bool IsSpace(char      ch)	{ return ch == ' ' || ch == '\t' || ch == '\r'; }
-	static bool IsSpaceOrEnd(char ch)	{ return ch == 0 || IsSpace(ch); }
+	static bool IsSpace(char      ch) { return ch == ' ' || ch == '\t' || ch == '\r'; }
+	static bool IsSpaceOrEnd(char ch) { return ch == 0 || IsSpace(ch); }
 
-	static bool IsMinus(char    ch)		{ return ch == '-'; }
-	static bool IsDot(char      ch)		{ return ch == '.'; }
-	static bool IsDigit(char    ch)		{ return ch >= '0' && ch <= '9'; }
-	static bool IsDigitDot(char ch)		{ return IsDigit(ch) || IsDot(ch); }
+	static bool IsMinus(char    ch) { return ch == '-'; }
+	static bool IsDot(char      ch) { return ch == '.'; }
+	static bool IsDigit(char    ch) { return ch >= '0' && ch <= '9'; }
+	static bool IsDigitDot(char ch) { return IsDigit(ch) || IsDot(ch); }
 
 	static bool IsAlpha(char ch)
 	{
@@ -80,8 +80,8 @@ public:
 		return ch == '_' || IsUpperAZ(ch);
 	}
 
-	static bool IsLowerAZ(char ch)		{ return ch >= 'a' && ch <= 'z'; }
-	static bool IsUpperAZ(char ch)		{ return ch >= 'A' && ch <= 'Z'; }
+	static bool IsLowerAZ(char ch) { return ch >= 'a' && ch <= 'z'; }
+	static bool IsUpperAZ(char ch) { return ch >= 'A' && ch <= 'Z'; }
 
 	void Error(error_t error)
 	{

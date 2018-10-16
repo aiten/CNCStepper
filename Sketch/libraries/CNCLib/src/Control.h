@@ -53,9 +53,6 @@ public:
 
 	void StopProgram(bool checkconditional);		// see m00 / m01
 
-	//void SetConditionalStop(bool stop);				// see m00 / m01
-	//bool IsConditionalStop();
-
 	void Delay(unsigned long ms);	// delay with idle processing
 
 	void Hold();					// stop executing programm (with down-ramp), must not be called in timerinterrupt
@@ -195,8 +192,9 @@ private:
 
 	static void HandleInterrupt() { GetInstance()->TimerInterrupt(); }
 
-	static bool StaticStepperEvent(CStepper*                     stepper, uintptr_t   param, EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo);
-	bool        StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo);
+	static bool StaticStepperEvent(CStepper* stepper, uintptr_t param, EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo);
+
+	bool StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo);
 
 	CStreamReader _reader;
 

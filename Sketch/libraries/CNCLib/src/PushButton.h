@@ -25,9 +25,7 @@ class CPushButton
 {
 public:
 
-	CPushButton()
-	{
-	}
+	CPushButton() { }
 
 	CPushButton(pin_t pin, uint8_t onValue)
 	{

@@ -90,20 +90,30 @@ private:
 
 public:
 
-	CGCodeParser(CStreamReader* reader,Stream* output) : super(reader,output)		{  };
+	CGCodeParser(CStreamReader* reader, Stream* output) : super(reader, output) { };
 
-	static mm1000_t GetG54PosPreset(axis_t axis);
-	static mm1000_t GetToolHeightPosPreset(axis_t axis)		{ return axis == super::_modalstate.Plane_axis_2 ? _modalstate.ToolHeigtCompensation : 0; }
-	static void SetG54PosPreset(axis_t axis, mm1000_t pos)	{ _modalstate.G54Pospreset[0][axis] = pos; }
-	static uint8_t GetZeroPresetIdx()					{ return _modalstate.ZeroPresetIdx; }
-	static void SetZeroPresetIdx(uint8_t idx)			{ _modalstate.ZeroPresetIdx = idx; }
+	static mm1000_t GetG54PosPreset(axis_t        axis);
+	static mm1000_t GetToolHeightPosPreset(axis_t axis) { return axis == super::_modalstate.Plane_axis_2 ? _modalstate.ToolHeigtCompensation : 0; }
+	static void     SetG54PosPreset(axis_t        axis, mm1000_t pos) { _modalstate.G54Pospreset[0][axis] = pos; }
+	static uint8_t  GetZeroPresetIdx() { return _modalstate.ZeroPresetIdx; }
+	static void     SetZeroPresetIdx(uint8_t idx) { _modalstate.ZeroPresetIdx = idx; }
 
-	static bool IsG53Present()								{ return _modlessstate.ZeroPresetIdx == 0; }
+	static bool IsG53Present() { return _modlessstate.ZeroPresetIdx == 0; }
 
-	static mm1000_t GetAllPreset(axis_t axis)				{ return GetG92PosPreset(axis) + GetG54PosPreset(axis) + GetToolHeightPosPreset(axis); }
+	static mm1000_t GetAllPreset(axis_t axis) { return GetG92PosPreset(axis) + GetG54PosPreset(axis) + GetToolHeightPosPreset(axis); }
 
-	static void Init()										{ super::Init(); _modalstate.Init(); _modlessstate.Init(); }
-	static void InitAndSetFeedRate(feedrate_t feedrateG0, feedrate_t feedrateG1, feedrate_t feedrateG1max) { Init();  super::InitAndSetFeedRate(feedrateG0, feedrateG1, feedrateG1max); }
+	static void Init()
+	{
+		super::Init();
+		_modalstate.Init();
+		_modlessstate.Init();
+	}
+
+	static void InitAndSetFeedRate(feedrate_t feedrateG0, feedrate_t feedrateG1, feedrate_t feedrateG1max)
+	{
+		Init();
+		super::InitAndSetFeedRate(feedrateG0, feedrateG1, feedrateG1max);
+	}
 
 protected:
 
@@ -112,15 +122,15 @@ protected:
 	virtual bool InitParse() override;
 	virtual void CleanupParse() override;
 
-	virtual bool GCommand(gcode_t gcode) override;	// check for GCode extension => return true if command is parsed, false to do default
-	virtual bool MCommand(mcode_t mcode) override;
+	virtual bool GCommand(gcode_t        gcode) override;	// check for GCode extension => return true if command is parsed, false to do default
+	virtual bool MCommand(mcode_t        mcode) override;
 	virtual bool SetParamCommand(param_t pramNo);
-	virtual bool Command(char ch) override;
+	virtual bool Command(char            ch) override;
 
 	void ToolSelectCommand();
 	void ParameterCommand();
 
-	virtual void CommentMessage(char*) override;
+	virtual void     CommentMessage(char* ) override;
 	virtual mm1000_t CalcAllPreset(axis_t axis) override;
 
 protected:
@@ -138,40 +148,40 @@ protected:
 		};
 
 		EnumAsByte(ECutterRadiusCompensation) CutterRadiusCompensation;
-		bool EvenSize;
+		bool                                  EvenSize;
 
-		uint8_t			ZeroPresetIdx;				// 0:g53-, 1:G54-
-		bool			IsG98;						// G98 or G99	( Return To R or return to init Z) 
+		uint8_t ZeroPresetIdx;				// 0:g53-, 1:G54-
+		bool    IsG98;						// G98 or G99	( Return To R or return to init Z) 
 
-		uint8_t			_debuglevel;
-		bool			IsProbeOK;
+		uint8_t _debuglevel;
+		bool    IsProbeOK;
 
-		toolnr_t		ToolSelected;
+		toolnr_t ToolSelected;
 
-		mm1000_t		G8xQ;
-		mm1000_t		G8xPlane2;
-		mm1000_t		G8xR;
-		mm1000_t		G8xP;
+		mm1000_t G8xQ;
+		mm1000_t G8xPlane2;
+		mm1000_t G8xR;
+		mm1000_t G8xP;
 
-		mm1000_t		G54Pospreset[G54ARRAYSIZE][NUM_AXIS];	// 54-59
-		mm1000_t		G38ProbePos[NUM_AXIS];
-		mm1000_t		ToolHeigtCompensation;
+		mm1000_t G54Pospreset[G54ARRAYSIZE][NUM_AXIS];	// 54-59
+		mm1000_t G38ProbePos[NUM_AXIS];
+		mm1000_t ToolHeigtCompensation;
 
-		float			Parameter[NUM_PARAMETER];		// this is a expression, mm or inch
-		uint8_t			ParamNoToIdx[NUM_PARAMETER];
+		float   Parameter[NUM_PARAMETER];		// this is a expression, mm or inch
+		uint8_t ParamNoToIdx[NUM_PARAMETER];
 
-		void Init()	
+		void Init()
 		{
-			*this = SModalState();		// POD .. Plane Old Data Type => no Constructor => init with default value = 0
+			*this         = SModalState();		// POD .. Plane Old Data Type => no Constructor => init with default value = 0
 			ZeroPresetIdx = 1;						// always 54
-//POD		G8xQ = G8xR = G8xPlane2 = G8xP = 0;
+			//POD		G8xQ = G8xR = G8xPlane2 = G8xP = 0;
 			CutterRadiusCompensation = CutterRadiusOff;
-			ToolSelected = 1;
-			IsG98 = true;
-//POD		_debuglevel = 0;
-//POD		for (uint8_t i = 0; i < NUM_AXIS; i++) G54Pospreset[i] = 0;
-//POD		for (uint8_t i = 0; i < NUM_PARAMETER; i++) Parameter[i] = 0;
-//POD		ToolHeigtCompensation = 0;
+			ToolSelected             = 1;
+			IsG98                    = true;
+			//POD		_debuglevel = 0;
+			//POD		for (uint8_t i = 0; i < NUM_AXIS; i++) G54Pospreset[i] = 0;
+			//POD		for (uint8_t i = 0; i < NUM_PARAMETER; i++) Parameter[i] = 0;
+			//POD		ToolHeigtCompensation = 0;
 		}
 	};
 
@@ -182,10 +192,10 @@ protected:
 
 	struct SModelessState
 	{
-		uint8_t	ZeroPresetIdx;				// 0:g53-, 1:G54-
-		void Init()
+		uint8_t ZeroPresetIdx;				// 0:g53-, 1:G54-
+		void    Init()
 		{
-//			*this = SModelessState();		// POD .. Plane Old Data Type => no Constructor => init with default value = 0
+			//			*this = SModelessState();		// POD .. Plane Old Data Type => no Constructor => init with default value = 0
 			ZeroPresetIdx = _modalstate.ZeroPresetIdx;
 		}
 	};
@@ -195,42 +205,50 @@ protected:
 	////////////////////////////////////////////////////////
 	// Parser structure
 
-	bool CutterRadiosIsOn()								    { if (_modalstate.CutterRadiusCompensation) { Info(MESSAGE_GCODE_G41G43AreNotAllowedWithThisCommand); return true; } else return false; }
+	bool CutterRadiosIsOn()
+	{
+		if (_modalstate.CutterRadiusCompensation)
+		{
+			Info(MESSAGE_GCODE_G41G43AreNotAllowedWithThisCommand);
+			return true;
+		}
+		else return false;
+	}
 
 	virtual bool GetParamOrExpression(mm1000_t*, bool convertToInch) override;
-	mm1000_t ParseParameter(bool convertToInch);
-	param_t ParseParamNo();
+	mm1000_t     ParseParameter(bool           convertToInch);
+	param_t      ParseParamNo();
 
 	mm1000_t GetParamValue(param_t paramNo, bool convertToInch);
-	void SetParamValue(param_t paramNo);
+	void     SetParamValue(param_t paramNo);
 
 	static uint8_t ParamNoToParamIdx(param_t paramNo);
 
-	static mm1000_t GetParamAsMm1000(mm1000_t posMm100, axis_t)					{ return posMm100; }
-	static mm1000_t GetParamAsPosition(mm1000_t posInMachine, axis_t axis)		{ return CMotionControlBase::GetInstance()->ToMm1000(axis, posInMachine); }
-	static mm1000_t GetParamAsMachine(mm1000_t posInmm1000, axis_t axis)		{ return CMotionControlBase::GetInstance()->ToMachine(axis, posInmm1000); }
-	static mm1000_t GetParamAsFeedrate(mm1000_t feedrate, axis_t axis)			{ return CMotionControlBase::GetInstance()->ToMachine(axis, feedrate / 60); }
+	static mm1000_t GetParamAsMm1000(mm1000_t   posMm100, axis_t     ) { return posMm100; }
+	static mm1000_t GetParamAsPosition(mm1000_t posInMachine, axis_t axis) { return CMotionControlBase::GetInstance()->ToMm1000(axis, posInMachine); }
+	static mm1000_t GetParamAsMachine(mm1000_t  posInmm1000, axis_t  axis) { return CMotionControlBase::GetInstance()->ToMachine(axis, posInmm1000); }
+	static mm1000_t GetParamAsFeedrate(mm1000_t feedrate, axis_t     axis) { return CMotionControlBase::GetInstance()->ToMachine(axis, feedrate / 60); }
 
-	mm1000_t GetRelativePosition(mm1000_t pos, axis_t axis)				{ return pos - GetG92PosPreset(axis) - GetG54PosPreset(axis); }
-	mm1000_t GetRelativePosition(axis_t axis)							{ return GetRelativePosition(CMotionControlBase::GetInstance()->GetPosition(axis), axis); }
+	mm1000_t GetRelativePosition(mm1000_t pos, axis_t axis) { return pos - GetG92PosPreset(axis) - GetG54PosPreset(axis); }
+	mm1000_t GetRelativePosition(axis_t   axis) { return GetRelativePosition(CMotionControlBase::GetInstance()->GetPosition(axis), axis); }
 
 	void GetG68IJK(axis_t axis, SAxisMove& move, mm1000_t offset[NUM_AXISXYZ]);
 
 private:
 
-	void GetR81(SAxisMove& move);
-	void GetP81(SAxisMove& move);
-	void GetQ81(SAxisMove& move);
-	void GetL81(SAxisMove& move, uint8_t& l);
+	void GetR81(SAxisMove&    move);
+	void GetP81(SAxisMove&    move);
+	void GetQ81(SAxisMove&    move);
+	void GetL81(SAxisMove&    move, uint8_t&  l);
 	void GetAngleR(SAxisMove& move, mm1000_t& angle);		// get angle (with R Parameter)
 
 	void G10Command();
 	void G38Command();
-	void G40Command()							{ _modalstate.CutterRadiusCompensation = SModalState::CutterRadiusOff; }
+	void G40Command() { _modalstate.CutterRadiusCompensation = SModalState::CutterRadiusOff; }
 	void G41Command();		// Cutter Radius Compensation left
 	void G42Command();		// Cutter Radius Compensation right
 	void G43Command();		// Tool Height Compensation 
-	void G49Command()							{ _modalstate.ToolHeigtCompensation = 0; }
+	void G49Command() { _modalstate.ToolHeigtCompensation = 0; }
 	void G53Command();
 	void G68Command();
 	void G68CommandDefault();
@@ -239,14 +257,14 @@ private:
 	void G68Ext12Command();
 	void G68ExtXXCommand(axis_t rotaxis);
 	void G69Command();
-	void G5xCommand(uint8_t idx);
+	void G5xCommand(uint8_t    idx);
 	void G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMinQ);
 	void G73Command();		// High-speed Peck Drilling for Shallow Holes
 	void G81Command();		// Basic drilling canned cycle
 	void G82Command();		// Spot Drilling Cycle
 	void G83Command();		// Peck Drilling for Deeper Holes
-	void G98Command()							{ _modalstate.IsG98 = true; };
-	void G99Command()							{ _modalstate.IsG98 = false; };
+	void G98Command() { _modalstate.IsG98 = true; };
+	void G99Command() { _modalstate.IsG98 = false; };
 
 	void M00Command();		// Compulsory stop
 	void M01Command();		// Optional stop
@@ -262,8 +280,8 @@ private:
 	void M220Command();		// Set Speed override
 	void M300Command();		// Play Song
 
-	void G38CenterProbe(bool probevalue);
-	bool CenterProbeCommand(SAxisMove& move, bool probevalue,axis_t axis);
+	void G38CenterProbe(bool           probevalue);
+	bool CenterProbeCommand(SAxisMove& move, bool probevalue, axis_t axis);
 
 	/////////////////
 
@@ -280,7 +298,7 @@ protected:
 
 	static void PrintInfoAllPreset();
 
-	void SetPositionAfterG68G69()				{ CMotionControlBase::GetInstance()->SetPositionFromMachine(); }
+	void SetPositionAfterG68G69() { CMotionControlBase::GetInstance()->SetPositionFromMachine(); }
 
 
 protected:
@@ -288,33 +306,35 @@ protected:
 	struct SParamInfo
 	{
 	public:
-		param_t _paramNo;		// base param adress
+		param_t     _paramNo;		// base param adress
 		const char* _text;
-		bool _allowaxisofs;
+		bool        _allowaxisofs;
+
 		enum EValueType
 		{
 			IsInt,
 			IsMm1000
 		};
+
 		uint8_t _valuetype;
 	public:
 		//SParamInfo(param_t paramNo, const char* text, bool allowaxisofs):_paramNo(paramNo),_text(text),_allowaxisofs(allowaxisofs) {};
-		const char* GetText()   const { return (const char*)pgm_read_ptr(&this->_text); }
-		param_t GetParamNo()    const { return pgm_read_word(&this->_paramNo); }
-		bool GetAllowAxisOfs()  const { return pgm_read_byte(&this->_allowaxisofs) != 0; }
-		uint8_t GetValueType()	const { return uint8_t(pgm_read_byte(&this->_valuetype)); }
+		const char* GetText() const { return (const char*)pgm_read_ptr(&this->_text); }
+		param_t     GetParamNo() const { return pgm_read_word(&this->_paramNo); }
+		bool        GetAllowAxisOfs() const { return pgm_read_byte(&this->_allowaxisofs) != 0; }
+		uint8_t     GetValueType() const { return uint8_t(pgm_read_byte(&this->_valuetype)); }
 	};
 
 	void PrintAllParam();
-	void PrintParam(const SParamInfo* item, axis_t axis);
+	void PrintParam(const SParamInfo*      item, axis_t axis);
 	void PrintParamValue(const SParamInfo* item, axis_t ofs);
-	void PrintParamValue(param_t paramNo);
+	void PrintParamValue(param_t           paramNo);
 
 	static const struct SParamInfo _paramdef[] PROGMEM;
 
-	static const SParamInfo* FindParamInfo(uintptr_t param, bool(*check)(const SParamInfo*, uintptr_t));
+	static const SParamInfo* FindParamInfo(uintptr_t         param, bool (*check)(const SParamInfo*, uintptr_t));
 	static const SParamInfo* FindParamInfoByText(const char* text);
-	static const SParamInfo* FindParamInfoByParamNo(param_t paramNo);
+	static const SParamInfo* FindParamInfoByParamNo(param_t  paramNo);
 };
 
 ////////////////////////////////////////////////////////

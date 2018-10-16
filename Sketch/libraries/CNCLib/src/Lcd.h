@@ -55,11 +55,11 @@ public:
 
 	static void InvalidateLcd()
 	{
-		#ifdef _USE_LCD
+#ifdef _USE_LCD
 
 		if (CLcd::GetInstance())
 			CLcd::GetInstance()->Invalidate();
-		#endif
+#endif
 	}
 
 protected:

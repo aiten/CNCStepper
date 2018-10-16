@@ -121,11 +121,11 @@ void CConfigEeprom::PrintConfig()
 		StepperSerial.print(ofs / sizeof(uint32_t));
 		StepperSerial.print('=');
 		StepperSerial.print(val);
-		#ifndef REDUCED_SIZE
+#ifndef REDUCED_SIZE
 		StepperSerial.print('(');
 		StepperSerial.print(val, HEX);
 		StepperSerial.print(')');
-		#endif
+#endif
 		StepperSerial.println();
 	}
 }

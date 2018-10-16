@@ -181,7 +181,7 @@ mm1000_t CGCodeParserBase::ParseCoordinate(bool convertUnits)
 
 	bool convertToInch = convertUnits && !_modalstate.UnitisMm;
 
-	#ifndef REDUCED_SIZE
+#ifndef REDUCED_SIZE
 
 	mm1000_t value;
 
@@ -190,7 +190,7 @@ mm1000_t CGCodeParserBase::ParseCoordinate(bool convertUnits)
 		return value;
 	}
 
-	#endif
+#endif
 
 	if (convertToInch)
 	{
@@ -210,7 +210,7 @@ unsigned long CGCodeParserBase::GetUint32OrParam(unsigned long max)
 {
 	unsigned long param;
 
-	#ifndef REDUCED_SIZE
+#ifndef REDUCED_SIZE
 	mm1000_t mm1000;
 
 	if (GetParamOrExpression(&mm1000, false))
@@ -218,7 +218,7 @@ unsigned long CGCodeParserBase::GetUint32OrParam(unsigned long max)
 		param = mm1000;
 	}
 	else
-	#endif
+#endif
 	{
 		param = GetUInt32();
 	}
@@ -257,21 +257,21 @@ bool CGCodeParserBase::ParseLineNumber()
 			return false;
 		}
 
-		#ifdef REDUCED_SIZE
+#ifdef REDUCED_SIZE
 		_modalstate.LineNumber = GetUInt16();
-		#else
+#else
 		_modalstate.LineNumber = GetInt32();
-		#endif
+#endif
 
 		_reader->SkipSpaces();
 
 		_OkMessage = []()
 		{
 			StepperSerial.print(_modalstate.LineNumber);
-			#ifndef REDUCED_SIZE
+#ifndef REDUCED_SIZE
 			StepperSerial.print(':');
 			StepperSerial.print(_modalstate.ReceivedLineNumber);
-			#endif
+#endif
 		};
 	}
 	return true;
@@ -307,9 +307,9 @@ void CGCodeParserBase::Wait(unsigned long ms)
 void CGCodeParserBase::Sync()
 {
 	CStepper::GetInstance()->WaitBusy();
-	#ifdef _USE_LCD
+#ifdef _USE_LCD
 	CControl::GetInstance()->Delay(0);
-	#endif
+#endif
 }
 
 ////////////////////////////////////////////////////////////
@@ -323,9 +323,9 @@ mm1000_t CGCodeParserBase::CalcAllPreset(axis_t axis)
 
 void CGCodeParserBase::Parse()
 {
-	#ifndef REDUCED_SIZE
+#ifndef REDUCED_SIZE
 	_modalstate.ReceivedLineNumber++;
-	#endif
+#endif
 	do
 	{
 		char ch = _reader->GetCharToUpper();
@@ -393,13 +393,13 @@ void CGCodeParserBase::Parse()
 
 			default:
 			{
-				#ifdef _MSC_VER
+#ifdef _MSC_VER
 				if (IsToken(F("X"), true, false))
 				{
 					_exit = true;
 					return;
 				}
-				#endif
+#endif
 				if (!Command(ch))
 				{
 					if (!LastCommand())
@@ -472,30 +472,30 @@ bool CGCodeParserBase::MCommand(mcode_t mcode)
 	{
 			// Spindle (+laser)
 		case 106:
-		case 3: 
+		case 3:
 		{
 			M0304Command(true);
 			return true;
 		}
-		case 4: 
+		case 4:
 		{
 			M0304Command(false);
 			return true;
 		}
 		case 107:
-		case 5: 
+		case 5:
 		{
 			M05Command();
 			return true;
 		}
 
-		// coolant
+			// coolant
 		case 7: M07Command();
 			return true;
 		case 9: M09Command();
 			return true;
 
-		// probe config
+			// probe config
 		case 100: _modalstate.ProbeOnValue = false;
 			return true;
 		case 101: _modalstate.ProbeOnValue = true;
@@ -663,7 +663,7 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 
 	feedrate_t feedrate;
 
-	#ifndef REDUCED_SIZE
+#ifndef REDUCED_SIZE
 	if (GetParamOrExpression(&feedrate, false))
 	{
 		if (FEEDRATE_MIN > feedrate)
@@ -676,7 +676,7 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 		}
 	}
 	else
-	#endif
+#endif
 	{
 		feedrate = GetInt32Scale(FEEDRATE_MIN, FEEDRATE_MAX, FEEDRATE_SCALE, FEEDRATE_MAXSCALE);
 	}
@@ -902,7 +902,7 @@ unsigned long CGCodeParserBase::GetDweel()
 {
 	const char*   current = _reader->GetBuffer();
 	unsigned long dweelms = GetUint32OrParam();
-	
+
 	if (_reader->GetChar() == '.')
 	{
 		// this is "sec" and not "ms"
@@ -924,14 +924,14 @@ void CGCodeParserBase::G04Command()
 		dweelms = GetDweel();
 	}
 
-	#ifndef REDUCED_SIZE
-	
+#ifndef REDUCED_SIZE
+
 	if (!ExpectEndOfCommand())
 	{
 		return;
 	}
-	
-	#endif
+
+#endif
 
 	Wait(dweelms);
 }
@@ -969,14 +969,14 @@ void CGCodeParserBase::G28Command()
 		}
 	}
 
-	#ifndef REDUCED_SIZE
-	
+#ifndef REDUCED_SIZE
+
 	if (!ExpectEndOfCommand())
 	{
 		return;
 	}
-	
-	#endif
+
+#endif
 
 	if (move.axes == 0)
 	{
@@ -1132,14 +1132,14 @@ void CGCodeParserBase::SpindleSpeedCommand()
 	_reader->SkipSpaces();
 	auto speed = short(GetUint32OrParam(MAXSPINDLE_SPEED));
 
-	#ifndef REDUCED_SIZE
-	
+#ifndef REDUCED_SIZE
+
 	if (IsError())
 	{
 		return;
 	}
 
-	#endif
+#endif
 
 	_modalstate.SpindleSpeed = speed;
 }

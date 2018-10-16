@@ -92,8 +92,14 @@ protected:
 
 			ldiv_t ud = ldiv(pos, SCALEMASK);
 
-			if (ud.quot < 0) ud.quot = -ud.quot;
-			if (ud.rem < 0) ud.rem   = -ud.rem;
+			if (ud.quot < 0)
+			{
+				ud.quot = -ud.quot;
+			}
+			if (ud.rem < 0)
+			{
+				ud.rem = -ud.rem;
+			}
 
 			if (scale > 0)
 			{
@@ -207,8 +213,6 @@ class CInch100000 : public CDecimaAsInt<inch100000_t,SCALE_INCH, 100000>
 private:
 
 	typedef CDecimaAsInt super;
-
-private:
 
 	inch100000_t _value;
 

@@ -48,42 +48,38 @@ public:
 
 	void ParseCommand();
 
-	bool    IsError() const						{ return _error != nullptr; };
-	error_t GetError() const					{ return _error; }
+	bool    IsError() const { return _error != nullptr; };
+	error_t GetError() const { return _error; }
 
 	typedef void (*PrintOKMessage)();
-	PrintOKMessage GetOkMessage() const			{ return _OkMessage; }
+	PrintOKMessage GetOkMessage() const { return _OkMessage; }
 
-	CStreamReader* GetReader() const			{ return _reader; }
-	Stream*        GetOutput() const			{ return _output; }
+	CStreamReader* GetReader() const { return _reader; }
+	Stream*        GetOutput() const { return _output; }
 
-	static void Init()
-	{
-	}
+	static void Init() { }
 
 protected:
 
 	////////////////////////////////////////////////////////
 
 	virtual void Parse() = 0;
-	virtual bool InitParse()					{ return true; }; // begin parsing of a command (override for prechecks), return true to continue
-	virtual void CleanupParse()
-	{
-	}; // called after call to Parse()
+	virtual bool InitParse() { return true; }; // begin parsing of a command (override for prechecks), return true to continue
+	virtual void CleanupParse() { }; // called after call to Parse()
 
 	bool         CheckError();
-	virtual char SkipSpacesOrComment()			{ return _reader->SkipSpaces(); }
-	void         SkipCommentSingleLine()		{ _reader->MoveToEnd(); };
+	virtual char SkipSpacesOrComment() { return _reader->SkipSpaces(); }
+	void         SkipCommentSingleLine() { _reader->MoveToEnd(); };
 
 	bool ExpectEndOfCommand();
-	void ErrorNotImplemented()					{ Error(MESSAGE(MESSAGE_PARSER_NotImplemented)); }
-	void ErrorNotANumber()						{ Error(MESSAGE(MESSAGE_PARSER_NotANumber)); };
-	void ErrorNumberRange()						{ Error(MESSAGE(MESSAGE_PARSER_OverrunOfNumber)); };
-	void Error()								{ Error(MESSAGE_UNKNOWNERROR); }
+	void ErrorNotImplemented() { Error(MESSAGE(MESSAGE_PARSER_NotImplemented)); }
+	void ErrorNotANumber() { Error(MESSAGE(MESSAGE_PARSER_NotANumber)); };
+	void ErrorNumberRange() { Error(MESSAGE(MESSAGE_PARSER_OverrunOfNumber)); };
+	void Error() { Error(MESSAGE_UNKNOWNERROR); }
 
 	////////////////////////////////////////////////////////
 
-	void ErrorAdd(error_t error)				{ if (!IsError()) Error(error); }
+	void ErrorAdd(error_t error) { if (!IsError()) Error(error); }
 
 	void Error(error_t error)
 	{
@@ -158,8 +154,7 @@ private:
 
 private:
 
-	template <class T>
-	T GetUInt()
+	template <class T> T GetUInt()
 	{
 		if (!CStreamReader::IsDigit(_reader->GetChar()))
 		{
@@ -182,8 +177,7 @@ private:
 		return value;
 	}
 
-	template <class T>
-	T GetInt()
+	template <class T> T GetInt()
 	{
 		bool negativ;
 		if ((negativ = CStreamReader::IsMinus(_reader->GetChar())) != 0)
@@ -192,8 +186,7 @@ private:
 		return negativ ? -value : value;
 	}
 
-	template <class T>
-	T GetUInt(T minvalue, T maxvalue)
+	template <class T> T GetUInt(T minvalue, T maxvalue)
 	{
 		T value = GetUInt<T>();
 		if (value < minvalue) Error(MESSAGE_PARSER_ValueLessThanMin);
@@ -201,8 +194,7 @@ private:
 		return value;
 	}
 
-	template <class T>
-	T GetInt(T minvalue, T maxvalue)
+	template <class T> T GetInt(T minvalue, T maxvalue)
 	{
 		T value = GetInt<T>();
 		if (value < minvalue) Error(MESSAGE_PARSER_ValueLessThanMin);

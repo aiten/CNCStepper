@@ -90,9 +90,9 @@ void CMotionControlBase::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedrat
 	// the ONLY methode to move!!!!!
 	// do not call Stepper direct
 
-	#ifdef _MSC_VER
+#ifdef _MSC_VER
 	CStepper::GetInstance()->MSCInfo = CControl::GetInstance()->GetBuffer();
-	#endif
+#endif
 
 	mm1000_t to_proj[NUM_AXIS];
 	udist_t  to_m[NUM_AXIS];
@@ -201,11 +201,11 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 		}
 	}
 
-	#if defined(_MSC_VER)
-	#pragma warning (suppress:4189)
+#if defined(_MSC_VER)
+#pragma warning (suppress:4189)
 	float mm1000_of_travel = hypot(angular_travel * radius, float(abs(linear_travel_max)));
 	mm1000_of_travel;
-	#endif
+#endif
 	if (hypot(angular_travel * radius, float(abs(linear_travel_max))) < 1)
 	{
 		return;
@@ -217,11 +217,11 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 
 	auto segments = (unsigned short)(abs(floor((CMm1000::ConvertTo((const mm1000_t)(2 * SEGMENTS_K * M_PI)) * radius + SEGMENTS_D) * angular_travel / (2.0 * M_PI))));
 
-	#if defined(_MSC_VER)
+#if defined(_MSC_VER)
 	double segments_full = CMm1000::ConvertTo((const mm1000_t)(2 * SEGMENTS_K * M_PI)) * radius + SEGMENTS_D;
 	segments_full;
 	Trace("Gx command with\tr=%f\tfull_segments=%f\tangular=%f\tangularG=%f\tsegments=%i\n", radius, segments_full, angular_travel, angular_travel / M_PI * 180, segments);
-	#endif
+#endif
 
 	if (segments > 1)
 	{
@@ -288,7 +288,7 @@ steprate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate
 	// feedrate < 0 => no arc correction (allowable max for all axis)
 	// from current position
 
-	#define AvoidOverrun 256
+#define AvoidOverrun 256
 
 	axis_t maxdistaxis = 0;
 
@@ -412,13 +412,13 @@ void CMotionControlBase::MoveAbsEx(feedrate_t feedrate, unsigned short axis, mm1
 	{
 		dest[axis] = d; // replace current position
 
-		#ifdef _MSC_VER
+#ifdef _MSC_VER
 		axis = va_arg(arglist, unsigned short);
 		d    = va_arg(arglist, mm1000_t);
-		#else
+#else
 		axis = va_arg(arglist, unsigned int);		// only "int" supported on arduino
 		d = va_arg(arglist, unsigned long);
-		#endif
+#endif
 	}
 
 	va_end(arglist);
@@ -441,13 +441,13 @@ void CMotionControlBase::MoveRelEx(feedrate_t feedrate, unsigned short axis, mm1
 	{
 		dest[axis] += d; // add to current postition
 
-		#ifdef _MSC_VER
+#ifdef _MSC_VER
 		axis = va_arg(arglist, unsigned short);
 		d    = va_arg(arglist, mm1000_t);
-		#else
+#else
 		axis = va_arg(arglist, unsigned int);		// only "int" supported on arduino
 		d = va_arg(arglist, unsigned long);
-		#endif
+#endif
 	}
 
 	va_end(arglist);

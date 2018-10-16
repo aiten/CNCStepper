@@ -40,7 +40,7 @@
 
 CMenuBase::MenuFunction CMenuBase::SMenuItemDef::GetButtonPress() const
 {
-	#if defined(__AVR_ARCH__)
+#if defined(__AVR_ARCH__)
 
 	struct ButtonFunctionWrapper
 	{
@@ -51,11 +51,11 @@ CMenuBase::MenuFunction CMenuBase::SMenuItemDef::GetButtonPress() const
 
 	return x.fnc;
 
-	#else
+#else
 
 	return _buttonpress;
 
-	#endif
+#endif
 }
 
 ////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef* def)
 {
 	auto newMenu = (const SMenuDef*)def->GetParam1();
 	auto posMenu = (const SMenuDef*)def->GetParam2();
-	
+
 	SetMenu(newMenu);
 
 	if (posMenu != nullptr)

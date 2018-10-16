@@ -45,15 +45,19 @@ void CControl::Init()
 	CStepper::GetInstance()->Init();
 	CStepper::GetInstance()->AddEvent(StaticStepperEvent, uintptr_t(this), _oldStepperEvent);
 
-	#ifdef _USE_LCD
+#ifdef _USE_LCD
 
 	if (CLcd::GetInstance())
+	{
 		CLcd::GetInstance()->Init();
+	}
 
-	#endif
+#endif
 
 	if (_timeBlink == 0)
+	{
 		CHAL::pinModeOutput(BLINK_LED);
+	}
 
 	CHAL::InitTimer0(HandleInterrupt);
 	CHAL::StartTimer0(IDLETIMER0VALUE);
@@ -74,11 +78,15 @@ void CControl::InitFromEeprom()
 {
 	CStepper::GetInstance()->SetDirection(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, stepperdirections)));
 
-	#ifdef REDUCED_SIZE
+#ifdef REDUCED_SIZE
+
 	CMotionControlBase::GetInstance()->InitConversionStepsPer(CConfigEeprom::GetConfigFloat(offsetof(CConfigEeprom::SCNCEeprom, StepsPerMm1000)));
-	#else
+
+#else
+
 	CMotionControlBase::GetInstance()->InitConversionBestStepsPer(CConfigEeprom::GetConfigFloat(offsetof(CConfigEeprom::SCNCEeprom, StepsPerMm1000)));
-	#endif
+
+#endif
 
 	uint16_t jerkspeed = CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, jerkspeed));
 	if (jerkspeed == 0)
@@ -100,7 +108,7 @@ void CControl::InitFromEeprom()
 
 		CStepper::GetInstance()->SetLimitMax(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].size) + ofs)));
 
-		#ifndef REDUCED_SIZE
+#ifndef REDUCED_SIZE
 
 		steprate_t steprate = CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].maxsteprate) + ofs);
 		if (steprate != 0)
@@ -126,7 +134,8 @@ void CControl::InitFromEeprom()
 			CMotionControlBase::GetInstance()->SetConversionStepsPerEx();
 			CMotionControlBase::GetInstance()->SetConversionStepsPerEx(axis, stepsperMM1000);
 		}
-		#endif
+
+#endif
 	}
 }
 
@@ -199,14 +208,14 @@ void CControl::Resurrect()
 	CStepper::GetInstance()->EmergencyStopResurrect();
 	CMotionControlBase::GetInstance()->SetPositionFromMachine();
 
-	#ifdef _USE_LCD
+#ifdef _USE_LCD
 
 	if (CLcd::GetInstance())
 	{
 		CLcd::GetInstance()->ClearDiagnostic();
 	}
 
-	#endif
+#endif
 
 	_bufferidx = 0;
 	StepperSerial.println(MESSAGE_OK_RESURRECT);
@@ -238,10 +247,12 @@ void CControl::Resume()
 
 void CControl::Poll()
 {
-	#ifdef _USE_LCD
+#ifdef _USE_LCD
+
 	if (CLcd::GetInstance())
 		CLcd::GetInstance()->Poll();
-	#endif
+
+#endif
 }
 
 ////////////////////////////////////////////////////////////
@@ -301,24 +312,24 @@ bool CControl::ParseAndPrintResult(CParser* parser, Stream* output)
 
 bool CControl::Command(char* buffer, Stream* output)
 {
-	#ifdef _USE_LCD
+#ifdef _USE_LCD
 
 	if (CLcd::GetInstance())
 	{
 		CLcd::GetInstance()->Command(buffer);
 	}
 
-	#endif
+#endif
 
 	if (IsKilled())
 	{
-		#ifndef REDUCED_SIZE
+#ifndef REDUCED_SIZE
 		if (IsResurrectCommand(buffer))		// restart with "!!!"
 		{
 			Resurrect();
 			return true;
 		}
-		#endif
+#endif
 		if (output)
 		{
 			PrintError(output);
@@ -446,11 +457,11 @@ void CControl::Run()
 	Init();
 	Initialized();
 
-	#ifdef _MSC_VER
+#ifdef _MSC_VER
 	while (!CGCodeParserBase::_exit)
-	#else
+#else
 	while (true)
-	#endif
+#endif
 	{
 		if (IsHold())
 		{
@@ -548,14 +559,14 @@ void CControl::TimerInterrupt()
 		}
 	}
 
-	#ifdef _USE_LCD
+#ifdef _USE_LCD
 
 	if (CLcd::GetInstance())
 	{
 		CLcd::GetInstance()->TimerInterrupt();
 	}
 
-	#endif
+#endif
 }
 
 ////////////////////////////////////////////////////////////
@@ -566,12 +577,14 @@ void CControl::Delay(unsigned long ms)
 
 	while (expected_end > millis())
 	{
-		#ifdef _USE_LCD
+#ifdef _USE_LCD
+
 		if (CLcd::GetInstance())
 		{
 			CLcd::GetInstance()->Poll();
 		}
-		#endif
+
+#endif
 	}
 }
 
@@ -581,7 +594,6 @@ bool CControl::StaticStepperEvent(CStepper* /*stepper*/, uintptr_t param, EnumAs
 {
 	return ((CControl*)param)->StepperEvent(eventtype, addinfo);
 }
-
 
 ////////////////////////////////////////////////////////////
 

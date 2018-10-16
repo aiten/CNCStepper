@@ -25,14 +25,11 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PIN, uint8_t ONVALUE>
-class CPushButtonLow
+template <pin_t PIN, uint8_t ONVALUE> class CPushButtonLow
 {
 public:
 
-	CPushButtonLow()
-	{
-	}
+	CPushButtonLow() { }
 
 	static void Init(uint8_t inputmode = INPUT_PULLUP)
 	{

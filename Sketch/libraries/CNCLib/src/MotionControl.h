@@ -131,7 +131,7 @@ private:
 
 	axisArray_t _rotateEnabled2D = 0;
 
-	#ifdef _MSC_VER
+#ifdef _MSC_VER
 
 public:
 
@@ -142,7 +142,7 @@ public:
 
 	bool Test(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXISXYZ], mm1000_t dest[NUM_AXIS], bool printOK, std::function<void()> print);
 
-	#endif
+#endif
 };
 
 ////////////////////////////////////////////////////////

@@ -57,8 +57,8 @@ protected:
 	virtual void ReadIdent();
 	virtual bool IsIdentStart(char ch) { return CStreamReader::IsAlpha(ch); }	// start of function or variable
 
-	virtual bool EvalVariable(const char*               var_name, expr_t& answer);
-	virtual void AssignVariable(const char* /*var_name*/, expr_t /*value*/) { };
+	virtual bool EvalVariable(const char*  var_name, expr_t& answer);
+	virtual void AssignVariable(const char*, expr_t          ) { };
 
 	enum ETokenType
 	{
@@ -125,14 +125,14 @@ protected:
 
 	struct SParserState
 	{
-		expr_t _number;							// number if parsed integer or float or variable(content)
-
+		expr_t      _number;					// number if parsed integer or float or variable(content)
 		const char* _varName;
-
-		bool _variableOK;					// _number = variable with content
+		bool        _variableOK;				// _number = variable with content
 
 		EnumAsByte(ETokenType) _detailtoken;
-	}                          _state;
+	};
+
+	SParserState _state;
 
 	EnumAsByte(ETokenType) GetTokenType() const { return _state._detailtoken; }
 

@@ -48,7 +48,7 @@ extern class HardwareSerial& StepperSerial;
 typedef uint8_t axis_t; // type for "axis"
 
 typedef signed long   sdist_t; // type of stepper coord system (signed)
-typedef unsigned long udist_t; // type of stepper coord system (unsigned)
+typedef uint32_t udist_t; // type of stepper coord system (unsigned)
 
 typedef const __FlashStringHelper* FLSTR;
 
@@ -159,9 +159,9 @@ ToDo;
 
 #define STEPRATE_MAX		(65535l)		// see range for steprate_t
 
-typedef unsigned short timer_t;			// timer tpye (16bit)
-typedef unsigned short mdist_t;			// tpye for one movement (16bit)
-typedef unsigned short steprate_t;		// tpye for speed (Hz), Steps/sec
+typedef uint16_t timer_t;			// timer tpye (16bit)
+typedef uint16_t mdist_t;			// tpye for one movement (16bit)
+typedef uint16_t steprate_t;		// tpye for speed (Hz), Steps/sec
 
 #define mudiv	udiv
 #define mudiv_t	udiv_t
@@ -175,9 +175,9 @@ typedef unsigned short steprate_t;		// tpye for speed (Hz), Steps/sec
 
 #define STEPRATE_MAX		(128000l)	// limit steprate_t
 
-typedef unsigned long timer_t;    // timer tpye (32bit)
-typedef unsigned long mdist_t;    // tpye for one movement (32bit)
-typedef unsigned long steprate_t; // tpye for speed (Hz), Steps/sec
+typedef uint32_t timer_t;    // timer tpye (32bit)
+typedef uint32_t mdist_t;    // tpye for one movement (32bit)
+typedef uint32_t steprate_t; // tpye for speed (Hz), Steps/sec
 
 #define mudiv	ldiv
 #define mudiv_t	ldiv_t
@@ -218,10 +218,10 @@ typedef unsigned long steprate_t; // tpye for speed (Hz), Steps/sec
 typedef uint8_t axisArray_t; // on bit per axis
 
 #if NUM_AXIS > 3
-typedef unsigned long DirCount_t;			// 4 bit for eache axis (0..7) count, 8 dirup, see DirCountAll_t
+typedef uint32_t DirCount_t;			// 4 bit for eache axis (0..7) count, 8 dirup, see DirCountAll_t
 #define DirCountBytes 4
 #else
-typedef unsigned short DirCount_t; // 4 bit for eache axis (0..7) count, 8 dirup 
+typedef uint16_t DirCount_t; // 4 bit for eache axis (0..7) count, 8 dirup 
 #define DirCountBytes 2
 #endif
 

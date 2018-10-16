@@ -111,7 +111,7 @@ void CGCode3DParser::M20Command()
 	strcpy(filenamebuffer, "/");
 
 	File           root  = SD.open(filenamebuffer);
-	unsigned short count = 0;
+	uint16_t count = 0;
 
 	if (root)
 	{
@@ -129,7 +129,7 @@ void CGCode3DParser::M20Command()
 
 ////////////////////////////////////////////////////////////
 
-void CGCode3DParser::PrintSDFileListRecurse(File& dir, uint8_t depth, unsigned short& count, char* filenamebuffer, char seperatorchar)
+void CGCode3DParser::PrintSDFileListRecurse(File& dir, uint8_t depth, uint16_t& count, char* filenamebuffer, char seperatorchar)
 {
 #ifdef _MSC_VER
 #pragma warning (suppress: 4127)
@@ -253,7 +253,7 @@ void CGCode3DParser::M26Command()
 	else if (_reader->GetCharToUpper() == 'L')
 	{
 		_reader->GetNextChar();
-		unsigned long lineNr = GetUInt32();
+		uint32_t lineNr = GetUInt32();
 		if (IsError())
 		{
 			return;
@@ -268,7 +268,7 @@ void CGCode3DParser::M26Command()
 
 		GetExecutingFile().seek(0);
 
-		for (unsigned long line = 1; line < lineNr; line++)
+		for (uint32_t line = 1; line < lineNr; line++)
 		{
 			// read line until \n
 			char ch;

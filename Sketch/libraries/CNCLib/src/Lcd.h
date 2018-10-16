@@ -69,9 +69,9 @@ protected:
 
 	virtual void Command(char* cmd);
 
-	virtual unsigned long Draw(EDrawType draw) = 0; // return => timeout for next draw
+	virtual uint32_t Draw(EDrawType draw) = 0; // return => timeout for next draw
 
-	virtual unsigned long Splash() = 0; // return time to display
+	virtual uint32_t Splash() = 0; // return time to display
 
 	bool IsSplash() const { return _splash; };
 
@@ -89,7 +89,7 @@ public:
 
 private:
 
-	unsigned long _nextdrawtime = 0;
+	uint32_t _nextdrawtime = 0;
 
 	bool _splash     = false;
 	bool _invalidate = false;

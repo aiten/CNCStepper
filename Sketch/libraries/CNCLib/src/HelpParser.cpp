@@ -134,7 +134,7 @@ bool CHelpParser::MoveAbs()
 {
 	udist_t position[NUM_AXIS] = { 0 };
 
-	for (unsigned long& pos : position)
+	for (uint32_t& pos : position)
 	{
 		if (IsUInt(_reader->SkipSpaces()))
 		{

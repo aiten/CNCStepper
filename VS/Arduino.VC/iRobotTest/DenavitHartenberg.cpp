@@ -208,7 +208,7 @@ float CDenavitHartenberg::SearchMinOld(float pos[3], float inout[NUM_AXIS], uint
 	
 	float oldiff = CalcDist(pos, inout);
 	float diff = oldiff;
-	unsigned short count = 0;
+	uint16_t count = 0;
 
 	while (true)
 	{

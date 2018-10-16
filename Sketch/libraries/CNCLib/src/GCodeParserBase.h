@@ -247,7 +247,7 @@ protected:
 	////////////////////////////////////////////////////////
 
 	void Sync();											// WaitBusy, sync movement with realtime
-	void Wait(unsigned long ms);							// add "wait" in movement queue
+	void Wait(uint32_t ms);							// add "wait" in movement queue
 	void SkipCommentNested();
 
 	void ConstantVelocity();
@@ -256,9 +256,9 @@ protected:
 	mm1000_t     ParseCoordinate(bool          convertUnits);
 	mm1000_t     ParseCoordinateAxis(axis_t    axis);
 
-	unsigned long  GetUint32OrParam(unsigned long max);
-	unsigned long  GetUint32OrParam() { return GetUint32OrParam(0xffffffffl); };
-	unsigned short GetUint16OrParam() { return (unsigned short)GetUint32OrParam(65535); };
+	uint32_t  GetUint32OrParam(uint32_t max);
+	uint32_t  GetUint32OrParam() { return GetUint32OrParam(0xffffffffl); };
+	uint16_t GetUint16OrParam() { return (uint16_t)GetUint32OrParam(65535); };
 	uint8_t        GetUint8OrParam() { return uint8_t(GetUint32OrParam(255)); };
 
 	//mm1000_t GetRelativePosition(mm1000_t pos, axis_t axis)	{ return pos - CalcAllPreset(axis); }
@@ -286,11 +286,11 @@ protected:
 
 	void InfoNotImplemented() { Info(MESSAGE_GCODE_NotImplemented); }
 
-	unsigned long GetDweel();
+	uint32_t GetDweel();
 
 	void GetRadius(SAxisMove& move, mm1000_t& radius);
 
-	void CallIOControl(uint8_t io, unsigned short value);
+	void CallIOControl(uint8_t io, uint16_t value);
 	void SpindleSpeedCommand();
 
 	void MoveStart(bool cutmove);

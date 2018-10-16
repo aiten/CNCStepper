@@ -102,7 +102,7 @@ void CMyControl::Init()
 
 ////////////////////////////////////////////////////////////
 
-void CMyControl::IOControl(uint8_t tool, unsigned short level)
+void CMyControl::IOControl(uint8_t tool, uint16_t level)
 {
 	if (!_data.IOControl(tool, level))
 	{
@@ -112,7 +112,7 @@ void CMyControl::IOControl(uint8_t tool, unsigned short level)
 
 ////////////////////////////////////////////////////////////
 
-unsigned short CMyControl::IOControl(uint8_t tool)
+uint16_t CMyControl::IOControl(uint8_t tool)
 {
 	switch (tool)
 	{

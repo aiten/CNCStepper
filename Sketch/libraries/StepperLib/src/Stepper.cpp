@@ -100,7 +100,7 @@ void CStepper::SetUsual(steprate_t vMax)
 	const steprate_t defjerk  = 1000;
 
 	auto          jerk = steprate_t(MulDivU32(vMax, defjerk, defspeed));
-	unsigned long sqrt = _ulsqrt_round(vMax * 10000l / defspeed);
+	uint32_t sqrt = _ulsqrt_round(vMax * 10000l / defspeed);
 
 	auto acc = steprate_t(sqrt * defacc / 100l);
 	auto dec = steprate_t(sqrt * defdec / 100l);
@@ -352,8 +352,8 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 		mdist_t d = dist[i];
 		if (d)
 		{
-			unsigned long axistimer = MulDivU32(_pod._move._timerMax, _steps, d);
-			if (axistimer < (unsigned long)pStepper->_pod._timerMax[i])
+			uint32_t axistimer = MulDivU32(_pod._move._timerMax, _steps, d);
+			if (axistimer < (uint32_t)pStepper->_pod._timerMax[i])
 			{
 				timerMax             = timer_t(MulDivU32(pStepper->_pod._timerMax[i], d, _steps));
 				_pod._move._timerMax = max(timerMax, _pod._move._timerMax);
@@ -430,11 +430,11 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 						}
 					}
 #ifdef use16bit
-					unsigned long distinit = _steps / maxMultiplier / 2;
-					unsigned long distsum = ((unsigned long)_distance_[i]) * ((unsigned long)calcfullsteps);
-					mdist_t s = (mdist_t)((distinit + distsum) / ((unsigned long)_steps) * multiplier);
+					uint32_t distinit = _steps / maxMultiplier / 2;
+					uint32_t distsum = ((uint32_t)_distance_[i]) * ((uint32_t)calcfullsteps);
+					mdist_t s = (mdist_t)((distinit + distsum) / ((uint32_t)_steps) * multiplier);
 #else
-					unsigned long distinit = _steps / maxMultiplier / 2;
+					uint32_t distinit = _steps / maxMultiplier / 2;
 					uint64_t      distsum  = uint64_t(_distance_[i]) * uint64_t(calcfullsteps);
 					auto          s        = mdist_t(((distinit + distsum) / uint64_t(_steps) * multiplier));
 #endif
@@ -557,7 +557,7 @@ void CStepper::SMovement::InitWait(CStepper* pStepper, mdist_t steps, timer_t ti
 	_state = StateReadyWait;
 }
 
-void CStepper::SMovement::InitIoControl(CStepper* pStepper, uint8_t tool, unsigned short level)
+void CStepper::SMovement::InitIoControl(CStepper* pStepper, uint8_t tool, uint16_t level)
 {
 	//this is no POD because of methode's => *this = SMovement();		
 	memset(this, 0, sizeof(SMovement)); // init with 0
@@ -697,13 +697,13 @@ void CStepper::SMovement::SRamp::RampRun(SMovement* pMovement)
 			timer_t upTimer   = pMovement->GetUpTimer(_timerStart > _timerRun);
 			timer_t downTimer = pMovement->GetUpTimer(_timerStop < _timerRun);
 
-			unsigned long sqUp   = (unsigned long)(upTimer) * (unsigned long)(upTimer);
-			unsigned long sqDown = (unsigned long)(downTimer) * (unsigned long)(downTimer);
+			uint32_t sqUp   = (uint32_t)(upTimer) * (uint32_t)(upTimer);
+			uint32_t sqDown = (uint32_t)(downTimer) * (uint32_t)(downTimer);
 
 			sqUp /= 0x1000; // may overrun => divide by 0x1000
 			sqDown /= 0x1000;
 
-			unsigned long sum = sqUp + sqDown;
+			uint32_t sum = sqUp + sqDown;
 
 			subUp = mdist_t(RoundMulDivU32(toMany, sqUp, sum)); // round
 		}
@@ -1040,7 +1040,7 @@ void CStepper::OptimizeMovementQueue(bool /* force */)
 
 ////////////////////////////////////////////////////////
 
-void CStepper::OnIdle(unsigned long idletime)
+void CStepper::OnIdle(uint32_t idletime)
 {
 	CallEvent(OnIdleEvent);
 	if (idletime > TIMEOUTSETIDLE)
@@ -1108,13 +1108,13 @@ void CStepper::WaitBusy()
 
 ////////////////////////////////////////////////////////
 
-unsigned long CStepper::GetAccelerationFromTimer(mdist_t timerV0)
+uint32_t CStepper::GetAccelerationFromTimer(mdist_t timerV0)
 {
 	// original a = v/t, => a=s/t^2
 	// for first step we need c0 => convert to sec, a = 1/t^2
 	// a = (F/timer)^2
 
-	unsigned long x = TIMER1FREQUENCE / timerV0;
+	uint32_t x = TIMER1FREQUENCE / timerV0;
 	return x * x;
 
 	//range: v0=100 => 10000
@@ -1137,14 +1137,14 @@ timer_t CStepper::GetTimer(mdist_t steps, timer_t timerstart)
 		steps = MAXACCDECSTEPS;
 	}
 
-	unsigned long a2 = 2 * GetAccelerationFromTimer(timerstart);
+	uint32_t a2 = 2 * GetAccelerationFromTimer(timerstart);
 
 	if (ToPrecisionU2(a2) + ToPrecisionU2(steps) > 31)
 	{
 		return TIMER1VALUEMAXSPEED;
 	}
 
-	unsigned long ad = a2 * steps;
+	uint32_t ad = a2 * steps;
 	auto          v  = steprate_t((_ulsqrt(((ad) / 93) * 85)));
 
 	return SpeedToTimer(v) + 1; // +1 	empiric tested to get better results
@@ -1165,17 +1165,17 @@ timer_t CStepper::GetTimerAccelerating(mdist_t steps, timer_t timerv0, timer_t t
 		steps = MAXACCDECSTEPS;
 	}
 
-	unsigned long sqv0 = TimerToSpeed(timerv0);
+	uint32_t sqv0 = TimerToSpeed(timerv0);
 	sqv0 *= sqv0;
 
-	unsigned long a2 = 2 * GetAccelerationFromTimer(timerstart);
+	uint32_t a2 = 2 * GetAccelerationFromTimer(timerstart);
 
 	if (ToPrecisionU2(a2) + ToPrecisionU2(steps) > 31)
 	{
 		return TIMER1VALUEMAXSPEED;
 	}
 
-	unsigned long ad = a2 * steps;
+	uint32_t ad = a2 * steps;
 	auto          v  = steprate_t((_ulsqrt(((sqv0 + ad) / 93) * 85)));
 
 	return SpeedToTimer(v) + 1; // +1 	empiric tested to get better results
@@ -1196,17 +1196,17 @@ timer_t CStepper::GetTimerDecelerating(mdist_t steps, timer_t timerv, timer_t ti
 		steps = MAXACCDECSTEPS;
 	}
 
-	unsigned long sqv0 = TimerToSpeed(timerv);
+	uint32_t sqv0 = TimerToSpeed(timerv);
 	sqv0 *= sqv0;
 
-	unsigned long a2 = 2 * GetAccelerationFromTimer(timerstart);
+	uint32_t a2 = 2 * GetAccelerationFromTimer(timerstart);
 
 	if (ToPrecisionU2(a2) + ToPrecisionU2(steps) > 31)
 	{
 		return TIMER1VALUEMAXSPEED;
 	}
 
-	unsigned long ad = a2 * steps;
+	uint32_t ad = a2 * steps;
 	if (sqv0 < ad)
 	{
 		return timer_t(-1);
@@ -1225,8 +1225,8 @@ mdist_t CStepper::GetAccSteps(timer_t timer, timer_t timerstart)
 	// original: d = v^2 / v0^2
 	// tested with execel to fit to timer calcualtion with cn = cn-1 + (2*cn-1) / (4n+1) and use of "integer"
 
-	unsigned long sqA2 = (unsigned long)(timer) * (unsigned long)(timer - 1) * 2;
-	unsigned long sqB  = (unsigned long)(timerstart) * (unsigned long)(timerstart);
+	uint32_t sqA2 = (uint32_t)(timer) * (uint32_t)(timer - 1) * 2;
+	uint32_t sqB  = (uint32_t)(timerstart) * (uint32_t)(timerstart);
 
 	// factor => tested with excel => timer *= 1.046 => timer^2 *= 1.0941 ( 1.046^2)
 	// use int and not float => 93/85 = 1,094117647058824 
@@ -1595,7 +1595,7 @@ void CStepper::FillStepBuffer()
 
 	// check if turn off stepper
 
-	unsigned long ms       = millis();
+	uint32_t ms       = millis();
 	auto          diff_sec = uint8_t(((ms - _pod._timerLastCheckEnable) / 1024)); // div 1024 is faster as 1000
 
 	if (diff_sec > 0)
@@ -1944,7 +1944,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 				_state = pState->_timer > _pod._move._ramp._timerRun ? StateUpAcc : StateUpDec;
 				if (pState->_count > 1 && _pod._move._ramp._nUpOffset == 0)
 				{
-					static const unsigned short corrtab[][2] PROGMEM =
+					static const uint16_t corrtab[][2] PROGMEM =
 					{
 						{1300, 1402},
 						{611, 709},
@@ -1952,8 +1952,8 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 						{307, 405},
 						{289, 403}
 					};
-					unsigned short mul = pgm_read_word(&corrtab[pState->_count - 2][0]);
-					unsigned short div = pgm_read_word(&corrtab[pState->_count - 2][1]);
+					uint16_t mul = pgm_read_word(&corrtab[pState->_count - 2][0]);
+					uint16_t div = pgm_read_word(&corrtab[pState->_count - 2][1]);
 					pState->_timer     = timer_t(MulDivU32(pState->_timer, mul, div));
 				}
 				else if (pState->_count <= 1 && _pod._move._ramp._nUpOffset == 0 && _state == StateUpDec)
@@ -2021,7 +2021,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 		if (pStepper->GetSpeedOverride() != CStepper::SpeedOverride100P)
 		{
 			// slower => increase timer
-			unsigned long tl = RoundMulDivU32(t, CStepper::SpeedOverride100P, pStepper->GetSpeedOverride());
+			uint32_t tl = RoundMulDivU32(t, CStepper::SpeedOverride100P, pStepper->GetSpeedOverride());
 			if (tl >= TIMER1MAX)
 			{
 				t = TIMER1MAX; // to slow
@@ -2158,21 +2158,21 @@ void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool direct
 	_pod._totalSteps += steps;
 #endif
 
-	unsigned short movecount     = 1;
+	uint16_t movecount     = 1;
 	udist_t        pos[NUM_AXIS] = {0};
 
 	steps *= stepmul;
 
 	if (steps > MAXSTEPSPERMOVE)
 	{
-		movecount = (unsigned short)(steps / MAXSTEPSPERMOVE);
+		movecount = (uint16_t)(steps / MAXSTEPSPERMOVE);
 		if ((steps % MAXSTEPSPERMOVE) != 0)
 		{
 			movecount++;
 		}
 	}
 
-	for (unsigned short j = 1; j < movecount; j++)
+	for (uint16_t j = 1; j < movecount; j++)
 	{
 		for (i = 0; i < NUM_AXIS; i++)
 		{
@@ -2215,9 +2215,9 @@ bool CStepper::MoveUntil(TestContinueMove testcontinue, uintptr_t param)
 
 ////////////////////////////////////////////////////////
 
-bool CStepper::MoveUntil(uint8_t referenceId, bool referencevalue, unsigned short stabletime)
+bool CStepper::MoveUntil(uint8_t referenceId, bool referencevalue, uint16_t stabletime)
 {
-	unsigned long time = 0;
+	uint32_t time = 0;
 
 	while (IsBusy())
 	{
@@ -2380,7 +2380,7 @@ void CStepper::WaitConditional(unsigned int sec100)
 
 ////////////////////////////////////////////////////////
 
-void CStepper::IoControl(uint8_t tool, unsigned short level)
+void CStepper::IoControl(uint8_t tool, uint16_t level)
 {
 	WaitUntilCanQueue();
 	_movements._queue.NextTail().InitIoControl(this, tool, level);
@@ -2449,7 +2449,7 @@ void CStepper::MoveRel(axis_t axis, sdist_t d, steprate_t vMax)
 ////////////////////////////////////////////////////////
 // repeat axis and d until axis not in 0 .. NUM_AXIS
 
-void CStepper::MoveAbsEx(steprate_t vMax, unsigned short axis, udist_t d, ...)
+void CStepper::MoveAbsEx(steprate_t vMax, uint16_t axis, udist_t d, ...)
 {
 	udist_t D[NUM_AXIS] = {0};
 	memcpy(D, _pod._calculatedpos, sizeof(_pod._calculatedpos));
@@ -2462,11 +2462,11 @@ void CStepper::MoveAbsEx(steprate_t vMax, unsigned short axis, udist_t d, ...)
 		D[axis] = d;
 
 #ifdef _MSC_VER
-		axis = va_arg(arglist, unsigned short);
+		axis = va_arg(arglist, uint16_t);
 		d    = va_arg(arglist, udist_t);
 #else
 		axis = va_arg(arglist, unsigned int);		// only "int" supported on arduino
-		d    = va_arg(arglist, unsigned long);	
+		d    = va_arg(arglist, uint32_t);	
 #endif
 	}
 
@@ -2478,7 +2478,7 @@ void CStepper::MoveAbsEx(steprate_t vMax, unsigned short axis, udist_t d, ...)
 ////////////////////////////////////////////////////////
 // repeat axis and d until axis not in 0 .. NUM_AXIS
 
-void CStepper::MoveRelEx(steprate_t vMax, unsigned short axis, sdist_t d, ...)
+void CStepper::MoveRelEx(steprate_t vMax, uint16_t axis, sdist_t d, ...)
 {
 	sdist_t dist[NUM_AXIS] = {0};
 
@@ -2490,11 +2490,11 @@ void CStepper::MoveRelEx(steprate_t vMax, unsigned short axis, sdist_t d, ...)
 		dist[axis] = d;
 
 #ifdef _MSC_VER
-		axis = va_arg(arglist, unsigned short);
+		axis = va_arg(arglist, uint16_t);
 		d    = va_arg(arglist, sdist_t);
 #else
 		axis = va_arg(arglist, unsigned int);		// only "int" supported on arduino
-		d    = va_arg(arglist, unsigned long);	
+		d    = va_arg(arglist, uint32_t);	
 #endif
 	}
 
@@ -2535,7 +2535,7 @@ timer_t CStepper::SpeedToTimer(steprate_t speed) const
 		return timer_t(-1);
 	}
 
-	unsigned long timer = TIMER1FREQUENCE / speed;
+	uint32_t timer = TIMER1FREQUENCE / speed;
 	if (timer > (timer_t(-1)))
 	{
 		return timer_t(-1);
@@ -2603,7 +2603,7 @@ void CStepper::Dump(uint8_t options)
 		}
 		StepperSerial.println();
 
-		DumpType<unsigned long>(F("TotalSteps"), _pod._totalSteps, false);
+		DumpType<uint32_t>(F("TotalSteps"), _pod._totalSteps, false);
 		DumpType<unsigned int>(F("TimerISRBusy"), _pod._timerISRBusy, false);
 
 		DumpType<bool>(F("TimerRunning"), _pod._timerRunning, false);
@@ -2687,7 +2687,7 @@ void CStepper::SMovementState::Dump(uint8_t /* options */)
 	DumpType<mdist_t>(F("n"), _n, false);
 	DumpType<timer_t>(F("t"), _timer, false);
 	DumpType<timer_t>(F("r"), _rest, false);
-	DumpType<unsigned long>(F("sum"), _sumTimer, false);
+	DumpType<uint32_t>(F("sum"), _sumTimer, false);
 	DumpArray<mdist_t, NUM_AXIS>(F("a"), _add, false);
 #endif
 }

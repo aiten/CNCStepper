@@ -116,8 +116,8 @@ public:
 	expr_t GetDouble();
 
 	uint8_t        GetUInt8();
-	unsigned short GetUInt16();
-	unsigned long  GetUInt32();
+	uint16_t GetUInt16();
+	uint32_t  GetUInt32();
 	char           GetInt8();
 	short          GetInt16();
 	long           GetInt32();

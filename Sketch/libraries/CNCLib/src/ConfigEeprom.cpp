@@ -32,7 +32,7 @@ template <> CConfigEeprom* CSingleton<CConfigEeprom>::_instance = nullptr;
 
 ////////////////////////////////////////////////////////////
 
-void CConfigEeprom::Init(unsigned short eepromsizesize, const void* defaulteeprom, uint32_t eepromID)
+void CConfigEeprom::Init(uint16_t eepromsizesize, const void* defaulteeprom, uint32_t eepromID)
 {
 	CHAL::InitEeprom();
 

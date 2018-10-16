@@ -141,7 +141,7 @@ void CControl::InitFromEeprom()
 
 ////////////////////////////////////////////////////////////
 
-uint8_t CControl::ConvertSpindleSpeedToIO8(unsigned short maxspeed, unsigned short level)
+uint8_t CControl::ConvertSpindleSpeedToIO8(uint16_t maxspeed, uint16_t level)
 {
 	if (level >= maxspeed)
 	{
@@ -486,7 +486,7 @@ void CControl::Run()
 
 void CControl::CheckIdlePoll(bool isidle)
 {
-	unsigned long time = millis();
+	uint32_t time = millis();
 
 	if (isidle && _lasttime + TIMEOUTCALLIDEL < time)
 	{
@@ -571,9 +571,9 @@ void CControl::TimerInterrupt()
 
 ////////////////////////////////////////////////////////////
 
-void CControl::Delay(unsigned long ms)
+void CControl::Delay(uint32_t ms)
 {
-	unsigned long expected_end = millis() + ms;
+	uint32_t expected_end = millis() + ms;
 
 	while (expected_end > millis())
 	{

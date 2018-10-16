@@ -52,9 +52,9 @@ public:
 
 	virtual void Kill() override;
 
-	virtual void IOControl(uint8_t tool, unsigned short level) override;
+	virtual void IOControl(uint8_t tool, uint16_t level) override;
 #ifndef REDUCED_SIZE
-	virtual unsigned short IOControl(uint8_t tool) override;
+	virtual uint16_t IOControl(uint8_t tool) override;
 #endif
 
 protected:
@@ -93,11 +93,11 @@ public:
 		mm1000_t	penchangepos_x_ofs;
 		mm1000_t	penchangepos_y_ofs;
 
-		unsigned short penchangeServoClampOpenPos;
-		unsigned short penchangeServoClampClosePos;
+		uint16_t penchangeServoClampOpenPos;
+		uint16_t penchangeServoClampClosePos;
 
-		unsigned short penchangeServoClampOpenDelay;
-		unsigned short penchangeServoClampCloseDelay;
+		uint16_t penchangeServoClampOpenDelay;
+		uint16_t penchangeServoClampCloseDelay;
 	};
 
 private:

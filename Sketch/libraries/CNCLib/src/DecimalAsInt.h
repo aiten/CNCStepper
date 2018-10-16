@@ -21,7 +21,7 @@
 
 //////////////////////////////////////////
 
-template <typename T, uint8_t SCALE, unsigned long SCALEMASK> class CDecimaAsInt
+template <typename T, uint8_t SCALE, uint32_t SCALEMASK> class CDecimaAsInt
 {
 protected:
 

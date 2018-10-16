@@ -44,13 +44,13 @@ public:
 
 	static File& GetExecutingFile()							{ return _state._file; }
 
-	static unsigned long GetExecutingFilePosition()			{ return _state._printFilePos; }
-	static unsigned long GetExecutingFileLine()				{ return _state._printFileLine; }
-	static unsigned long GetExecutingFileSize()				{ return _state._printFileSize; }
+	static uint32_t GetExecutingFilePosition()			{ return _state._printFilePos; }
+	static uint32_t GetExecutingFileLine()				{ return _state._printFileLine; }
+	static uint32_t GetExecutingFileSize()				{ return _state._printFileSize; }
 	static const char*   GetExecutingFileName()				{ return _state._printfilename; }
 
-	static void SetExecutingFilePosition(unsigned long pos) { _state._printFilePos   = pos; }
-	static void SetExecutingFileLine(unsigned long line)	{ _state._printFileLine = line; }
+	static void SetExecutingFilePosition(uint32_t pos) { _state._printFilePos   = pos; }
+	static void SetExecutingFileLine(uint32_t line)	{ _state._printFileLine = line; }
 	static void SetExecutingFileName(char* filename)		{ strcpy(_state._printfilename, filename); }
 
 	static void Init()
@@ -73,9 +73,9 @@ private:
 
 	struct GCodeState
 	{
-		unsigned long _printFilePos;
-		unsigned long _printFileLine;
-		unsigned long _printFileSize;
+		uint32_t _printFilePos;
+		uint32_t _printFileLine;
+		uint32_t _printFileSize;
 		File          _file;
 
 		bool _isM28; // SD write mode
@@ -115,7 +115,7 @@ private:
 	bool CheckSD();
 	bool DeleteSDFile(char* filename, bool errorifnotexists);
 
-	static void PrintSDFileListRecurse(class File& dir, uint8_t depth, unsigned short& count, char* filenamebuffer, char seperatorchar);
+	static void PrintSDFileListRecurse(class File& dir, uint8_t depth, uint16_t& count, char* filenamebuffer, char seperatorchar);
 
 protected:
 

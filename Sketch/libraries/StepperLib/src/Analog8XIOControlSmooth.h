@@ -97,7 +97,7 @@ public:
 
 	void Poll()
 	{
-		unsigned long milli;
+		uint32_t milli;
 		if (_currentlevel != _iolevel && (milli = millis()) >= _nexttime)
 		{
 			_nexttime = milli + _delayMs;
@@ -133,7 +133,7 @@ private:
 		CHAL::analogWrite8(PWMPIN, uint8_t(abs(lvl)));
 	}
 
-	unsigned long _nexttime; // time to modify level
+	uint32_t _nexttime; // time to modify level
 
 #ifndef REDUCED_SIZE
 	int16_t _level; // value if "enabled", On/Off will switch between 0..level

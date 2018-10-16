@@ -240,7 +240,7 @@ bool CMyMotionControl::FromAngle(const float angle[NUM_AXIS], mm1000_t dest[NUM_
 
 void CMyMotionControl::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedrate)
 {
-	unsigned short movecount = 1;
+	uint16_t movecount = 1;
 	mm1000_t nextto[NUM_AXIS];
 	mm1000_t totaldist[NUM_AXIS];
 
@@ -261,12 +261,12 @@ void CMyMotionControl::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedrate)
 
 	if (maxdist > splitdist)
 	{
-		movecount = (unsigned short)(maxdist / splitdist);
+		movecount = (uint16_t)(maxdist / splitdist);
 		if ((maxdist % splitdist) != 0)
 			movecount++;
 	}
 
-	for (unsigned short j = movecount-1; j > 0; j--)
+	for (uint16_t j = movecount-1; j > 0; j--)
 	{
 		for (i = 0; i < NUM_AXIS; i++)
 		{

@@ -38,7 +38,7 @@ public:
 
 	CMsvcStepper();
 
-	virtual void OnIdle(unsigned long idletime) override;
+	virtual void OnIdle(uint32_t idletime) override;
 	virtual void OnStart() override;
 	virtual void OnWait(EnumAsByte(EWaitType) wait) override;
 

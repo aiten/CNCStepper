@@ -161,18 +161,18 @@ protected:
 
 	uint8_t GetPage();
 
-	virtual unsigned long Draw(EDrawType draw) override;
-	virtual unsigned long Splash() override;
+	virtual uint32_t Draw(EDrawType draw) override;
+	virtual uint32_t Splash() override;
 
 	void QueueCommandHistory(char ch);
 
-	unsigned long DrawLoop(DrawFunction drawfnc)
+	uint32_t DrawLoop(DrawFunction drawfnc)
 	{
 		_curretDraw = drawfnc;
 		return DrawLoop();
 	}
 
-	unsigned long DrawLoop();
+	uint32_t DrawLoop();
 
 	virtual bool DrawLoopDefault(EnumAsByte(EDrawLoopType) type, uintptr_t data);
 
@@ -215,7 +215,7 @@ private:
 	int8_t _screensaveXDiff = 1;
 	int8_t _screensaveYDiff = 1;
 
-	unsigned long _screensaveTime = 0;
+	uint32_t _screensaveTime = 0;
 
 	uint8_t _SDFileCount  = 255;
 	int8_t  _addMenuItems = 0;
@@ -234,7 +234,7 @@ protected:
 	CRotaryButton<rotarypos_t, CU8GLcd_ROTARY_ACCURACY> _rotarybutton;
 	CPushButton                                         _rotarypushbutton;
 
-	unsigned long _rotaryEventTime = 0;
+	uint32_t _rotaryEventTime = 0;
 
 	uint8_t _lcd_numaxis = NUM_AXIS;
 	uint8_t _charHeight  = 10;

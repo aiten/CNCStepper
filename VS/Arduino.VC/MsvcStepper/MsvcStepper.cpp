@@ -81,7 +81,7 @@ void CMsvcStepper::HandleIdle()
 	if (IsBusy())
 		DoISR();
 
-	static unsigned long lasttimerinterrupt = 0;
+	static uint32_t lasttimerinterrupt = 0;
 
 	if (lasttimerinterrupt + 100 < millis())
 	{
@@ -103,7 +103,7 @@ void CMsvcStepper::OnStart()
 
 ////////////////////////////////////////////////////////////
 
-void CMsvcStepper::OnIdle(unsigned long idletime)
+void CMsvcStepper::OnIdle(uint32_t idletime)
 {
 	__super::OnIdle(idletime);
 }

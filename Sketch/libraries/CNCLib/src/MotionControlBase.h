@@ -145,8 +145,8 @@ public:
 	/////////////////////////////////////////////////////////
 	// some helper function to move (all result in MoveAbs(...)
 
-	void MoveAbsEx(feedrate_t feedrate, unsigned short axis, mm1000_t d, ...); // repeat axis and d until axis not in 0 .. NUM_AXIS-1
-	void MoveRelEx(feedrate_t feedrate, unsigned short axis, mm1000_t d, ...); // repeat axis and d until axis not in 0 .. NUM_AXIS-1
+	void MoveAbsEx(feedrate_t feedrate, uint16_t axis, mm1000_t d, ...); // repeat axis and d until axis not in 0 .. NUM_AXIS-1
+	void MoveRelEx(feedrate_t feedrate, uint16_t axis, mm1000_t d, ...); // repeat axis and d until axis not in 0 .. NUM_AXIS-1
 
 	/////////////////////////////////////////////////////////
 	// Samples for converting functions

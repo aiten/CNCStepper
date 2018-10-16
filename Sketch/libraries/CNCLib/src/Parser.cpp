@@ -88,8 +88,8 @@ bool CParser::ExpectEndOfCommand()
 ////////////////////////////////////////////////////////////
 
 uint8_t        CParser::GetUInt8() { return GetUInt<uint8_t>(); }
-unsigned short CParser::GetUInt16() { return GetUInt<unsigned short>(); }
-unsigned long  CParser::GetUInt32() { return GetUInt<unsigned long>(); }
+uint16_t CParser::GetUInt16() { return GetUInt<uint16_t>(); }
+uint32_t  CParser::GetUInt32() { return GetUInt<uint32_t>(); }
 
 char    CParser::GetInt8() { return GetInt<char>(); }
 short   CParser::GetInt16() { return GetInt<short>(); }

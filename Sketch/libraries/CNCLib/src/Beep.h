@@ -181,7 +181,7 @@ enum ETone
 struct SPlayTone
 {
 	enum ETone     Tone;					// 0 => end
-	unsigned short Duration;
+	uint16_t Duration;
 
 	static const SPlayTone PlayOK[] PROGMEM;
 	static const SPlayTone PlayError[] PROGMEM;
@@ -200,9 +200,9 @@ public:
 		CHAL::digitalWrite(PIN, LOW);
 	}
 
-	static void Beep(ETone freq, unsigned short duration)
+	static void Beep(ETone freq, uint16_t duration)
 	{
-		unsigned long endmillis = millis() + duration;
+		uint32_t endmillis = millis() + duration;
 		unsigned int  tonePause = static_cast<unsigned int>(freq);
 
 		do

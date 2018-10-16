@@ -25,7 +25,7 @@ unsigned int timer2value = 4;
 
 unsigned int irq_countTimer0 = 0;
 unsigned int irq_countTimer1 = 0;
-unsigned long irq_countTimer2 = 0;
+uint32_t irq_countTimer2 = 0;
 
 void HandleInterruptTimer0()
 {
@@ -72,7 +72,7 @@ void loop()
 {
   static unsigned int myirq_countTimer0 = 0;
   static unsigned int myirq_countTimer1 = 0;
-  static unsigned long myirq_countTimer2 = 0;
+  static uint32_t myirq_countTimer2 = 0;
   static long starttime0 = millis();
   static long starttime1 = millis();
   static long starttime2 = millis();

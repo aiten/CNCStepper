@@ -215,7 +215,7 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 	//
 	// segments for full circle => (CONST_K * r * M_PI * b + CONST_D)		(r in mm, b ...2?)
 
-	auto segments = (unsigned short)(abs(floor((CMm1000::ConvertTo((const mm1000_t)(2 * SEGMENTS_K * M_PI)) * radius + SEGMENTS_D) * angular_travel / (2.0 * M_PI))));
+	auto segments = (uint16_t)(abs(floor((CMm1000::ConvertTo((const mm1000_t)(2 * SEGMENTS_K * M_PI)) * radius + SEGMENTS_D) * angular_travel / (2.0 * M_PI))));
 
 #if defined(_MSC_VER)
 	double segments_full = CMm1000::ConvertTo((const mm1000_t)(2 * SEGMENTS_K * M_PI)) * radius + SEGMENTS_D;
@@ -239,7 +239,7 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 
 		uint8_t count = 0;
 
-		for (unsigned short i = 1; i < segments; i++)
+		for (uint16_t i = 1; i < segments; i++)
 		{
 			if (count < arc_correction)
 			{
@@ -342,7 +342,7 @@ steprate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate
 			if (maxdist != sum && sum != 0)
 			{
 				// avoid overrun: feedrate * maxdist
-				if (ToPrecisionU2((unsigned long)feedrate) + ToPrecisionU2((unsigned long)maxdist) > 30)
+				if (ToPrecisionU2((uint32_t)feedrate) + ToPrecisionU2((uint32_t)maxdist) > 30)
 				{
 					// use float to avoid overruns
 					feedrate = feedrate_t(float(feedrate) * float(maxdist) / float(sum));
@@ -400,7 +400,7 @@ feedrate_t CMotionControlBase::GetMaxFeedRate(axis_t axis, feedrate_t feedrate)
 ////////////////////////////////////////////////////////
 // repeat axis and d until axis not in 0 .. NUM_AXIS
 
-void CMotionControlBase::MoveAbsEx(feedrate_t feedrate, unsigned short axis, mm1000_t d, ...)
+void CMotionControlBase::MoveAbsEx(feedrate_t feedrate, uint16_t axis, mm1000_t d, ...)
 {
 	mm1000_t dest[NUM_AXIS];
 	GetPositions(dest);
@@ -413,11 +413,11 @@ void CMotionControlBase::MoveAbsEx(feedrate_t feedrate, unsigned short axis, mm1
 		dest[axis] = d; // replace current position
 
 #ifdef _MSC_VER
-		axis = va_arg(arglist, unsigned short);
+		axis = va_arg(arglist, uint16_t);
 		d    = va_arg(arglist, mm1000_t);
 #else
 		axis = va_arg(arglist, unsigned int);		// only "int" supported on arduino
-		d = va_arg(arglist, unsigned long);
+		d = va_arg(arglist, uint32_t);
 #endif
 	}
 
@@ -429,7 +429,7 @@ void CMotionControlBase::MoveAbsEx(feedrate_t feedrate, unsigned short axis, mm1
 ////////////////////////////////////////////////////////
 // repeat axis and d until axis not in 0 .. NUM_AXIS
 
-void CMotionControlBase::MoveRelEx(feedrate_t feedrate, unsigned short axis, mm1000_t d, ...)
+void CMotionControlBase::MoveRelEx(feedrate_t feedrate, uint16_t axis, mm1000_t d, ...)
 {
 	mm1000_t dest[NUM_AXIS];
 	GetPositions(dest);
@@ -442,11 +442,11 @@ void CMotionControlBase::MoveRelEx(feedrate_t feedrate, unsigned short axis, mm1
 		dest[axis] += d; // add to current postition
 
 #ifdef _MSC_VER
-		axis = va_arg(arglist, unsigned short);
+		axis = va_arg(arglist, uint16_t);
 		d    = va_arg(arglist, mm1000_t);
 #else
 		axis = va_arg(arglist, unsigned int);		// only "int" supported on arduino
-		d = va_arg(arglist, unsigned long);
+		d = va_arg(arglist, uint32_t);
 #endif
 	}
 

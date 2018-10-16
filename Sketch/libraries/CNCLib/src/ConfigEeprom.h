@@ -46,7 +46,7 @@ class CConfigEeprom : public CSingleton<CConfigEeprom>
 {
 private:
 
-	unsigned short _eepromsizesize;
+	uint16_t _eepromsizesize;
 	const void*    _defaulteeprom;
 
 	bool _eepromvalid    = false;
@@ -56,12 +56,12 @@ public:
 
 	CConfigEeprom() { };
 
-	CConfigEeprom(unsigned short eepromsizesize, const void* defaulteeprom, uint32_t eepromID)
+	CConfigEeprom(uint16_t eepromsizesize, const void* defaulteeprom, uint32_t eepromID)
 	{
 		Init(eepromsizesize, defaulteeprom, eepromID);
 	}
 
-	void Init(unsigned short eepromsizesize, const void* defaulteeprom, uint32_t eepromID);
+	void Init(uint16_t eepromsizesize, const void* defaulteeprom, uint32_t eepromID);
 	void Flush();
 
 	static uint32_t GetConfigU32(eepromofs_t);

@@ -133,7 +133,7 @@ void CMyControl::Init()
 
 ////////////////////////////////////////////////////////////
 
-void CMyControl::IOControl(uint8_t tool, unsigned short level)
+void CMyControl::IOControl(uint8_t tool, uint16_t level)
 {
 	switch (tool)
 	{
@@ -149,7 +149,7 @@ void CMyControl::IOControl(uint8_t tool, unsigned short level)
 
 ////////////////////////////////////////////////////////////
 
-unsigned short CMyControl::IOControl(uint8_t tool)
+uint16_t CMyControl::IOControl(uint8_t tool)
 {
 	switch (tool)
 	{
@@ -161,8 +161,8 @@ unsigned short CMyControl::IOControl(uint8_t tool)
 #endif
 		case Probe: { return _data._probe.IsOn(); }
 
-		case Servo1:	return (unsigned short) _servo1.readMicroseconds();
-		case Servo2:	return (unsigned short) _servo2.readMicroseconds();
+		case Servo1:	return (uint16_t) _servo1.readMicroseconds();
+		case Servo2:	return (uint16_t) _servo2.readMicroseconds();
 	}
 
 	return super::IOControl(tool);

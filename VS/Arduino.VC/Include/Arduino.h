@@ -152,15 +152,15 @@ static uint8_t        DDRD;
 static uint8_t        DDRB;
 static uint8_t        TCCR0A;
 static uint8_t        TCCR0B;
-static unsigned short TCNT0;
+static uint16_t TCNT0;
 static uint8_t        TIMSK0;
-static unsigned short TIFR0;
-static unsigned short OCR0B;
+static uint16_t TIFR0;
+static uint16_t OCR0B;
 static uint8_t        TCCR1A;
 static uint8_t        TCCR1B;
-static unsigned short TCNT1;
+static uint16_t TCNT1;
 static uint8_t        TIMSK1;
-static unsigned short TIFR1;
+static uint16_t TIFR1;
 
 static uint8_t PINA;
 static uint8_t PINA0;
@@ -239,17 +239,17 @@ static uint8_t PINL3;
 
 static uint8_t SREG;
 
-inline unsigned long  pgm_read_dword(const void* p) { return *(unsigned long*)(p); }
-inline unsigned short pgm_read_word(const void*  p) { return *(unsigned short*)(p); }
+inline uint32_t  pgm_read_dword(const void* p) { return *(uint32_t*)(p); }
+inline uint16_t pgm_read_word(const void*  p) { return *(uint16_t*)(p); }
 inline uint8_t        pgm_read_byte(const void*  p) { return *(uint8_t*)(p); }
 inline const void*    pgm_read_ptr(const void*   p) { return *((void **)(p)); }
 
 //extern unsigned int GetTickCount();
 #pragma warning(suppress: 28159)
-inline unsigned long millis() { return GetTickCount(); }
+inline uint32_t millis() { return GetTickCount(); }
 
 //extern void Sleep(unsigned int ms);
-inline void delay(unsigned long ms) { Sleep(ms); }
+inline void delay(uint32_t ms) { Sleep(ms); }
 
 #define STDIO 0
 #define HEX 16
@@ -271,9 +271,9 @@ public:
 	void print(unsigned int  ui) { printf("%u", ui); };
 	void print(int           i) { printf("%i", i); };
 	void print(long          l) { printf("%li", l); };
-	void print(unsigned long ul) { printf("%lu", ul); };
+//	void print(uint32_t ul) { printf("%lu", ul); };
 
-	void print(unsigned long ul, uint8_t base)
+	void print(uint32_t ul, uint8_t base)
 	{
 		if (base == 10) printf("%lu", ul);
 		if (base == 16) printf("%x", ul);
@@ -287,9 +287,9 @@ public:
 	void println(char          c) { printf("%c\n", c); };
 	void println(int           i) { printf("%i\n", i); };
 	void println(long          l) { printf("%li\n", l); };
-	void println(unsigned long ul) { printf("%lu\n", ul); };
+//	void println(uint32_t ul) { printf("%lu\n", ul); };
 
-	void println(unsigned long ul, uint8_t base)
+	void println(uint32_t ul, uint8_t base)
 	{
 		print(ul, base);
 		println();

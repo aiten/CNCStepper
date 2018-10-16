@@ -27,9 +27,9 @@
 
 ////////////////////////////////////////////////////////
 
-unsigned short CHAL::analogRead(pin_t pin)
+uint16_t CHAL::analogRead(pin_t pin)
 {
-	return (unsigned short)::analogRead(pin);
+	return (uint16_t)::analogRead(pin);
 }
 
 ////////////////////////////////////////////////////////

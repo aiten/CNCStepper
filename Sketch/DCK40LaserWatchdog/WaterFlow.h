@@ -60,7 +60,7 @@ public:
 		// no disable interrupts => cache
 
 		unsigned char countIdx = _countIdx;
-		unsigned long sumtime = 0;
+		uint32_t sumtime = 0;
 		unsigned int  sumcount = 0;
 
 		for (unsigned char diff = 1; diff < SAMPELCOUNT && sumtime < timediff; diff++)
@@ -81,9 +81,9 @@ private:
 
 	static WaterFlow* _ISRInstance;
 
-	static unsigned int ScaleCount(unsigned int count, unsigned long totaltime, unsigned long scaletotime)
+	static unsigned int ScaleCount(unsigned int count, uint32_t totaltime, uint32_t scaletotime)
 	{
-		return (unsigned long)count * scaletotime / totaltime;
+		return (uint32_t)count * scaletotime / totaltime;
 	}
 
 	static unsigned char NextIndex(unsigned char idx, unsigned char count)
@@ -126,10 +126,10 @@ private:
 		_countIdx = idxnext;
 	}
 
-	unsigned long _countUntil;
+	uint32_t _countUntil;
 	volatile unsigned char _countIdx = 0;
 	volatile int _count[SAMPELCOUNT];
-	unsigned long _countTime[SAMPELCOUNT];
+	uint32_t _countTime[SAMPELCOUNT];
 };
 
 ////////////////////////////////////////////////////////////

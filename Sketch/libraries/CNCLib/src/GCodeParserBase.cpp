@@ -206,9 +206,9 @@ mm1000_t CGCodeParserBase::ParseCoordinate(bool convertUnits)
 
 ////////////////////////////////////////////////////////////
 
-unsigned long CGCodeParserBase::GetUint32OrParam(unsigned long max)
+uint32_t CGCodeParserBase::GetUint32OrParam(uint32_t max)
 {
-	unsigned long param;
+	uint32_t param;
 
 #ifndef REDUCED_SIZE
 	mm1000_t mm1000;
@@ -297,7 +297,7 @@ void CGCodeParserBase::ConstantVelocity()
 
 ////////////////////////////////////////////////////////////
 
-void CGCodeParserBase::Wait(unsigned long ms)
+void CGCodeParserBase::Wait(uint32_t ms)
 {
 	CStepper::GetInstance()->Wait(ms / 10);
 }
@@ -898,10 +898,10 @@ void CGCodeParserBase::G0203Command(bool isG02)
 
 ////////////////////////////////////////////////////////////
 
-unsigned long CGCodeParserBase::GetDweel()
+uint32_t CGCodeParserBase::GetDweel()
 {
 	const char*   current = _reader->GetBuffer();
-	unsigned long dweelms = GetUint32OrParam();
+	uint32_t dweelms = GetUint32OrParam();
 
 	if (_reader->GetChar() == '.')
 	{
@@ -916,7 +916,7 @@ unsigned long CGCodeParserBase::GetDweel()
 
 void CGCodeParserBase::G04Command()
 {
-	unsigned long dweelms = 0;
+	uint32_t dweelms = 0;
 
 	if (_reader->SkipSpacesToUpper() == 'P')
 	{
@@ -1146,7 +1146,7 @@ void CGCodeParserBase::SpindleSpeedCommand()
 
 ////////////////////////////////////////////////////////////
 
-void CGCodeParserBase::CallIOControl(uint8_t io, unsigned short value)
+void CGCodeParserBase::CallIOControl(uint8_t io, uint16_t value)
 {
 	CStepper::GetInstance()->IoControl(io, value);
 }

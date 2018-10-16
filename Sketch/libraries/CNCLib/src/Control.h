@@ -53,7 +53,7 @@ public:
 
 	void StopProgram(bool checkconditional);		// see m00 / m01
 
-	void Delay(unsigned long ms);	// delay with idle processing
+	void Delay(uint32_t ms);	// delay with idle processing
 
 	void Hold();					// stop executing programm (with down-ramp), must not be called in timerinterrupt
 	void Resume();					// continue executing (start queue from stepper)
@@ -99,8 +99,8 @@ public:
 		VacuumOn = 1
 	};
 
-	virtual void           IOControl(uint8_t /* tool */, unsigned short /*level */) { };
-	virtual unsigned short IOControl(uint8_t /* tool */) { return 0; };
+	virtual void           IOControl(uint8_t /* tool */, uint16_t /*level */) { };
+	virtual uint16_t IOControl(uint8_t /* tool */) { return 0; };
 
 	enum EStepperControlEvent
 	{
@@ -125,7 +125,7 @@ public:
 	//////////////////////////////////////////
 
 	void           InitFromEeprom();
-	static uint8_t ConvertSpindleSpeedToIO8(unsigned short maxspeed, unsigned short level); // { return (uint8_t)MulDivU32(abs(level), 255, maxspeed); }
+	static uint8_t ConvertSpindleSpeedToIO8(uint16_t maxspeed, uint16_t level); // { return (uint8_t)MulDivU32(abs(level), 255, maxspeed); }
 
 	//////////////////////////////////////////
 
@@ -179,9 +179,9 @@ private:
 
 	uint8_t _bufferidx;										// read Buffer index , see SERIALBUFFERSIZE
 
-	unsigned long _lasttime;								// time last char received
-	unsigned long _timeBlink;								// time to change blink state
-	unsigned long _timePoll;								// time call poll next
+	uint32_t _lasttime;								// time last char received
+	uint32_t _timeBlink;								// time to change blink state
+	uint32_t _timePoll;								// time call poll next
 
 	CStepper::SEvent _oldStepperEvent;
 

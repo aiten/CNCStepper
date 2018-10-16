@@ -26,7 +26,7 @@
 
 ////////////////////////////////////////////////////////
 
-typedef unsigned short param_t;
+typedef uint16_t param_t;
 
 #define NUM_MAXPARAMNAMELENGTH 16
 #define NUM_PARAMETERRANGE	255

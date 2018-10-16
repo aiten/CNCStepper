@@ -69,12 +69,12 @@ public:
 
 private:
 
-	unsigned long _redrawtime = 0;
+	uint32_t _redrawtime = 0;
 	unsigned int _secActive = 0;
 
-	unsigned long _lastBlink = 0;
+	uint32_t _lastBlink = 0;
 	bool  _blinkWasOn = true;
-	unsigned long _lastDraw = 0;
+	uint32_t _lastDraw = 0;
 	bool _drawLCDRequest = false;
 
 	WaterFlow _flow;

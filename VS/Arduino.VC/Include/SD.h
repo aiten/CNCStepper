@@ -261,7 +261,7 @@ public:
 	virtual int  available() override { return feof(GetF()->_f) ? 0 : 1; }
 	virtual char read() override { return (char)fgetc(GetF()->_f); }
 
-	unsigned long size() const
+	uint32_t size() const
 	{
 		struct stat st;
 		stat(_dirfile->_OSfilename, &st);
@@ -293,8 +293,8 @@ public:
 	//	virtual int peek();
 	//	virtual void flush();
 	//	int read(void *buf, uint16_t nbyte);
-	boolean       seek(unsigned long pos) { return fseek(GetF()->_f, pos, SEEK_SET) == 0; }
-	unsigned long position() { return ftell(GetF()->_f); }
+	boolean       seek(uint32_t pos) { return fseek(GetF()->_f, pos, SEEK_SET) == 0; }
+	uint32_t position() { return ftell(GetF()->_f); }
 };
 
 ////////////////////////////////////////////////////////////

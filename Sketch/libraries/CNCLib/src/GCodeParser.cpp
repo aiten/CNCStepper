@@ -438,7 +438,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 				}
 				case PARAMSTART_CONTROLLERFAN:
 				{
-					CControl::GetInstance()->IOControl(CControl::ControllerFan, (unsigned short)intvalue);
+					CControl::GetInstance()->IOControl(CControl::ControllerFan, (uint16_t)intvalue);
 					break;
 				}
 				case PARAMSTART_RAPIDMOVEFEED:
@@ -982,7 +982,7 @@ void CGCodeParser::GetL81(SAxisMove& move, uint8_t& l)
 	move.bitfield.bit.L = true;
 
 	_reader->GetNextChar();
-	unsigned long myL = GetUint32OrParam();
+	uint32_t myL = GetUint32OrParam();
 
 	if (myL == 0 || myL > 255)
 	{
@@ -1878,7 +1878,7 @@ void CGCodeParser::M110Command()
 {
 	// set linenumber
 
-	unsigned long linenumber = 0;
+	uint32_t linenumber = 0;
 
 	if (_reader->SkipSpacesToUpper() == 'N')
 	{

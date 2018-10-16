@@ -107,7 +107,7 @@ public:
 	struct SIoControl
 	{
 		uint8_t			_tool;
-		unsigned short	_level;
+		uint16_t	_level;
 	};
 
 	/////////////////////
@@ -211,11 +211,11 @@ public:
 	void MoveAbs(axis_t axis, udist_t d, steprate_t vMax = 0);
 	void MoveRel(axis_t axis, sdist_t d, steprate_t vMax = 0);
 
-	void MoveAbsEx(steprate_t vMax, unsigned short axis, udist_t d, ...);	// repeat axis and d until axis not in 0 .. NUM_AXIS-1
-	void MoveRelEx(steprate_t vMax, unsigned short axis, sdist_t d, ...);	// repeat axis and d until axis not in 0 .. NUM_AXIS-1
+	void MoveAbsEx(steprate_t vMax, uint16_t axis, udist_t d, ...);	// repeat axis and d until axis not in 0 .. NUM_AXIS-1
+	void MoveRelEx(steprate_t vMax, uint16_t axis, sdist_t d, ...);	// repeat axis and d until axis not in 0 .. NUM_AXIS-1
 	void Wait(unsigned int sec100);							// unconditional wait
 	void WaitConditional(unsigned int sec100);				// conditional wait 
-	void IoControl(uint8_t tool, unsigned short level);
+	void IoControl(uint8_t tool, uint16_t level);
 
 	bool MoveUntil(TestContinueMove testcontinue, uintptr_t param);
 
@@ -245,10 +245,10 @@ public:
 	steprate_t GetJerkSpeed(axis_t axis) const					{ return _pod._maxJerkSpeed[axis]; }
 
 #ifndef REDUCED_SIZE
-	unsigned long GetTotalSteps() const							{ return _pod._totalSteps; }
+	uint32_t GetTotalSteps() const							{ return _pod._totalSteps; }
 	unsigned int GetTimerISRBuys() const						{ return _pod._timerISRBusy; }
 #endif
-	unsigned long IdleTime() const								{ return _pod._timerStartOrOnIdle; }
+	uint32_t IdleTime() const								{ return _pod._timerStartOrOnIdle; }
 
 	void AddEvent(StepperEvent event, uintptr_t eventparam, SEvent& oldevent);
 
@@ -302,7 +302,7 @@ private:
 
 protected:
 
-	bool MoveUntil(uint8_t referenceId, bool referencevalue, unsigned short stabletime);
+	bool MoveUntil(uint8_t referenceId, bool referencevalue, uint16_t stabletime);
 
 	void QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], steprate_t vMax);
 
@@ -323,8 +323,8 @@ protected:
 
 	static mdist_t GetSteps(timer_t timer1, timer_t timer2, timer_t timerstart, timer_t timerstop);		// from v1 to v2 (v1<v2 uses acc, dec otherwise)
 
-	unsigned long GetAccelerationFromTimer(mdist_t timerV0);
-	unsigned long GetAccelerationFromSpeed(steprate_t speedV0)									{ return GetAccelerationFromTimer(SpeedToTimer(speedV0)); }
+	uint32_t GetAccelerationFromTimer(mdist_t timerV0);
+	uint32_t GetAccelerationFromSpeed(steprate_t speedV0)									{ return GetAccelerationFromTimer(SpeedToTimer(speedV0)); }
 
 	timer_t SpeedToTimer(steprate_t speed) const;
 	steprate_t TimerToSpeed(timer_t timer) const;
@@ -351,7 +351,7 @@ protected:
 		timer_t			_timerbacklash;								// -1 or 0 for temporary enable/disable backlash without setting _backlash to 0
 
 #ifndef REDUCED_SIZE
-		unsigned long	_totalSteps;								// total steps since start
+		uint32_t	_totalSteps;								// total steps since start
 		unsigned int	_timerISRBusy;								// ISR while in ISR
 #endif
 
@@ -375,8 +375,8 @@ protected:
 
 		mdist_t			_backlash[NUM_AXIS];						// backlash of each axis (signed mdist_t/2)
 
-		unsigned long	_timerStartOrOnIdle;						// timervalue if library start move or goes to Idle
-		unsigned long	_timerLastCheckEnable;						// timervalue
+		uint32_t	_timerStartOrOnIdle;						// timervalue if library start move or goes to Idle
+		uint32_t	_timerLastCheckEnable;						// timervalue
 
 		uint8_t	_idleLevel;											// level if idle (0..100)
 		volatile EnumAsByte(ESpeedOverride)	_speedoverride;			// Speed override, 128 => 100% (change in irq possible)
@@ -534,7 +534,7 @@ protected:
 
 		void InitMove(CStepper*pStepper, SMovement* mvPrev, mdist_t steps, const mdist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], timer_t timerMax);
 		void InitWait(CStepper*pStepper, mdist_t steps, timer_t timer, bool checkWaitConditional);
-		void InitIoControl(CStepper*pStepper, uint8_t tool, unsigned short level);
+		void InitIoControl(CStepper*pStepper, uint8_t tool, uint16_t level);
 
 		void InitStop(SMovement* mvPrev, timer_t timer, timer_t dectimer);
 
@@ -575,7 +575,7 @@ protected:
 		char _dummyalign;
 
 #ifndef REDUCED_SIZE
-		unsigned long _sumTimer;	// for debug
+		uint32_t _sumTimer;	// for debug
 #endif
 
 		mdist_t _add[NUM_AXIS];
@@ -633,7 +633,7 @@ private:
 
 protected:
 
-	debugvirtula void OnIdle(unsigned long idletime);				// called in ISR
+	debugvirtula void OnIdle(uint32_t idletime);				// called in ISR
 	debugvirtula void OnWait(EnumAsByte(EWaitType) wait);			// wait for finish move or movementqueue full
 	debugvirtula void OnStart();									// startup of movement
 

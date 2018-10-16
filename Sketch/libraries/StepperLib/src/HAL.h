@@ -45,12 +45,12 @@
 
 ////////////////////////////////////////////////////////
 
-#define TIMER0VALUE(freq)	((timer_t)((unsigned long)TIMER0FREQUENCE/(unsigned long)(freq)))
-#define TIMER1VALUE(freq)	((timer_t)((unsigned long)TIMER1FREQUENCE/(unsigned long)(freq)))
-#define TIMER2VALUE(freq)	((timer_t)((unsigned long)TIMER2FREQUENCE/(unsigned long)(freq)))
-//#define TIMER3VALUE(freq)	((timer_t)((unsigned long)TIMER3FREQUENCE/(unsigned long)freq))
-//#define TIMER4VALUE(freq)	((timer_t)((unsigned long)TIMER4FREQUENCE/(unsigned long)freq))
-//#define TIMER5VALUE(freq)	((timer_t)((unsigned long)TIMER5FREQUENCE/(unsigned long)freq))
+#define TIMER0VALUE(freq)	((timer_t)((uint32_t)TIMER0FREQUENCE/(uint32_t)(freq)))
+#define TIMER1VALUE(freq)	((timer_t)((uint32_t)TIMER1FREQUENCE/(uint32_t)(freq)))
+#define TIMER2VALUE(freq)	((timer_t)((uint32_t)TIMER2FREQUENCE/(uint32_t)(freq)))
+//#define TIMER3VALUE(freq)	((timer_t)((uint32_t)TIMER3FREQUENCE/(uint32_t)freq))
+//#define TIMER4VALUE(freq)	((timer_t)((uint32_t)TIMER4FREQUENCE/(uint32_t)freq))
+//#define TIMER5VALUE(freq)	((timer_t)((uint32_t)TIMER5FREQUENCE/(uint32_t)freq))
 
 #define TIMER2MICROSEC					(1.0/(float) TIMER2FREQUENCE*1000000.0)
 #define TIMER2VALUEFROMMICROSEC(msec)	((timer_t)((msec) / TIMER2MICROSEC))
@@ -193,7 +193,7 @@ public:
 
 	static void analogWrite8(pin_t pin, uint8_t val);
 
-	static unsigned short analogRead(pin_t pin);
+	static uint16_t analogRead(pin_t pin);
 
 	static void attachInterruptPin(pin_t pin, void (*userFunc)(), int mode) ALWAYSINLINE;
 

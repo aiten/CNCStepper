@@ -57,8 +57,8 @@ CGCodeBuilder& CGCodeBuilder::Add(mm1000_t mm1000)
 
 CGCodeBuilder& CGCodeBuilder::AddAxisName(axis_t axis)
 {
-	auto len = uint8_t(strlen(_commandstring));
-	_commandstring[len] = AxisToChar(axis);
+	auto len                = uint8_t(strlen(_commandstring));
+	_commandstring[len]     = AxisToChar(axis);
 	_commandstring[len + 1] = 0;
 	return *this;
 }

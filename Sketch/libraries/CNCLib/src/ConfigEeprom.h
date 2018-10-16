@@ -54,9 +54,7 @@ private:
 
 public:
 
-	CConfigEeprom()
-	{
-	};
+	CConfigEeprom() { };
 
 	CConfigEeprom(unsigned short eepromsizesize, const void* defaulteeprom, uint32_t eepromID)
 	{
@@ -68,12 +66,12 @@ public:
 
 	static uint32_t GetConfigU32(eepromofs_t);
 
-#if defined(__AVR_ARCH__)
+	#if defined(__AVR_ARCH__)
 
 	static uint8_t  GetConfigU8(eepromofs_t ofs)  { return (uint8_t)GetConfigU32(ofs); };
 	static uint16_t GetConfigU16(eepromofs_t ofs) { return (uint16_t)GetConfigU32(ofs); };
 
-#else
+	#else
 
 	static uint8_t GetConfigU8(eepromofs_t ofs)
 	{
@@ -92,7 +90,7 @@ public:
 		return (val >> (diff * 8)) & 0xffff;
 	}
 
-#endif
+	#endif
 
 	static float GetConfigFloat(eepromofs_t);
 
@@ -150,13 +148,13 @@ public:
 		EEPROM_DTRISRESET = (1 << 2),
 	};
 
-#define COMMANDSYNTAX_BIT	6
-#define COMMANDSYNTAX_LEN	2
-#define COMMANDSYNTAX_MASK  (CConfigEeprom::COMMANDSYNTAXBIT0+CConfigEeprom::COMMANDSYNTAXBIT1+CConfigEeprom::COMMANDSYNTAXBIT2)
-#define COMMANDSYNTAX_VALUE(a)	(((a)*(1<<COMMANDSYNTAX_BIT))&COMMANDSYNTAX_MASK)
-#define COMMANDSYNTAX_CLEAR(a)	((a)&~COMMANDSYNTAX_MASK)
+	#define COMMANDSYNTAX_BIT	6
+	#define COMMANDSYNTAX_LEN	2
+	#define COMMANDSYNTAX_MASK  (CConfigEeprom::COMMANDSYNTAXBIT0+CConfigEeprom::COMMANDSYNTAXBIT1+CConfigEeprom::COMMANDSYNTAXBIT2)
+	#define COMMANDSYNTAX_VALUE(a)	(((a)*(1<<COMMANDSYNTAX_BIT))&COMMANDSYNTAX_MASK)
+	#define COMMANDSYNTAX_CLEAR(a)	((a)&~COMMANDSYNTAX_MASK)
 
-#define EPROM_SIGNATURE		0x21436501
+	#define EPROM_SIGNATURE		0x21436501
 
 	struct SCNCEeprom
 	{
@@ -197,7 +195,7 @@ public:
 			uint8_t referenceValue_min;
 			uint8_t referenceValue_max;
 
-#ifndef REDUCED_SIZE
+			#ifndef REDUCED_SIZE
 
 			uint32_t maxsteprate;
 			uint16_t acc;
@@ -207,7 +205,7 @@ public:
 			float StepsPerMm1000;
 
 			mm1000_t probesize;
-#endif
+			#endif
 		} axis[NUM_AXIS];
 	};
 };

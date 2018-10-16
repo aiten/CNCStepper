@@ -21,8 +21,7 @@
 
 //////////////////////////////////////////
 
-template <typename T, uint8_t SCALE, unsigned long SCALEMASK>
-class CDecimaAsInt
+template <typename T, uint8_t SCALE, unsigned long SCALEMASK> class CDecimaAsInt
 {
 protected:
 
@@ -195,10 +194,10 @@ private:
 public:
 
 	static char* ToString(mm1000_t pos, char* tmp, uint8_t precision, uint8_t scale); // right aligned
-	static char* ToString(mm1000_t pos, char* tmp, uint8_t scale)		{ return SkipSpaces(ToString(pos, tmp, 11, scale)); }
+	static char* ToString(mm1000_t pos, char* tmp, uint8_t scale) { return SkipSpaces(ToString(pos, tmp, 11, scale)); }
 
-	char* ToString(char* tmp, uint8_t precision, uint8_t scale) const	{ return ToString(_value, tmp, precision, scale); } // right aligned
-	char* ToString(char* tmp, uint8_t scale) const						{ return ToString(_value, tmp, scale); }
+	char* ToString(char* tmp, uint8_t precision, uint8_t scale) const { return ToString(_value, tmp, precision, scale); } // right aligned
+	char* ToString(char* tmp, uint8_t scale) const { return ToString(_value, tmp, scale); }
 };
 
 //////////////////////////////////////////
@@ -216,10 +215,10 @@ private:
 public:
 
 	static char* ToString(inch100000_t pos, char* tmp, uint8_t precision, uint8_t scale); // right aligned
-	static char* ToString(inch100000_t pos, char* tmp, uint8_t scale)		{ return SkipSpaces(ToString(pos, tmp, 11, scale)); }
+	static char* ToString(inch100000_t pos, char* tmp, uint8_t scale) { return SkipSpaces(ToString(pos, tmp, 11, scale)); }
 
-	char* ToString(char* tmp, uint8_t precision, uint8_t scale) const		{ return ToString(_value, tmp, precision, scale); } // right aligned
-	char* ToString(char* tmp, uint8_t scale) const							{ return ToString(_value, tmp, scale); }
+	char* ToString(char* tmp, uint8_t precision, uint8_t scale) const { return ToString(_value, tmp, precision, scale); } // right aligned
+	char* ToString(char* tmp, uint8_t scale) const { return ToString(_value, tmp, scale); }
 };
 
 //////////////////////////////////////////

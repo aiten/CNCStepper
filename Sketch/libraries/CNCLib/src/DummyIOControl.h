@@ -26,24 +26,16 @@ class CDummyIOControl
 public:
 
 	void Init(uint8_t = 0)		// digital and analog
-	{
-	}
+	{ }
 
-	void Set(bool)
-	{
-	}
+	void Set(bool) { }
 
-	void Off()
-	{
-	}
+	void Off() { }
 
 	void On(uint8_t = 0)		// same signature as CAnalog8IOControl
-	{
-	}
+	{ }
 
-	void SetLevel(uint8_t)
-	{
-	}
+	void SetLevel(uint8_t) { }
 
 	uint8_t GetLevel()
 	{
@@ -55,17 +47,11 @@ public:
 		return false;
 	}
 
-	void SetPin(pin_t)
-	{
-	}
+	void SetPin(pin_t) { }
 
-	void Check()
-	{
-	}
+	void Check() { }
 
-	void Poll()
-	{
-	}
+	void Poll() { }
 };
 
 ////////////////////////////////////////////////////////

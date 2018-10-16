@@ -49,7 +49,7 @@ public:
 	virtual void Kill();			// stop everyting => Emergency Stop
 	virtual void Resurrect();		// Call after Kill to restart again
 
-	bool IsKilled()												{ return CStepper::GetInstance()->IsEmergencyStop(); }
+	bool IsKilled() { return CStepper::GetInstance()->IsEmergencyStop(); }
 
 	void StopProgram(bool checkconditional);		// see m00 / m01
 
@@ -60,7 +60,7 @@ public:
 
 	void Hold();					// stop executing programm (with down-ramp), must not be called in timerinterrupt
 	void Resume();					// continue executing (start queue from stepper)
-	bool IsHold()												{ return CStepper::GetInstance()->IsPauseMove(); }
+	bool IsHold() { return CStepper::GetInstance()->IsPauseMove(); }
 
 	//////////////////////////////////////////
 
@@ -102,9 +102,9 @@ public:
 		VacuumOn = 1
 	};
 
-	virtual void IOControl(uint8_t /* tool */, unsigned short /*level */)	{ };
-	virtual unsigned short IOControl(uint8_t /* tool */)				{ return 0; };
-	
+	virtual void           IOControl(uint8_t /* tool */, unsigned short /*level */) { };
+	virtual unsigned short IOControl(uint8_t /* tool */) { return 0; };
+
 	enum EStepperControlEvent
 	{
 		OnStartEvent = CStepper::OnStartEvent,
@@ -121,30 +121,30 @@ public:
 	//////////////////////////////////////////
 
 	virtual void GoToReference();								// Goto Reference during Initialisation
-	virtual bool GoToReference(axis_t axis,steprate_t steprate, bool toMinRef);
+	virtual bool GoToReference(axis_t axis, steprate_t steprate, bool toMinRef);
 
 	bool GoToReference(axis_t axis);
 
 	//////////////////////////////////////////
 
-	void InitFromEeprom();
+	void           InitFromEeprom();
 	static uint8_t ConvertSpindleSpeedToIO8(unsigned short maxspeed, unsigned short level); // { return (uint8_t)MulDivU32(abs(level), 255, maxspeed); }
 
 	//////////////////////////////////////////
 
-	void StartPrintFromSD()				{ _printFromSDFile = true; }
-	void ClearPrintFromSD()				{ _printFromSDFile = false; }
-	bool PrintFromSDRunnding() const	{ return _printFromSDFile; }
+	void StartPrintFromSD() { _printFromSDFile = true; }
+	void ClearPrintFromSD() { _printFromSDFile = false; }
+	bool PrintFromSDRunnding() const { return _printFromSDFile; }
 
 	//////////////////////////////////////////
 
-	bool PostCommand(FLSTR cmd, Stream* output= nullptr);
-	bool PostCommand(char* cmd, Stream* output= nullptr);
+	bool PostCommand(FLSTR cmd, Stream* output = nullptr);
+	bool PostCommand(char* cmd, Stream* output = nullptr);
 
 	//////////////////////////////////////////
 
-	const char* GetBuffer() const		{ return _buffer; }
-	uint8_t GetBufferCount() const		{ return _bufferidx; }
+	const char*  GetBuffer() const { return _buffer; }
+	uint8_t      GetBufferCount() const { return _bufferidx; }
 	virtual bool IsEndOfCommandChar(char ch);					// override default End of command char, default \n
 
 protected:
@@ -156,8 +156,8 @@ protected:
 	virtual void Initialized();									// called if Init() is done
 
 	virtual bool Parse(CStreamReader* reader, Stream* output);	// specify Parser, default parser
-	virtual bool Command(char* buffer, Stream* output);		    // execute Command (call parser)
-	virtual void Idle(unsigned int idletime);					// called after TIMEOUTCALLIDEL in idle state
+	virtual bool Command(char*        buffer, Stream* output);		    // execute Command (call parser)
+	virtual void Idle(unsigned int    idletime);					// called after TIMEOUTCALLIDEL in idle state
 	virtual void Poll();										// call in Idle and at least e.g. 100ms (not in interrupt), see CheckIdlePoll
 	virtual void ReadAndExecuteCommand();						// read and execute commands from other source e.g. SD.File
 
@@ -169,43 +169,42 @@ protected:
 
 	virtual bool OnEvent(EnumAsByte(EStepperControlEvent) eventtype, uintptr_t addinfo);
 
-	bool IsResurrectCommand(const char*buffer)					{ return buffer[0] == '!' && buffer[1] == '!' && buffer[2] == '!' && (buffer[3] == 0 || (buffer[3] == '\r' && buffer[4] == 0)); }
+	bool IsResurrectCommand(const char* buffer) { return buffer[0] == '!' && buffer[1] == '!' && buffer[2] == '!' && (buffer[3] == 0 || (buffer[3] == '\r' && buffer[4] == 0)); }
 
-	void DisableBlinkLed()										{ _timeBlink = 0xffffffff;  }
+	void DisableBlinkLed() { _timeBlink = 0xffffffff; }
 
 private:
 
 	void ReadAndExecuteCommand(Stream* stream, Stream* output, bool filestream);	// read command until "IsEndOfCommandChar" and execute command (Serial or SD.File)
 
-	void CheckIdlePoll(bool isidle);							// check idle time and call Idle every 100ms
+	void CheckIdlePoll(bool isidle);						// check idle time and call Idle every 100ms
 
 
-	uint8_t			_bufferidx;									// read Buffer index , see SERIALBUFFERSIZE
+	uint8_t _bufferidx;										// read Buffer index , see SERIALBUFFERSIZE
 
-	unsigned long	_lasttime;									// time last char received
-	unsigned long	_timeBlink;									// time to change blink state
-	unsigned long	_timePoll;									// time call poll next
+	unsigned long _lasttime;								// time last char received
+	unsigned long _timeBlink;								// time to change blink state
+	unsigned long _timePoll;								// time call poll next
 
 	CStepper::SEvent _oldStepperEvent;
 
-	bool			_dummy;
-	bool			_printFromSDFile;					
+	bool _dummy;
+	bool _printFromSDFile;
 
-	char			_buffer[SERIALBUFFERSIZE];					// serial input buffer
+	char _buffer[SERIALBUFFERSIZE];					// serial input buffer
 
-	static void HandleInterrupt()								{ GetInstance()->TimerInterrupt(); }
+	static void HandleInterrupt() { GetInstance()->TimerInterrupt(); }
 
-	static bool StaticStepperEvent(CStepper*stepper, uintptr_t param, EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo);
-	bool StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo);
+	static bool StaticStepperEvent(CStepper*                     stepper, uintptr_t   param, EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo);
+	bool        StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo);
 
-	CStreamReader		_reader;
+	CStreamReader _reader;
 
-	void PrintError(Stream* output)								{ output->print(MESSAGE_ERROR); }
+	void PrintError(Stream* output) { output->print(MESSAGE_ERROR); }
 
 public:
 
 	bool CallOnEvent(uint8_t eventtype, uintptr_t param);
-
 };
 
 ////////////////////////////////////////////////////////

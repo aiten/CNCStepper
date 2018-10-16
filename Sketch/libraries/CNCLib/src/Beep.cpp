@@ -43,7 +43,7 @@ const SPlayTone SPlayTone::PlayError[] PROGMEM
 	{ ToneA7, MilliSecToDuration(200) },
 	{ ToneA6, MilliSecToDuration(200) },
 	{ ToneA7, MilliSecToDuration(200) },
-	{ ToneEnd, 0  }
+	{ ToneEnd, 0 }
 };
 
 /*
@@ -66,54 +66,54 @@ const SPlayTone SPlayTone::PlayInfo[] PROGMEM
 
 const SPlayTone SPlayTone::PlayInfo[] PROGMEM
 {
-	{ ToneE5,	Duration16	},
-	{ ToneDx5 , Duration16	},
+	{ ToneE5, Duration16 },
+	{ ToneDx5, Duration16 },
 
-	{ ToneE5 ,	Duration16	},
-	{ ToneDx5 , Duration16	},
-	{ ToneE5 ,	Duration16	},
-	{ ToneB4 ,	Duration16	},
-	{ ToneD5 ,	Duration16	},
-	{ ToneC5 ,	Duration16	},
-	
-	{ ToneA4,	Duration8	},
-	{ ToneNo,	Duration16	},
-	{ ToneC4,	Duration16	},
-	{ ToneE4,	Duration16	},
-	{ ToneA4,	Duration16	},
+	{ ToneE5, Duration16 },
+	{ ToneDx5, Duration16 },
+	{ ToneE5, Duration16 },
+	{ ToneB4, Duration16 },
+	{ ToneD5, Duration16 },
+	{ ToneC5, Duration16 },
 
-	{ ToneB4,	Duration8	},
-	{ ToneNo,	Duration16	},
-	{ ToneE4,	Duration16	},
-	{ ToneGx4,	Duration16	},
-	{ ToneB4,	Duration16	},
+	{ ToneA4, Duration8 },
+	{ ToneNo, Duration16 },
+	{ ToneC4, Duration16 },
+	{ ToneE4, Duration16 },
+	{ ToneA4, Duration16 },
 
-	{ ToneC5,	Duration8	},
-	{ ToneNo,	Duration16	},
-	{ ToneE4,	Duration16	},
-	{ ToneE5,	Duration16	},
-	{ ToneDx5 , Duration16	},
+	{ ToneB4, Duration8 },
+	{ ToneNo, Duration16 },
+	{ ToneE4, Duration16 },
+	{ ToneGx4, Duration16 },
+	{ ToneB4, Duration16 },
 
-	{ ToneE5 ,	Duration16	},
-	{ ToneDx5 , Duration16	},
-	{ ToneE5 ,	Duration16	},
-	{ ToneB4 ,	Duration16	},
-	{ ToneD5 ,	Duration16	},
-	{ ToneC5 ,	Duration16	},
+	{ ToneC5, Duration8 },
+	{ ToneNo, Duration16 },
+	{ ToneE4, Duration16 },
+	{ ToneE5, Duration16 },
+	{ ToneDx5, Duration16 },
 
-	{ ToneA4,	Duration8	},
-	{ ToneNo,	Duration16	},
-	{ ToneC4,	Duration16	},
-	{ ToneE4,	Duration16	},
-	{ ToneA4,	Duration16	},
+	{ ToneE5, Duration16 },
+	{ ToneDx5, Duration16 },
+	{ ToneE5, Duration16 },
+	{ ToneB4, Duration16 },
+	{ ToneD5, Duration16 },
+	{ ToneC5, Duration16 },
 
-	{ ToneB4,	Duration8	},
-	{ ToneNo,	Duration16	},
-	{ ToneE4,	Duration16	},
-	{ ToneC5,	Duration16	},
-	{ ToneB4,	Duration16	},
+	{ ToneA4, Duration8 },
+	{ ToneNo, Duration16 },
+	{ ToneC4, Duration16 },
+	{ ToneE4, Duration16 },
+	{ ToneA4, Duration16 },
 
-	{ ToneA4,	Duration4	},
+	{ ToneB4, Duration8 },
+	{ ToneNo, Duration16 },
+	{ ToneE4, Duration16 },
+	{ ToneC5, Duration16 },
+	{ ToneB4, Duration16 },
+
+	{ ToneA4, Duration4 },
 
 	{ ToneEnd, 0 }
 };

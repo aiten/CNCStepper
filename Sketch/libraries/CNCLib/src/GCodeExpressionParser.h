@@ -46,7 +46,8 @@ protected:
 
 	virtual void ScannNextToken() override;
 	virtual void ReadIdent() override;
-	virtual bool IsIdentStart(char        ch) override { return ch == '#' || super::IsIdentStart(ch); } // start of function or variable
+	virtual bool IsIdentStart(char ch) override { return ch == '#' || super::IsIdentStart(ch); } // start of function or variable
+
 	virtual bool EvalVariable(const char* var_name, expr_t& answer) override;
 };
 

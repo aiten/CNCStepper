@@ -22,29 +22,27 @@
 ////////////////////////////////////////////////////////
 
 // 1010 -> 1000 -> 1001 -> 0001 -> 0101 -> 0100 -> 0110 -> 0010
-static const uint8_t _L298Nhalfstep4Pin[8] PROGMEM = {10, 8, 9, 1, 5, 4, 6, 2};
+static const uint8_t _L298Nhalfstep4Pin[8] PROGMEM = { 10, 8, 9, 1, 5, 4, 6, 2 };
 
 // 1010 -> 1001 -> 0101 -> 0110
-static const uint8_t _L298Nfullstep4Pin[4] PROGMEM = {10, 9, 5, 6};
+static const uint8_t _L298Nfullstep4Pin[4] PROGMEM = { 10, 9, 5, 6 };
 // static uint8_t _L298Nfullstep4Pin[4] = { 1+2, 2+4, 4+8, 8+1 };
 
 // 1010 -> 1001 -> 0101 -> 0110
 // aAbB => a => !a=A 
-static const uint8_t _L298Nfullstep2Pin[4] PROGMEM = {3, 2, 0, 1};
+static const uint8_t _L298Nfullstep2Pin[4] PROGMEM = { 3, 2, 0, 1 };
 
 ////////////////////////////////////////////////////////
 
-CStepperL298N::CStepperL298N()
-{
-}
+CStepperL298N::CStepperL298N() {}
 
 ////////////////////////////////////////////////////////
 
 pin_t CStepperL298N::_pin[NUM_AXIS][4] =
 {
-	{2, 3, 4, 5},
-	{6, 7, 8, 9},
-	{PIN_A0, PIN_A1, PIN_A2, PIN_A3}, // A0-A3
+	{ 2, 3, 4, 5 },
+	{ 6, 7, 8, 9 },
+	{ PIN_A0, PIN_A1, PIN_A2, PIN_A3 }, // A0-A3
 #if NUM_AXIS > 3
 #if defined(__AVR_ATmega328P__) || defined(__SAMD21G18A__)
 	{ PIN_A4, PIN_A5, 12, 13 },					// A4&5,12&13, leave 11 for Spindle PWM, A6&A7 are input only!

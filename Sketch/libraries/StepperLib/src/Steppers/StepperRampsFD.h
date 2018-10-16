@@ -123,21 +123,24 @@ public:
 
 		CHAL::pinModeInputPullUp(RAMPSFD_ESTOP_PIN);
 
-		CHAL::pinModeOutput(RAMPSFD_FET5D12_PIN); HALFastdigitalWrite(RAMPSFD_FET5D12_PIN, 0);
-		CHAL::pinModeOutput(RAMPSFD_FET6D2_PIN);  HALFastdigitalWrite(RAMPSFD_FET6D2_PIN, 0);
+		CHAL::pinModeOutput(RAMPSFD_FET5D12_PIN);
+		HALFastdigitalWrite(RAMPSFD_FET5D12_PIN, 0);
+		CHAL::pinModeOutput(RAMPSFD_FET6D2_PIN);
+		HALFastdigitalWrite(RAMPSFD_FET6D2_PIN, 0);
 	}
 
 	////////////////////////////////////////////////////////
 
 protected:
 
-	virtual void  SetEnable(axis_t axis, uint8_t level, bool /* force */) override
+	virtual void SetEnable(axis_t axis, uint8_t level, bool /* force */) override
 	{
 		switch (axis)
 		{
 #ifdef _MSC_VER
 #pragma warning( disable : 4127 )
 #endif
+			// @formatter:off — disable formatter after this line
 			case X_AXIS:  if (level != LevelOff)	HALFastdigitalWrite(RAMPSFD_X_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPSFD_X_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_OFF); break;
 			case Y_AXIS:  if (level != LevelOff)	HALFastdigitalWrite(RAMPSFD_Y_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPSFD_Y_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_OFF); break;
 			case Z_AXIS:  if (level != LevelOff)	HALFastdigitalWrite(RAMPSFD_Z_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPSFD_Z_ENABLE_PIN,  RAMPSFD_PIN_ENABLE_OFF); break;
@@ -146,6 +149,7 @@ protected:
 			case E1_AXIS: if (level != LevelOff)	HALFastdigitalWrite(RAMPSFD_E1_ENABLE_PIN, RAMPSFD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPSFD_E1_ENABLE_PIN, RAMPSFD_PIN_ENABLE_OFF); break;
 #endif
 			case E2_AXIS: if (level != LevelOff)	HALFastdigitalWrite(RAMPSFD_E2_ENABLE_PIN, RAMPSFD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPSFD_E2_ENABLE_PIN, RAMPSFD_PIN_ENABLE_OFF); break;
+				// @formatter:on — enable formatter after this line
 
 #ifdef _MSC_VER
 #pragma warning( default : 4127 )
@@ -162,9 +166,9 @@ protected:
 #ifdef _MSC_VER
 #pragma warning( disable : 4127 )
 #endif
-			case X_AXIS:  return ConvertLevel(HALFastdigitalRead(RAMPSFD_X_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
-			case Y_AXIS:  return ConvertLevel(HALFastdigitalRead(RAMPSFD_Y_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
-			case Z_AXIS:  return ConvertLevel(HALFastdigitalRead(RAMPSFD_Z_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
+			case X_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPSFD_X_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
+			case Y_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPSFD_Y_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
+			case Z_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPSFD_Z_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
 			case E0_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPSFD_E0_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
 #ifndef RAMPSFD_DISABLE_E1
 			case E1_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPSFD_E1_ENABLE_PIN) == RAMPSFD_PIN_ENABLE_ON);
@@ -179,17 +183,18 @@ protected:
 
 	////////////////////////////////////////////////////////
 
-	#if defined(RAMPS14_USE_A4998)
+#if defined(RAMPS14_USE_A4998)
 		#define USE_A4998
-	#else
-		#undef USE_A4998
-	#endif
-	#include "StepperA4998_DRV8825.h"
+#else
+#undef USE_A4998
+#endif
+#include "StepperA4998_DRV8825.h"
 
 	////////////////////////////////////////////////////////
-	
+
 	static void SetDirection(axisArray_t directionUp)
 	{
+		// @formatter:off — disable formatter after this line
 		if ((directionUp&(1 << X_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPSFD_X_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_X_DIR_PIN, RAMPSFD_PIN_DIR_ON);
 		if ((directionUp&(1 << Y_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPSFD_Y_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_Y_DIR_PIN, RAMPSFD_PIN_DIR_ON);
 		if ((directionUp&(1 << Z_AXIS)) != 0)  HALFastdigitalWriteNC(RAMPSFD_Z_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_Z_DIR_PIN, RAMPSFD_PIN_DIR_ON);
@@ -198,6 +203,7 @@ protected:
 		if ((directionUp&(1 << E1_AXIS)) != 0) HALFastdigitalWriteNC(RAMPSFD_E1_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_E1_DIR_PIN, RAMPSFD_PIN_DIR_ON);
 #endif
 		if ((directionUp&(1 << E2_AXIS)) != 0) HALFastdigitalWriteNC(RAMPSFD_E2_DIR_PIN, RAMPSFD_PIN_DIR_OFF); else HALFastdigitalWriteNC(RAMPSFD_E2_DIR_PIN, RAMPSFD_PIN_DIR_ON);
+		// @formatter:on — enable formatter after this line
 	}
 
 	////////////////////////////////////////////////////////
@@ -225,7 +231,7 @@ protected:
 #ifndef RAMPSFD_DISABLE_E1
 		HALFastdigitalWriteNC(RAMPSFD_E1_STEP_PIN, RAMPSFD_PIN_STEP_ON); 
 #endif
-		HALFastdigitalWriteNC(RAMPSFD_E2_STEP_PIN, RAMPSFD_PIN_STEP_ON); 
+		HALFastdigitalWriteNC(RAMPSFD_E2_STEP_PIN, RAMPSFD_PIN_STEP_ON);
 	}
 
 	////////////////////////////////////////////////////////
@@ -235,7 +241,7 @@ protected:
 	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override
 	{
 		// The timing requirements for minimum pulse durations on the STEP pin are different for the two drivers. 
-		// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 
+	// With the DRV8825, the high and low STEP pulses must each be at least 1.9 us; 
 		// they can be as short as 1 us when using the A4988.
 
 		while (_setState != NextIsDone)
@@ -277,7 +283,7 @@ protected:
 			state = AnyPendingAxis(steps, cnt) ? NextIsClearPin : NextIsClearDonePin;
 
 //			Delay1(RAMPSFD_NUM_AXIS);
-//			ClearStepPin();
+	//			ClearStepPin();
 //			state = state == NextIsClearPin ? NextIsSetPin : NextIsDone;
 		}
 		else
@@ -292,9 +298,9 @@ protected:
 	{
 		// optimize => not used as "Delay1
 		return steps[X_AXIS] > cnt || steps[Y_AXIS] > cnt || steps[Z_AXIS] > cnt
-#if RAMPS14_NUM_AXIS > 3		    
+#if RAMPS14_NUM_AXIS > 3
 			|| steps[E0_AXIS] > cnt
-#if RAMPS14_NUM_AXIS > 4		    
+#if RAMPS14_NUM_AXIS > 4
 			|| steps[E1_AXIS] > cnt
 #endif
 #endif

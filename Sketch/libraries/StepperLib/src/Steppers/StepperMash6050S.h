@@ -85,9 +85,7 @@ protected:
 
 	////////////////////////////////////////////////////////
 
-	virtual void  SetEnable(axis_t, uint8_t, bool) override
-	{
-	}
+	virtual void SetEnable(axis_t, uint8_t, bool) override { }
 
 	////////////////////////////////////////////////////////
 
@@ -114,10 +112,12 @@ protected:
 
 	static void SetDirection(axisArray_t directionUp)
 	{
+		// @formatter:off — disable formatter after this line
 		if ((directionUp&(1 << X_AXIS)) != 0) HALFastdigitalWriteNC(MASH6050S_X_DIR_PIN, MASH6050S_PIN_DIR_OFF); else HALFastdigitalWriteNC(MASH6050S_X_DIR_PIN, MASH6050S_PIN_DIR_ON);
 		if ((directionUp&(1 << Y_AXIS)) != 0) HALFastdigitalWriteNC(MASH6050S_Y_DIR_PIN, MASH6050S_PIN_DIR_OFF); else HALFastdigitalWriteNC(MASH6050S_Y_DIR_PIN, MASH6050S_PIN_DIR_ON);
 		if ((directionUp&(1 << Z_AXIS)) != 0) HALFastdigitalWriteNC(MASH6050S_Z_DIR_PIN, MASH6050S_PIN_DIR_OFF); else HALFastdigitalWriteNC(MASH6050S_Z_DIR_PIN, MASH6050S_PIN_DIR_ON);
 		if ((directionUp&(1 << A_AXIS)) != 0) HALFastdigitalWriteNC(MASH6050S_C_DIR_PIN, MASH6050S_PIN_DIR_OFF); else HALFastdigitalWriteNC(MASH6050S_C_DIR_PIN, MASH6050S_PIN_DIR_ON);
+		// @formatter:on — enable formatter after this line
 	}
 
 	////////////////////////////////////////////////////////
@@ -252,10 +252,10 @@ public:
 	{
 		switch (referenceid)
 		{
-		case 0: return HALFastdigitalRead(MASH6050S_X_MIN_PIN);
-		case 2: return HALFastdigitalRead(MASH6050S_Y_MIN_PIN);
-		case 5: return HALFastdigitalRead(MASH6050S_Z_MAX_PIN);
-		case 6: return HALFastdigitalRead(MASH6050S_C_MIN_PIN);
+			case 0: return HALFastdigitalRead(MASH6050S_X_MIN_PIN);
+			case 2: return HALFastdigitalRead(MASH6050S_Y_MIN_PIN);
+			case 5: return HALFastdigitalRead(MASH6050S_Z_MAX_PIN);
+			case 6: return HALFastdigitalRead(MASH6050S_C_MIN_PIN);
 		}
 		return 255;
 	}

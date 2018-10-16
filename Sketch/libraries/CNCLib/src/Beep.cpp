@@ -46,15 +46,6 @@ const SPlayTone SPlayTone::PlayError[] PROGMEM
 	{ ToneEnd, 0 }
 };
 
-/*
-const SPlayTone SPlayTone::PlayInfo[] PROGMEM
-{
-	{ ToneA5, MilliSecToDuration(200) },
-	{ ToneA6, MilliSecToDuration(200) },
-	{ ToneA7, MilliSecToDuration(200) },
-	{ ToneEnd }
-};
-*/
 // Fuer Elise: Beethoven
 
 #define Duration0	4000

@@ -21,8 +21,7 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PIN>
-class CReadAnalogIOControl
+template <pin_t PIN> class CReadAnalogIOControl
 {
 public:
 

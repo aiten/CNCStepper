@@ -37,8 +37,7 @@ CStepper::CStepper()
 
 ////////////////////////////////////////////////////////
 
-template <>
-CStepper* CSingleton<CStepper>::_instance = nullptr;
+template <> CStepper* CSingleton<CStepper>::_instance = nullptr;
 
 uint8_t          CStepper::_mysteps[NUM_AXIS];
 volatile uint8_t CStepper::_setState;
@@ -99,7 +98,7 @@ void CStepper::SetUsual(steprate_t vMax)
 	const steprate_t defdec   = 380;
 	const steprate_t defjerk  = 1000;
 
-	auto          jerk = steprate_t(MulDivU32(vMax, defjerk, defspeed));
+	auto     jerk = steprate_t(MulDivU32(vMax, defjerk, defspeed));
 	uint32_t sqrt = _ulsqrt_round(vMax * 10000l / defspeed);
 
 	auto acc = steprate_t(sqrt * defacc / 100l);
@@ -198,7 +197,7 @@ void CStepper::QueueMove(const mdist_t dist[NUM_AXIS], const bool directionUp[NU
 	{
 		if ((_pod._lastdirection & directionmask) != direction)
 		{
-			mdist_t backlashdist[NUM_AXIS] = {0};
+			mdist_t backlashdist[NUM_AXIS] = { 0 };
 
 			mdist_t backlashsteps = 0;
 			mask                  = 1;
@@ -435,8 +434,8 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 					mdist_t s = (mdist_t)((distinit + distsum) / ((uint32_t)_steps) * multiplier);
 #else
 					uint32_t distinit = _steps / maxMultiplier / 2;
-					uint64_t      distsum  = uint64_t(_distance_[i]) * uint64_t(calcfullsteps);
-					auto          s        = mdist_t(((distinit + distsum) / uint64_t(_steps) * multiplier));
+					uint64_t distsum  = uint64_t(_distance_[i]) * uint64_t(calcfullsteps);
+					auto     s        = mdist_t(((distinit + distsum) / uint64_t(_steps) * multiplier));
 #endif
 					axisdiff = uint8_t(dist[i] - s); // must be in range 0..7
 				}
@@ -525,16 +524,16 @@ void CStepper::SMovement::InitStop(SMovement* mvPrev, timer_t timer, timer_t dec
 
 	_pod._move._timerDec = dectimer;
 
-	mdist_t downstpes = CStepper::GetDecSteps(timer, dectimer);
+	mdist_t downsteps = CStepper::GetDecSteps(timer, dectimer);
 
 	for (uint8_t i = 0; i < NUM_AXIS; i++)
 	{
-		_distance_[i] = mdist_t(RoundMulDivUInt(_distance_[i], downstpes, _steps));
+		_distance_[i] = mdist_t(RoundMulDivUInt(_distance_[i], downsteps, _steps));
 	}
 
 	_state = SMovement::StateReadyMove;
 
-	_steps = downstpes;
+	_steps = downsteps;
 
 	_pod._move._ramp._timerRun = timer;
 
@@ -1145,7 +1144,7 @@ timer_t CStepper::GetTimer(mdist_t steps, timer_t timerstart)
 	}
 
 	uint32_t ad = a2 * steps;
-	auto          v  = steprate_t((_ulsqrt(((ad) / 93) * 85)));
+	auto     v  = steprate_t((_ulsqrt(((ad) / 93) * 85)));
 
 	return SpeedToTimer(v) + 1; // +1 	empiric tested to get better results
 }
@@ -1176,7 +1175,7 @@ timer_t CStepper::GetTimerAccelerating(mdist_t steps, timer_t timerv0, timer_t t
 	}
 
 	uint32_t ad = a2 * steps;
-	auto          v  = steprate_t((_ulsqrt(((sqv0 + ad) / 93) * 85)));
+	auto     v  = steprate_t((_ulsqrt(((sqv0 + ad) / 93) * 85)));
 
 	return SpeedToTimer(v) + 1; // +1 	empiric tested to get better results
 }
@@ -1306,9 +1305,7 @@ void CStepper::StopMove(steprate_t v0Dec)
 				SubTotalSteps();
 
 				_movements._queue.RemoveTail(_movements._queue.GetHeadPos());
-
 				_movements._queue.NextTail().InitStop(&mv, _movementstate._timer, dectimer);
-
 				_movements._queue.Enqueue();
 			}
 
@@ -1596,7 +1593,7 @@ void CStepper::FillStepBuffer()
 	// check if turn off stepper
 
 	uint32_t ms       = millis();
-	auto          diff_sec = uint8_t(((ms - _pod._timerLastCheckEnable) / 1024)); // div 1024 is faster as 1000
+	auto     diff_sec = uint8_t(((ms - _pod._timerLastCheckEnable) / 1024)); // div 1024 is faster as 1000
 
 	if (diff_sec > 0)
 	{
@@ -1946,15 +1943,15 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 				{
 					static const uint16_t corrtab[][2] PROGMEM =
 					{
-						{1300, 1402},
-						{611, 709},
-						{322, 400},
-						{307, 405},
-						{289, 403}
+						{ 1300, 1402 },
+						{ 611, 709 },
+						{ 322, 400 },
+						{ 307, 405 },
+						{ 289, 403 }
 					};
-					uint16_t mul = pgm_read_word(&corrtab[pState->_count - 2][0]);
-					uint16_t div = pgm_read_word(&corrtab[pState->_count - 2][1]);
-					pState->_timer     = timer_t(MulDivU32(pState->_timer, mul, div));
+					uint16_t mul   = pgm_read_word(&corrtab[pState->_count - 2][0]);
+					uint16_t div   = pgm_read_word(&corrtab[pState->_count - 2][1]);
+					pState->_timer = timer_t(MulDivU32(pState->_timer, mul, div));
 				}
 				else if (pState->_count <= 1 && _pod._move._ramp._nUpOffset == 0 && _state == StateUpDec)
 				{
@@ -2159,7 +2156,7 @@ void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool direct
 #endif
 
 	uint16_t movecount     = 1;
-	udist_t        pos[NUM_AXIS] = {0};
+	udist_t  pos[NUM_AXIS] = { 0 };
 
 	steps *= stepmul;
 
@@ -2293,7 +2290,7 @@ bool CStepper::MoveReference(axis_t axis, uint8_t referenceid, bool toMin, stepr
 		distIfRefIsOn = maxdist / 8;
 	}
 
-	// check diection of move (assume to min)
+	// check direction of move (assume to min)
 	if (maxdist > 0)
 	{
 		maxdist = -maxdist;
@@ -2342,7 +2339,7 @@ bool CStepper::MoveReference(axis_t axis, uint8_t referenceid, bool toMin, stepr
 		Error(MESSAGE(MESSAGE_STEPPER_MoveReferenceFailed));
 	}
 
-	// calling this methode always sets position, independent of the result!!!!
+	// calling this method always sets position, independent of the result!!!!
 	SetPosition(axis, toMin ? GetLimitMin(axis) : GetLimitMax(axis));
 
 	return ret;
@@ -2429,7 +2426,7 @@ void CStepper::MoveRel(const sdist_t d[NUM_AXIS], steprate_t vMax)
 
 void CStepper::MoveAbs(axis_t axis, udist_t d, steprate_t vMax)
 {
-	udist_t D[NUM_AXIS] = {0};
+	udist_t D[NUM_AXIS] = { 0 };
 	memcpy(D, _pod._calculatedpos, sizeof(_pod._calculatedpos));
 	D[axis] = d;
 	MoveAbs(D, vMax);
@@ -2439,8 +2436,8 @@ void CStepper::MoveAbs(axis_t axis, udist_t d, steprate_t vMax)
 
 void CStepper::MoveRel(axis_t axis, sdist_t d, steprate_t vMax)
 {
-	udist_t dist[NUM_AXIS]        = {0};
-	bool    directionUp[NUM_AXIS] = {false};
+	udist_t dist[NUM_AXIS]        = { 0 };
+	bool    directionUp[NUM_AXIS] = { false };
 	dist[axis]                    = abs(d);
 	directionUp[axis]             = d > 0;
 	QueueAndSplitStep(dist, directionUp, vMax);
@@ -2451,7 +2448,7 @@ void CStepper::MoveRel(axis_t axis, sdist_t d, steprate_t vMax)
 
 void CStepper::MoveAbsEx(steprate_t vMax, uint16_t axis, udist_t d, ...)
 {
-	udist_t D[NUM_AXIS] = {0};
+	udist_t D[NUM_AXIS] = { 0 };
 	memcpy(D, _pod._calculatedpos, sizeof(_pod._calculatedpos));
 
 	va_list arglist;
@@ -2480,7 +2477,7 @@ void CStepper::MoveAbsEx(steprate_t vMax, uint16_t axis, udist_t d, ...)
 
 void CStepper::MoveRelEx(steprate_t vMax, uint16_t axis, sdist_t d, ...)
 {
-	sdist_t dist[NUM_AXIS] = {0};
+	sdist_t dist[NUM_AXIS] = { 0 };
 
 	va_list arglist;
 	va_start(arglist, d);

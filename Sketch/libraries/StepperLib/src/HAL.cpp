@@ -34,9 +34,7 @@ uint16_t CHAL::analogRead(pin_t pin)
 
 ////////////////////////////////////////////////////////
 
-static void IgnoreIrq()
-{
-}
+static void IgnoreIrq() {}
 
 CHAL::HALEvent CHAL::_TimerEvent0 = IgnoreIrq;
 CHAL::HALEvent CHAL::_TimerEvent1 = IgnoreIrq;

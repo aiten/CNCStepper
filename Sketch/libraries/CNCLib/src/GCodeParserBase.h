@@ -72,7 +72,7 @@ public:
 
 	static bool IsSpindleOn() { return _modalstate.SpindleOn; }
 
-	static bool  IsCutMove() { return _modalstate.CutMove; }
+	static bool    IsCutMove() { return _modalstate.CutMove; }
 	static int16_t GetSpindleSpeed() { return _modalstate.SpindleSpeed; }
 
 	static void Init()

@@ -51,9 +51,7 @@
 //
 ////////////////////////////////////////////////////////////
 
-CU8GLcd::CU8GLcd()
-{
-}
+CU8GLcd::CU8GLcd() {}
 
 ////////////////////////////////////////////////////////////
 
@@ -98,9 +96,7 @@ void CU8GLcd::SetRotaryPin(pin_t pin1, pin_t pin2, pin_t pinPush, uint8_t onValu
 uint8_t CU8GLcd::GetPageCount()
 {
 	uint8_t count;
-	for (count = 0; GetDrawFunction(&_pagedef[count].draw) != NULL; count++)
-	{
-	}
+	for (count = 0; GetDrawFunction(&_pagedef[count].draw) != NULL; count++) { }
 	return count;
 }
 
@@ -149,8 +145,11 @@ void CU8GLcd::CallRotaryButtonTick()
 	switch (_rotarybutton.Tick())
 	{
 		case CRotaryButton<rotarypos_t, CU8GLcd_ROTARY_ACCURACY>::Nothing: break;
-		default: _rotaryEventTime = millis();
+		default:
+		{
+			_rotaryEventTime = millis();
 			break;
+		}
 	}
 }
 
@@ -181,6 +180,7 @@ void CU8GLcd::Poll()
 	{
 		bool screensaver = IsScreenSaver();
 		_rotaryEventTime = millis();
+
 		if (!screensaver)
 		{
 			ButtonPress();
@@ -737,7 +737,7 @@ bool CU8GLcd::DrawLoopPreset(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 		return DrawLoopDefault(type, data);
 	}
 
-	FLSTR zeroShiftName[] PROGMEM = {F("G53"), F("G54"), F("G55"), F("G56"), F("G57"), F("G58"), F("G59")};
+	FLSTR zeroShiftName[] PROGMEM = { F("G53"), F("G54"), F("G55"), F("G56"), F("G57"), F("G58"), F("G59") };
 
 	SetPosition(ToCol(0), ToRow(0) - HeadLineOffset());
 	Print(F("Preset: "));

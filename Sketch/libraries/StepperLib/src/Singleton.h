@@ -21,8 +21,7 @@
 
 //////////////////////////////////////////
 
-template <class T>
-class CSingleton
+template <class T> class CSingleton
 {
 private:
 	static T* _instance;

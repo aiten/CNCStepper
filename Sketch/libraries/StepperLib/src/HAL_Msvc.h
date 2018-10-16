@@ -83,7 +83,7 @@ inline void CHAL::StartTimer1OneShot(timer_t) {}
 inline void CHAL::StopTimer1() {}
 inline void CHAL::InitTimer2OneShot(HALEvent evt) { _TimerEvent2 = evt; }
 inline void CHAL::RemoveTimer2() {}
-inline void CHAL::StartTimer2OneShot(timer_t) {}
+inline void CHAL::StartTimer2OneShot(timer_t  ) {}
 inline void CHAL::ReStartTimer2OneShot(timer_t) {}
 inline void CHAL::StopTimer2() {}
 

@@ -21,8 +21,7 @@
 
 //////////////////////////////////////////
 
-template <class T>
-class CPushValue
+template <class T> class CPushValue
 {
 private:
 

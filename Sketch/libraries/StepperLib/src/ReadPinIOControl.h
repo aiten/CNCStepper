@@ -21,8 +21,7 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PIN, uint8_t ONVALUE>
-class CReadPinIOControl
+template <pin_t PIN, uint8_t ONVALUE> class CReadPinIOControl
 {
 public:
 

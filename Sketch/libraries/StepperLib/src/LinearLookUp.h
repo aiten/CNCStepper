@@ -21,8 +21,7 @@
 
 //////////////////////////////////////////
 
-template <class TInput, class TOutput>
-class CLinearLookup
+template <class TInput, class TOutput> class CLinearLookup
 {
 public:
 	struct SLookupTable

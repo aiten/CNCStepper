@@ -30,20 +30,20 @@
 
 //////////////////////////////////////////
 
-extern uint8_t ToPrecisionU10(uint32_t );
+extern uint8_t ToPrecisionU10(uint32_t);
 extern uint8_t ToPrecisionU10(uint16_t);
-extern uint8_t ToPrecisionS10(int32_t);
+extern uint8_t ToPrecisionS10(int32_t );
 
 extern uint8_t ToPrecisionU2(uint32_t);
 extern uint8_t ToPrecisionU2(uint16_t);
-extern uint8_t ToPrecisionS2(int32_t);
+extern uint8_t ToPrecisionS2(int32_t );
 
 ////////////////////////////////////////////////////////
 
-template <class T> bool IsBitSet(T t, uint8_t bit) { return (t & ((T(1)) << bit)) != 0; };
+template <class T> bool IsBitSet(T   t, uint8_t bit) { return (t & ((T(1)) << bit)) != 0; };
 template <class T> bool IsBitClear(T t, uint8_t bit) { return (t & ((T(1)) << bit)) == 0; };
-template <class T> void BitSet(T& t, uint8_t bit) { t |= (T(1)) << bit; };
-template <class T> void BitClear(T& t, uint8_t bit) { t &= ~((T(1)) << bit); };
+template <class T> void BitSet(T&    t, uint8_t bit) { t |= (T(1)) << bit; };
+template <class T> void BitClear(T&  t, uint8_t bit) { t &= ~((T(1)) << bit); };
 
 ////////////////////////////////////////////////////////
 
@@ -90,7 +90,7 @@ typedef struct _udiv_t
 {
 	uint16_t quot;
 	uint16_t rem;
-}                  udiv_t;
+}            udiv_t;
 
 inline udiv_t udiv(uint16_t __num, uint16_t __denom)
 {
@@ -114,8 +114,7 @@ extern udiv_t udiv(uint16_t __num, uint16_t __denom) __asm__("__udivmodhi4") __A
 
 ////////////////////////////////////////////////////////
 
-template <typename T, uint8_t sz>
-void                          DumpArray(FLSTR head, const T pos[sz], bool newline)
+template <typename T, uint8_t sz> void DumpArray(FLSTR head, const T pos[sz], bool newline)
 {
 	if (head != nullptr)
 	{
@@ -140,8 +139,7 @@ void                          DumpArray(FLSTR head, const T pos[sz], bool newlin
 
 ////////////////////////////////////////////////////////
 
-template <typename T>
-void DumpType(FLSTR head, T value, bool newline)
+template <typename T> void DumpType(FLSTR head, T value, bool newline)
 {
 	if (head != nullptr)
 	{

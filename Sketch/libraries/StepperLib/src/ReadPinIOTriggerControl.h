@@ -21,8 +21,7 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PIN, uint8_t ONVALUE, uint32_t STABLETIME>
-class CReadPinIOTriggerControl
+template <pin_t PIN, uint8_t ONVALUE, uint32_t STABLETIME> class CReadPinIOTriggerControl
 {
 public:
 

@@ -38,20 +38,18 @@ private:
 
 public:
 
-	CGCode3DParser(CStreamReader* reader, Stream* output) : super(reader, output)
-	{
-	}
+	CGCode3DParser(CStreamReader* reader, Stream* output) : super(reader, output) { }
 
-	static File& GetExecutingFile()							{ return _state._file; }
+	static File& GetExecutingFile() { return _state._file; }
 
-	static uint32_t GetExecutingFilePosition()			{ return _state._printFilePos; }
-	static uint32_t GetExecutingFileLine()				{ return _state._printFileLine; }
-	static uint32_t GetExecutingFileSize()				{ return _state._printFileSize; }
-	static const char*   GetExecutingFileName()				{ return _state._printfilename; }
+	static uint32_t    GetExecutingFilePosition() { return _state._printFilePos; }
+	static uint32_t    GetExecutingFileLine() { return _state._printFileLine; }
+	static uint32_t    GetExecutingFileSize() { return _state._printFileSize; }
+	static const char* GetExecutingFileName() { return _state._printfilename; }
 
 	static void SetExecutingFilePosition(uint32_t pos) { _state._printFilePos   = pos; }
-	static void SetExecutingFileLine(uint32_t line)	{ _state._printFileLine = line; }
-	static void SetExecutingFileName(char* filename)		{ strcpy(_state._printfilename, filename); }
+	static void SetExecutingFileLine(uint32_t     line) { _state._printFileLine = line; }
+	static void SetExecutingFileName(char*        filename) { strcpy(_state._printfilename, filename); }
 
 	static void Init()
 	{
@@ -76,7 +74,7 @@ private:
 		uint32_t _printFilePos;
 		uint32_t _printFileLine;
 		uint32_t _printFileSize;
-		File          _file;
+		File     _file;
 
 		bool _isM28; // SD write mode
 		char _printfilename[MAXFILEEXTNAME + 1];

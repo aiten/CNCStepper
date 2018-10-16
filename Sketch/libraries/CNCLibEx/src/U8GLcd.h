@@ -229,7 +229,7 @@ protected:
 	void SetRotaryPin(pin_t pin1, pin_t pin2, pin_t pinPush, uint8_t onValuePush);
 
 	void        CallRotaryButtonTick();
-	static void CallRotaryButtonTickISR()				{ ((CU8GLcd*)CLcd::GetInstance())->CallRotaryButtonTick(); }
+	static void CallRotaryButtonTickISR() { ((CU8GLcd*)CLcd::GetInstance())->CallRotaryButtonTick(); }
 
 	CRotaryButton<rotarypos_t, CU8GLcd_ROTARY_ACCURACY> _rotarybutton;
 	CPushButton                                         _rotarypushbutton;
@@ -242,14 +242,14 @@ protected:
 
 	const uint8_t* _font = u8g_font_6x10;
 
-	uint8_t ToRow(uint8_t row)							{ return (row + 1) * (_charHeight); }
-	uint8_t ToCol(uint8_t col)							{ return (col) * (_charWidth); }
+	uint8_t ToRow(uint8_t row) { return (row + 1) * (_charHeight); }
+	uint8_t ToCol(uint8_t col) { return (col) * (_charWidth); }
 
-	uint8_t TotalRows()									{ return CU8GLcd_LCD_GROW / _charHeight; }
-	uint8_t TotalCols()									{ return CU8GLcd_LCD_GCOL / _charWidth; }
+	uint8_t TotalRows() { return CU8GLcd_LCD_GROW / _charHeight; }
+	uint8_t TotalCols() { return CU8GLcd_LCD_GCOL / _charWidth; }
 
-	uint8_t HeadLineOffset()							{ return 2; }
-	uint8_t PosLineOffset()								{ return (_lcd_numaxis > 5 ? 0 : 1); }
+	uint8_t HeadLineOffset() { return 2; }
+	uint8_t PosLineOffset() { return (_lcd_numaxis > 5 ? 0 : 1); }
 
 	static char* DrawPos(axis_t axis, mm1000_t pos, char* tmp, uint8_t precision); // draw mm100 or inch
 

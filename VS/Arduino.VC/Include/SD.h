@@ -286,14 +286,12 @@ public:
 		return GetD()->openNextFile();
 	}
 
-	void rewindDirectory()
-	{
-	}
+	void rewindDirectory() { }
 
 	//	virtual int peek();
 	//	virtual void flush();
 	//	int read(void *buf, uint16_t nbyte);
-	boolean       seek(uint32_t pos) { return fseek(GetF()->_f, pos, SEEK_SET) == 0; }
+	boolean  seek(uint32_t pos) { return fseek(GetF()->_f, pos, SEEK_SET) == 0; }
 	uint32_t position() { return ftell(GetF()->_f); }
 };
 

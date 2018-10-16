@@ -197,9 +197,7 @@ void CMsvcStepper::Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, 
 	_TotalSteps++;
 	_eventIdx++;
 
-	if (_eventIdx < CacheSize)
-	{
-	}
+	if (_eventIdx < CacheSize) { }
 	else
 	{
 		WriteTestResults(_filename);
@@ -280,7 +278,7 @@ void CMsvcStepper::EndTest(const char* filename)
 void CMsvcStepper::WriteTestResults(const char* filename)
 {
 	bool append           = (_flushcount++) != 0;
-	char fname[_MAX_PATH] = {0};
+	char fname[_MAX_PATH] = { 0 };
 	fname[0]              = 0;
 
 	/*

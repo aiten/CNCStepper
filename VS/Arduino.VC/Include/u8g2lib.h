@@ -25,14 +25,14 @@ public:
 	void begin() {};
 	void firstPage() {};
 	bool nextPage() { return false; }
-	void drawStr(int, int, const char*) {}
-	void setFont(const uint8_t *) { };
-	void setCursor(int , int )	{ };
+	void drawStr(int           , int, const char*) {}
+	void setFont(const uint8_t*) { };
+	void setCursor(int         , int) { };
 
-	void print(const char)			{ };
+	void print(const char) { };
 
-	void print(const char*)			{ };
-	void println(const char*)		{ };
+	void print(const char*  ) { };
+	void println(const char*) { };
 };
 
 class U8G2_ST7920_128X64_1_SW_SPI : public U8G2
@@ -48,7 +48,7 @@ public:
 };
 
 
-static void* U8G2_R0;
+static void*          U8G2_R0;
 static const uint8_t* u8g_font_unifont;
 static const uint8_t* u8g_font_unifontr;
 static const uint8_t* u8g_font_6x12;

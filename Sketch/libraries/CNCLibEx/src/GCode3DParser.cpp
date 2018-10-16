@@ -85,17 +85,28 @@ bool CGCode3DParser::MCommand(mcode_t mcode)
 
 	switch (mcode)
 	{
-		case 20: M20Command();	return true;
-		case 21: M21Command();	return true;
-		case 22: M22Command();	return true;
-		case 23: M23Command();	return true;
-		case 24: M24Command();	return true;
-		case 25: M25Command();	return true;
-		case 26: M26Command();	return true;
-		case 27: M27Command();	return true;
-		case 28: M28Command();	return true;
-		case 29: M29Command();	return true;
-		case 30: M30Command();	return true;
+		case 20: M20Command();
+			return true;
+		case 21: M21Command();
+			return true;
+		case 22: M22Command();
+			return true;
+		case 23: M23Command();
+			return true;
+		case 24: M24Command();
+			return true;
+		case 25: M25Command();
+			return true;
+		case 26: M26Command();
+			return true;
+		case 27: M27Command();
+			return true;
+		case 28: M28Command();
+			return true;
+		case 29: M29Command();
+			return true;
+		case 30: M30Command();
+			return true;
 		case 115: _OkMessage = PrintVersion;
 			return true;
 	}
@@ -110,7 +121,7 @@ void CGCode3DParser::M20Command()
 	char filenamebuffer[MAXPATHNAME];
 	strcpy(filenamebuffer, "/");
 
-	File           root  = SD.open(filenamebuffer);
+	File     root  = SD.open(filenamebuffer);
 	uint16_t count = 0;
 
 	if (root)
@@ -176,9 +187,7 @@ void CGCode3DParser::M21Command()
 
 ////////////////////////////////////////////////////////////
 
-void CGCode3DParser::M22Command()
-{
-}
+void CGCode3DParser::M22Command() {}
 
 ////////////////////////////////////////////////////////////
 
@@ -222,9 +231,7 @@ void CGCode3DParser::M24Command()
 
 ////////////////////////////////////////////////////////////
 
-void CGCode3DParser::M25Command()
-{
-}
+void CGCode3DParser::M25Command() {}
 
 ////////////////////////////////////////////////////////////
 
@@ -258,7 +265,6 @@ void CGCode3DParser::M26Command()
 		{
 			return;
 		}
-
 
 		if (lineNr < 1)
 		{
@@ -471,6 +477,7 @@ bool CGCode3DParser::GetPathName(char* buffer)
 		}
 		else if (first)
 		{
+			// nothing
 		}
 		else
 		{

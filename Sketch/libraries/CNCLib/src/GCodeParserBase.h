@@ -258,7 +258,7 @@ protected:
 
 	uint32_t GetUint32OrParam(uint32_t max);
 	uint32_t GetUint32OrParam() { return GetUint32OrParam(0xffffffffl); };
-	uint16_t GetUint16OrParam() { return (uint16_t)GetUint32OrParam(65535); };
+	uint16_t GetUint16OrParam() { return uint16_t(GetUint32OrParam(65535)); };
 	uint8_t  GetUint8OrParam() { return uint8_t(GetUint32OrParam(255)); };
 
 	//mm1000_t GetRelativePosition(mm1000_t pos, axis_t axis)	{ return pos - CalcAllPreset(axis); }

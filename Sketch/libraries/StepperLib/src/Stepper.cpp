@@ -352,7 +352,7 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 		if (d)
 		{
 			uint32_t axistimer = MulDivU32(_pod._move._timerMax, _steps, d);
-			if (axistimer < (uint32_t)pStepper->_pod._timerMax[i])
+			if (axistimer < uint32_t(pStepper->_pod._timerMax[i]))
 			{
 				timerMax             = timer_t(MulDivU32(pStepper->_pod._timerMax[i], d, _steps));
 				_pod._move._timerMax = max(timerMax, _pod._move._timerMax);
@@ -696,8 +696,8 @@ void CStepper::SMovement::SRamp::RampRun(SMovement* pMovement)
 			timer_t upTimer   = pMovement->GetUpTimer(_timerStart > _timerRun);
 			timer_t downTimer = pMovement->GetUpTimer(_timerStop < _timerRun);
 
-			uint32_t sqUp   = (uint32_t)(upTimer) * (uint32_t)(upTimer);
-			uint32_t sqDown = (uint32_t)(downTimer) * (uint32_t)(downTimer);
+			uint32_t sqUp   = uint32_t(upTimer) * uint32_t(upTimer);
+			uint32_t sqDown = uint32_t(downTimer) * uint32_t(downTimer);
 
 			sqUp /= 0x1000; // may overrun => divide by 0x1000
 			sqDown /= 0x1000;
@@ -1224,8 +1224,8 @@ mdist_t CStepper::GetAccSteps(timer_t timer, timer_t timerstart)
 	// original: d = v^2 / v0^2
 	// tested with execel to fit to timer calcualtion with cn = cn-1 + (2*cn-1) / (4n+1) and use of "integer"
 
-	uint32_t sqA2 = (uint32_t)(timer) * (uint32_t)(timer - 1) * 2;
-	uint32_t sqB  = (uint32_t)(timerstart) * (uint32_t)(timerstart);
+	uint32_t sqA2 = uint32_t(timer) * uint32_t(timer - 1) * 2;
+	uint32_t sqB  = uint32_t(timerstart) * uint32_t(timerstart);
 
 	// factor => tested with excel => timer *= 1.046 => timer^2 *= 1.0941 ( 1.046^2)
 	// use int and not float => 93/85 = 1,094117647058824 
@@ -2162,7 +2162,7 @@ void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool direct
 
 	if (steps > MAXSTEPSPERMOVE)
 	{
-		movecount = (uint16_t)(steps / MAXSTEPSPERMOVE);
+		movecount = uint16_t(steps / MAXSTEPSPERMOVE);
 		if ((steps % MAXSTEPSPERMOVE) != 0)
 		{
 			movecount++;

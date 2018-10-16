@@ -438,7 +438,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 				}
 				case PARAMSTART_CONTROLLERFAN:
 				{
-					CControl::GetInstance()->IOControl(CControl::ControllerFan, (uint16_t)intvalue);
+					CControl::GetInstance()->IOControl(CControl::ControllerFan, uint16_t(intvalue));
 					break;
 				}
 				case PARAMSTART_RAPIDMOVEFEED:
@@ -525,7 +525,7 @@ const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfo(uintptr_t param, boo
 
 const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfoByText(const char* text)
 {
-	return FindParamInfo((uintptr_t)text, [](const SParamInfo* p, uintptr_t x) -> bool
+	return FindParamInfo(uintptr_t(text), [](const SParamInfo* p, uintptr_t x) -> bool
 	{
 		const char* text = p->GetText();
 		return text != nullptr && strcasecmp_P((const char*)x, text) == 0;
@@ -1974,7 +1974,7 @@ void CGCodeParser::M300Command()
 	{
 		_reader->GetNextChar();
 		unsigned int freq = GetUInt16();
-		tone[0].Tone      = (ETone)FreqToTone(freq);
+		tone[0].Tone      = ETone(FreqToTone(freq));
 		if (IsError())
 		{
 			return;

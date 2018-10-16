@@ -214,8 +214,6 @@ private:
 
 	typedef CDecimaAsInt super;
 
-	inch100000_t _value;
-
 public:
 
 	static char* ToString(inch100000_t pos, char* tmp, uint8_t precision, uint8_t scale); // right aligned

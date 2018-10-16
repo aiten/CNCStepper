@@ -29,7 +29,7 @@ template <pin_t PIN, uint8_t ONVALUE> class CPushButtonLow
 {
 public:
 
-	CPushButtonLow() { }
+	CPushButtonLow() = default;
 
 	static void Init(uint8_t inputmode = INPUT_PULLUP)
 	{

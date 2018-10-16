@@ -259,7 +259,7 @@ public:
 	operator bool() const { return _dirfile != nullptr && _dirfile->isopen(); }
 
 	virtual int  available() override { return feof(GetF()->_f) ? 0 : 1; }
-	virtual char read() override { return (char)fgetc(GetF()->_f); }
+	virtual char read() override { return char(fgetc(GetF()->_f)); }
 
 	uint32_t size() const
 	{

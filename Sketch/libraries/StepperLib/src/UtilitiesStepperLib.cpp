@@ -42,7 +42,7 @@ uint8_t ToPrecisionU10(uint16_t v)
 
 uint8_t ToPrecisionU10(uint32_t v)
 {
-	if (v < 10000) return ToPrecisionU10((uint16_t)v);
+	if (v < 10000) return ToPrecisionU10(uint16_t(v));
 	if (v < 100000) return 5;
 	if (v < 1000000) return 6;
 	if (v < 10000000) return 7;
@@ -55,9 +55,9 @@ uint8_t ToPrecisionS10(int32_t v)
 {
 	if (v < 0)
 	{
-		return ToPrecisionU10((uint32_t)-v);
+		return ToPrecisionU10(uint32_t(-v));
 	}
-	return ToPrecisionU10((uint32_t)v);
+	return ToPrecisionU10(uint32_t(v));
 }
 
 

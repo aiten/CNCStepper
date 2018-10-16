@@ -29,7 +29,7 @@
 
 uint16_t CHAL::analogRead(pin_t pin)
 {
-	return (uint16_t)::analogRead(pin);
+	return uint16_t(::analogRead(pin));
 }
 
 ////////////////////////////////////////////////////////

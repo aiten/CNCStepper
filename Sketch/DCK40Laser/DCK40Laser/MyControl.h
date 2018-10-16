@@ -45,11 +45,11 @@ private:
 
 public:
 
-	CMyControl()				 { }
+	CMyControl() { }
 
 	virtual void Kill() override;
 
-	virtual void IOControl(uint8_t tool, uint16_t level) override;
+	virtual void     IOControl(uint8_t tool, uint16_t level) override;
 	virtual uint16_t IOControl(uint8_t tool) override;
 
 protected:
@@ -67,20 +67,17 @@ protected:
 private:
 
 	static const CConfigEeprom::SCNCEeprom _eepromFlash;
-	
+
 	ControlData _data;
 
 
-	CAnalog8IOControl<LASER_PWM_PIN> _laserPWM;
+	CAnalog8IOControl<LASER_PWM_PIN>                                             _laserPWM;
 	COnOffIOControl<LASER_ENABLE_PIN, LASER_ENABLE_PIN_ON, LASER_ENABLE_PIN_OFF> _laserOnOff;
 
-	COnOffIOControl<LASERWATER_PIN, LASERWATER_PIN_ON, LASERWATER_PIN_OFF> _laserWater;
+	COnOffIOControl<LASERWATER_PIN, LASERWATER_PIN_ON, LASERWATER_PIN_OFF>    _laserWater;
 	COnOffIOControl<LASERVACUUM_PIN, LASERVACUUM_PIN_ON, LASERVACUUM_PIN_OFF> _laserVacuum;
-
-
 };
 
 ////////////////////////////////////////////////////////
 
 extern CMyControl Control;
-

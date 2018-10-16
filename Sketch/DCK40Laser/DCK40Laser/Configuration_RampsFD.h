@@ -40,7 +40,7 @@
 
 // change some pin definition here:
 
-#undef RAMPSFD_REF_ON 
+#undef RAMPSFD_REF_ON
 #undef RAMPSFD_REF_OFF
 
 #define RAMPSFD_REF_ON  1
@@ -86,5 +86,3 @@
 #define SD_ENABLE_PIN    CAT(BOARDNAME,_SDSS_PIN)
 
 ////////////////////////////////////////////////////////
-
-

@@ -36,11 +36,11 @@
 ////////////////////////////////////////////////////////
 
 #define X_MAXSIZE 320000				// in mm1000_t
-#define Y_MAXSIZE 220000 
-#define Z_MAXSIZE 100000 
-#define A_MAXSIZE 1000 
-#define B_MAXSIZE 1000 
-#define C_MAXSIZE 1000 
+#define Y_MAXSIZE 220000
+#define Z_MAXSIZE 100000
+#define A_MAXSIZE 1000
+#define B_MAXSIZE 1000
+#define C_MAXSIZE 1000
 
 ////////////////////////////////////////////////////////
 
@@ -124,4 +124,3 @@
 ////////////////////////////////////////////////////////
 
 #define MESSAGE_MYCONTROL_Starting					F("DC-K40 Laser: (" __DATE__ ", " __TIME__ ")")
-

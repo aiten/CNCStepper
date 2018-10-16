@@ -900,8 +900,8 @@ void CGCodeParserBase::G0203Command(bool isG02)
 
 uint32_t CGCodeParserBase::GetDweel()
 {
-	const char*   current = _reader->GetBuffer();
-	uint32_t dweelms = GetUint32OrParam();
+	const char* current = _reader->GetBuffer();
+	uint32_t    dweelms = GetUint32OrParam();
 
 	if (_reader->GetChar() == '.')
 	{

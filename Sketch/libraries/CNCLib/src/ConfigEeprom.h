@@ -46,8 +46,8 @@ class CConfigEeprom : public CSingleton<CConfigEeprom>
 {
 private:
 
-	uint16_t _eepromsizesize;
-	const void*    _defaulteeprom;
+	uint16_t    _eepromsizesize;
+	const void* _defaulteeprom;
 
 	bool _eepromvalid    = false;
 	bool _eepromcanwrite = false;

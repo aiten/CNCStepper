@@ -23,7 +23,7 @@ http://www.gnu.org/licenses/
 
 uint8_t digitalReadValues[MAXDIGITALREADPINS] = {LOW};
 
-uint8_t digitalRead(short pin)
+uint8_t digitalRead(int16_t pin)
 {
 	uint8_t value = digitalReadFromFile(pin);
 
@@ -51,7 +51,7 @@ uint8_t digitalRead(short pin)
 	return value;
 };
 
-uint8_t digitalReadFromFile(short pin)
+uint8_t digitalReadFromFile(int16_t pin)
 {
 	char tmpname[_MAX_PATH];
 	char filename[_MAX_PATH];

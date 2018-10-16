@@ -73,7 +73,7 @@ public:
 	static bool IsSpindleOn() { return _modalstate.SpindleOn; }
 
 	static bool  IsCutMove() { return _modalstate.CutMove; }
-	static short GetSpindleSpeed() { return _modalstate.SpindleSpeed; }
+	static int16_t GetSpindleSpeed() { return _modalstate.SpindleSpeed; }
 
 	static void Init()
 	{
@@ -149,7 +149,7 @@ protected:
 		feedrate_t G1FeedRate;
 		feedrate_t G1MaxFeedRate;
 
-		short SpindleSpeed;			// > 0 CW, < 0 CCW
+		int16_t SpindleSpeed;			// > 0 CW, < 0 CCW
 
 		bool CutMove;
 		bool SpindleOn;
@@ -256,10 +256,10 @@ protected:
 	mm1000_t     ParseCoordinate(bool          convertUnits);
 	mm1000_t     ParseCoordinateAxis(axis_t    axis);
 
-	uint32_t  GetUint32OrParam(uint32_t max);
-	uint32_t  GetUint32OrParam() { return GetUint32OrParam(0xffffffffl); };
+	uint32_t GetUint32OrParam(uint32_t max);
+	uint32_t GetUint32OrParam() { return GetUint32OrParam(0xffffffffl); };
 	uint16_t GetUint16OrParam() { return (uint16_t)GetUint32OrParam(65535); };
-	uint8_t        GetUint8OrParam() { return uint8_t(GetUint32OrParam(255)); };
+	uint8_t  GetUint8OrParam() { return uint8_t(GetUint32OrParam(255)); };
 
 	//mm1000_t GetRelativePosition(mm1000_t pos, axis_t axis)	{ return pos - CalcAllPreset(axis); }
 	//mm1000_t GetRelativePosition(axis_t axis)				{ return GetRelativePosition(CMotionControlBase::GetInstance()->GetPosition(axis), axis); }

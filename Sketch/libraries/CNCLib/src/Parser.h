@@ -112,16 +112,16 @@ protected:
 
 public:
 
-	int32_t   GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale, uint8_t maxscale); // get "float" e.g. 1.234 => 1234 or 12 => 12000, limit with scale
-	expr_t GetDouble();
+	int32_t GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale, uint8_t maxscale); // get "float" e.g. 1.234 => 1234 or 12 => 12000, limit with scale
+	expr_t  GetDouble();
 
-	uint8_t        GetUInt8();
+	uint8_t  GetUInt8();
 	uint16_t GetUInt16();
-	uint32_t  GetUInt32();
-	char           GetInt8();
-	short          GetInt16();
-	int32_t           GetInt32();
-	sdist_t        GetSDist();
+	uint32_t GetUInt32();
+	char     GetInt8();
+	int16_t  GetInt16();
+	int32_t  GetInt32();
+	sdist_t  GetSDist();
 
 	static bool IsUInt(char ch) { return CStreamReader::IsDigit(ch); }
 	static bool IsInt(char  ch) { return CStreamReader::IsMinus(ch) || CStreamReader::IsDigit(ch); }

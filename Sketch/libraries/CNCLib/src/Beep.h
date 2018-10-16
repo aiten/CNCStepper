@@ -180,8 +180,8 @@ enum ETone
 
 struct SPlayTone
 {
-	enum ETone     Tone;					// 0 => end
-	uint16_t Duration;
+	enum ETone Tone;					// 0 => end
+	uint16_t   Duration;
 
 	static const SPlayTone PlayOK[] PROGMEM;
 	static const SPlayTone PlayError[] PROGMEM;
@@ -202,8 +202,8 @@ public:
 
 	static void Beep(ETone freq, uint16_t duration)
 	{
-		uint32_t endmillis = millis() + duration;
-		unsigned int  tonePause = static_cast<unsigned int>(freq);
+		uint32_t     endmillis = millis() + duration;
+		unsigned int tonePause = static_cast<unsigned int>(freq);
 
 		do
 		{

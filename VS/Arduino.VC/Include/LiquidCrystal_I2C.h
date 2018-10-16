@@ -41,7 +41,7 @@ public:
 	void print(unsigned int) {};
 	void print(int) {};
 	void print(float, int =2 ) {};
-	void print(short) {};
+	void print(int16_t) {};
 //	void print(uint32_t) {};
 	void home() {};
 };

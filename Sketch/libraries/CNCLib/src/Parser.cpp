@@ -87,13 +87,13 @@ bool CParser::ExpectEndOfCommand()
 
 ////////////////////////////////////////////////////////////
 
-uint8_t        CParser::GetUInt8() { return GetUInt<uint8_t>(); }
+uint8_t  CParser::GetUInt8() { return GetUInt<uint8_t>(); }
 uint16_t CParser::GetUInt16() { return GetUInt<uint16_t>(); }
-uint32_t  CParser::GetUInt32() { return GetUInt<uint32_t>(); }
+uint32_t CParser::GetUInt32() { return GetUInt<uint32_t>(); }
 
 char    CParser::GetInt8() { return GetInt<char>(); }
-short   CParser::GetInt16() { return GetInt<short>(); }
-int32_t    CParser::GetInt32() { return GetInt<int32_t>(); }
+int16_t CParser::GetInt16() { return GetInt<int16_t>(); }
+int32_t CParser::GetInt32() { return GetInt<int32_t>(); }
 sdist_t CParser::GetSDist() { return GetInt<sdist_t>(); }
 
 ////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ int32_t CParser::GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale
 	// 1.2345 with scale=3 and maxscale=5 is ok => return 1235 (calculated with scale - round)
 
 	bool    negativ;
-	int32_t    value     = 0;
+	int32_t value     = 0;
 	uint8_t thisscale = 0;
 	uint8_t ch        = _reader->GetChar();
 

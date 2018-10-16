@@ -34,7 +34,7 @@ class CStepper& Stepper = MyStepper;
 
 int _tmain(int /* argc */, _TCHAR* /* argv */ [])
 {
-	digitalReadEvent = [](short pin)
+	digitalReadEvent = [](int16_t pin)
 	{
 		switch (pin)
 		{

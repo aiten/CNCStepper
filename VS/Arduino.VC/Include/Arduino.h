@@ -108,23 +108,24 @@ typedef unsigned char uint8_t;
 typedef signed char   int8_t;
 
 
-inline void analogWrite(short, int)
+inline void analogWrite(int16_t, int)
 {
 };
-inline int analogRead(short) { return 0; };
+inline int analogRead(int16_t) { return 0; };
 
-inline void digitalWrite(short, short)
+inline void digitalWrite(int16_t, int16_t)
 {
 };
-extern uint8_t digitalRead(short pin);
+extern uint8_t digitalRead(int16_t pin);
 
-inline void pinMode(short, short)
+inline void pinMode(int16_t, int16_t)
 {
 };
 
 #define DIGITALREADNOVALUE 255
-extern std::function<uint8_t(short)> digitalReadEvent;
-extern uint8_t                       digitalReadFromFile(short pin);
+extern std::function<uint8_t(int16_t)> digitalReadEvent;
+
+extern uint8_t                       digitalReadFromFile(int16_t pin);
 
 #define LED_BUILTIN (13)
 

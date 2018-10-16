@@ -34,9 +34,10 @@ public:
 	struct SMenuItemDef;
 	struct SMenuDef;
 
-	typedef uint8_t           menupos_t;
+	typedef uint8_t   menupos_t;
+	typedef uintptr_t menuparam_t;
+
 	typedef void (CMenuBase::*MenuFunction)(const SMenuItemDef*);
-	typedef uintptr_t         menuparam_t;
 
 	struct SMenuItemDef
 	{

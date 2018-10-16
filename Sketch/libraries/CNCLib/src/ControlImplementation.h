@@ -178,7 +178,7 @@ struct ControlData
 		_coolant.Set(false);
 	}
 
-	inline bool IsKill()
+	inline bool IsKill() const
 	{
 		if (_kill.IsOn())
 		{

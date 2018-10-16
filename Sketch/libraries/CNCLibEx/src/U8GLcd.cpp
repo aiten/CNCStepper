@@ -748,11 +748,10 @@ bool CU8GLcd::DrawLoopPreset(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 
 	for (uint8_t i = 0; i < _lcd_numaxis; i++)
 	{
-		mm1000_t ps;
-
 		SetPosition(ToCol(0), ToRow(i + 1) + PosLineOffset());
 		Print(CGCodeBuilder::AxisToChar(i));
-		ps = CGCodeParser::GetG54PosPreset(i);
+
+		mm1000_t ps = CGCodeParser::GetG54PosPreset(i);
 		Print(DrawPos(i, ps, tmp, 7));
 
 		ps = CGCodeParser::GetG92PosPreset(i);

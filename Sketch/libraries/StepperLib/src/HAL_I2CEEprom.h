@@ -73,9 +73,10 @@ public:
 		Wire.beginTransmission(deviceaddress);
 		Wire.write(int(eeaddresspage >> 8));   // MSB
 		Wire.write(int(eeaddresspage & 0xFF)); // LSB
-		byte c;
-		for (c = 0; c < length; c++)
+		for (byte c = 0; c < length; c++)
+		{
 			Wire.write(data[c]);
+		}
 		Wire.endTransmission();
 	}
 
@@ -87,7 +88,10 @@ public:
 		Wire.write(int(eeaddress & 0xFF)); // LSB
 		Wire.endTransmission();
 		Wire.requestFrom(deviceaddress, 1);
-		if (Wire.available()) rdata = Wire.read();
+		if (Wire.available())
+		{
+			rdata = Wire.read();
+		}
 		return rdata;
 	}
 
@@ -99,8 +103,12 @@ public:
 		Wire.write(int(eeaddress & 0xFF)); // LSB
 		Wire.endTransmission();
 		Wire.requestFrom(deviceaddress, length);
-		int c;
-		for (c                              = 0; c < length; c++)
-			if (Wire.available()) buffer[c] = Wire.read();
+		for (int c = 0; c < length; c++)
+		{
+			if (Wire.available())
+			{
+				buffer[c] = Wire.read();
+			}
+		}
 	}
 };

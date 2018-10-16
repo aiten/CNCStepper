@@ -102,9 +102,9 @@ public:
 
 	void Diagnostic(FLSTR diag) { _diagnostics = diag; }
 
-	bool  IsDiagnostic() { return _diagnostics != nullptr; };
-	FLSTR GetDiagnostic() { return _diagnostics; }
-	void  ClearDiagnostic() { _diagnostics = nullptr; }
+	bool  IsDiagnostic() const		{ return _diagnostics != nullptr; };
+	FLSTR GetDiagnostic() const		{ return _diagnostics; }
+	void  ClearDiagnostic()			{ _diagnostics = nullptr; }
 
 private:
 

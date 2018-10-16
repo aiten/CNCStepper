@@ -134,7 +134,7 @@ public:
 
 	void StartPrintFromSD()				{ _printFromSDFile = true; }
 	void ClearPrintFromSD()				{ _printFromSDFile = false; }
-	bool PrintFromSDRunnding()			{ return _printFromSDFile; }
+	bool PrintFromSDRunnding() const	{ return _printFromSDFile; }
 
 	//////////////////////////////////////////
 
@@ -143,8 +143,8 @@ public:
 
 	//////////////////////////////////////////
 
-	const char* GetBuffer()				{ return _buffer; }
-	uint8_t GetBufferCount()			{ return _bufferidx; }
+	const char* GetBuffer() const		{ return _buffer; }
+	uint8_t GetBufferCount() const		{ return _bufferidx; }
 	virtual bool IsEndOfCommandChar(char ch);					// override default End of command char, default \n
 
 protected:

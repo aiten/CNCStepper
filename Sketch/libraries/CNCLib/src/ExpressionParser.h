@@ -105,7 +105,7 @@ protected:
 
 	} _state;
 
-	EnumAsByte(ETokenType) GetTokenType()			{ return _state._detailtoken; }
+	EnumAsByte(ETokenType) GetTokenType() const			{ return _state._detailtoken; }
 
 	expr_t ParseLevel1();
 	expr_t ParseLevel2();

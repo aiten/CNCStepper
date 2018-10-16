@@ -81,7 +81,7 @@ public:
 	char _pathname[512];
 	char _name[512];
 
-	bool isDirectory()
+	bool isDirectory() const
 	{
 		struct stat st;
 		return stat(_OSfilename, &st) != -1 && (st.st_mode & _S_IFDIR) != 0;
@@ -192,8 +192,8 @@ private:
 	bool IsDirHandle() const { return _dirfile != nullptr && !_dirfile->IsFile(); };
 	bool IsFileHandle() const { return _dirfile != nullptr && _dirfile->IsFile(); };
 
-	MyFile* GetF() { return IsFileHandle() ? static_cast<MyFile*>(_dirfile) : nullptr; }
-	MyDir*  GetD() { return IsDirHandle() ? static_cast<MyDir*>(_dirfile) : nullptr; }
+	MyFile* GetF() const { return IsFileHandle() ? static_cast<MyFile*>(_dirfile) : nullptr; }
+	MyDir*  GetD() const { return IsDirHandle() ? static_cast<MyDir*>(_dirfile) : nullptr; }
 
 public:
 
@@ -256,19 +256,19 @@ public:
 		_dirfile->open(mode);
 	}
 
-	operator bool() { return _dirfile != nullptr && _dirfile->isopen(); }
+	operator bool() const { return _dirfile != nullptr && _dirfile->isopen(); }
 
 	virtual int  available() override { return feof(GetF()->_f) ? 0 : 1; }
 	virtual char read() override { return (char)fgetc(GetF()->_f); }
 
-	unsigned long size()
+	unsigned long size() const
 	{
 		struct stat st;
 		stat(_dirfile->_OSfilename, &st);
 		return st.st_size;
 	}
 
-	char* name() { return _dirfile->_name; }
+	char* name() const { return _dirfile->_name; }
 
 	bool isDirectory(const char* name)
 	{

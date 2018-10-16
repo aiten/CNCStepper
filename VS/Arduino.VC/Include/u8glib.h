@@ -31,7 +31,7 @@ class U8GLIB // : public Stream
 public:
 	void begin() {};
 	void firstPage() { _buffer[0]=0; };
-	bool nextPage()
+	bool nextPage() const
 	{
 		char filename[_MAX_PATH];
 		::GetTempPathA(_MAX_PATH, filename);
@@ -48,7 +48,7 @@ public:
 		return false;
 	}
 	void drawStr(int x, int y, const char* text) { setPrintPos(x, y); print(text); }
-	void setFont(const u8g_fntpgm_uint8_t *font) { font; };
+	void setFont(const u8g_fntpgm_uint8_t *) { };
 	void setPrintPos(int x, int y)  { sprintf_s(_tmp, "SP:%i:%i\n",x,y); strcat_s(_buffer,_tmp); };
 
 	void print(const char ch)		{ sprintf_s(_tmp, "P:%c\n",ch); strcat_s(_buffer, _tmp); };

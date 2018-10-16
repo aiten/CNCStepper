@@ -103,13 +103,13 @@ public:
 		_overrunpos = overrun;
 	}
 
-	range_t GetMin()							{ return _minpos; }
-	range_t GetMax()							{ return _maxpos; }
-	bool    GetOverrrunMode()					{ return _overrunpos; }
+	range_t GetMin() const						{ return _minpos; }
+	range_t GetMax() const						{ return _maxpos; }
+	bool    GetOverrrunMode() const				{ return _overrunpos; }
 
-	range_t GetFullRangePos()					{ return _pos; }
+	range_t GetFullRangePos() const				{ return _pos; }
 
-	range_t GetPos()							{ return (_pos + ((_pos > 0) ? ACCURACY / 2 : -(ACCURACY / 2))) / ACCURACY; }
+	range_t GetPos() const						{ return (_pos + ((_pos > 0) ? ACCURACY / 2 : -(ACCURACY / 2))) / ACCURACY; }
 	void    SetPos(range_t pos)					{ _pos = pos * ACCURACY; }
 
 	void SetPageIdx(rotarypage_t page)			{ SetPos(page); }

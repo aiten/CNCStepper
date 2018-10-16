@@ -570,7 +570,7 @@ void CStepper::SMovement::InitIoControl(CStepper* pStepper, uint8_t tool, unsign
 
 ////////////////////////////////////////////////////////
 
-mdist_t CStepper::SMovement::GetDistance(axis_t axis)
+mdist_t CStepper::SMovement::GetDistance(axis_t axis) const
 {
 	if (_distance_[axis])
 	{
@@ -586,7 +586,7 @@ mdist_t CStepper::SMovement::GetDistance(axis_t axis)
 
 ////////////////////////////////////////////////////////
 
-uint8_t CStepper::SMovement::GetMaxStepMultiplier()
+uint8_t CStepper::SMovement::GetMaxStepMultiplier() const
 {
 	DirCount_t count         = _dirCount;
 	uint8_t    maxmultiplier = 0;

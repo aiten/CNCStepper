@@ -77,7 +77,7 @@ public:
 		}
 	}
 
-	bool IsPressed()
+	bool IsPressed() const
 	{
 		// current state!!!!!
 		// use IsOn() 

@@ -48,14 +48,14 @@ public:
 
 	void ParseCommand();
 
-	bool    IsError()							{ return _error != nullptr; };
-	error_t GetError()							{ return _error; }
+	bool    IsError() const						{ return _error != nullptr; };
+	error_t GetError() const					{ return _error; }
 
 	typedef void (*PrintOKMessage)();
-	PrintOKMessage GetOkMessage()				{ return _OkMessage; }
+	PrintOKMessage GetOkMessage() const			{ return _OkMessage; }
 
-	CStreamReader* GetReader()					{ return _reader; }
-	Stream*        GetOutput()					{ return _output; }
+	CStreamReader* GetReader() const			{ return _reader; }
+	Stream*        GetOutput() const			{ return _output; }
 
 	static void Init()
 	{

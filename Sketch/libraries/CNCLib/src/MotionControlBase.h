@@ -89,8 +89,8 @@ public:
 	static void ToMachine(const mm1000_t mm1000[NUM_AXIS], udist_t   machine[NUM_AXIS]) { for (axis_t x = 0; x < NUM_AXIS; x++) { machine[x] = _ToMachine(x, mm1000[x]); } };
 	static void ToMm1000(const udist_t   machine[NUM_AXIS], mm1000_t mm1000[NUM_AXIS])	{ for (axis_t  x = 0; x < NUM_AXIS; x++) { mm1000[x]  = _ToMm1000(x, machine[x]); } };
 
-	bool    IsError()			{ return _error != nullptr; };
-	error_t GetError()			{ return _error; }
+	bool    IsError() const		{ return _error != nullptr; };
+	error_t GetError() const	{ return _error; }
 	void    ClearError()		{ _error = nullptr; }
 
 protected:

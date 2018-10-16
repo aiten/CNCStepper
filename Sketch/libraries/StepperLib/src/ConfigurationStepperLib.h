@@ -47,8 +47,8 @@ extern class HardwareSerial& StepperSerial;
 
 typedef uint8_t axis_t; // type for "axis"
 
-typedef signed long   sdist_t; // tpye of stepper coord system (signed)
-typedef unsigned long udist_t; // tpye of stepper coord system (unsigned)
+typedef signed long   sdist_t; // type of stepper coord system (signed)
+typedef unsigned long udist_t; // type of stepper coord system (unsigned)
 
 typedef const __FlashStringHelper* FLSTR;
 

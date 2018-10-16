@@ -34,7 +34,7 @@
 const SPlayTone SPlayTone::PlayOK[] PROGMEM =
 {
 	{ ToneA6, MilliSecToDuration(100) },
-	{ ToneEnd }
+	{ ToneEnd, 0 }
 };
 
 const SPlayTone SPlayTone::PlayError[] PROGMEM
@@ -43,7 +43,7 @@ const SPlayTone SPlayTone::PlayError[] PROGMEM
 	{ ToneA7, MilliSecToDuration(200) },
 	{ ToneA6, MilliSecToDuration(200) },
 	{ ToneA7, MilliSecToDuration(200) },
-	{ ToneEnd }
+	{ ToneEnd, 0  }
 };
 
 /*
@@ -115,5 +115,5 @@ const SPlayTone SPlayTone::PlayInfo[] PROGMEM
 
 	{ ToneA4,	Duration4	},
 
-	{ ToneEnd }
+	{ ToneEnd, 0 }
 };

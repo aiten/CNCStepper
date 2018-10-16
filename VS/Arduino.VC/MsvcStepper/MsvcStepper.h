@@ -76,7 +76,7 @@ public:
 		return mv;
 	}
 
-	uint8_t GetMovementCount()
+	uint8_t GetMovementCount() const
 	{
 		return _movements._queue.Count();
 	}

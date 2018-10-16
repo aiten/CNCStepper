@@ -120,12 +120,12 @@ public:
 
 	virtual void Init();
 
-	bool IsError()												{ return _pod._error != nullptr; };
-	error_t GetError()											{ return _pod._error; }
+	bool IsError() const										{ return _pod._error != nullptr; };
+	error_t GetError() const									{ return _pod._error; }
 	void ClearError()											{ _pod._error = nullptr; }
 
-	bool IsFatalError()											{ return _pod._fatalerror != nullptr; };
-	error_t GetFatalError()										{ return _pod._fatalerror; }
+	bool IsFatalError() const									{ return _pod._fatalerror != nullptr; };
+	error_t GetFatalError() const								{ return _pod._fatalerror; }
 	void ClearFatalError()										{ _pod._fatalerror = nullptr; }
 
 
@@ -158,7 +158,7 @@ public:
 
 	void SetBacklash(steprate_t speed)			                { _pod._timerbacklash = SpeedToTimer(speed); };
 	bool IsSetBacklash()  const									{ return timer_t(-1) != _pod._timerbacklash; }
-	steprate_t GetBacklash()									{ return TimerToSpeed(_pod._timerbacklash); };
+	steprate_t GetBacklash() const								{ return TimerToSpeed(_pod._timerbacklash); };
 
 	bool IsBusy()  const										{ return _pod._timerRunning; };
 	void WaitBusy();
@@ -187,18 +187,18 @@ public:
 
 	void PauseMove();											// Finish current move but do not continue with next (WITH dec ramp)
 	void ContinueMove();										// continue after pause
-	bool IsPauseMove()											{ return _pod._pause;  }
+	bool IsPauseMove() const									{ return _pod._pause;  }
 
 	void EmergencyStop()										{ _pod._emergencyStop = true; AbortMove(); }
-	bool IsEmergencyStop()										{ return _pod._emergencyStop; }
+	bool IsEmergencyStop() const								{ return _pod._emergencyStop; }
 	void EmergencyStopResurrect();
 
-	bool IsWaitConditional()									{ return _pod._isWaitConditional; }
+	bool IsWaitConditional() const								{ return _pod._isWaitConditional; }
 	void SetWaitConditional(bool conditionalwait)				{ _pod._isWaitConditional = conditionalwait; }
 
 	void SetReferenceHitValue(uint8_t referneceid, uint8_t valueHit)	{ _pod._referenceHitValue[referneceid] = valueHit; }
-	bool IsUseReference(uint8_t referneceid)					{ return _pod._referenceHitValue[referneceid] != 255; }
-	bool IsUseReference(axis_t axis, bool toMin)				{ return IsUseReference(ToReferenceId(axis, toMin)); }
+	bool IsUseReference(uint8_t referneceid) const				{ return _pod._referenceHitValue[referneceid] != 255; }
+	bool IsUseReference(axis_t axis, bool toMin) const			{ return IsUseReference(ToReferenceId(axis, toMin)); }
 
 	debugvirtula bool MoveReference(axis_t axis, uint8_t referenceid, bool toMin, steprate_t vMax, sdist_t maxdist = 0, sdist_t distToRef = 0, sdist_t distIfRefIsOn = 0);
 	void SetPosition(axis_t axis, udist_t pos);
@@ -487,19 +487,19 @@ protected:
 
 		stepperstatic CStepper* _pStepper;						// give access to stepper (not static if multiinstance)  
 
-		timer_t GetUpTimerAcc()									{ return _pod._move._timerAcc; }
-		timer_t GetUpTimerDec()									{ return _pod._move._timerDec; }
+		timer_t GetUpTimerAcc()	const							{ return _pod._move._timerAcc; }
+		timer_t GetUpTimerDec()	const							{ return _pod._move._timerDec; }
 
-		timer_t GetDownTimerAcc()								{ return _pod._move._timerAcc; }
-		timer_t GetDownTimerDec()								{ return _pod._move._timerDec; }
+		timer_t GetDownTimerAcc() const							{ return _pod._move._timerAcc; }
+		timer_t GetDownTimerDec() const							{ return _pod._move._timerDec; }
 
-		timer_t GetUpTimer(bool acc)							{ return acc ? GetUpTimerAcc() : GetUpTimerDec(); }
-		timer_t GetDownTimer(bool acc)							{ return acc ? GetDownTimerAcc() : GetDownTimerDec(); }
+		timer_t GetUpTimer(bool acc) const						{ return acc ? GetUpTimerAcc() : GetUpTimerDec(); }
+		timer_t GetDownTimer(bool acc) const					{ return acc ? GetDownTimerAcc() : GetDownTimerDec(); }
 
-		mdist_t GetDistance(axis_t axis);
-		uint8_t GetStepMultiplier(axis_t axis)					{ return (_dirCount >> (axis * 4)) % 8; }
-		bool GetDirectionUp(axis_t axis)						{ return ((_dirCount >> (axis * 4)) & 8) != 0; }
-		uint8_t GetMaxStepMultiplier();
+		mdist_t GetDistance(axis_t axis) const;
+		uint8_t GetStepMultiplier(axis_t axis) const			{ return (_dirCount >> (axis * 4)) % 8; }
+		bool GetDirectionUp(axis_t axis) const					{ return ((_dirCount >> (axis * 4)) & 8) != 0; }
+		uint8_t GetMaxStepMultiplier() const;
 
 		bool Ramp(SMovement*mvNext);
 

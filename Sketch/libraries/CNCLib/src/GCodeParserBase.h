@@ -205,7 +205,7 @@ protected:
 
 		mm1000_t newpos[NUM_AXIS];
 
-		uint8_t GetIJK() { return bitfield.all & 7; }
+		uint8_t GetIJK() const		{ return bitfield.all & 7; }
 
 		SAxisMove(bool getcurrentPosition) 
 		{

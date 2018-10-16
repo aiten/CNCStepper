@@ -26,7 +26,7 @@ public:
 	void firstPage() {};
 	bool nextPage() { return false; }
 	void drawStr(int, int, const char*) {}
-	void setFont(const uint8_t *font) { font; };
+	void setFont(const uint8_t *) { };
 	void setCursor(int , int )	{ };
 
 	void print(const char)			{ };

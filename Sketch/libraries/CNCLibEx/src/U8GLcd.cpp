@@ -738,7 +738,15 @@ bool CU8GLcd::DrawLoopPreset(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 		return DrawLoopDefault(type, data);
 	}
 
-	FLSTR zeroShiftName[] PROGMEM = { F("G53"), F("G54"), F("G55"), F("G56"), F("G57"), F("G58"), F("G59") };
+	FLSTR const zeroShiftName53 = F("G53");
+	FLSTR const zeroShiftName54 = F("G54");
+	FLSTR const zeroShiftName55 = F("G55");
+	FLSTR const zeroShiftName56 = F("G56");
+	FLSTR const zeroShiftName57 = F("G57");
+	FLSTR const zeroShiftName58 = F("G58");
+	FLSTR const zeroShiftName59 = F("G59");
+
+	FLSTR zeroShiftName[] PROGMEM = { zeroShiftName53, zeroShiftName54, zeroShiftName55, zeroShiftName56, zeroShiftName57, zeroShiftName58, zeroShiftName59 };
 
 	SetPosition(ToCol(0), ToRow(0) - HeadLineOffset());
 	Print(F("Preset: "));

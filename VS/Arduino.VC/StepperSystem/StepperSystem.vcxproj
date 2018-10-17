@@ -18,7 +18,7 @@
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\Src\Menu3D.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\Src\MessageCNCLibEx.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\Src\SDDirReader.h" />
-    <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\Src\U8GLCD.h" />
+    <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\src\U8gLcd.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\Beep.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\CNCLib.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\ConfigEeprom.h" />
@@ -33,7 +33,7 @@
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\GCodeParserBase.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\GCodeTools.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\HelpParser.h" />
-    <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\LCD.h" />
+    <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\src\Lcd.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\Matrix3x3.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\Matrix4x4.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuBase.h" />
@@ -99,8 +99,8 @@
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\GCode3DParser.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\Menu3D.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\SDDirReader.cpp" />
-    <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\U8GLCD.cpp" />
-    <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\U8GLCD_Menu.cpp" />
+    <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\src\U8gLcd.cpp" />
+    <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\src\U8gLcd_Menu.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\Beep.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\ConfigEeprom.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\Control.cpp" />
@@ -111,7 +111,7 @@
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\GCodeParserBase.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\GCodeTools.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\HelpParser.cpp" />
-    <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\LCD.cpp" />
+    <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\src\Lcd.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuBase.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuNavigator.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\MotionControl.cpp" />

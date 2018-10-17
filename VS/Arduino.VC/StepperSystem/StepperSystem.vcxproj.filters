@@ -90,9 +90,6 @@
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\HelpParser.h">
       <Filter>CNCLib</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\LCD.h">
-      <Filter>CNCLib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MessageCNCLib.h">
       <Filter>CNCLib</Filter>
     </ClInclude>
@@ -158,9 +155,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\PushButton.h">
       <Filter>CNCLib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\Src\U8GLCD.h">
-      <Filter>CNCLibEx</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuBaseText.h">
       <Filter>CNCLib</Filter>
@@ -267,6 +261,12 @@
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuNavigator.h">
       <Filter>CNCLib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\libraries\CNCLibEx\src\U8gLcd.h">
+      <Filter>CNCLibEx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\src\Lcd.h">
+      <Filter>CNCLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\MsvcStepper\MsvcStepper.cpp">
@@ -297,9 +297,6 @@
       <Filter>CNCLib</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\HelpParser.cpp">
-      <Filter>CNCLib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\LCD.cpp">
       <Filter>CNCLib</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\Parser.cpp">
@@ -335,9 +332,6 @@
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\Beep.cpp">
       <Filter>CNCLib</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\U8GLCD.cpp">
-      <Filter>CNCLibEx</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Sketch\libraries\StepperLib\src\Steppers\StepperL298N.cpp">
       <Filter>StepperLib\Steppers</Filter>
     </ClCompile>
@@ -368,11 +362,17 @@
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\SDDirReader.cpp">
       <Filter>CNCLibEx</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\U8GLCD_Menu.cpp">
-      <Filter>CNCLibEx</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\MenuNavigator.cpp">
       <Filter>CNCLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\src\U8gLcd_Menu.cpp">
+      <Filter>CNCLibEx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\src\Lcd.cpp">
+      <Filter>CNCLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\src\U8gLcd.cpp">
+      <Filter>CNCLibEx</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

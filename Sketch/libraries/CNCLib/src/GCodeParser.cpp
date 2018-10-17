@@ -363,6 +363,7 @@ mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertToInch)
 			case PARAMSTART_FEEDRATE: return GetG1FeedRate();
 			case PARAMSTART_CONTROLLERFAN: return CControl::GetInstance()->IOControl(CControl::ControllerFan);
 			case PARAMSTART_RAPIDMOVEFEED: return -GetG0FeedRate();
+			default: break;
 		}
 	}
 
@@ -771,6 +772,8 @@ bool CGCodeParser::Command(char ch)
 		case '!':
 		case '&': CommandEscape();
 			return true;
+
+		default: break;
 	}
 
 	return super::Command(ch);
@@ -785,48 +788,30 @@ bool CGCodeParser::GCommand(uint8_t gcode)
 
 	switch (gcode)
 	{
-		case 10: G10Command();
-			return true;
-		case 38: G38Command();
-			return true;
-		case 40: G40Command();
-			return true;
-		case 41: G41Command();
-			return true;
-		case 42: G42Command();
-			return true;
-		case 43: G43Command();
-			return true;
-		case 52: InfoNotImplemented();
-			return true;
-		case 53: G53Command();
-			return true;
-		case 54: G5xCommand(1);
-			return true;
-		case 55: G5xCommand(2);
-			return true;
-		case 56: G5xCommand(3);
-			return true;
-		case 57: G5xCommand(4);
-			return true;
-		case 58: G5xCommand(5);
-			return true;
-		case 59: G5xCommand(6);
-			return true;
-		case 68: G68Command();
-			return true;
-		case 69: G69Command();
-			return true;
-		case 81: G81Command();
-			return true;
-		case 82: G82Command();
-			return true;
-		case 83: G83Command();
-			return true;
-		case 98: G98Command();
-			return true;
-		case 99: G99Command();
-			return true;
+		// @formatter:off — disable formatter after this line
+		case 10: G10Command();	return true;
+		case 38: G38Command();	return true;
+		case 40: G40Command();	return true;
+		case 41: G41Command();	return true;
+		case 42: G42Command();	return true;
+		case 43: G43Command();	return true;
+		case 52: InfoNotImplemented();	return true;
+		case 53: G53Command();	return true;
+		case 54: G5xCommand(1);	return true;
+		case 55: G5xCommand(2);	return true;
+		case 56: G5xCommand(3);	return true;
+		case 57: G5xCommand(4);	return true;
+		case 58: G5xCommand(5);	return true;
+		case 59: G5xCommand(6);	return true;
+		case 68: G68Command();	return true;
+		case 69: G69Command();	return true;
+		case 81: G81Command();	return true;
+		case 82: G82Command();	return true;
+		case 83: G83Command();	return true;
+		case 98: G98Command();	return true;
+		case 99: G99Command();	return true;
+		default: break;
+			// @formatter:on — enable formatter after this line
 	}
 	return false;
 }
@@ -840,32 +825,23 @@ bool CGCodeParser::MCommand(mcode_t mcode)
 
 	switch (mcode)
 	{
-		case 0: M00Command();
-			return true;
-		case 1: M01Command();
-			return true;
-		case 2: M02Command();
-			return true;
-		case 6: M06Command();
-			return true;
-		case 8: M08Command();
-			return true;
-		case 10: M10Command();
-			return true;
-		case 11: M11Command();
-			return true;
-		case 110: M110Command();
-			return true;
-		case 111: M111Command();
-			return true;
-		case 114: M114Command();
-			return true;
-		case 220: M220Command();
-			return true;
+		// @formatter:off — disable formatter after this line
+		case 0: M00Command();	return true;
+		case 1: M01Command();	return true;
+		case 2: M02Command();	return true;
+		case 6: M06Command();	return true;
+		case 8: M08Command();	return true;
+		case 10: M10Command();	return true;
+		case 11: M11Command();	return true;
+		case 110: M110Command();	return true;
+		case 111: M111Command();	return true;
+		case 114: M114Command();	return true;
+		case 220: M220Command();	return true;
 #ifndef REDUCED_SIZE
-		case 300: M300Command();
-			return true;
+		case 300: M300Command();	return true;
 #endif
+		default: break;
+			// @formatter:on — enable formatter after this line
 	}
 	return false;
 }
@@ -2000,6 +1976,7 @@ void CGCodeParser::M300Command()
 				fromprogmem = true;
 				break;
 			}
+			default: break;
 		}
 	}
 	if (!fromprogmem && _reader->SkipSpacesToUpper() == 'P')
@@ -2055,6 +2032,8 @@ void CGCodeParser::CNCLibCommandExtensions()
 			}
 			break;
 		}
+		default: break;
+
 	}
 }
 

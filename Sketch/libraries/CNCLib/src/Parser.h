@@ -136,10 +136,10 @@ protected:
 	//	  \002	=> space or end or not digit (last comand char), e.g. g0\002 will find g0 and not g01
 	//	  \003	=> \000 (end of line)
 
-	bool IsToken(FLSTR        b, bool       expectdel, bool ignorecase);
-	bool TryToken(FLSTR       b, bool       expectdel, bool ignorecase) { return TryToken(_reader->GetBuffer(), b, expectdel, ignorecase); }
-	bool TryToken(const char* buffer, FLSTR b, bool         expectdel, bool ignorecase); // scan from different location, but do not remove it
+	bool IsToken(FLSTR  b, bool expectdel, bool ignorecase);
+	bool TryToken(FLSTR b, bool expectdel, bool ignorecase) { return TryToken(_reader->GetBuffer(), b, expectdel, ignorecase); }
 
+	bool TryToken(const char* buffer, FLSTR b, bool expectdel, bool ignorecase); // scan from different location, but do not remove it
 	bool TryToken(const char* buffer, FLSTR b, bool ignorecase); // same as stricmp (with Progmem)	
 
 	//////////////////////////////////////////////////////

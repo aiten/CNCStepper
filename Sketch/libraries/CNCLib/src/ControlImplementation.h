@@ -179,6 +179,8 @@ struct ControlData
 				_controllerfan.SetLevel(uint8_t(level));
 				return true;
 			}
+
+			default: break;
 		}
 		return false;
 	}
@@ -224,6 +226,8 @@ struct ControlData
 					_controllerfan.Off();
 				}
 				break;
+
+			default: break;
 		}
 	}
 };

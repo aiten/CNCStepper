@@ -60,21 +60,21 @@ CMenuBase::MenuFunction CMenuBase::SMenuItemDef::GetButtonPress() const
 
 ////////////////////////////////////////////////////////////
 
-CMenuBase::menupos_t CMenuBase::GetMenuItemCount()
+CMenuBase::menupos_t CMenuBase::GetMenuItemCount() const
 {
 	return GetMenuDef()->GetItemCount();
 }
 
 ////////////////////////////////////////////////////////////
 
-FLSTR CMenuBase::GetItemText(menupos_t idx)
+FLSTR CMenuBase::GetItemText(menupos_t idx) const
 {
 	return GetMenuDef()->GetItems()[idx].GetText();
 }
 
 ////////////////////////////////////////////////////////////
 
-FLSTR CMenuBase::GetText()
+FLSTR CMenuBase::GetText() const
 {
 	return GetMenuDef()->GetText();
 };
@@ -173,26 +173,19 @@ void CMenuBase::MenuButtonPressMove(const SMenuItemDef* def)
 
 	switch (dist)
 	{
-		case MoveP100: builder.Add(F("100"));
-			break;
-		case MoveP10: builder.Add(F("10"));
-			break;
-		case MoveP1: builder.Add(F("1"));
-			break;
-		case MoveP01: builder.Add(F("0.1"));
-			break;
-		case MoveP001: builder.Add(F("0.01"));
-			break;
-		case MoveM001: builder.Add(F("-0.01"));
-			break;
-		case MoveM01: builder.Add(F("-0.1"));
-			break;
-		case MoveM1: builder.Add(F("-1"));
-			break;
-		case MoveM10: builder.Add(F("-10"));
-			break;
-		case MoveM100: builder.Add(F("-100"));
-			break;
+		// @formatter:off — disable formatter after this line
+		case MoveP100: builder.Add(F("100"));	break;
+		case MoveP10: builder.Add(F("10"));		break;
+		case MoveP1: builder.Add(F("1"));		break;
+		case MoveP01: builder.Add(F("0.1"));	break;
+		case MoveP001: builder.Add(F("0.01"));	break;
+		case MoveM001: builder.Add(F("-0.01"));	break;
+		case MoveM01: builder.Add(F("-0.1"));	break;
+		case MoveM1: builder.Add(F("-1"));		break;
+		case MoveM10: builder.Add(F("-10"));	break;
+		case MoveM100: builder.Add(F("-100"));	break;
+		default: break;
+			// @formatter:on — enable formatter after this line
 	}
 
 	builder.Add(F(" g90"));
@@ -208,16 +201,13 @@ void CMenuBase::MenuButtonPressRotate(const SMenuItemDef* def)
 
 	switch (req)
 	{
-		case RotateClear: PostCommand(EGCodeSyntaxType::GCode, F("g68.10"));
-			break;
-		case RotateOffset: PostCommand(EGCodeSyntaxType::GCode, F("g68.11"));
-			break;
-		case RotateSetYZ: PostCommand(EGCodeSyntaxType::GCode, F("g68.13 j0k0"));
-			break;
-		case RotateSetX: PostCommand(EGCodeSyntaxType::GCode, F("g68.14 i0"));
-			break;
-		default: CLcd::GetInstance()->ErrorBeep();
-			return;
+		// @formatter:off — disable formatter after this line
+		case RotateClear: PostCommand(EGCodeSyntaxType::GCode, F("g68.10"));	break;
+		case RotateOffset: PostCommand(EGCodeSyntaxType::GCode, F("g68.11"));	break;
+		case RotateSetYZ: PostCommand(EGCodeSyntaxType::GCode, F("g68.13 j0k0"));	break;
+		case RotateSetX: PostCommand(EGCodeSyntaxType::GCode, F("g68.14 i0"));	break;
+		default: CLcd::GetInstance()->ErrorBeep(); break;
+			// @formatter:on — enable formatter after this line
 	}
 	CLcd::GetInstance()->OKBeep();
 }

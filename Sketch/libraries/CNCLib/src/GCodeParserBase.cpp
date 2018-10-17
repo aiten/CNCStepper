@@ -76,6 +76,7 @@ bool CGCodeParserBase::Command(char ch)
 			_OkMessage = PrintInfo;
 			return true;
 		}
+		default: break;
 	}
 
 	return false;
@@ -131,6 +132,7 @@ void CGCodeParserBase::SkipCommentNested()
 				cnt++;
 				break;
 			}
+			default: break;
 		}
 	}
 
@@ -161,6 +163,7 @@ char CGCodeParserBase::SkipSpacesOrComment()
 			SkipCommentSingleLine();
 			break;
 		}
+		default: break;
 	}
 
 	return _reader->GetChar();
@@ -426,40 +429,26 @@ bool CGCodeParserBase::GCommand(uint8_t gcode)
 {
 	switch (gcode)
 	{
-		case 0: G00Command();
-			return true;
-		case 1: G01Command();
-			return true;
-		case 2: G02Command();
-			return true;
-		case 3: G03Command();
-			return true;
-		case 4: G04Command();
-			return true;
-		case 17: G171819Command(X_AXIS, Y_AXIS, Z_AXIS);
-			return true;
-		case 18: G171819Command(X_AXIS, Z_AXIS, Y_AXIS);
-			return true;
-		case 19: G171819Command(Y_AXIS, Z_AXIS, X_AXIS);
-			return true;
-		case 20: G20Command();
-			return true;
-		case 21: G21Command();
-			return true;
-		case 28: G28Command();
-			return true;
-		case 31: G31Command(_modalstate.ProbeOnValue);
-			return true;
-		case 61: G61Command();
-			return true;
-		case 64: G64Command();
-			return true;
-		case 90: G90Command();
-			return true;
-		case 91: G91Command();
-			return true;
-		case 92: G92Command();
-			return true;
+		// @formatter:off — disable formatter after this line
+		case 0: G00Command();	return true;
+		case 1: G01Command();	return true;
+		case 2: G02Command();	return true;
+		case 3: G03Command();	return true;
+		case 4: G04Command();	return true;
+		case 17: G171819Command(X_AXIS, Y_AXIS, Z_AXIS);	return true;
+		case 18: G171819Command(X_AXIS, Z_AXIS, Y_AXIS);	return true;
+		case 19: G171819Command(Y_AXIS, Z_AXIS, X_AXIS);	return true;
+		case 20: G20Command();	return true;
+		case 21: G21Command();	return true;
+		case 28: G28Command();	return true;
+		case 31: G31Command(_modalstate.ProbeOnValue);	return true;
+		case 61: G61Command();	return true;
+		case 64: G64Command();	return true;
+		case 90: G90Command();	return true;
+		case 91: G91Command();	return true;
+		case 92: G92Command();	return true;
+		default: break;
+			// @formatter:on — enable formatter after this line
 	}
 	return false;
 }
@@ -470,36 +459,24 @@ bool CGCodeParserBase::MCommand(mcode_t mcode)
 {
 	switch (mcode)
 	{
-			// Spindle (+laser)
+		// @formatter:off — disable formatter after this line
+		// Spindle (+laser)
 		case 106:
-		case 3:
-		{
-			M0304Command(true);
-			return true;
-		}
-		case 4:
-		{
-			M0304Command(false);
-			return true;
-		}
+		case 3:	M0304Command(true);	return true;
+		case 4:	M0304Command(false);return true;
+
 		case 107:
-		case 5:
-		{
-			M05Command();
-			return true;
-		}
+		case 5:	M05Command(); return true;
 
-			// coolant
-		case 7: M07Command();
-			return true;
-		case 9: M09Command();
-			return true;
+		// coolant
+		case 7: M07Command();	return true;
+		case 9: M09Command();	return true;
 
-			// probe config
-		case 100: _modalstate.ProbeOnValue = false;
-			return true;
-		case 101: _modalstate.ProbeOnValue = true;
-			return true;
+		// probe config
+		case 100: _modalstate.ProbeOnValue = false;	return true;
+		case 101: _modalstate.ProbeOnValue = true;	return true;
+		default: break;
+			// @formatter:on — enable formatter after this line
 	}
 	return false;
 }

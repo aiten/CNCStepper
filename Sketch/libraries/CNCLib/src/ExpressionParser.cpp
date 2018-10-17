@@ -103,6 +103,7 @@ void CExpressionParser::ScannNextToken()
 		case '^': _state._detailtoken = PowSy;			_reader->GetNextChar(); return;
 		case '!': _state._detailtoken = FactorialSy;	_reader->GetNextChar(); return;
 		case '=': _state._detailtoken = AssignSy;		_reader->GetNextChar(); return;
+		default: break;
 	}
 	// @formatter:on — enable formatter after this line
 
@@ -443,6 +444,8 @@ expr_t CExpressionParser::EvalOperator(EnumAsByte(ETokenType) operatorSy, const 
 
 			// level 7
 		case FactorialSy:		return Factorial(lhs);
+
+		default: break;
 	}
 	// @formatter:on — enable formatter after this line
 
@@ -481,6 +484,8 @@ expr_t CExpressionParser::EvalFunction(EnumAsByte(ETokenType) operatorSy, const 
 		case FixSy:  return floor(value);
 		case FupSy:  return ceil(value);
 		case RoundSy:  return round(value);
+	
+		default: break;
 	}
 	// @formatter:on — enable formatter after this line
 
@@ -496,8 +501,8 @@ bool CExpressionParser::EvalVariable(const char* var_name, expr_t& answer)
 
 	// check for built-in variables
 	// @formatter:off — disable formatter after this line
-	if (TryToken(var_name, F("E"), true))  { answer = (expr_t) 2.7182818284590452353602874713527; return true; }
-	if (TryToken(var_name, F("PI"), true)) { answer = (expr_t) 3.1415926535897932384626433832795; return true; }
+	if (TryToken(var_name, F("E"), true))  { answer = expr_t(2.7182818284590452353602874713527); return true; }
+	if (TryToken(var_name, F("PI"), true)) { answer = expr_t(3.1415926535897932384626433832795); return true; }
 	// @formatter:on — enable formatter after this line
 
 	return false;

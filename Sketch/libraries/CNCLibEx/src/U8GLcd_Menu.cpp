@@ -135,9 +135,9 @@ void CU8GLcd::ButtonPressMenuPage()
 			{
 				ErrorBeep();
 			}
-
 			break;
 		}
+		default: break;
 	}
 }
 

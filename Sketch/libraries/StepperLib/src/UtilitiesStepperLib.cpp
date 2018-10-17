@@ -87,9 +87,9 @@ uint8_t ToPrecisionS2(int32_t v)
 {
 	if (v < 0)
 	{
-		return ToPrecisionU2((uint32_t)-v);
+		return ToPrecisionU2(uint32_t(-v));
 	}
-	return ToPrecisionU2((uint32_t)v);
+	return ToPrecisionU2(uint32_t(v));
 }
 
 ////////////////////////////////////////////////////////

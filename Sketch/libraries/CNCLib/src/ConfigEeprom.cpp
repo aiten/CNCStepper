@@ -83,7 +83,7 @@ inline const void* AddAdr(const void* adr, eepromofs_t ofs)
 	return ((uint8_t*)adr) + ofs;
 }
 
-uint32_t CConfigEeprom::GetConfig32(eepromofs_t ofs)
+uint32_t CConfigEeprom::GetConfig32(eepromofs_t ofs) const
 {
 	if (_eepromvalid)
 	{

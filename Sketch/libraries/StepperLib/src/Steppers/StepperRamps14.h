@@ -122,9 +122,6 @@ protected:
 	{
 		switch (axis)
 		{
-#ifdef _MSC_VER
-#pragma warning( disable : 4127 )
-#endif
 			// @formatter:off — disable formatter after this line
 			case X_AXIS:  if (level != LevelOff)	HALFastdigitalWrite(RAMPS14_X_ENABLE_PIN, RAMPS14_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPS14_X_ENABLE_PIN, RAMPS14_PIN_ENABLE_OFF); break;
 			case Y_AXIS:  if (level != LevelOff)	HALFastdigitalWrite(RAMPS14_Y_ENABLE_PIN, RAMPS14_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPS14_Y_ENABLE_PIN, RAMPS14_PIN_ENABLE_OFF); break;
@@ -135,11 +132,8 @@ protected:
 			case E1_AXIS: if (level != LevelOff)	HALFastdigitalWrite(RAMPS14_E1_ENABLE_PIN, RAMPS14_PIN_ENABLE_ON);	else	HALFastdigitalWrite(RAMPS14_E1_ENABLE_PIN, RAMPS14_PIN_ENABLE_OFF); break;
 #endif
 #endif
+			default: break;
 				// @formatter:on — enable formatter after this line
-
-#ifdef _MSC_VER
-#pragma warning( default : 4127 )
-#endif
 		}
 	}
 
@@ -149,9 +143,6 @@ protected:
 	{
 		switch (axis)
 		{
-#ifdef _MSC_VER
-#pragma warning( disable : 4127 )
-#endif
 			case X_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPS14_X_ENABLE_PIN) == RAMPS14_PIN_ENABLE_ON);
 			case Y_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPS14_Y_ENABLE_PIN) == RAMPS14_PIN_ENABLE_ON);
 			case Z_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPS14_Z_ENABLE_PIN) == RAMPS14_PIN_ENABLE_ON);
@@ -161,10 +152,7 @@ protected:
 			case E1_AXIS: return ConvertLevel(HALFastdigitalRead(RAMPS14_E1_ENABLE_PIN) == RAMPS14_PIN_ENABLE_ON);
 #endif
 #endif
-
-#ifdef _MSC_VER
-#pragma warning( default : 4127 )
-#endif
+			default: break;
 		}
 		return LevelOff;
 	}
@@ -372,6 +360,7 @@ public:
 				case 8: return HALFastdigitalRead(RAMPS14_E1_MIN_PIN)==RAMPS14_REF_ON;
 				case 9: return HALFastdigitalRead(RAMPS14_E1_MAX_PIN)==RAMPS14_REF_ON;
 				*/
+			default: break;
 		}
 		return 255;
 	}

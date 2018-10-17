@@ -51,7 +51,7 @@ public:
 	void     SetRotate2D(axis_t         axis, float  rad);
 	void     SetOffset2D(const mm1000_t ofs[NUM_AXISXYZ]);
 	mm1000_t GetOffset2D(axis_t         axis) { return _rotateOffset2D[axis]; }
-	float    GetAngle2D(axis_t          axis) { return _rotate2D[axis].GetAngle(); }
+	float    GetAngle2D(axis_t          axis) const { return _rotate2D[axis].GetAngle(); }
 	bool     IsEnabled2D(axis_t         axis) const { return IsBitSet(_rotateEnabled2D, axis); }
 	void     ClearRotate2D() { _rotateEnabled2D = 0; }
 

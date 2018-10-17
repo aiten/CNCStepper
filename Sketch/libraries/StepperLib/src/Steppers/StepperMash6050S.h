@@ -256,6 +256,7 @@ public:
 			case 2: return HALFastdigitalRead(MASH6050S_Y_MIN_PIN);
 			case 5: return HALFastdigitalRead(MASH6050S_Z_MAX_PIN);
 			case 6: return HALFastdigitalRead(MASH6050S_C_MIN_PIN);
+			default: break;
 		}
 		return 255;
 	}

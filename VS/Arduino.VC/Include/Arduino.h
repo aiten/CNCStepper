@@ -266,7 +266,7 @@ public:
 
 	void print(uint32_t ul, uint8_t base)
 	{
-		if (base == 10) printf("%lu", ul);
+		if (base == 10) printf("%u", ul);
 		if (base == 16) printf("%x", ul);
 	}
 
@@ -321,13 +321,13 @@ public:
 		{
 			if (_istty)
 			{
-				ch = (char)_getwch();
+				ch = char(_getwch());
 				if (ch == '\r')
 					_last = '\n';
 			}
 			else
 			{
-				ch = (char)_fgetchar();
+				ch = char(_fgetchar());
 			}
 		}
 

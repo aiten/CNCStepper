@@ -2009,6 +2009,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 					pState->CalcTimerAcc(_pod._move._ramp._timerStop, _pod._move._ramp._nDownOffset - (_steps - n - 1), count);
 					break;
 				}
+				default: break;
 			}
 		}
 

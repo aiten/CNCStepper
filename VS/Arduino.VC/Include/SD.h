@@ -35,6 +35,9 @@
 class SDClass
 {
 public:
+
+	SDClass() = default;
+
 	bool begin(uint8_t) { return true; };
 
 	class File open(const char* filename, uint8_t mode = FILE_READ);
@@ -77,9 +80,9 @@ public:
 	virtual void open(int mode) =0;
 	virtual bool isopen() =0;
 
-	char _OSfilename[512];
-	char _pathname[512];
-	char _name[512];
+	char _OSfilename[_MAX_PATH];
+	char _pathname[_MAX_PATH];
+	char _name[_MAX_PATH];
 
 	bool isDirectory() const
 	{
@@ -281,7 +284,7 @@ public:
 		return isDirectory(_dirfile->_OSfilename);
 	}
 
-	File openNextFile()
+	File openNextFile() const
 	{
 		return GetD()->openNextFile();
 	}
@@ -292,7 +295,7 @@ public:
 	//	virtual void flush();
 	//	int read(void *buf, uint16_t nbyte);
 	boolean  seek(uint32_t pos) { return fseek(GetF()->_f, pos, SEEK_SET) == 0; }
-	uint32_t position() { return ftell(GetF()->_f); }
+	uint32_t position() const { return ftell(GetF()->_f); }
 };
 
 ////////////////////////////////////////////////////////////

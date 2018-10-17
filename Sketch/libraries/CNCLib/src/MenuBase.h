@@ -94,9 +94,9 @@ public:
 
 public:
 
-	menupos_t GetMenuItemCount();
-	FLSTR     GetItemText(menupos_t idx);
-	FLSTR     GetText();
+	menupos_t GetMenuItemCount() const;
+	FLSTR     GetItemText(menupos_t idx) const;
+	FLSTR     GetText() const;
 
 	CMenuNavigator& GetNavigator() { return _menuNavigator; }
 

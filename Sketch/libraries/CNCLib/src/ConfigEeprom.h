@@ -98,7 +98,7 @@ public:
 
 	bool ParseConfig(class CParser*);
 
-	uint32_t GetConfig32(eepromofs_t ofs);
+	uint32_t GetConfig32(eepromofs_t ofs) const;
 
 private:
 

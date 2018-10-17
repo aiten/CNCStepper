@@ -366,6 +366,7 @@ bool CU8GLcd::DrawLoopDefault(EnumAsByte(EDrawLoopType) type, uintptr_t /* data 
 						return true;
 					}
 			*/
+		default: break;
 	}
 	return true;
 }

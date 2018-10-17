@@ -49,7 +49,7 @@ template <class T> void BitClear(T&  t, uint8_t bit) { t &= ~((T(1)) << bit); };
 
 inline unsigned int RoundMulDivUInt(unsigned int v, unsigned int m, unsigned int d)
 {
-	return (unsigned int)(((uint32_t)(v) * (uint32_t)(m) + (uint32_t)(d / 2)) / d);
+	return (unsigned int)((uint32_t(v) * uint32_t(m) + uint32_t(d / 2)) / d);
 }
 
 inline uint8_t RoundMulDivU8(uint8_t v, uint8_t m, uint8_t d)
@@ -96,8 +96,8 @@ inline udiv_t udiv(uint16_t __num, uint16_t __denom)
 {
 	div_t  d = div(__num, __denom);
 	udiv_t ud;
-	ud.quot = (uint16_t)d.quot;
-	ud.rem  = (uint16_t)d.rem;
+	ud.quot = uint16_t(d.quot);
+	ud.rem  = uint16_t(d.rem);
 	return ud;
 }
 

@@ -212,6 +212,7 @@ public:
 			case 3: return HALFastdigitalRead(CNCSHIELD_Y_MIN_PIN);
 			case 4:
 			case 5: return HALFastdigitalRead(CNCSHIELD_Z_MIN_PIN);
+			default: break;
 		}
 		return 255;
 	}

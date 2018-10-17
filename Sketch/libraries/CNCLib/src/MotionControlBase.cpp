@@ -42,14 +42,14 @@ template <> CMotionControlBase* CSingleton<CMotionControlBase>::_instance = null
 
 /////////////////////////////////////////////////////////
 
-void CMotionControlBase::GetPositions(mm1000_t current[NUM_AXIS])
+void CMotionControlBase::GetPositions(mm1000_t current[NUM_AXIS]) const
 {
 	memcpy(current, _current, sizeof(_current));
 }
 
 /////////////////////////////////////////////////////////
 
-mm1000_t CMotionControlBase::GetPosition(axis_t axis)
+mm1000_t CMotionControlBase::GetPosition(axis_t axis) const
 {
 	return _current[axis];
 }
@@ -283,7 +283,7 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 
 /////////////////////////////////////////////////////////
 
-steprate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate_t feedrate)
+steprate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate_t feedrate) const
 {
 	// feedrate < 0 => no arc correction (allowable max for all axis)
 	// from current position

@@ -85,30 +85,21 @@ bool CGCode3DParser::MCommand(mcode_t mcode)
 
 	switch (mcode)
 	{
-		case 20: M20Command();
-			return true;
-		case 21: M21Command();
-			return true;
-		case 22: M22Command();
-			return true;
-		case 23: M23Command();
-			return true;
-		case 24: M24Command();
-			return true;
-		case 25: M25Command();
-			return true;
-		case 26: M26Command();
-			return true;
-		case 27: M27Command();
-			return true;
-		case 28: M28Command();
-			return true;
-		case 29: M29Command();
-			return true;
-		case 30: M30Command();
-			return true;
-		case 115: _OkMessage = PrintVersion;
-			return true;
+		// @formatter:off — disable formatter after this line
+		case 20: M20Command();	return true;
+		case 21: M21Command();	return true;
+		case 22: M22Command();	return true;
+		case 23: M23Command();	return true;
+		case 24: M24Command();	return true;
+		case 25: M25Command();	return true;
+		case 26: M26Command();	return true;
+		case 27: M27Command();	return true;
+		case 28: M28Command();	return true;
+		case 29: M29Command();	return true;
+		case 30: M30Command();	return true;
+		case 115: _OkMessage = PrintVersion; return true;
+		default: break;
+		// @formatter:on — enable formatter after this line
 	}
 
 	return false;

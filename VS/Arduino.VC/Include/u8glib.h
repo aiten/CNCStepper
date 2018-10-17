@@ -29,6 +29,8 @@ class U8GLIB // : public Stream
 	char _tmp[1024];
 
 public:
+	U8GLIB() = default;
+
 	void begin() {};
 	void firstPage() { _buffer[0] = 0; };
 

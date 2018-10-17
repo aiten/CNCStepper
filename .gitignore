@@ -26,6 +26,7 @@ bin
 
 /Sketch/libraries/grbl
 /Sketch/libraries/LiquidCrystal_I2C
+/Sketch/libraries/LiquidCrystal
 /Sketch/libraries/U8glib
 /Sketch/libraries/SD
 /Sketch/libraries/DallasTemperature

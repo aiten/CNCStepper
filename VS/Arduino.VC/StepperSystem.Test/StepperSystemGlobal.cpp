@@ -22,6 +22,5 @@
 
 #pragma warning(disable: 4127)
 
-CSerial Serial;
+CSerial         Serial;
 HardwareSerial& StepperSerial = Serial;
-

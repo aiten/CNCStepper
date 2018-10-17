@@ -53,14 +53,14 @@ enum EStepperBaseAxis
 
 ////////////////////////////////////////////////////////
 
-static const uint8_t sbm800halfstep0[8] PROGMEM = { 0x3F, 0x3F, 0x1F, 0x1F, 0x1B, 0x1B, 0x3B, 0x3B };
-static const uint8_t sbm800halfstep20[8] PROGMEM = { 0x37, 0x36, 0x1E, 0x16, 0x13, 0x12, 0x3A, 0x32 };
-static const uint8_t sbm800halfstep60[8] PROGMEM = { 0x2F, 0x2D, 0x1D, 0x0D, 0x0B, 0x09, 0x39, 0x29 };
+static const uint8_t sbm800halfstep0[8] PROGMEM   = { 0x3F, 0x3F, 0x1F, 0x1F, 0x1B, 0x1B, 0x3B, 0x3B };
+static const uint8_t sbm800halfstep20[8] PROGMEM  = { 0x37, 0x36, 0x1E, 0x16, 0x13, 0x12, 0x3A, 0x32 };
+static const uint8_t sbm800halfstep60[8] PROGMEM  = { 0x2F, 0x2D, 0x1D, 0x0D, 0x0B, 0x09, 0x39, 0x29 };
 static const uint8_t sbm800halfstep100[8] PROGMEM = { 0x27, 0x2D, 0x1C, 0x0D, 0x03, 0x09, 0x38, 0x29 };
 
-static const uint8_t sbm800fullstep0[4] PROGMEM = { 0x3F, 0x3B, 0x1B, 0x1F };
-static const uint8_t sbm800fullstep20[4] PROGMEM = { 0x36, 0x32, 0x12, 0x16 };
-static const uint8_t sbm800fullstep60[4] PROGMEM = { 0x2D, 0x29, 0x09, 0x0D };
+static const uint8_t sbm800fullstep0[4] PROGMEM   = { 0x3F, 0x3B, 0x1B, 0x1F };
+static const uint8_t sbm800fullstep20[4] PROGMEM  = { 0x36, 0x32, 0x12, 0x16 };
+static const uint8_t sbm800fullstep60[4] PROGMEM  = { 0x2D, 0x29, 0x09, 0x0D };
 static const uint8_t sbm800fullstep100[4] PROGMEM = { 0x24, 0x20, 0x00, 0x04 };
 
 static const uint8_t stepperadd[SMC800_NUM_AXIS] PROGMEM = { StepperX, StepperY, StepperZ };
@@ -69,14 +69,13 @@ static const uint8_t stepperadd[SMC800_NUM_AXIS] PROGMEM = { StepperX, StepperY,
 
 CStepperSMC800::CStepperSMC800()
 {
-	_num_axis=SMC800_NUM_AXIS;
+	_num_axis = SMC800_NUM_AXIS;
 }
 
 ////////////////////////////////////////////////////////
 
 void CStepperSMC800::OutSMC800Cmd(const uint8_t val)
 {
-
 #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 
 	PORTL = val;
@@ -98,23 +97,16 @@ void CStepperSMC800::OutSMC800Cmd(const uint8_t val)
 
 ////////////////////////////////////////////////////////
 
-void CStepperSMC800::InitMemVar()
-{
-	register uint8_t i;
-	for (i = 0; i < SMC800_NUM_AXIS; i++)	_stepIdx[i] = 0;
-	for (i = 0; i < SMC800_NUM_AXIS; i++)	_level[i] = LevelOff;
-	for (i = 0; i < NUM_AXIS; i++)			_fullStepMode[i] = false;
-
-	_pod._idleLevel = Level20P;
-}
-
-////////////////////////////////////////////////////////
-
 void CStepperSMC800::Init()
 {
 	super::Init();
 
-	InitMemVar();
+	uint8_t i;
+	for (i = 0; i < SMC800_NUM_AXIS; i++) _stepIdx[i] = 0;
+	for (i = 0; i < SMC800_NUM_AXIS; i++) _level[i]   = LevelOff;
+	for (i = 0; i < NUM_AXIS; i++) _fullStepMode[i]   = false;
+
+	_pod._idleLevel = Level20P;
 
 #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 
@@ -168,10 +160,14 @@ void CStepperSMC800::Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp
 	{
 		if (steps[axis])
 		{
-			if (directionUp&1)
+			if (directionUp & 1)
+			{
 				_stepIdx[axis] += steps[axis];
+			}
 			else
+			{
 				_stepIdx[axis] -= steps[axis];
+			}
 			SetPhase(axis);
 		}
 		directionUp /= 2;
@@ -180,17 +176,17 @@ void CStepperSMC800::Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp
 
 ////////////////////////////////////////////////////////
 
-void CStepperSMC800::SetEnable(axis_t axis, uint8_t level, bool force )
+void CStepperSMC800::SetEnable(axis_t axis, uint8_t level, bool force)
 {
-	if (axis<SMC800_NUM_AXIS)
+	if (axis < SMC800_NUM_AXIS)
 	{
-		if (level > Level60P)		_level[axis] = LevelMax;
+		if (level > Level60P) _level[axis] = LevelMax;
 #ifndef REDUCED_SIZE
-		else if (level > Level20P)	_level[axis] = Level60P;
+		else if (level > Level20P) _level[axis] = Level60P;
 #endif
-		else if (level > LevelOff)	_level[axis] = Level20P;
-		else						_level[axis] = LevelOff;
-		
+		else if (level > LevelOff) _level[axis] = Level20P;
+		else _level[axis]                       = LevelOff;
+
 		if (force) SetPhase(axis);
 	}
 }
@@ -209,21 +205,23 @@ void CStepperSMC800::SetPhase(axis_t axis)
 {
 	if (axis < SMC800_NUM_AXIS)
 	{
-		register uint8_t addIO = pgm_read_byte(&stepperadd[axis]);
-		register uint8_t stepidx = _stepIdx[axis];
+		uint8_t addIO   = pgm_read_byte(&stepperadd[axis]);
+		uint8_t stepidx = _stepIdx[axis];
 
 		if (_fullStepMode[axis])
 		{
 			stepidx = stepidx & 0x3;
 			switch (_level[axis])
 			{
+				// @formatter:off — disable formatter after this line
 				default:
-				case LevelMax:   OutSMC800Cmd(pgm_read_byte(&sbm800fullstep100[stepidx]) + addIO);      break;
+				case LevelMax: OutSMC800Cmd(pgm_read_byte(&sbm800fullstep100[stepidx]) + addIO); break;
 #ifndef REDUCED_SIZE
-				case Level60P:   OutSMC800Cmd(pgm_read_byte(&sbm800fullstep60[stepidx]) + addIO);       break;
+				case Level60P: OutSMC800Cmd(pgm_read_byte(&sbm800fullstep60[stepidx]) + addIO);	break;
 #endif
-				case Level20P:   OutSMC800Cmd(pgm_read_byte(&sbm800fullstep20[stepidx]) + addIO);       break;
-				case LevelOff:   OutSMC800Cmd(pgm_read_byte(&sbm800fullstep0[stepidx]) + addIO);        break;
+				case Level20P: OutSMC800Cmd(pgm_read_byte(&sbm800fullstep20[stepidx]) + addIO);	break;
+				case LevelOff: OutSMC800Cmd(pgm_read_byte(&sbm800fullstep0[stepidx]) + addIO);	break;
+					// @formatter:on — enable formatter after this line
 			}
 		}
 		else
@@ -231,13 +229,15 @@ void CStepperSMC800::SetPhase(axis_t axis)
 			stepidx = stepidx & 0x7;
 			switch (_level[axis])
 			{
+				// @formatter:off — disable formatter after this line
 				default:
-				case LevelMax:    OutSMC800Cmd(pgm_read_byte(&sbm800halfstep100[stepidx]) + addIO);    break;
+				case LevelMax: OutSMC800Cmd(pgm_read_byte(&sbm800halfstep100[stepidx]) + addIO); break;
 #ifndef REDUCED_SIZE
-				case Level60P:    OutSMC800Cmd(pgm_read_byte(&sbm800halfstep60[stepidx]) + addIO);     break;
+				case Level60P: OutSMC800Cmd(pgm_read_byte(&sbm800halfstep60[stepidx]) + addIO);	break;
 #endif
-				case Level20P:    OutSMC800Cmd(pgm_read_byte(&sbm800halfstep20[stepidx]) + addIO);     break;
-				case LevelOff:    OutSMC800Cmd(pgm_read_byte(&sbm800halfstep0[stepidx]) + addIO);      break;
+				case Level20P: OutSMC800Cmd(pgm_read_byte(&sbm800halfstep20[stepidx]) + addIO);	break;
+				case LevelOff: OutSMC800Cmd(pgm_read_byte(&sbm800halfstep0[stepidx]) + addIO);	break;
+					// @formatter:on — enable formatter after this line
 			}
 		}
 	}
@@ -255,10 +255,10 @@ uint8_t CStepperSMC800::GetReferenceValue(uint8_t /*referenceid*/)
 void CStepperSMC800::MoveAwayFromReference(axis_t /* axis */, sdist_t dist, steprate_t vMax)
 {
 #ifndef REDUCED_SIZE
-	MoveRelEx(vMax, X_AXIS, min(dist, (sdist_t)GetLimitMax(X_AXIS) / 2), 
-					Y_AXIS, min(dist, (sdist_t)GetLimitMax(Y_AXIS) / 2), 
-					Z_AXIS, min(dist, (sdist_t)GetLimitMax(Z_AXIS) / 2), 
-					-1);
+	MoveRelEx(vMax, X_AXIS, min(dist, (sdist_t)GetLimitMax(X_AXIS) / 2),
+	          Y_AXIS, min(dist, (sdist_t)GetLimitMax(Y_AXIS) / 2),
+	          Z_AXIS, min(dist, (sdist_t)GetLimitMax(Z_AXIS) / 2),
+	          -1);
 #else
 	MoveRelEx(vMax, X_AXIS, min((mdist_t) dist, 256), 
 					Y_AXIS, min((mdist_t) dist, 256), 

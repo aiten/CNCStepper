@@ -36,11 +36,11 @@
 ////////////////////////////////////////////////////////
 
 #define X_MAXSIZE 800000				// in mm1000_t
-#define Y_MAXSIZE 500000 
-#define Z_MAXSIZE 100000 
-#define A_MAXSIZE 360000 
-#define B_MAXSIZE 360000 
-#define C_MAXSIZE 360000 
+#define Y_MAXSIZE 500000
+#define Z_MAXSIZE 100000
+#define A_MAXSIZE 360000
+#define B_MAXSIZE 360000
+#define C_MAXSIZE 360000
 
 ////////////////////////////////////////////////////////
 
@@ -173,4 +173,3 @@
 #define MESSAGE_MYCONTROL_Starting					F("KK1000S(HA) Mega is starting ... (" __DATE__ ", " __TIME__ ")")
 #define MESSAGE_LCD_HEADLINE F("Proxxon MF70 Ramps14M")
 #endif
-

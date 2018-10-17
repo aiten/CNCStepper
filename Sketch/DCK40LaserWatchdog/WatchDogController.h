@@ -1,4 +1,3 @@
-
 /*
   This file is part of CNCLib - A library for stepper motors.
 
@@ -15,6 +14,8 @@
   GNU General Public License for more details.
   http://www.gnu.org/licenses/
 */
+
+#pragma once
 
 ////////////////////////////////////////////////////////////
 
@@ -67,16 +68,16 @@ public:
 
 private:
 
-	unsigned long _redrawtime = 0;
-	unsigned int _secActive = 0;
+	uint32_t     _redrawtime = 0;
+	unsigned int _secActive  = 0;
 
-	unsigned long _lastBlink = 0;
-	bool  _blinkWasOn = true;
-	unsigned long _lastDraw = 0;
-	bool _drawLCDRequest = false;
+	uint32_t _lastBlink      = 0;
+	bool     _blinkWasOn     = true;
+	uint32_t _lastDraw       = 0;
+	bool     _drawLCDRequest = false;
 
 	WaterFlow _flow;
-	WatchDog _watchDog;
+	WatchDog  _watchDog;
 
 	float ReadTemp();
 
@@ -91,17 +92,15 @@ private:
 
 	void DrawLcd();
 
-	float _currentTemp = 0.0;
+	float        _currentTemp = 0.0;
 	unsigned int _currentFlow = 0xffff;
 
-	float _lastTemp = 0.0;
+	float        _lastTemp = 0.0;
 	unsigned int _lastFlow = 0xffff;
 
 	bool _sw1On = true;
 	bool _sw2On = true;
 	bool _sw3On = true;
-
 };
 
 ////////////////////////////////////////////////////////////
-

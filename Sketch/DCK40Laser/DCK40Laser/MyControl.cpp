@@ -31,9 +31,9 @@
 
 ////////////////////////////////////////////////////////////
 
-CMyControl Control;
-CMotionControl MotionControl;
-CConfigEeprom Eprom;
+CMyControl      Control;
+CMotionControl  MotionControl;
+CConfigEeprom   Eprom;
 HardwareSerial& StepperSerial = Serial;
 
 ////////////////////////////////////////////////////////////
@@ -48,9 +48,9 @@ const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 {
 	EPROM_SIGNATURE,
 	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
-	GetInfo1a()|CConfigEeprom::IS_LASER|CConfigEeprom::HAVE_SPINDLE|CConfigEeprom::HAVE_SPINDLE_ANALOG,GetInfo1b(),
+	GetInfo1a() | CConfigEeprom::IS_LASER | CConfigEeprom::HAVE_SPINDLE | CConfigEeprom::HAVE_SPINDLE_ANALOG, GetInfo1b(),
 	0,
-	STEPPERDIRECTION,0,0,SPINDEL_FADETIMEDELAY,
+	STEPPERDIRECTION, 0, 0,SPINDEL_FADETIMEDELAY,
 	SPINDLE_MAXSPEED,
 	CNC_JERKSPEED,
 	CNC_MAXSPEED,
@@ -58,11 +58,11 @@ const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 	CNC_DEC,
 	STEPRATERATE_REFMOVE,
 	MOVEAWAYFROMREF_MM1000,
-	X_STEPSPERMM/1000.0,
+	X_STEPSPERMM / 1000.0,
 	{
-		{ X_MAXSIZE,     X_USEREFERENCE, REFMOVE_1_AXIS,  X_REFERENCEHITVALUE_MIN, X_REFERENCEHITVALUE_MAX },
-		{ Y_MAXSIZE,     Y_USEREFERENCE, REFMOVE_2_AXIS,  Y_REFERENCEHITVALUE_MIN, Y_REFERENCEHITVALUE_MAX },
-		{ Z_MAXSIZE,     Z_USEREFERENCE, REFMOVE_3_AXIS,  Z_REFERENCEHITVALUE_MIN, Z_REFERENCEHITVALUE_MAX },
+		{ X_MAXSIZE, X_USEREFERENCE, REFMOVE_1_AXIS, X_REFERENCEHITVALUE_MIN, X_REFERENCEHITVALUE_MAX },
+		{ Y_MAXSIZE, Y_USEREFERENCE, REFMOVE_2_AXIS, Y_REFERENCEHITVALUE_MIN, Y_REFERENCEHITVALUE_MAX },
+		{ Z_MAXSIZE, Z_USEREFERENCE, REFMOVE_3_AXIS, Z_REFERENCEHITVALUE_MIN, Z_REFERENCEHITVALUE_MAX },
 #if NUM_AXIS > 3
 		{ A_MAXSIZE,     A_USEREFERENCE, REFMOVE_4_AXIS,  A_REFERENCEHITVALUE_MIN, A_REFERENCEHITVALUE_MAX },
 #endif
@@ -104,12 +104,11 @@ void CMyControl::Init()
 #ifdef MYUSE_LCD
 	InitSD(SD_ENABLE_PIN);
 #endif
-
 }
 
 ////////////////////////////////////////////////////////////
 
-void CMyControl::IOControl(uint8_t tool, unsigned short level)
+void CMyControl::IOControl(uint8_t tool, uint16_t level)
 {
 	switch (tool)
 	{
@@ -127,9 +126,12 @@ void CMyControl::IOControl(uint8_t tool, unsigned short level)
 			}
 			return;
 
-		case Vacuum:  _laserVacuum.Set(level > 0); return;
-	//  case Coolant: _laserWater.Set(level > 0); return; do not allow water turn off
-
+		case Vacuum:
+		{
+			_laserVacuum.Set(level > 0);
+			return;
+		}
+			//  case Coolant: _laserWater.Set(level > 0); return; do not allow water turn off
 	}
 
 	if (!_data.IOControl(tool, level))
@@ -140,15 +142,15 @@ void CMyControl::IOControl(uint8_t tool, unsigned short level)
 
 ////////////////////////////////////////////////////////////
 
-unsigned short CMyControl::IOControl(uint8_t tool)
+uint16_t CMyControl::IOControl(uint8_t tool)
 {
 	switch (tool)
 	{
 		case SpindleCW:
-		case SpindleCCW:	{ return _laserPWM.IsOn(); }
-		case Probe:			{ return _data._probe.IsOn(); }
-		case Coolant: 		{ return _laserWater.IsOn(); }
-		case Vacuum: 		{ return _laserVacuum.IsOn(); }
+		case SpindleCCW: { return _laserPWM.IsOn(); }
+		case Probe: { return _data._probe.IsOn(); }
+		case Coolant: { return _laserWater.IsOn(); }
+		case Vacuum: { return _laserVacuum.IsOn(); }
 		case ControllerFan: { return _data._controllerfan.GetLevel(); }
 	}
 
@@ -231,7 +233,7 @@ bool CMyControl::OnEvent(EnumAsByte(EStepperControlEvent) eventtype, uintptr_t a
 		{
 			if (CGCodeParserBase::IsSpindleOn())
 			{
-				bool newIsCutMove = addinfo != 0;
+				const bool newIsCutMove = addinfo != 0;
 				if (CGCodeParserBase::IsCutMove() != newIsCutMove)
 				{
 					CStepper::GetInstance()->IoControl(CControl::SpindleCW, newIsCutMove ? CGCodeParserBase::GetSpindleSpeed() : 0);

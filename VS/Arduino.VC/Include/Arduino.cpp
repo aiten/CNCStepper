@@ -23,18 +23,24 @@ http://www.gnu.org/licenses/
 
 uint8_t digitalReadValues[MAXDIGITALREADPINS] = { LOW };
 
-uint8_t digitalRead(short pin)
+uint8_t digitalRead(int16_t pin)
 {
 	uint8_t value = digitalReadFromFile(pin);
 
-	if (value == DIGITALREADNOVALUE && digitalReadEvent != NULL)
+	if (value == DIGITALREADNOVALUE && digitalReadEvent != nullptr)
+	{
 		value = digitalReadEvent(pin);
+	}
 
 	if (value == DIGITALREADNOVALUE && pin < MAXDIGITALREADPINS)
+	{
 		value = digitalReadValues[pin];
+	}
 
 	if (value == DIGITALREADNOVALUE)
+	{
 		value = LOW;
+	}
 
 	if (pin < MAXDIGITALREADPINS)
 	{
@@ -45,12 +51,12 @@ uint8_t digitalRead(short pin)
 	return value;
 };
 
-uint8_t digitalReadFromFile(short pin)
+uint8_t digitalReadFromFile(int16_t pin)
 {
 	char tmpname[_MAX_PATH];
 	char filename[_MAX_PATH];
 	::GetTempPathA(_MAX_PATH, tmpname);
-	sprintf_s(filename, "%s\\CNCLib_digitalReadFor_%i.txt", tmpname, (int)pin);
+	sprintf_s(filename, "%s\\CNCLib_digitalReadFor_%i.txt", tmpname, int(pin));
 
 	FILE* fin;
 	fopen_s(&fin, filename, "rt");

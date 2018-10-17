@@ -74,4 +74,3 @@
 ////////////////////////////////////////////////////////
 
 #define MESSAGE_MYCONTROL_Starting          F("SMC800:" __DATE__ )
-

@@ -16,6 +16,8 @@
 */
 ////////////////////////////////////////////////////////
 
+#pragma once
+
 #include <Arduino.h>
 
 #pragma once
@@ -43,18 +45,20 @@ extern class HardwareSerial& StepperSerial;
 
 ////////////////////////////////////////////////////////
 
-typedef uint8_t axis_t;	// type for "axis"
+typedef uint8_t axis_t; // type for "axis"
 
-typedef signed   long sdist_t;	// tpye of stepper coord system (signed)
-typedef unsigned long udist_t;	// tpye of stepper coord system (unsigned)
+typedef int32_t  sdist_t; // type of stepper coord system (signed)
+typedef uint32_t udist_t; // type of stepper coord system (unsigned)
 
-typedef const __FlashStringHelper * error_t;
+typedef const __FlashStringHelper* FLSTR;
+
+typedef FLSTR error_t;
 
 ////////////////////////////////////////////////////////
 //
 // Stepper
 
-#define REFERENCESTABLETIME	2			// time in ms for reference must not change (in Reference move) => signal bounce
+#define REFERENCESTABLETIME	2						// time in ms for reference must not change (in Reference move) => signal bounce
 
 #define IDLETIMER1VALUE		TIMER1VALUE(31)			// Idle timer value (stepper timer not moving), must fit into 16 bit
 #define TIMEOUTSETIDLE		1000					// set level after 1000ms
@@ -65,7 +69,7 @@ typedef const __FlashStringHelper * error_t;
 
 ////////////////////////////////////////////////////////
 
-#define SYNC_STEPBUFFERCOUNT		8		// allow only x element in step buffer when io or wait starts
+#define SYNC_STEPBUFFERCOUNT	8					// allow only x element in step buffer when io or wait starts
 
 ////////////////////////////////////////////////////////
 
@@ -155,9 +159,9 @@ ToDo;
 
 #define STEPRATE_MAX		(65535l)		// see range for steprate_t
 
-typedef unsigned short timer_t;			// timer tpye (16bit)
-typedef unsigned short mdist_t;			// tpye for one movement (16bit)
-typedef unsigned short steprate_t;		// tpye for speed (Hz), Steps/sec
+typedef uint16_t timer_t;			// timer tpye (16bit)
+typedef uint16_t mdist_t;			// tpye for one movement (16bit)
+typedef uint16_t steprate_t;		// tpye for speed (Hz), Steps/sec
 
 #define mudiv	udiv
 #define mudiv_t	udiv_t
@@ -171,9 +175,9 @@ typedef unsigned short steprate_t;		// tpye for speed (Hz), Steps/sec
 
 #define STEPRATE_MAX		(128000l)	// limit steprate_t
 
-typedef unsigned long timer_t;			// timer tpye (32bit)
-typedef unsigned long mdist_t;			// tpye for one movement (32bit)
-typedef unsigned long steprate_t;		// tpye for speed (Hz), Steps/sec
+typedef uint32_t timer_t;    // timer tpye (32bit)
+typedef uint32_t mdist_t;    // tpye for one movement (32bit)
+typedef uint32_t steprate_t; // tpye for speed (Hz), Steps/sec
 
 #define mudiv	ldiv
 #define mudiv_t	ldiv_t
@@ -211,13 +215,13 @@ typedef unsigned long steprate_t;		// tpye for speed (Hz), Steps/sec
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef uint8_t axisArray_t;			// on bit per axis
+typedef uint8_t axisArray_t; // on bit per axis
 
 #if NUM_AXIS > 3
-typedef unsigned long DirCount_t;			// 4 bit for eache axis (0..7) count, 8 dirup, see DirCountAll_t
+typedef uint32_t DirCount_t;			// 4 bit for eache axis (0..7) count, 8 dirup, see DirCountAll_t
 #define DirCountBytes 4
 #else
-typedef unsigned short DirCount_t;			// 4 bit for eache axis (0..7) count, 8 dirup 
+typedef uint16_t DirCount_t; // 4 bit for eache axis (0..7) count, 8 dirup 
 #define DirCountBytes 2
 #endif
 
@@ -229,7 +233,7 @@ struct DirCountByte_t
 {
 	union
 	{
-		struct 
+		struct
 		{
 			struct DirCountStepByte_t
 			{
@@ -239,17 +243,19 @@ struct DirCountByte_t
 				uint8_t count2 : 3;
 				uint8_t dirUp2 : 1;
 			} byte[DirCountBytes - 1];
+
 			struct DirCountInfoByte_t
 			{
 				uint8_t count1 : 3;
 				uint8_t dirUp1 : 1;
 
-				uint8_t nocount : 1;		// do not count step (e.g. move for backlash)
+				uint8_t nocount : 1; // do not count step (e.g. move for backlash)
 				uint8_t unused1 : 1;
 				uint8_t unused2 : 1;
 				uint8_t unused3 : 1;
 			} byteInfo;
-		} byte;
+		}     byte;
+
 		DirCount_t all;
 	};
 };

@@ -29,7 +29,7 @@
 
 ////////////////////////////////////////////////////////////
 
-template<> CControl* CSingleton<CControl>::_instance = NULL;
+template <> CControl* CSingleton<CControl>::_instance = nullptr;
 
 ////////////////////////////////////////////////////////
 
@@ -43,17 +43,21 @@ CControl::CControl()
 void CControl::Init()
 {
 	CStepper::GetInstance()->Init();
-	CStepper::GetInstance()->AddEvent(StaticStepperEvent, (uintptr_t) this, _oldStepperEvent);
+	CStepper::GetInstance()->AddEvent(StaticStepperEvent, uintptr_t(this), _oldStepperEvent);
 
 #ifdef _USE_LCD
-	
+
 	if (CLcd::GetInstance())
+	{
 		CLcd::GetInstance()->Init();
+	}
 
 #endif
-	
-	if (_timeBlink==0)
+
+	if (_timeBlink == 0)
+	{
 		CHAL::pinModeOutput(BLINK_LED);
+	}
 
 	CHAL::InitTimer0(HandleInterrupt);
 	CHAL::StartTimer0(IDLETIMER0VALUE);
@@ -75,24 +79,31 @@ void CControl::InitFromEeprom()
 	CStepper::GetInstance()->SetDirection(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, stepperdirections)));
 
 #ifdef REDUCED_SIZE
+
 	CMotionControlBase::GetInstance()->InitConversionStepsPer(CConfigEeprom::GetConfigFloat(offsetof(CConfigEeprom::SCNCEeprom, StepsPerMm1000)));
+
 #else
+
 	CMotionControlBase::GetInstance()->InitConversionBestStepsPer(CConfigEeprom::GetConfigFloat(offsetof(CConfigEeprom::SCNCEeprom, StepsPerMm1000)));
+
 #endif
 
 	uint16_t jerkspeed = CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, jerkspeed));
-	if (jerkspeed == 0) jerkspeed = 1024;
-	
+	if (jerkspeed == 0)
+	{
+		jerkspeed = 1024;
+	}
+
 	CStepper::GetInstance()->SetDefaultMaxSpeed(
-		((steprate_t)CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate))),
-		((steprate_t)CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, acc))),
-		((steprate_t)CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, dec))),
+		steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate))),
+		steprate_t(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, acc))),
+		steprate_t(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, dec))),
 		jerkspeed);
 
 	for (uint8_t axis = 0; axis < NUM_AXIS; axis++)
 	{
-		eepromofs_t ofs = sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions)*axis;
-		CStepper::GetInstance()->SetReferenceHitValue(CStepper::GetInstance()->ToReferenceId(axis, true),  CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].referenceValue_min) + ofs));
+		eepromofs_t ofs = sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis;
+		CStepper::GetInstance()->SetReferenceHitValue(CStepper::GetInstance()->ToReferenceId(axis, true), CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].referenceValue_min) + ofs));
 		CStepper::GetInstance()->SetReferenceHitValue(CStepper::GetInstance()->ToReferenceId(axis, false), CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].referenceValue_max) + ofs));
 
 		CStepper::GetInstance()->SetLimitMax(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].size) + ofs)));
@@ -100,13 +111,22 @@ void CControl::InitFromEeprom()
 #ifndef REDUCED_SIZE
 
 		steprate_t steprate = CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].maxsteprate) + ofs);
-		if (steprate != 0) CStepper::GetInstance()->SetMaxSpeed(axis, steprate);
+		if (steprate != 0)
+		{
+			CStepper::GetInstance()->SetMaxSpeed(axis, steprate);
+		}
 
 		steprate = CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, axis[0].acc) + ofs);
-		if (steprate != 0) CStepper::GetInstance()->SetAcc(axis, steprate);
+		if (steprate != 0)
+		{
+			CStepper::GetInstance()->SetAcc(axis, steprate);
+		}
 
 		steprate = CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, axis[0].dec) + ofs);
-		if (steprate != 0) CStepper::GetInstance()->SetDec(axis, steprate);
+		if (steprate != 0)
+		{
+			CStepper::GetInstance()->SetDec(axis, steprate);
+		}
 
 		float stepsperMM1000 = CConfigEeprom::GetConfigFloat(offsetof(CConfigEeprom::SCNCEeprom, axis[0].StepsPerMm1000) + ofs);
 		if (stepsperMM1000 != 0.0)
@@ -114,16 +134,20 @@ void CControl::InitFromEeprom()
 			CMotionControlBase::GetInstance()->SetConversionStepsPerEx();
 			CMotionControlBase::GetInstance()->SetConversionStepsPerEx(axis, stepsperMM1000);
 		}
+
 #endif
 	}
 }
 
 ////////////////////////////////////////////////////////////
 
-uint8_t CControl::ConvertSpindleSpeedToIO8(unsigned short maxspeed, unsigned short level) 
-{ 
-	if (level >= maxspeed) return 255;
-	return (uint8_t)MulDivU32(level, 255, maxspeed); 
+uint8_t CControl::ConvertSpindleSpeedToIO8(uint16_t maxspeed, uint16_t level)
+{
+	if (level >= maxspeed)
+	{
+		return 255;
+	}
+	return uint8_t(MulDivU32(level, 255, maxspeed));
 }
 
 ////////////////////////////////////////////////////////////
@@ -132,7 +156,7 @@ void CControl::GoToReference()
 {
 	for (axis_t i = 0; i < NUM_AXIS; i++)
 	{
-		axis_t axis = CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].refmoveSequence) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions)*i);
+		axis_t axis = CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].refmoveSequence) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * i);
 		if (axis < NUM_AXIS)
 		{
 			GoToReference(axis);
@@ -144,9 +168,11 @@ void CControl::GoToReference()
 
 bool CControl::GoToReference(axis_t axis)
 {
-	EnumAsByte(EReverenceType) referenceType = (EReverenceType)CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].referenceType) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions)*axis);
-	if (referenceType == EReverenceType::NoReference) 
+	EnumAsByte(EReverenceType) referenceType = EReverenceType(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].referenceType) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis));
+	if (referenceType == EReverenceType::NoReference)
+	{
 		return false;
+	}
 
 	GoToReference(axis, 0, referenceType == EReverenceType::ReferenceToMin);
 	return true;
@@ -158,12 +184,12 @@ bool CControl::GoToReference(axis_t axis, steprate_t steprate, bool toMinRef)
 {
 	if (steprate == 0)
 	{
-		steprate = (steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, refmovesteprate));
+		steprate = steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, refmovesteprate)));
 	}
 	// goto min/max
 	return CStepper::GetInstance()->MoveReference(
-		axis, CStepper::GetInstance()->ToReferenceId(axis, toMinRef), toMinRef, steprate,0, 
-		CMotionControlBase::GetInstance()->ToMachine(axis,CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, moveAwayFromRefernece))));
+		axis, CStepper::GetInstance()->ToReferenceId(axis, toMinRef), toMinRef, steprate, 0,
+		CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, moveAwayFromRefernece))));
 }
 
 ////////////////////////////////////////////////////////////
@@ -183,9 +209,11 @@ void CControl::Resurrect()
 	CMotionControlBase::GetInstance()->SetPositionFromMachine();
 
 #ifdef _USE_LCD
-	
+
 	if (CLcd::GetInstance())
+	{
 		CLcd::GetInstance()->ClearDiagnostic();
+	}
 
 #endif
 
@@ -195,15 +223,11 @@ void CControl::Resurrect()
 
 ////////////////////////////////////////////////////////////
 
-void CControl::StopProgram(bool /*checkconditional*/)
-{
-}
+void CControl::StopProgram(bool /*checkconditional*/) {}
 
 ////////////////////////////////////////////////////////////
 
-void CControl::Idle(unsigned int /*idletime*/)
-{
-}
+void CControl::Idle(unsigned int /*idletime*/) {}
 
 ////////////////////////////////////////////////////////////
 
@@ -224,8 +248,10 @@ void CControl::Resume()
 void CControl::Poll()
 {
 #ifdef _USE_LCD
+
 	if (CLcd::GetInstance())
 		CLcd::GetInstance()->Poll();
+
 #endif
 }
 
@@ -239,7 +265,7 @@ bool CControl::Parse(CStreamReader* reader, Stream* output)
 
 ////////////////////////////////////////////////////////////
 
-bool CControl::ParseAndPrintResult(CParser *parser, Stream* output)
+bool CControl::ParseAndPrintResult(CParser* parser, Stream* output)
 {
 	bool ret = true;
 
@@ -250,13 +276,13 @@ bool CControl::ParseAndPrintResult(CParser *parser, Stream* output)
 
 	if (parser->IsError())
 	{
-		if (output) 
+		if (output)
 		{
 			PrintError(output);
 			output->print(parser->GetError());
 			output->print(MESSAGE_CONTROL_RESULTS);
 			output->print(_buffer);
-//			output->print(millis());
+			//			output->print(millis());
 		}
 		ret = false;
 	}
@@ -264,7 +290,7 @@ bool CControl::ParseAndPrintResult(CParser *parser, Stream* output)
 	{
 		// => not in "else" if "OK" should be sent after "Error:"
 		if (output) output->print(MESSAGE_OK);
-		if (parser->GetOkMessage() != NULL)
+		if (parser->GetOkMessage() != nullptr)
 		{
 			if (output)
 			{
@@ -274,7 +300,10 @@ bool CControl::ParseAndPrintResult(CParser *parser, Stream* output)
 		}
 	}
 
-	if (output) output->println();
+	if (output)
+	{
+		output->println();
+	}
 
 	return ret;
 }
@@ -286,7 +315,9 @@ bool CControl::Command(char* buffer, Stream* output)
 #ifdef _USE_LCD
 
 	if (CLcd::GetInstance())
+	{
 		CLcd::GetInstance()->Command(buffer);
+	}
 
 #endif
 
@@ -301,26 +332,28 @@ bool CControl::Command(char* buffer, Stream* output)
 #endif
 		if (output)
 		{
-			PrintError(output); 
+			PrintError(output);
 			output->println(MESSAGE_CONTROL_KILLED);
-// => uncomment if "OK" will not be sent after "Error:"
-//			output->println(MESSAGE_OK);
+			// => uncomment if "OK" will not be sent after "Error:"
+			//			output->println(MESSAGE_OK);
 		}
 		return false;
 	}
 
 	// if one Parse failes, return false
-	
+
 	bool ret = true;
-	
+
 	_reader.Init(buffer);
 
 	if (_reader.GetChar())
 	{
 		while (_reader.GetChar())
 		{
-			if (!Parse(&_reader,output))
+			if (!Parse(&_reader, output))
+			{
 				ret = false;
+			}
 		}
 	}
 	else if (output)
@@ -328,7 +361,7 @@ bool CControl::Command(char* buffer, Stream* output)
 		// send OK on empty line (command)
 		output->println(MESSAGE_OK_EMPTYLINE);
 	}
-	
+
 	return ret;
 }
 
@@ -337,7 +370,7 @@ bool CControl::Command(char* buffer, Stream* output)
 bool CControl::IsEndOfCommandChar(char ch)
 {
 	//return ch == '\n' || ch == '\r' || ch == -1;
-	return ch == '\n' || ch == (char) -1;
+	return ch == '\n' || ch == char(-1);
 }
 
 ////////////////////////////////////////////////////////////
@@ -368,17 +401,18 @@ void CControl::ReadAndExecuteCommand(Stream* stream, Stream* output, bool filest
 			{
 				if (output)
 				{
-					PrintError(output); output->println(MESSAGE_CONTROL_FLUSHBUFFER);
+					PrintError(output);
+					output->println(MESSAGE_CONTROL_FLUSHBUFFER);
 				}
 				_bufferidx = 0;
 			}
-/*
-			if (ch == '\x18')
-			{
-				StepperSerial.println(MESSAGE_CTRLX);
-				_bufferidx = 0;
-			}
-*/
+			/*
+						if (ch == '\x18')
+						{
+							StepperSerial.println(MESSAGE_CTRLX);
+							_bufferidx = 0;
+						}
+			*/
 		}
 
 		if (filestream)						// e.g. SD card => execute last line without "EndOfLine"
@@ -386,7 +420,7 @@ void CControl::ReadAndExecuteCommand(Stream* stream, Stream* output, bool filest
 			if (_bufferidx > 0)
 			{
 				_buffer[_bufferidx + 1] = 0;
-				Command(_buffer,output);
+				Command(_buffer, output);
 				_bufferidx = 0;
 			}
 		}
@@ -400,7 +434,7 @@ bool CControl::SerialReadAndExecuteCommand()
 {
 	if (StepperSerial.available() > 0)
 	{
-		ReadAndExecuteCommand(&StepperSerial, &StepperSerial, false);			
+		ReadAndExecuteCommand(&StepperSerial, &StepperSerial, false);
 	}
 
 	return _bufferidx > 0;		// command pending, buffer not empty
@@ -418,7 +452,7 @@ void CControl::FileReadAndExecuteCommand(Stream* stream, Stream* output)
 void CControl::Run()
 {
 	_bufferidx = 0;
-	_lasttime = _timeBlink = _timePoll = 0;
+	_lasttime  = _timeBlink = _timePoll = 0;
 
 	Init();
 	Initialized();
@@ -452,7 +486,7 @@ void CControl::Run()
 
 void CControl::CheckIdlePoll(bool isidle)
 {
-	unsigned long time = millis();
+	uint32_t time = millis();
 
 	if (isidle && _lasttime + TIMEOUTCALLIDEL < time)
 	{
@@ -460,7 +494,7 @@ void CControl::CheckIdlePoll(bool isidle)
 		Poll();
 		_timePoll = time;
 	}
-	else if(_timePoll + TIMEOUTCALLPOLL < time)
+	else if (_timePoll + TIMEOUTCALLPOLL < time)
 	{
 		Poll();
 		_timePoll = time;
@@ -482,15 +516,15 @@ void CControl::ReadAndExecuteCommand()
 
 ////////////////////////////////////////////////////////////
 
-bool CControl::PostCommand(const __FlashStringHelper* cmd, Stream* output)
+bool CControl::PostCommand(FLSTR cmd, Stream* output)
 {
-// use _buffer to execute command
+	// use _buffer to execute command
 
-	const char* cmd1 = (const char*)cmd;
-	uint8_t idx = _bufferidx;
+	auto    cmd1       = (const char*)(cmd);
+	uint8_t idx        = _bufferidx;
 	uint8_t idxprogmem = 0;
 
-	for (;idx<sizeof(_buffer); idx++, idxprogmem++)
+	for (; idx < sizeof(_buffer); idx++, idxprogmem++)
 	{
 		_buffer[idx] = pgm_read_byte(&cmd1[idxprogmem]);
 
@@ -528,22 +562,28 @@ void CControl::TimerInterrupt()
 #ifdef _USE_LCD
 
 	if (CLcd::GetInstance())
+	{
 		CLcd::GetInstance()->TimerInterrupt();
+	}
 
 #endif
 }
 
 ////////////////////////////////////////////////////////////
 
-void CControl::Delay(unsigned long ms)
+void CControl::Delay(uint32_t ms)
 {
-	unsigned long expected_end = millis() + ms;
+	uint32_t expected_end = millis() + ms;
 
 	while (expected_end > millis())
 	{
 #ifdef _USE_LCD
+
 		if (CLcd::GetInstance())
+		{
 			CLcd::GetInstance()->Poll();
+		}
+
 #endif
 	}
 }
@@ -551,17 +591,18 @@ void CControl::Delay(unsigned long ms)
 ////////////////////////////////////////////////////////////
 
 bool CControl::StaticStepperEvent(CStepper* /*stepper*/, uintptr_t param, EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo)
-{ 
+{
 	return ((CControl*)param)->StepperEvent(eventtype, addinfo);
 }
-
 
 ////////////////////////////////////////////////////////////
 
 bool CControl::StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo)
 {
 	if (CallOnEvent(eventtype, addinfo))
+	{
 		return true;
+	}
 
 	return _oldStepperEvent.Call(CStepper::GetInstance(), eventtype, addinfo);
 }
@@ -570,7 +611,7 @@ bool CControl::StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventtype, uintp
 
 bool CControl::CallOnEvent(uint8_t eventtype, uintptr_t param)
 {
-	return OnEvent((EnumAsByte(EStepperControlEvent)) eventtype, param);
+	return OnEvent(EnumAsByte(EStepperControlEvent)(eventtype), param);
 }
 
 ////////////////////////////////////////////////////////////
@@ -579,17 +620,13 @@ bool CControl::OnEvent(EnumAsByte(EStepperControlEvent) eventtype, uintptr_t add
 {
 	switch (eventtype)
 	{
-		case OnWaitEvent:
-
-			if (CStepper::WaitTimeCritical > (CStepper::EWaitType) (unsigned int)addinfo)
+		case OnWaitEvent: if (CStepper::WaitTimeCritical > CStepper::EWaitType((unsigned int)addinfo))
 			{
 				CheckIdlePoll(false);
 			}
 			break;
 
-		case OnIoEvent:
-			
-			IOControl(((CStepper::SIoControl*) addinfo)->_tool, ((CStepper::SIoControl*) addinfo)->_level);
+		case OnIoEvent: IOControl(((CStepper::SIoControl*)addinfo)->_tool, ((CStepper::SIoControl*)addinfo)->_level);
 			break;
 	}
 	return true;

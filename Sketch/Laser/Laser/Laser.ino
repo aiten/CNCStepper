@@ -1,4 +1,3 @@
-
 /*
   This file is part of CNCLib - A library for stepper motors.
 
@@ -30,15 +29,14 @@ CMyStepper Stepper;
 
 void setup()
 {
-  StepperSerial.begin(USBBAUDRATE);
+	StepperSerial.begin(USBBAUDRATE);
 }
 
 ////////////////////////////////////////////////////////////
 
 void loop()
 {
-  Control.Run();
+	Control.Run();
 }
 
 ////////////////////////////////////////////////////////////
-  

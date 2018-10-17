@@ -15,6 +15,7 @@
   http://www.gnu.org/licenses/
 */
 
+#pragma once
 
 ////////////////////////////////////////////////////////////
 
@@ -22,7 +23,7 @@ class WatchDog
 {
 private:
 
-	bool _isOn = false;
+	bool    _isOn = false;
 	uint8_t _onValue;
 	uint8_t _offValue;
 	uint8_t _pin;
@@ -31,8 +32,8 @@ public:
 
 	void Init(uint8_t pin, uint8_t onvalue)
 	{
-		_pin = pin;
-		_onValue = onvalue;
+		_pin      = pin;
+		_onValue  = onvalue;
 		_offValue = onvalue == LOW ? HIGH : LOW;
 
 		pinMode(_pin, OUTPUT);
@@ -75,4 +76,3 @@ public:
 		return false;
 	}
 };
-

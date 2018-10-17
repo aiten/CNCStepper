@@ -35,21 +35,24 @@
 class SDClass
 {
 public:
-	bool begin(uint8_t ) { return true; };
 
-	class File open(const char *filename, uint8_t mode = FILE_READ);
+	SDClass() = default;
 
-	bool remove(const char *filename)
+	bool begin(uint8_t) { return true; };
+
+	class File open(const char* filename, uint8_t mode = FILE_READ);
+
+	bool remove(const char* filename)
 	{
 		return ::remove(GetFilename(filename)) == 0;
 	}
 
-	bool exists(const char *filename)
+	bool exists(const char* filename)
 	{
 		return _access(GetFilename(filename), 0) != -1;
 	}
 
-	bool mkdir(const char * /*filename*/)
+	bool mkdir(const char* /*filename*/)
 	{
 		return true;
 	}
@@ -58,12 +61,11 @@ private:
 
 	char _fullfilename[512];
 
-	char* GetFilename(const char *filename)
+	char* GetFilename(const char* filename)
 	{
 		sprintf_s<512>(_fullfilename, SDPATH"\\%s", filename);
 		return _fullfilename;
 	}
-
 };
 
 extern SDClass SD;
@@ -73,16 +75,16 @@ extern SDClass SD;
 class MyDirFile
 {
 public:
-	virtual bool IsFile()=0;
-	virtual void close()=0;
-	virtual void open(int mode)=0;
-	virtual bool isopen()=0;
+	virtual bool IsFile() =0;
+	virtual void close() =0;
+	virtual void open(int mode) =0;
+	virtual bool isopen() =0;
 
-	char _OSfilename[512];
-	char _pathname[512];
-	char _name[512];
+	char _OSfilename[_MAX_PATH];
+	char _pathname[_MAX_PATH];
+	char _name[_MAX_PATH];
 
-	bool isDirectory()
+	bool isDirectory() const
 	{
 		struct stat st;
 		return stat(_OSfilename, &st) != -1 && (st.st_mode & _S_IFDIR) != 0;
@@ -90,16 +92,19 @@ public:
 
 	MyDirFile() { _refcount = 0; }
 
-	int _refcount;
-	void IncRef()	{ _refcount++; };
-	void DecRef()	
-	{	
-		_refcount--; 
-		if (_refcount==0) 
-		{	
-			close(); 
-			delete this; 
-		} 
+	virtual ~MyDirFile() = default;
+
+	int  _refcount;
+	void IncRef() { _refcount++; };
+
+	void DecRef()
+	{
+		_refcount--;
+		if (_refcount == 0)
+		{
+			close();
+			delete this;
+		}
 	};
 };
 
@@ -111,14 +116,19 @@ public:
 
 	MyFile()
 	{
-		_f = NULL;
+		_f = nullptr;
 	}
 
 	FILE* _f;
 
-	virtual bool IsFile() override  { return true; };
-	virtual void close()   override { if (_f) fclose(_f); _f = NULL; };
-	virtual bool isopen()  override { return _f != NULL; }
+	virtual bool IsFile() override { return true; };
+
+	virtual void close() override
+	{
+		if (_f) fclose(_f);
+		_f = nullptr;
+	};
+	virtual bool isopen() override { return _f != nullptr; }
 
 	virtual void open(int mode) override
 	{
@@ -127,7 +137,7 @@ public:
 		else
 		{
 			fopen_s(&_f, _OSfilename, "wb");
-			if (_f != NULL)
+			if (_f != nullptr)
 			{
 				fclose(_f);
 				fopen_s(&_f, _OSfilename, "r+");
@@ -144,17 +154,22 @@ public:
 
 	MyDir()
 	{
-		_dir = NULL;
+		_dir = nullptr;
 	}
 
 	virtual bool IsFile() override { return false; };
-	virtual void close()  override { if (_dir) FindClose(_dir); _dir = NULL; };
-	virtual bool isopen() override { return _dir != NULL; }
 
-	HANDLE _dir;
-	bool   _dirEof;
+	virtual void close() override
+	{
+		if (_dir) FindClose(_dir);
+		_dir = nullptr;
+	};
+	virtual bool isopen() override { return _dir != nullptr; }
+
+	HANDLE           _dir;
+	bool             _dirEof;
 	WIN32_FIND_DATAA ffd;
-	char _dirfindmask[512];
+	char             _dirfindmask[512];
 
 	class File openNextFile();
 
@@ -177,43 +192,51 @@ private:
 
 	MyDirFile* _dirfile;
 
-	bool IsDirHandle()	const	{ return _dirfile != NULL && !_dirfile->IsFile(); };
-	bool IsFileHandle()	const 	{ return _dirfile != NULL && _dirfile->IsFile(); };
+	bool IsDirHandle() const { return _dirfile != nullptr && !_dirfile->IsFile(); };
+	bool IsFileHandle() const { return _dirfile != nullptr && _dirfile->IsFile(); };
 
-	MyFile* GetF()				{ return IsFileHandle() ? ((MyFile*) _dirfile) : NULL; }
-	MyDir* GetD()				{ return IsDirHandle() ? ((MyDir*) _dirfile) : NULL; }
-
+	MyFile* GetF() const { return IsFileHandle() ? static_cast<MyFile*>(_dirfile) : nullptr; }
+	MyDir*  GetD() const { return IsDirHandle() ? static_cast<MyDir*>(_dirfile) : nullptr; }
 
 public:
 
 	File operator=(const File& src)
 	{
 		_dirfile = src._dirfile;
-		if (_dirfile) _dirfile->IncRef();
+		if (_dirfile)
+		{
+			_dirfile->IncRef();
+		}
 		return *this;
 	}
 
 	File(const File& src) : Stream(src)
 	{
 		_dirfile = src._dirfile;
-		if (_dirfile) _dirfile->IncRef();
+		if (_dirfile)
+		{
+			_dirfile->IncRef();
+		}
 	}
 
 	~File()
 	{
-		if (_dirfile) _dirfile->DecRef();
-		_dirfile = NULL;
+		if (_dirfile)
+		{
+			_dirfile->DecRef();
+		}
+		_dirfile = nullptr;
 	}
 
-	File()		{ _dirfile = NULL; }
+	File() { _dirfile = nullptr; }
 
 	void close()
 	{
-		if (_dirfile) 
+		if (_dirfile)
 		{
 			_dirfile->close();
 			_dirfile->DecRef();
-			_dirfile = NULL;
+			_dirfile = nullptr;
 		}
 	}
 
@@ -229,28 +252,28 @@ public:
 		}
 		_dirfile->IncRef();
 
-		strcpy_s(_dirfile->_name,name);
-		strcpy_s(_dirfile->_OSfilename,osfilename);
-		strcpy_s(_dirfile->_pathname,pathname);
+		strcpy_s(_dirfile->_name, name);
+		strcpy_s(_dirfile->_OSfilename, osfilename);
+		strcpy_s(_dirfile->_pathname, pathname);
 
 		_dirfile->open(mode);
 	}
 
-	operator bool()					{ return _dirfile != NULL && _dirfile->isopen(); }
+	operator bool() const { return _dirfile != nullptr && _dirfile->isopen(); }
 
-	virtual int available()	 override { return feof(GetF()->_f) ? 0 : 1; }
-	virtual char read() override	{ return (char)fgetc(GetF()->_f); }
+	virtual int  available() override { return feof(GetF()->_f) ? 0 : 1; }
+	virtual char read() override { return char(fgetc(GetF()->_f)); }
 
-	unsigned long size()
+	uint32_t size() const
 	{
 		struct stat st;
 		stat(_dirfile->_OSfilename, &st);
 		return st.st_size;
 	}
 
-	char* name()	{ return _dirfile->_name; }
-	
-	bool isDirectory(const char *name)
+	char* name() const { return _dirfile->_name; }
+
+	bool isDirectory(const char* name)
 	{
 		struct stat st;
 		return stat(name, &st) != -1 && (st.st_mode & _S_IFDIR) != 0;
@@ -261,19 +284,18 @@ public:
 		return isDirectory(_dirfile->_OSfilename);
 	}
 
-	File openNextFile()
+	File openNextFile() const
 	{
 		return GetD()->openNextFile();
 	}
 
-	void rewindDirectory() {}
+	void rewindDirectory() { }
 
 	//	virtual int peek();
 	//	virtual void flush();
 	//	int read(void *buf, uint16_t nbyte);
-	boolean seek(unsigned long pos)				{ return fseek(GetF()->_f, pos, SEEK_SET) == 0; }
-	unsigned long position()					{ return ftell(GetF()->_f); }
-
+	boolean  seek(uint32_t pos) { return fseek(GetF()->_f, pos, SEEK_SET) == 0; }
+	uint32_t position() const { return ftell(GetF()->_f); }
 };
 
 ////////////////////////////////////////////////////////////
@@ -289,7 +311,7 @@ inline File MyDir::openNextFile()
 			if (!FindNextFileA(_dir, &ffd))
 			{
 				FindClose(_dir);
-				_dir = NULL;
+				_dir    = nullptr;
 				_dirEof = true;
 				break;
 			}
@@ -299,7 +321,9 @@ inline File MyDir::openNextFile()
 			char tmp[256];
 			tmp[0] = 0;
 			if (strcmp(_pathname, "/") != 0)
+			{
 				strcpy_s(tmp, _pathname);
+			}
 			strcat_s(tmp, "/");
 			strcat_s(tmp, ffd.cFileName);
 
@@ -308,7 +332,7 @@ inline File MyDir::openNextFile()
 			if (!FindNextFileA(_dir, &ffd))
 			{
 				FindClose(_dir);
-				_dir = NULL;
+				_dir    = nullptr;
 				_dirEof = true;
 			}
 		}
@@ -321,14 +345,16 @@ inline File MyDir::openNextFile()
 
 		_dir = FindFirstFileA(_dirfindmask, &ffd);
 		if (_dir)
+		{
 			return openNextFile();
+		}
 	}
 
 	return ret;
 }
 
 
-inline File SDClass::open(const char *filename, uint8_t mode)
+inline File SDClass::open(const char* filename, uint8_t mode)
 {
 	char osfilename[256];
 	char pathname[256];
@@ -337,30 +363,48 @@ inline File SDClass::open(const char *filename, uint8_t mode)
 	File file;
 
 	if (filename[0] == 0)
+	{
 		return file;
+	}
 
-//	file._mode = mode;
+	//	file._mode = mode;
 
 	if (filename[0] == '/')
 	{
 		if (filename[1] == 0)
+		{
 			sprintf_s<256>(osfilename, SDPATH);
+		}
 		else
+		{
 			sprintf_s<256>(osfilename, SDPATH"%s", filename);
+		}
 	}
 	else
+	{
 		sprintf_s<256>(osfilename, SDPATH"\\%s", filename);
+	}
 
-	for (char*t = osfilename; *t; t++) if (*t == '/') *t = '\\';
+	for (char* t = osfilename; *t; t++)
+	{
+		if (*t == '/')
+		{
+			*t = '\\';
+		}
+	}
 
 	strcpy_s(pathname, filename);
 	char* dirend = strrchr(pathname, '/');
 	if (dirend)
+	{
 		strcpy_s(name, dirend + 1);
+	}
 	else
+	{
 		strcpy_s(name, filename);
+	}
 
-	file.open(name,osfilename,pathname, mode);
+	file.open(name, osfilename, pathname, mode);
 
 	return file;
 }

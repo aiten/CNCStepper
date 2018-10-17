@@ -21,14 +21,13 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PWMPIN, pin_t DIRPIN>
-class CAnalog8XIOControlSmooth
+template <pin_t PWMPIN, pin_t DIRPIN> class CAnalog8XIOControlSmooth
 {
 public:
 
-	void Init()		// init and set default value
+	void Init() // init and set default value
 	{
-		_nexttime = 0;
+		_nexttime     = 0;
 		_currentlevel = _iolevel = 0;
 		CHAL::pinMode(DIRPIN, OUTPUT);
 		Out(0);
@@ -37,13 +36,13 @@ public:
 #endif
 	}
 
-	void Init(int16_t level)		// init and set default value
+	void Init(int16_t level) // init and set default value
 	{
 		Init();
 		On(level);
 	}
 
-	void On(int16_t level)					// Set level and turn on
+	void On(int16_t level) // Set level and turn on
 	{
 #ifndef REDUCED_SIZE
 		_level = level;
@@ -51,19 +50,19 @@ public:
 		MySetLevel(level);
 	}
 
-	void OnMax()							// turn on at max level, same as On(255)
+	void OnMax() // turn on at max level, same as On(255)
 	{
 		On(255);
 	}
 
 #ifndef REDUCED_SIZE
-	void On()								// turn on at specified level (see Level property)
+	void On() // turn on at specified level (see Level property)
 	{
 		MySetLevel(_level);
 	}
 #endif
 
-	void Off()								// turn off, use On() to switch on at same value
+	void Off() // turn off, use On() to switch on at same value
 	{
 		MySetLevel(0);
 	}
@@ -97,14 +96,18 @@ public:
 
 	void Poll()
 	{
-		unsigned long milli;
-		if (_currentlevel != _iolevel && (milli=millis()) >= _nexttime)
+		uint32_t milli;
+		if (_currentlevel != _iolevel && (milli = millis()) >= _nexttime)
 		{
 			_nexttime = milli + _delayMs;
 			if (_currentlevel > _iolevel)
+			{
 				_currentlevel--;
+			}
 			else
+			{
 				_currentlevel++;
+			}
 
 			Out(_currentlevel);
 		}
@@ -126,19 +129,19 @@ private:
 	static void Out(int16_t lvl)
 	{
 		CHAL::digitalWrite(DIRPIN, lvl >= 0);
-		CHAL::analogWrite8(PWMPIN, (uint8_t)abs(lvl));
+		CHAL::analogWrite8(PWMPIN, uint8_t(abs(lvl)));
 	}
 
-	unsigned long _nexttime;		// time to modify level
+	uint32_t _nexttime; // time to modify level
 
 #ifndef REDUCED_SIZE
-	int16_t	_level;					// value if "enabled", On/Off will switch between 0..level
+	int16_t _level; // value if "enabled", On/Off will switch between 0..level
 #endif
 
-	int16_t	_currentlevel;			// used for analogWrite
-	int16_t	_iolevel;				// current level
+	int16_t _currentlevel; // used for analogWrite
+	int16_t _iolevel;      // current level
 
-	uint8_t	_delayMs;
+	uint8_t _delayMs;
 
 	void MySetLevel(int16_t level)
 	{

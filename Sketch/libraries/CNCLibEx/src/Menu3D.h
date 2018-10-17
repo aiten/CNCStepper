@@ -33,17 +33,16 @@ public:
 
 	////////////////////////////////////////////////////////
 
-	void MenuButtonPressSDStart(const SMenuItemDef*);
+	void MenuButtonPressSDStart(const SMenuItemDef* );
 	void MenuButtonPressSDSelect(const SMenuItemDef*);
 
 	void SetSDMenu() { SetMenu(_SDMenuDef); }
 
 protected:
 
-	const SMenuDef*		_SDMenuDef= NULL;
-
+	const SMenuDef* _SDMenuDef = nullptr;
 };
 
-#define MENUENTRY_SDFILES ((const __FlashStringHelper*)1)
+#define MENUENTRY_SDFILES ((FLSTR)1)
 
 ////////////////////////////////////////////////////////

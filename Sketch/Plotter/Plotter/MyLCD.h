@@ -28,14 +28,3 @@
 #elif LCD_TYPE==2
 #include "LCD_12864_u8g/MyLcd.h"
 #endif
-
-
-
-
-
-
-
-
-
-
-

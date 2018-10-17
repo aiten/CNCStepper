@@ -33,18 +33,16 @@
 
 CPlotter::CPlotter()
 {
-	_isPenDown = false;
+	_isPenDown        = false;
 	_isPenDownTimeout = false;
-	_isDelayPen = false;
-	_pen = 0;
-	_havePen = false;
+	_isDelayPen       = false;
+	_pen              = 0;
+	_havePen          = false;
 }
 
 ////////////////////////////////////////////////////////////
 
-void CPlotter::Init()
-{
-}
+void CPlotter::Init() {}
 
 ////////////////////////////////////////////////////////////
 
@@ -164,10 +162,10 @@ bool CPlotter::MoveToPenPosition(feedrate_t feedrate, mm1000_t pos)
 
 #elif PENTYPE == PENTYPE_SERVO    // servo
 
-  CStepper::GetInstance()->IoControl(CControl::Servo2, (short) pos);
-  CStepper::GetInstance()->Wait(feedrate / 10);
+	CStepper::GetInstance()->IoControl(CControl::Servo2, (int16_t)pos);
+	CStepper::GetInstance()->Wait(feedrate / 10);
 
-  return true;
+	return true;
 
 #else
 
@@ -182,7 +180,7 @@ bool CPlotter::ToPenChangePos(uint8_t pen)
 {
 	mm1000_t ofs_x = pen * CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, penchangepos_x_ofs));
 	mm1000_t ofs_y = pen * CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, penchangepos_y_ofs));;
-	
+
 	CMotionControlBase::GetInstance()->MoveAbsEx(
 		CHPGLParser::_state.FeedRateUp,
 		X_AXIS, ConvertConfigPos(CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, penchangepos_x)), X_AXIS) + ofs_x,
@@ -193,8 +191,8 @@ bool CPlotter::ToPenChangePos(uint8_t pen)
 		return false;
 
 	return MoveToPenPosition(
-			CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, movepenchangeFeedrate)),
-			ConvertConfigPos(CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, penchangepos_z)), Z_AXIS));
+		CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, movepenchangeFeedrate)),
+		ConvertConfigPos(CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, penchangepos_z)), Z_AXIS));
 }
 
 ////////////////////////////////////////////////////////////
@@ -202,7 +200,7 @@ bool CPlotter::ToPenChangePos(uint8_t pen)
 bool CPlotter::OffPenChangePos(uint8_t pen)
 {
 	return MoveToPenPosition(
-			CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, movepenchangeFeedrate)),
+		CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, movepenchangeFeedrate)),
 		ConvertConfigPos(CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, penuppos)), Z_AXIS));
 }
 
@@ -261,18 +259,18 @@ bool CPlotter::PenFromDepot(uint8_t pen)
 		return false;
 
 	CStepper::GetInstance()->IoControl(CControl::Servo1, CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampClosePos)));
-	CStepper::GetInstance()->Wait(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampClosePos))/10);
+	CStepper::GetInstance()->Wait(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampClosePos)) / 10);
 
-//	_servo1.write(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampClosePos)));
-//	delay(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampCloseDelay)));
+	//	_servo1.write(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampClosePos)));
+	//	delay(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampCloseDelay)));
 
 	OffPenChangePos(pen);
 
 	////////////////////////////////////
-	
+
 	CStepper::GetInstance()->WaitBusy();
 
-	_pen = pen;
+	_pen     = pen;
 	_havePen = true;
 	return true;
 }
@@ -290,9 +288,8 @@ mm1000_t CPlotter::ConvertConfigPos(mm1000_t pos, axis_t axis)
 
 	if (pos >= 0x7fff000l)
 	{
-		eepromofs_t ofs = sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions)*axis;
-		pos = CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].size) + ofs);
+		eepromofs_t ofs = sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis;
+		pos             = CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].size) + ofs);
 	}
 	return pos;
 }
-

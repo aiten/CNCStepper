@@ -54,4 +54,3 @@
 ////////////////////////////////////////////////////////
 
 #define MESSAGE_MYCONTROL_Starting          F("CNCShield:" __DATE__ )
-

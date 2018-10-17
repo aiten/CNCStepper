@@ -37,10 +37,14 @@ public:
 
 	virtual void Parse() override;
 
-	static mm1000_t HPGLToMM1000X(long xx);
-	static mm1000_t HPGLToMM1000Y(long yy);
+	static mm1000_t HPGLToMM1000X(int32_t xx);
+	static mm1000_t HPGLToMM1000Y(int32_t yy);
 
-	static void Init() { super::Init(); _state.Init(); }
+	static void Init()
+	{
+		super::Init();
+		_state.Init();
+	}
 
 	struct SState
 	{
@@ -68,9 +72,9 @@ public:
 
 		void SetFeedRates()
 		{
-			FeedRateUp = CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, penupFeedrate));
-			FeedRateUp = CMotionControlBase::GetInstance()->GetMaxFeedRate(X_AXIS, FeedRateUp);
-			FeedRateUp = -FeedRateUp;
+			FeedRateUp   = CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, penupFeedrate));
+			FeedRateUp   = CMotionControlBase::GetInstance()->GetMaxFeedRate(X_AXIS, FeedRateUp);
+			FeedRateUp   = -FeedRateUp;
 			FeedRateDown = CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, pendownFeedrate));
 		}
 	};
@@ -88,20 +92,6 @@ private:
 	void IgnoreCommand();
 	void InitCommand();
 	void PenMoveCommand(uint8_t cmdidx);
-
 };
 
 ////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-

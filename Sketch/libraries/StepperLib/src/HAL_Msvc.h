@@ -54,36 +54,38 @@
 
 #define TIMEROVERHEAD		(0)				// decrease Timervalue for ISR overhead before set new timer
 
-inline void CHAL::DisableInterrupts()	{	cli(); }
-inline void CHAL::EnableInterrupts()	{	sei(); }
+inline void CHAL::DisableInterrupts() { cli(); }
+inline void CHAL::EnableInterrupts() { sei(); }
 
-inline void CHAL::DelayMicroseconds0250() {  }
-inline void CHAL::DelayMicroseconds0312() {  }
-inline void CHAL::DelayMicroseconds0375() {  }
-inline void CHAL::DelayMicroseconds0438() {  }
-inline void CHAL::DelayMicroseconds0500() {  }
+inline void CHAL::DelayMicroseconds0250() {}
+inline void CHAL::DelayMicroseconds0312() {}
+inline void CHAL::DelayMicroseconds0375() {}
+inline void CHAL::DelayMicroseconds0438() {}
+inline void CHAL::DelayMicroseconds0500() {}
+
 inline void CHAL::DelayMicroseconds(unsigned int) {}
 
-inline irqflags_t CHAL::GetSREG()				{ return SREG; }
-inline void CHAL::SetSREG(irqflags_t a)			{ SREG=a; }
+inline irqflags_t CHAL::GetSREG() { return SREG; }
+inline void       CHAL::SetSREG(irqflags_t a) { SREG = a; }
 
 #define __asm__(a)
 
-inline void CHAL::InitTimer0(HALEvent evt){ _TimerEvent0 = evt; }
-inline void CHAL::RemoveTimer0()			{}
-inline void CHAL::StartTimer0(timer_t)		{}
-inline void CHAL::StopTimer0()				{}
+inline void CHAL::InitTimer0(HALEvent evt) { _TimerEvent0 = evt; }
 
-inline void CHAL::InitTimer1OneShot(HALEvent evt){ _TimerEvent1 = evt; }
-inline void CHAL::RemoveTimer1()			{}
-inline void CHAL::StartTimer1OneShot(timer_t)		{}
-inline void CHAL::StopTimer1()				{}
+inline void CHAL::RemoveTimer0() {}
+inline void CHAL::StartTimer0(timer_t) {}
+inline void CHAL::StopTimer0() {}
 
-inline void CHAL::InitTimer2OneShot(HALEvent evt){ _TimerEvent2 = evt; }
-inline void CHAL::RemoveTimer2()			{}
-inline void CHAL::StartTimer2OneShot(timer_t)		{}
+inline void CHAL::InitTimer1OneShot(HALEvent evt) { _TimerEvent1 = evt; }
+inline void CHAL::RemoveTimer1() {}
+inline void CHAL::StartTimer1OneShot(timer_t) {}
+
+inline void CHAL::StopTimer1() {}
+inline void CHAL::InitTimer2OneShot(HALEvent evt) { _TimerEvent2 = evt; }
+inline void CHAL::RemoveTimer2() {}
+inline void CHAL::StartTimer2OneShot(timer_t  ) {}
 inline void CHAL::ReStartTimer2OneShot(timer_t) {}
-inline void CHAL::StopTimer2()				{}
+inline void CHAL::StopTimer2() {}
 
 /*
 inline void CHAL::InitTimer3(HALEvent evt){ _TimerEvent3 = evt; }
@@ -107,7 +109,7 @@ inline void CHAL::StopTimer5()				{}
 
 inline void CHAL::digitalWrite(pin_t pin, uint8_t lowOrHigh)
 {
-	::digitalWrite(pin,lowOrHigh);
+	::digitalWrite(pin, lowOrHigh);
 }
 
 inline uint8_t CHAL::digitalRead(pin_t pin)
@@ -131,16 +133,16 @@ inline void CHAL::pinModeInputPullUp(pin_t pin)
 }
 
 inline void CHAL::pinMode(pin_t pin, uint8_t mode)
-{ 
-	::pinMode(pin,mode); 
+{
+	::pinMode(pin, mode);
 }
 
-inline void CHAL::eeprom_write_dword(uint32_t *  __p, uint32_t  	__value)
+inline void CHAL::eeprom_write_dword(uint32_t* __p, uint32_t __value)
 {
 	::eeprom_write_dword(__p, __value);
 }
 
-inline uint32_t CHAL::eeprom_read_dword(const uint32_t * __p)
+inline uint32_t CHAL::eeprom_read_dword(const uint32_t* __p)
 {
 	return ::eeprom_read_dword(__p);
 }
@@ -164,5 +166,4 @@ inline bool CHAL::NeedFlushEeprom()
 
 ////////////////////////////////////////////////////////
 
-#endif 
-
+#endif

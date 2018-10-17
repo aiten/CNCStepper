@@ -19,7 +19,7 @@
 
 #pragma once
 
-typedef  uint8_t u8g_fntpgm_uint8_t;
+typedef uint8_t u8g_fntpgm_uint8_t;
 
 #define clrscr() system("cls")
 
@@ -29,13 +29,16 @@ class U8GLIB // : public Stream
 	char _tmp[1024];
 
 public:
+	U8GLIB() = default;
+
 	void begin() {};
-	void firstPage() { _buffer[0]=0; };
-	bool nextPage()
+	void firstPage() { _buffer[0] = 0; };
+
+	bool nextPage() const
 	{
 		char filename[_MAX_PATH];
 		::GetTempPathA(_MAX_PATH, filename);
-		strcat_s(filename,"\\CNCLib_LCD.txt");
+		strcat_s(filename, "\\CNCLib_LCD.txt");
 
 		FILE* fout;
 		fopen_s(&fout, filename, "wt");
@@ -47,14 +50,38 @@ public:
 
 		return false;
 	}
-	void drawStr(int x, int y, const char* text) { setPrintPos(x, y); print(text); }
-	void setFont(const u8g_fntpgm_uint8_t *font) { font; };
-	void setPrintPos(int x, int y)  { sprintf_s(_tmp, "SP:%i:%i\n",x,y); strcat_s(_buffer,_tmp); };
 
-	void print(const char ch)		{ sprintf_s(_tmp, "P:%c\n",ch); strcat_s(_buffer, _tmp); };
+	void drawStr(int x, int y, const char* text)
+	{
+		setPrintPos(x, y);
+		print(text);
+	}
 
-	void print(const char* text)	{ sprintf_s(_tmp, "P:%s\n", text); strcat_s(_buffer, _tmp); };
-	void println(const char* text)	{ sprintf_s(_tmp, "PL:%s\n", text); strcat_s(_buffer, _tmp); };
+	void setFont(const u8g_fntpgm_uint8_t*) { };
+
+	void setPrintPos(int x, int y)
+	{
+		sprintf_s(_tmp, "SP:%i:%i\n", x, y);
+		strcat_s(_buffer, _tmp);
+	};
+
+	void print(const char ch)
+	{
+		sprintf_s(_tmp, "P:%c\n", ch);
+		strcat_s(_buffer, _tmp);
+	};
+
+	void print(const char* text)
+	{
+		sprintf_s(_tmp, "P:%s\n", text);
+		strcat_s(_buffer, _tmp);
+	};
+
+	void println(const char* text)
+	{
+		sprintf_s(_tmp, "PL:%s\n", text);
+		strcat_s(_buffer, _tmp);
+	};
 };
 
 class U8GLIB_ST7920_128X64_1X : public U8GLIB

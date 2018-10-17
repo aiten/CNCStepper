@@ -21,14 +21,13 @@
 
 //////////////////////////////////////////
 
-template<class TInput, class TOutput>
-class CLinearLookup
+template <class TInput, class TOutput> class CLinearLookup
 {
 public:
 	struct SLookupTable
 	{
-		TInput	input;
-		TOutput	output;
+		TInput  input;
+		TOutput output;
 	};
 
 	typedef uint8_t index_t;
@@ -66,9 +65,9 @@ public:
 
 	TOutput LinearInterpolation(TInput input, index_t i) const
 	{
-		TInput   distinput = input - GetInput(i);
-		TInput   diffinput = GetInput(i + 1) - GetInput(i);
-		TOutput  diffoutput = GetOutput(i + 1) - GetOutput(i);
+		TInput  distinput  = input - GetInput(i);
+		TInput  diffinput  = GetInput(i + 1) - GetInput(i);
+		TOutput diffoutput = GetOutput(i + 1) - GetOutput(i);
 
 		//return pTable[i].output + ( distinput / diffinput  ) * diffoutput; => OK if TInput is float
 		return GetOutput(i) + (distinput * diffoutput) / diffinput;
@@ -79,15 +78,14 @@ public:
 		// table must be sorted!!!!
 		// binary serach
 
-		index_t c;
-		index_t left = 0;
+		index_t left  = 0;
 		index_t right = _tabelSize - 1;
 
-		if (_tabelSize == 0)	return TOutput(0);
+		if (_tabelSize == 0) return TOutput(0);
 
 		while (true)
 		{
-			c = left + ((right - left) / 2);
+			index_t c = left + ((right - left) / 2);
 
 			TInput val = GetInput(c);
 
@@ -135,12 +133,11 @@ public:
 	CLinearLookup(const SLookupTable* pTable, index_t tabelSize)
 	{
 		_tabelSize = tabelSize;
-		_pTable = pTable;
+		_pTable    = pTable;
 	}
 
 private:
 
 	const SLookupTable* _pTable;
-	uint8_t _tabelSize;
-
+	uint8_t             _tabelSize;
 };

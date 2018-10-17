@@ -32,7 +32,7 @@ class CHelpParser : public CParser
 {
 public:
 
-	CHelpParser(CStreamReader* reader,Stream* output) : CParser(reader,output){}
+	CHelpParser(CStreamReader* reader, Stream* output) : CParser(reader, output) { }
 
 protected:
 
@@ -42,7 +42,9 @@ protected:
 	bool MoveRel(axis_t axis);
 	bool MoveAbs();
 	bool MoveAbs(axis_t axis);
+
 	bool SetPosition(axis_t axis);
+
 	bool MyGoToReference(axis_t axis);
 	bool SetSpeed();
 

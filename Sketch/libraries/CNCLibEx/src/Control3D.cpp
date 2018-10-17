@@ -42,7 +42,7 @@ void CControl3D::Init()
 {
 	super::Init();
 	CGCode3DParser::Init();
-	ClearPrintFromSD ();
+	ClearPrintFromSD();
 }
 
 ////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ void CControl3D::InitSD(pin_t sdEnablePin)
 {
 	StepperSerial.print(MESSAGE_CONTROL3D_InitializingSDCard);
 
-	ClearPrintFromSD ();
+	ClearPrintFromSD();
 
 	CHAL::pinModeOutput(sdEnablePin);
 	CHAL::digitalWrite(sdEnablePin, HIGH);
@@ -99,8 +99,8 @@ void CControl3D::ReInitSD()
 
 bool CControl3D::Parse(CStreamReader* reader, Stream* output)
 {
-	CGCode3DParser gcode(reader,output);
-	return ParseAndPrintResult(&gcode,output);
+	CGCode3DParser gcode(reader, output);
+	return ParseAndPrintResult(&gcode, output);
 }
 
 ////////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ void CControl3D::ReadAndExecuteCommand()
 		}
 		else
 		{
-			FileReadAndExecuteCommand(&file,NULL);			// one line!!! Output goes to NULL
+			FileReadAndExecuteCommand(&file, nullptr); // one line!!! Output goes to NULL
 
 			if (file.available() == 0)
 			{

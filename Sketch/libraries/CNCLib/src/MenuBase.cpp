@@ -60,21 +60,21 @@ CMenuBase::MenuFunction CMenuBase::SMenuItemDef::GetButtonPress() const
 
 ////////////////////////////////////////////////////////////
 
-CMenuBase::menupos_t CMenuBase::GetMenuItemCount()
+CMenuBase::menupos_t CMenuBase::GetMenuItemCount() const
 {
 	return GetMenuDef()->GetItemCount();
 }
 
 ////////////////////////////////////////////////////////////
 
-const __FlashStringHelper*  CMenuBase::GetItemText(menupos_t idx)
+FLSTR CMenuBase::GetItemText(menupos_t idx) const
 {
 	return GetMenuDef()->GetItems()[idx].GetText();
 }
 
 ////////////////////////////////////////////////////////////
 
-const __FlashStringHelper*  CMenuBase::GetText()
+FLSTR CMenuBase::GetText() const
 {
 	return GetMenuDef()->GetText();
 };
@@ -83,8 +83,9 @@ const __FlashStringHelper*  CMenuBase::GetText()
 
 bool CMenuBase::Select(menupos_t idx)
 {
-	const SMenuItemDef* item = &GetMenuDef()->GetItems()[idx];
-	MenuFunction fnc = item->GetButtonPress();
+	auto item = &GetMenuDef()->GetItems()[idx];
+	auto fnc  = item->GetButtonPress();
+
 	if (fnc != NULL)
 	{
 		(this->*fnc)(item);
@@ -96,19 +97,20 @@ bool CMenuBase::Select(menupos_t idx)
 
 ////////////////////////////////////////////////////////////
 
-void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef*def)
+void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef* def)
 {
-	const SMenuDef* newMenu = (const SMenuDef*) def->GetParam1();
-	const SMenuDef* posMenu = (const SMenuDef*) def->GetParam2();
+	auto newMenu = (const SMenuDef*)def->GetParam1();
+	auto posMenu = (const SMenuDef*)def->GetParam2();
+
 	SetMenu(newMenu);
 
-	if (posMenu!=NULL)
+	if (posMenu != nullptr)
 	{
 		// param2 != NULL => find index
-		GetNavigator().SetPosition(newMenu->FindMenuIdx((uintptr_t) def, [](const SMenuItemDef* def, uintptr_t param) -> bool
+		GetNavigator().SetPosition(newMenu->FindMenuIdx(uintptr_t(def), [](const SMenuItemDef* def, uintptr_t param) -> bool
 		{
-			return	def->GetButtonPress() == &CMenuBase::MenuButtonPressSetMenu &&			// must be setMenu
-					def->GetParam1() == ((const SMenuItemDef*)param)->GetParam2();			// param1 or new menu must be param2 of "Back from"
+			return def->GetButtonPress() == &CMenuBase::MenuButtonPressSetMenu && // must be setMenu
+				def->GetParam1() == ((const SMenuItemDef*)param)->GetParam2();    // param1 or new menu must be param2 of "Back from"
 		}));
 	}
 
@@ -119,18 +121,19 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef*def)
 
 void CMenuBase::MenuButtonPressMenuBack(const SMenuItemDef* def)
 {
-	const SMenuDef* newMenu = (const SMenuDef*)def->GetParam1();
-	const struct SMenuDef* oldMenu = GetMenuDef();
-	
+	auto newMenu = (const SMenuDef*)def->GetParam1();
+	auto oldMenu = GetMenuDef();
+
 	SetMenu(newMenu);
 
-	GetNavigator().SetPosition(GetMenuDef()->FindMenuIdx((uintptr_t) oldMenu, [](const SMenuItemDef* def, uintptr_t oldMenu) -> bool
+	GetNavigator().SetPosition(GetMenuDef()->FindMenuIdx(uintptr_t(oldMenu), [](const SMenuItemDef* def, uintptr_t oldMenu) -> bool
 	{
 		return def->GetParam1() == oldMenu && def->GetButtonPress() == &CMenuBase::MenuButtonPressSetMenu;
 	}));
 
 	Changed();
 }
+
 ////////////////////////////////////////////////////////////
 
 uint8_t CMenuBase::FindMenuIndexBack()
@@ -143,39 +146,46 @@ uint8_t CMenuBase::FindMenuIndexBack()
 
 ////////////////////////////////////////////////////////////
 
-void CMenuBase::MenuButtonPressSetCommand(const SMenuItemDef*def)
+void CMenuBase::MenuButtonPressSetCommand(const SMenuItemDef* def)
 {
-	PostCommand(EGCodeSyntaxType::GCodeBasic, (const __FlashStringHelper*)def->GetParam1());
+	PostCommand(EGCodeSyntaxType::GCodeBasic, FLSTR(def->GetParam1()));
 	CLcd::GetInstance()->OKBeep();
 }
 
 ////////////////////////////////////////////////////////////
 
-void CMenuBase::MenuButtonPressMove(const SMenuItemDef*def)
+void CMenuBase::MenuButtonPressMove(const SMenuItemDef* def)
 {
-	axis_t axis = (axis_t)(unsigned int)GetMenuDef()->GetParam1();
-	uint8_t dist = (uint8_t)(unsigned int)def->GetParam1();
+	auto axis = axis_t((unsigned int)GetMenuDef()->GetParam1());
+	auto dist = uint8_t((unsigned int)def->GetParam1());
 
-	if (dist == MoveHome) { MenuButtonPressHomeA(axis); return; }
+	if (dist == MoveHome)
+	{
+		MenuButtonPressHomeA(axis);
+		return;
+	}
 
 	CGCodeBuilder builder;
 	InitPostCommand(EGCodeSyntaxType::GCodeBasic, builder.GetCommand());
 
 	builder.Add(F("g91 g0 "))
-		.AddAxisName(axis);
+	       .AddAxisName(axis);
 
 	switch (dist)
 	{
-		case MoveP100:	builder.Add(F("100")); break;
-		case MoveP10:	builder.Add(F("10")); break;
-		case MoveP1:	builder.Add(F("1")); break;
-		case MoveP01:	builder.Add(F("0.1")); break;
-		case MoveP001:	builder.Add(F("0.01")); break;
-		case MoveM001:	builder.Add(F("-0.01")); break;
-		case MoveM01:	builder.Add(F("-0.1")); break;
-		case MoveM1:	builder.Add(F("-1")); break;
-		case MoveM10:	builder.Add(F("-10")); break;
-		case MoveM100:  builder.Add(F("-100")); break;
+		// @formatter:off — disable formatter after this line
+		case MoveP100: builder.Add(F("100"));	break;
+		case MoveP10: builder.Add(F("10"));		break;
+		case MoveP1: builder.Add(F("1"));		break;
+		case MoveP01: builder.Add(F("0.1"));	break;
+		case MoveP001: builder.Add(F("0.01"));	break;
+		case MoveM001: builder.Add(F("-0.01"));	break;
+		case MoveM01: builder.Add(F("-0.1"));	break;
+		case MoveM1: builder.Add(F("-1"));		break;
+		case MoveM10: builder.Add(F("-10"));	break;
+		case MoveM100: builder.Add(F("-100"));	break;
+		default: break;
+			// @formatter:on — enable formatter after this line
 	}
 
 	builder.Add(F(" g90"));
@@ -185,27 +195,28 @@ void CMenuBase::MenuButtonPressMove(const SMenuItemDef*def)
 
 ////////////////////////////////////////////////////////////
 
-void CMenuBase::MenuButtonPressRotate(const SMenuItemDef*def)
+void CMenuBase::MenuButtonPressRotate(const SMenuItemDef* def)
 {
-	uint8_t req = (uint8_t)(unsigned int)def->GetParam1();
+	auto req = uint8_t((unsigned int)def->GetParam1());
 
 	switch (req)
 	{
-		case RotateClear:		PostCommand(EGCodeSyntaxType::GCode, F("g68.10")); break;
-		case RotateOffset:		PostCommand(EGCodeSyntaxType::GCode, F("g68.11")); break;
-		case RotateSetYZ:		PostCommand(EGCodeSyntaxType::GCode, F("g68.13 j0k0")); break;
-		case RotateSetX:		PostCommand(EGCodeSyntaxType::GCode, F("g68.14 i0")); break;
-		default:				CLcd::GetInstance()->ErrorBeep(); return;
-
+		// @formatter:off — disable formatter after this line
+		case RotateClear: PostCommand(EGCodeSyntaxType::GCode, F("g68.10"));	break;
+		case RotateOffset: PostCommand(EGCodeSyntaxType::GCode, F("g68.11"));	break;
+		case RotateSetYZ: PostCommand(EGCodeSyntaxType::GCode, F("g68.13 j0k0"));	break;
+		case RotateSetX: PostCommand(EGCodeSyntaxType::GCode, F("g68.14 i0"));	break;
+		default: CLcd::GetInstance()->ErrorBeep(); break;
+			// @formatter:on — enable formatter after this line
 	}
 	CLcd::GetInstance()->OKBeep();
 }
 
 ////////////////////////////////////////////////////////////
 
-void CMenuBase::MenuButtonPressProbe(const SMenuItemDef*def)
+void CMenuBase::MenuButtonPressProbe(const SMenuItemDef* def)
 {
-	MenuButtonPressProbe((axis_t)(unsigned int)def->GetParam1());
+	MenuButtonPressProbe(axis_t((unsigned int)def->GetParam1()));
 }
 
 ////////////////////////////////////////////////////////////
@@ -217,30 +228,30 @@ void CMenuBase::MenuButtonPressProbe(axis_t axis)
 	InitPostCommand(EGCodeSyntaxType::GCode, builder.GetCommand());
 
 	builder.Add(F("g91 g31 "))
-			.AddAxisName(axis)
-			.Add(-10000)
-			.Add(F(" F100 g90"));
+	       .AddAxisName(axis)
+	       .Add(-10000)
+	       .Add(F(" F100 g90"));
 
 	if (PostCommand(builder.GetCommand()))
 	{
-		eepromofs_t ofs = sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions)*axis;
+		eepromofs_t ofs = sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis;
 
 		builder.InitCommand();
 		InitPostCommand(EGCodeSyntaxType::GCode, builder.GetCommand());
 
 		builder.Add(F("g92 "))
-			.AddAxisName(axis)
-			.Add(- (mm1000_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].probesize) + ofs));
+		       .AddAxisName(axis)
+		       .Add(- mm1000_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].probesize) + ofs)));
 
 		PostCommand(builder.GetCommand());
 
 		builder.InitCommand();
 		InitPostCommand(EGCodeSyntaxType::GCode, builder.GetCommand());
-		
+
 		builder.Add(F("g91 "))
-			.AddAxisName(axis)
-			.Add(3000)
-			.Add(F(" g90"));
+		       .AddAxisName(axis)
+		       .Add(3000)
+		       .Add(F(" g90"));
 
 		PostCommand(builder.GetCommand());
 	}
@@ -248,9 +259,9 @@ void CMenuBase::MenuButtonPressProbe(axis_t axis)
 
 ////////////////////////////////////////////////////////////
 
-void CMenuBase::MenuButtonPressHome(const SMenuItemDef*def)
+void CMenuBase::MenuButtonPressHome(const SMenuItemDef* def)
 {
-	MenuButtonPressHomeA((axis_t)(unsigned int)def->GetParam1());
+	MenuButtonPressHomeA(axis_t((unsigned int)def->GetParam1()));
 }
 
 void CMenuBase::MenuButtonPressHomeA(axis_t axis)
@@ -259,12 +270,14 @@ void CMenuBase::MenuButtonPressHomeA(axis_t axis)
 	InitPostCommand(EGCodeSyntaxType::GCode, builder.GetCommand());
 
 	builder.Add(F("g53 g0"))
-		.AddAxisName(axis);
+	       .AddAxisName(axis);
 
 	switch (axis)
 	{
-		case Z_AXIS:	builder.Add(F("#5163")); break;
-		default:		builder.Add(F("0")); break;
+		case Z_AXIS: builder.Add(F("#5163"));
+			break;
+		default: builder.Add(F("0"));
+			break;
 	}
 	PostCommand(builder.GetCommand());
 	CLcd::GetInstance()->OKBeep();
@@ -274,14 +287,14 @@ void CMenuBase::MenuButtonPressHomeA(axis_t axis)
 
 void CMenuBase::MenuButtonPressMoveG92(const SMenuItemDef*)
 {
-	axis_t axis = (axis_t)(unsigned int)GetMenuDef()->GetParam1();
+	auto axis = axis_t((unsigned int)GetMenuDef()->GetParam1());
 
 	CGCodeBuilder builder;
 	InitPostCommand(EGCodeSyntaxType::GCode, builder.GetCommand());
 
 	builder.Add(F("g92 "))
-		.AddAxisName(axis)
-		.Add(F("0"));
+	       .AddAxisName(axis)
+	       .Add(F("0"));
 
 	PostCommand(builder.GetCommand());
 	CLcd::GetInstance()->OKBeep();
@@ -292,9 +305,13 @@ void CMenuBase::MenuButtonPressMoveG92(const SMenuItemDef*)
 void CMenuBase::MenuButtonPressSpindle(const SMenuItemDef*)
 {
 	if (CControl::GetInstance()->IOControl(CControl::SpindleCW) != 0)
+	{
 		PostCommand(EGCodeSyntaxType::GCodeBasic, F("m5"));
+	}
 	else
+	{
 		PostCommand(EGCodeSyntaxType::GCodeBasic, F("m3"));
+	}
 	CLcd::GetInstance()->OKBeep();
 }
 
@@ -303,9 +320,13 @@ void CMenuBase::MenuButtonPressSpindle(const SMenuItemDef*)
 void CMenuBase::MenuButtonPressCoolant(const SMenuItemDef*)
 {
 	if (CControl::GetInstance()->IOControl(CControl::Coolant) != 0)
+	{
 		PostCommand(EGCodeSyntaxType::GCodeBasic, F("m9"));
+	}
 	else
+	{
 		PostCommand(EGCodeSyntaxType::GCodeBasic, F("m7"));
+	}
 	CLcd::GetInstance()->OKBeep();
 }
 

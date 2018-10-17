@@ -98,4 +98,3 @@
 #define MESSAGE_GCODE_G90OR91						StepperMessage("40","G90 or G91 expected")
 
 ////////////////////////////////////////////////////////
-

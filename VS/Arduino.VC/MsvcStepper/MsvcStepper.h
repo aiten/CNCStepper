@@ -34,34 +34,34 @@
 
 class CMsvcStepper : public CStepper
 {
-
 public:
 
 	CMsvcStepper();
 
-	virtual void OnIdle(unsigned long idletime) override;
+	virtual void OnIdle(uint32_t idletime) override;
 	virtual void OnStart() override;
 	virtual void OnWait(EnumAsByte(EWaitType) wait) override;
 
 	virtual void Init() override;
 
-	virtual uint8_t  GetReferenceValue(uint8_t referenceId) override;
-	virtual bool  IsAnyReference() override { return GetReferenceValue(0)==_pod._referenceHitValue[0]; };
+	virtual uint8_t GetReferenceValue(uint8_t referenceid) override;
+	virtual bool    IsAnyReference() override { return GetReferenceValue(0) == _pod._referenceHitValue[0]; };
 
-	void MoveRel3(sdist_t dX, sdist_t dY, sdist_t dZ, steprate_t vMax = 0)	{ MoveRelEx(vMax, X_AXIS, dX, Y_AXIS, dY, Z_AXIS, dZ, -1); }
-	void MoveAbs3(udist_t X, udist_t Y, udist_t Z, steprate_t vMax = 0)		{ MoveAbsEx(vMax, X_AXIS, X, Y_AXIS, Y, Z_AXIS, Z, -1); }
+	void MoveRel3(sdist_t dX, sdist_t dY, sdist_t dZ, steprate_t vMax = 0) { MoveRelEx(vMax, X_AXIS, dX, Y_AXIS, dY, Z_AXIS, dZ, -1); }
+	void MoveAbs3(udist_t X, udist_t  Y, udist_t  Z, steprate_t  vMax = 0) { MoveAbsEx(vMax, X_AXIS, X, Y_AXIS, Y, Z_AXIS, Z, -1); }
 
 protected:
 
-	virtual void StepBegin(const SStepBuffer* step) override;
-	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override;
-	virtual void StepRequest(bool isr) override;
+	virtual void StepBegin(const SStepBuffer* stepbuffer) override;
 
-	virtual void  SetEnable(axis_t axis, uint8_t level, bool /* force */) override { _level[axis] = level; };
-	virtual uint8_t GetEnable(axis_t axis) override		{ return _level[axis]; }
+	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override;
+	virtual void StepRequest(bool   isr) override;
+
+	virtual void    SetEnable(axis_t axis, uint8_t level, bool /* force */) override { _level[axis] = level; };
+	virtual uint8_t GetEnable(axis_t axis) override { return _level[axis]; }
 
 public:
-	
+
 	// function for testing purpose (make public)
 
 	struct SMovementX
@@ -69,14 +69,15 @@ public:
 		SMovement mv;
 	};
 
-	SMovementX GetMovement(uint8_t idxfromhead) 
+	SMovementX GetMovement(uint8_t idxfromhead)
 	{
 		SMovementX mv;
 		idxfromhead = _movements._queue.NextIndex(_movements._queue.GetHeadPos(), idxfromhead);
-		mv.mv = _movements._queue.Buffer[idxfromhead];
+		mv.mv       = _movements._queue.Buffer[idxfromhead];
 		return mv;
 	}
-	uint8_t GetMovementCount()
+
+	uint8_t GetMovementCount() const
 	{
 		return _movements._queue.Count();
 	}
@@ -87,16 +88,16 @@ private:
 
 public:
 
-	virtual void StartTimer(timer_t timerB) override;		// 0 => set idle timer (==Timer not running)
-	virtual void SetIdleTimer() override;					// set idle Timer
+	virtual void StartTimer(timer_t timerB) override; // 0 => set idle timer (==Timer not running)
+	virtual void SetIdleTimer() override;             // set idle Timer
 
-	virtual void OptimizeMovementQueue(bool force)  override;
-	virtual bool MoveReference(axis_t axis, uint8_t referenceid, bool toMin, steprate_t vMax, sdist_t maxdist, sdist_t distToRef, sdist_t distIfRefIsOn)  override;
+	virtual void OptimizeMovementQueue(bool force) override;
+	virtual bool MoveReference(axis_t       axis, uint8_t referenceid, bool toMin, steprate_t vMax, sdist_t maxdist, sdist_t distToRef, sdist_t distIfRefIsOn) override;
 
 	// Test extensions
 
-	void InitTest(const char* filename=NULL);
-	void EndTest(const char* filename=NULL);
+	void InitTest(const char* filename = nullptr);
+	void EndTest(const char*  filename = nullptr);
 
 	bool DelayOptimization;
 	bool SplitFile;
@@ -108,19 +109,21 @@ private:
 	void WriteTestResults(const char* filename);
 
 	const char* _filename;
-	int _flushcount;
+	int         _flushcount;
 
 	struct STimerEvent
 	{
 		timer_t TimerValues;
-		int Steps;
-		int Count;
+		int     Steps;
+		int     Count;
+
 		struct SAxis
 		{
 			int Multiplier;
 			int MoveAxis;
 			int Distance;
-		} Axis[NUM_AXIS_MVC];
+		}       Axis[NUM_AXIS_MVC];
+
 		char MSCInfo[MOVEMENTINFOSIZE];
 	};
 
@@ -129,31 +132,30 @@ private:
 	void InitCache()
 	{
 		_eventIdx = 0;
-		memset(_TimerEvents, 0, sizeof(_TimerEvents));
+		memset(_TimerEvents, 0, sizeof(STimerEvent) * CacheSize);
 	}
 
-	int _exportIdx;
-	int _eventIdx;
+	int          _exportIdx;
+	int          _eventIdx;
 	STimerEvent* _TimerEvents;
-	int _oldCacheSize;
+	int          _oldCacheSize;
 
-	int	_sumtime[NUM_AXIS_MVC];
-	int _count[NUM_AXIS_MVC];
-	int _total[NUM_AXIS_MVC];
-	char _speed[NUM_AXIS_MVC][20];
-	long long _totaltime;
-	int _lasttimer;
+	int     _sumtime[NUM_AXIS_MVC];
+	int     _count[NUM_AXIS_MVC];
+	int     _total[NUM_AXIS_MVC];
+	char    _speed[NUM_AXIS_MVC][20];
+	int64_t _totaltime;
+	int     _lasttimer;
 
 	int _refMovestart;
 
-	bool _isReferenceMove;
+	bool    _isReferenceMove;
 	uint8_t _isReferenceId;
-	int  _referenceMoveSteps;
-	
+	int     _referenceMoveSteps;
+
 	void DoISR();
 
 public:
 
 	void HandleIdle();
 };
-

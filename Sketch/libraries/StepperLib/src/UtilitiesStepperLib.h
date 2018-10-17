@@ -30,92 +30,93 @@
 
 //////////////////////////////////////////
 
-extern uint8_t ToPrecisionU10(unsigned long);
-extern uint8_t ToPrecisionU10(unsigned short);
-extern uint8_t ToPrecisionS10(long v);
+extern uint8_t ToPrecisionU10(uint32_t);
+extern uint8_t ToPrecisionU10(uint16_t);
+extern uint8_t ToPrecisionS10(int32_t );
 
-extern uint8_t ToPrecisionU2(unsigned long);
-extern uint8_t ToPrecisionU2(unsigned short);
-extern uint8_t ToPrecisionS2(long);
+extern uint8_t ToPrecisionU2(uint32_t);
+extern uint8_t ToPrecisionU2(uint16_t);
+extern uint8_t ToPrecisionS2(int32_t );
 
 ////////////////////////////////////////////////////////
 
-template<class T> bool IsBitSet(T t, uint8_t bit)				{ return (t & (((T)1) << bit)) != 0; };
-template<class T> bool IsBitClear(T t, uint8_t bit)			{ return (t & (((T)1) << bit)) == 0; };
-template<class T> void BitSet(T& t, uint8_t bit)				{ t |= ((T)1) << bit; };
-template<class T> void BitClear(T& t, uint8_t bit)			{ t &= ~(((T)1) << bit); };
+template <class T> bool IsBitSet(T   t, uint8_t bit) { return (t & ((T(1)) << bit)) != 0; };
+template <class T> bool IsBitClear(T t, uint8_t bit) { return (t & ((T(1)) << bit)) == 0; };
+template <class T> void BitSet(T&    t, uint8_t bit) { t |= (T(1)) << bit; };
+template <class T> void BitClear(T&  t, uint8_t bit) { t &= ~((T(1)) << bit); };
 
 ////////////////////////////////////////////////////////
 
 inline unsigned int RoundMulDivUInt(unsigned int v, unsigned int m, unsigned int d)
 {
-	return (unsigned int)(((unsigned long)(v)* (unsigned long)(m)+(unsigned long)(d / 2)) / d);
+	return (unsigned int)((uint32_t(v) * uint32_t(m) + uint32_t(d / 2)) / d);
 }
 
 inline uint8_t RoundMulDivU8(uint8_t v, uint8_t m, uint8_t d)
 {
-	return (uint8_t) (((unsigned int)v * m + d / 2) / d);
+	return uint8_t(((unsigned int)v * m + d / 2) / d);
 }
 
-inline unsigned long RoundMulDivU32(unsigned long v, unsigned long m, unsigned long d)
+inline uint32_t RoundMulDivU32(uint32_t v, uint32_t m, uint32_t d)
 {
 	return (v * m + d / 2) / d;
 }
 
-inline long RoundMulDivI32(long v, long m, long d)
+inline int32_t RoundMulDivI32(int32_t v, int32_t m, int32_t d)
 {
 	return (v * m + d / 2) / d;
 }
 
-inline unsigned long MulDivU32(unsigned long v, unsigned long m, unsigned long d)
+inline uint32_t MulDivU32(uint32_t v, uint32_t m, uint32_t d)
 {
 	return (v * m) / d;
 }
 
-inline long MulDivI32(long v, long m, long d)
+inline int32_t MulDivI32(int32_t v, int32_t m, int32_t d)
 {
 	return (v * m) / d;
 }
 
 ////////////////////////////////////////////////////////
 
-unsigned long _ulsqrt_round(unsigned long val);
-unsigned long _ulsqrt(unsigned long val);
+uint32_t _ulsqrt_round(uint32_t val);
+uint32_t _ulsqrt(uint32_t       val);
 
 ////////////////////////////////////////////////////////
 
 #if defined(_MSC_VER) || defined(__SAM3X8E__) || defined(__SAMD21G18A__)
 
-typedef struct _udiv_t {
-	unsigned short quot;
-	unsigned short rem;
-} udiv_t;
-
-inline udiv_t udiv(unsigned short __num, unsigned short __denom)
+typedef struct _udiv_t
 {
-	div_t d = div(__num, __denom);
+	uint16_t quot;
+	uint16_t rem;
+}            udiv_t;
+
+inline udiv_t udiv(uint16_t __num, uint16_t __denom)
+{
+	div_t  d = div(__num, __denom);
 	udiv_t ud;
-	ud.quot = (unsigned short)d.quot;
-	ud.rem = (unsigned short)d.rem;
+	ud.quot = uint16_t(d.quot);
+	ud.rem  = uint16_t(d.rem);
 	return ud;
 }
 
 #else
 
 typedef struct _udiv_t {
-	unsigned short quot;
-	unsigned short rem;
+	uint16_t quot;
+	uint16_t rem;
 } udiv_t;
 
-extern udiv_t udiv(unsigned short __num, unsigned short __denom) __asm__("__udivmodhi4") __ATTR_CONST__;
+extern udiv_t udiv(uint16_t __num, uint16_t __denom) __asm__("__udivmodhi4") __ATTR_CONST__;
 
 #endif
 
 ////////////////////////////////////////////////////////
 
-template<typename T, uint8_t sz> void DumpArray(const __FlashStringHelper* head, const T pos[sz], bool newline)
+template <typename T, uint8_t sz> void DumpArray(FLSTR head, const T pos[sz], bool newline)
 {
-	if (head != NULL)
+	if (head != nullptr)
 	{
 		StepperSerial.print(head);
 		StepperSerial.print(F("="));
@@ -127,16 +128,20 @@ template<typename T, uint8_t sz> void DumpArray(const __FlashStringHelper* head,
 		StepperSerial.print(pos[i]);
 	}
 	if (newline)
+	{
 		StepperSerial.println();
+	}
 	else
+	{
 		StepperSerial.print(F(":"));
+	}
 }
 
 ////////////////////////////////////////////////////////
 
-template<typename T> void DumpType(const __FlashStringHelper* head, T value, bool newline)
+template <typename T> void DumpType(FLSTR head, T value, bool newline)
 {
-	if (head != NULL)
+	if (head != nullptr)
 	{
 		StepperSerial.print(head);
 		StepperSerial.print(F("="));
@@ -144,9 +149,13 @@ template<typename T> void DumpType(const __FlashStringHelper* head, T value, boo
 	StepperSerial.print(value);
 
 	if (newline)
+	{
 		StepperSerial.println();
+	}
 	else
+	{
 		StepperSerial.print(F(":"));
+	}
 }
 
 ////////////////////////////////////////////////////////

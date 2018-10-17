@@ -47,7 +47,7 @@
 
 void CU8GLcd::SetMenuPage()
 {
-	_currentpage = GetPageCount()-1;	// TODO: last is default menu
+	_currentpage = GetPageCount() - 1; // TODO: last is default menu
 	GetMenu().SetMainMenu();
 	SetRotaryFocusMenuPage();
 	OKBeep();
@@ -75,7 +75,9 @@ uint8_t CU8GLcd::GetMenuIdx()
 			{
 				menuidx = 0;
 				if (_SDFileCount == 0 || menu > _addMenuItems)
+				{
 					menuidx = 1;
+				}
 			}
 
 			GetMenu().GetNavigator().SetPosition(menuidx, menu);
@@ -99,7 +101,7 @@ void CU8GLcd::SetRotaryFocusMenuPage()
 		if (_SDFileCount == 255)
 		{
 			_SDFileCount = 0;
-			CSDDirReader dirreader([](File*file) -> bool { return file->isDirectory(); });
+			CSDDirReader dirreader([](File* file) -> bool { return file->isDirectory(); });
 			while (dirreader.MoveNext())
 			{
 				_SDFileCount++;
@@ -113,7 +115,8 @@ void CU8GLcd::SetRotaryFocusMenuPage()
 		_SDFileCount = 255;
 	}
 
-	_rotarybutton.SetPageIdx(GetMenu().GetNavigator().GetPosition()); _rotarybutton.SetMinMax(0, GetMenu().GetMenuItemCount() - 1 + _addMenuItems, false);
+	_rotarybutton.SetPageIdx(GetMenu().GetNavigator().GetPosition());
+	_rotarybutton.SetMinMax(0, GetMenu().GetMenuItemCount() - 1 + _addMenuItems, false);
 	_rotaryFocus = RotaryMenuPage;
 }
 
@@ -123,16 +126,18 @@ void CU8GLcd::ButtonPressMenuPage()
 {
 	switch (_rotaryFocus)
 	{
-		case RotaryMainPage:	SetRotaryFocusMenuPage(); OKBeep();  break;
+		case RotaryMainPage: SetRotaryFocusMenuPage();
+			OKBeep();
+			break;
 		case RotaryMenuPage:
 		{
 			if (!GetMenu().Select(GetMenu().GetNavigator().GetItemIdx()))
 			{
 				ErrorBeep();
 			}
-
 			break;
 		}
+		default: break;
 	}
 }
 
@@ -141,8 +146,8 @@ void CU8GLcd::ButtonPressMenuPage()
 bool CU8GLcd::PrintMenuLine(uint8_t& drawidx, uint8_t selectedMenuIdx, bool& isSelectedMenu)
 {
 	const uint8_t printFirstLine = 1;
-	const uint8_t printLastLine = (TotalRows() - 1);
-	isSelectedMenu = false;
+	const uint8_t printLastLine  = (TotalRows() - 1);
+	isSelectedMenu               = false;
 
 	uint8_t printtorow = GetMenu().GetNavigator().ToPrintLine(printFirstLine, printLastLine, drawidx);
 	if (printtorow != 255)
@@ -150,7 +155,9 @@ bool CU8GLcd::PrintMenuLine(uint8_t& drawidx, uint8_t selectedMenuIdx, bool& isS
 		isSelectedMenu = drawidx == selectedMenuIdx && _rotaryFocus == RotaryMenuPage;
 		SetPosition(ToCol(isSelectedMenu ? 0 : 1), ToRow(printtorow) + PosLineOffset());
 		if (isSelectedMenu)
+		{
 			Print(F(">"));
+		}
 	}
 	drawidx++;
 	return printtorow != 255;
@@ -160,20 +167,30 @@ bool CU8GLcd::PrintMenuLine(uint8_t& drawidx, uint8_t selectedMenuIdx, bool& isS
 
 bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
-	if (type==DrawLoopHeader)			return true;
-//	if (type==DrawLoopQueryTimerout)	{ *((unsigned long*)data) = 2000; return true; }
-	if (type == DrawLoopQueryTimerout) { *((unsigned long*)data) = 250; return true; }
-	if (type!=DrawLoopDraw)				return DrawLoopDefault(type,data);
+	if (type == DrawLoopHeader)
+	{
+		return true;
+	}
+	//	if (type==DrawLoopQueryTimerout)	{ *((uint32_t*)data) = 2000; return true; }
+	if (type == DrawLoopQueryTimerout)
+	{
+		*((uint32_t*)data) = 250;
+		return true;
+	}
+	if (type != DrawLoopDraw)
+	{
+		return DrawLoopDefault(type, data);
+	}
 
 	SetPosition(ToCol(0), ToRow(0) - HeadLineOffset());
 	Print(F("Menu: "));
 	Print(GetMenu().GetText());
 
-	uint8_t selectedMenuIdx = 255;
-	bool isSelectedMenu;
+	uint8_t       selectedMenuIdx = 255;
+	bool          isSelectedMenu;
 	const uint8_t printFirstLine = 1;
-	const uint8_t printLastLine = (TotalRows()- 1);
-	const uint8_t menuEntries = GetMenu().GetMenuItemCount();
+	const uint8_t printLastLine  = (TotalRows() - 1);
+	const uint8_t menuEntries    = GetMenu().GetMenuItemCount();
 
 	if (_rotaryFocus == RotaryMenuPage)
 	{
@@ -182,22 +199,22 @@ bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 
 	GetMenu().GetNavigator().AdjustOffset(menuEntries + _addMenuItems, printFirstLine, printLastLine);
 
-	uint8_t drawidx = 0;
+	uint8_t      drawidx = 0;
 	for (uint8_t menuidx = 0; menuidx < menuEntries; menuidx++)
 	{
 		auto menuItem = GetMenu().GetItemText(menuidx);
 		if (menuItem == MENUENTRY_SDFILES)
 		{
-			CSDDirReader dirreader([](File*file) -> bool { return file->isDirectory(); });
+			CSDDirReader dirreader([](File* file) -> bool { return file->isDirectory(); });
 
-			for (uint8_t fileidx=0;dirreader.MoveNext(); fileidx++)
+			for (uint8_t fileidx = 0; dirreader.MoveNext(); fileidx++)
 			{
-				if (PrintMenuLine(drawidx, selectedMenuIdx,isSelectedMenu))
+				if (PrintMenuLine(drawidx, selectedMenuIdx, isSelectedMenu))
 				{
 					Print(dirreader.Current.name());
 					if (isSelectedMenu)
 					{
-						GetMenu().GetNavigator().SetParam((uintptr_t)fileidx);
+						GetMenu().GetNavigator().SetParam(uintptr_t(fileidx));
 					}
 				}
 			}

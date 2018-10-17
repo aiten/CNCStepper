@@ -21,8 +21,7 @@
 
 //////////////////////////////////////////
 
-template <class T>
-class CPushValue
+template <class T> class CPushValue
 {
 private:
 
@@ -33,7 +32,7 @@ public:
 
 	CPushValue(T* remember, T newValue)
 	{
-		_Value = remember;
+		_Value    = remember;
 		_oldValue = *remember;
 		*remember = newValue;
 	}

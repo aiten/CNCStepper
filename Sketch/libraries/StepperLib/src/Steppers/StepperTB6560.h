@@ -82,33 +82,27 @@ public:
 #ifdef _MSC_VER
 #pragma warning( default : 4127 )
 #endif
-
 	}
 
 protected:
 
 	////////////////////////////////////////////////////////
 
-	virtual void  SetEnable(axis_t axis, uint8_t level, bool /* force */) override
+	virtual void SetEnable(axis_t axis, uint8_t level, bool /* force */) override
 	{
-
 #define SETLEVEL(pin) if (level != LevelOff)	HALFastdigitalWrite(pin,TB6560_PIN_ENABLE_ON);	else	HALFastdigitalWrite(pin,TB6560_PIN_ENABLE_OFF);
 		switch (axis)
 		{
-#ifdef _MSC_VER
-#pragma warning( disable : 4127 )
-#endif
-			case X_AXIS:  SETLEVEL(TB6560_X_ENABLE_PIN); break;
-			case Y_AXIS:  SETLEVEL(TB6560_Y_ENABLE_PIN); break;
-			case Z_AXIS:  SETLEVEL(TB6560_Z_ENABLE_PIN); break;
+			// @formatter:off — disable formatter after this line
+			case X_AXIS: SETLEVEL(TB6560_X_ENABLE_PIN);	break;
+			case Y_AXIS: SETLEVEL(TB6560_Y_ENABLE_PIN);	break;
+			case Z_AXIS: SETLEVEL(TB6560_Z_ENABLE_PIN);	break;
 				//		case A_AXIS: SETLEVEL(TB6560_A_ENABLE_PIN); break;
 				//		case B_AXIS: SETLEVEL(TB6560_B_ENABLE_PIN); break;
-#ifdef _MSC_VER
-#pragma warning( default : 4127 )
-#endif
+			default: break;
+				// @formatter:on — enable formatter after this line
 		}
 #undef SETLEVEL
-
 	}
 
 	////////////////////////////////////////////////////////
@@ -117,17 +111,12 @@ protected:
 	{
 		switch (axis)
 		{
-#ifdef _MSC_VER
-#pragma warning( disable : 4127 )
-#endif
-			case X_AXIS:  return ConvertLevel(HALFastdigitalRead(TB6560_X_ENABLE_PIN) == TB6560_PIN_ENABLE_ON);
-			case Y_AXIS:  return ConvertLevel(HALFastdigitalRead(TB6560_Y_ENABLE_PIN) == TB6560_PIN_ENABLE_ON);
-			case Z_AXIS:  return ConvertLevel(HALFastdigitalRead(TB6560_Z_ENABLE_PIN) == TB6560_PIN_ENABLE_ON);
+			case X_AXIS: return ConvertLevel(HALFastdigitalRead(TB6560_X_ENABLE_PIN) == TB6560_PIN_ENABLE_ON);
+			case Y_AXIS: return ConvertLevel(HALFastdigitalRead(TB6560_Y_ENABLE_PIN) == TB6560_PIN_ENABLE_ON);
+			case Z_AXIS: return ConvertLevel(HALFastdigitalRead(TB6560_Z_ENABLE_PIN) == TB6560_PIN_ENABLE_ON);
 				//		case A_AXIS: return ConvertLevel(HALFastdigitalRead(TB6560_A_ENABLE_PIN) == TB6560_PIN_ENABLE_ON);
 				//		case B_AXIS: return ConvertLevel(HALFastdigitalRead(TB6560_B_ENABLE_PIN) == TB6560_PIN_ENABLE_ON);
-#ifdef _MSC_VER
-#pragma warning( default : 4127 )
-#endif
+			default: break;
 		}
 		return 0;
 	}
@@ -138,7 +127,7 @@ protected:
 	{
 		// Step:   LOW to HIGH
 
-#define SETDIR(a,dirpin)		if ((directionUp&(1<<a)) != 0) HALFastdigitalWriteNC(dirpin,TB6560_PIN_DIR_OFF); else HALFastdigitalWriteNC(dirpin,TB6560_PIN_DIR_ON);
+#define SETDIR(a,dirpin)		if ((directionUp&(1<<(a))) != 0) HALFastdigitalWriteNC(dirpin,TB6560_PIN_DIR_OFF); else HALFastdigitalWriteNC(dirpin,TB6560_PIN_DIR_ON);
 
 		SETDIR(X_AXIS, TB6560_X_DIR_PIN);
 		SETDIR(Y_AXIS, TB6560_Y_DIR_PIN);
@@ -148,10 +137,12 @@ protected:
 
 		for (uint8_t cnt = 0;; cnt++)
 		{
-			register bool have = false;
-			if (steps[X_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_X_STEP_PIN, TB6560_PIN_STEP_ON); have = true; }
-			if (steps[Y_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_Y_STEP_PIN, TB6560_PIN_STEP_ON); have = true; }
-			if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_Z_STEP_PIN, TB6560_PIN_STEP_ON); have = true; }
+			// @formatter:off — disable formatter after this line
+
+			bool have = false;
+			if (steps[X_AXIS] > cnt) {	HALFastdigitalWriteNC(TB6560_X_STEP_PIN, TB6560_PIN_STEP_ON);	have = true; }
+			if (steps[Y_AXIS] > cnt) {	HALFastdigitalWriteNC(TB6560_Y_STEP_PIN, TB6560_PIN_STEP_ON);	have = true; }
+			if (steps[Z_AXIS] > cnt) {	HALFastdigitalWriteNC(TB6560_Z_STEP_PIN, TB6560_PIN_STEP_ON);	have = true; }
 			//		if (steps[A_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_A_STEP_PIN,TB6560_PIN_STEP_ON); have = true; }
 			//		if (steps[B_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_B_STEP_PIN,TB6560_PIN_STEP_ON); have = true; }
 
@@ -162,6 +153,8 @@ protected:
 			if (steps[Z_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_Z_STEP_PIN, TB6560_PIN_STEP_OFF); }
 			//		if (steps[A_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_A_STEP_PIN,TB6560_PIN_STEP_OFF); }
 			//		if (steps[B_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_B_STEP_PIN,TB6560_PIN_STEP_OFF); }
+
+			// @formatter:on — enable formatter after this line
 
 			if (!have) break;
 

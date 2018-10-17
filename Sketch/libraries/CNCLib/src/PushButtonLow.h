@@ -25,14 +25,11 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PIN, uint8_t ONVALUE>
-class CPushButtonLow
+template <pin_t PIN, uint8_t ONVALUE> class CPushButtonLow
 {
 public:
 
-	CPushButtonLow()
-	{
-	}
+	CPushButtonLow() = default;
 
 	static void Init(uint8_t inputmode = INPUT_PULLUP)
 	{
@@ -45,28 +42,31 @@ public:
 		switch (_state)
 		{
 			case ButtonOff:
+			{
 				if (isOn)
 				{
 					_state = ButtonPressed;
 				}
 				break;
-
+			}
 			case ButtonPressed:
+			{
 				if (!isOn)
 				{
 					_state = ButtonPressedOff;
 				}
 				break;
-
-			case ButtonPressedOff:
-				break;
+			}
+			case ButtonPressedOff: break;
 
 			case ExpectButtonOff:
+			{
 				if (!isOn)
 				{
 					_state = ButtonOff;
 				}
 				break;
+			}
 		}
 	}
 
@@ -97,18 +97,18 @@ public:
 		return false;
 	}
 
-protected:
+protected
+:
 
 	enum EButtonState
 	{
-		ButtonOff = 0,			// button not pressed, not waiting
-		ButtonPressed,			// report pressed if IsOn is called, Button still pressed, wait for Button Off
-		ButtonPressedOff,		// Pressed an released but not reported
-		ExpectButtonOff			// reported on IsOn, wait for "Off"
+		ButtonOff = 0,		// button not pressed, not waiting
+		ButtonPressed,		// report pressed if IsOn is called, Button still pressed, wait for Button Off
+		ButtonPressedOff,	// Pressed an released but not reported
+		ExpectButtonOff		// reported on IsOn, wait for "Off"
 	};
 
 	EnumAsByte(EButtonState) _state = ButtonOff;
-
 };
 
 ////////////////////////////////////////////////////////

@@ -17,6 +17,8 @@
 */
 ////////////////////////////////////////////////////////
 
+#pragma once
+
 #include <StepperLib.h>
 #include <CNCLib.h>
 

@@ -1,4 +1,3 @@
-
 /*
   This file is part of CNCLib - A library for stepper motors.
 
@@ -16,6 +15,8 @@
   http://www.gnu.org/licenses/
 */
 
+#pragma once
+
 ////////////////////////////////////////////////////////////
 
 #include <avr\interrupt.h>
@@ -30,14 +31,14 @@ public:
 	{
 		for (uint8_t i = 0; i < SAMPELCOUNT; i++)
 		{
-			_count[i] = 0;
+			_count[i]     = 0;
 			_countTime[i] = 0;
 		}
 	}
 
 	void Init(uint8_t pin)
 	{
-		_countIdx = SAMPELCOUNT - 1;
+		_countIdx             = SAMPELCOUNT - 1;
 		_countTime[_countIdx] = millis();
 		Next();
 
@@ -58,7 +59,7 @@ public:
 		// no disable interrupts => cache
 
 		unsigned char countIdx = _countIdx;
-		unsigned long sumtime = 0;
+		uint32_t      sumtime  = 0;
 		unsigned int  sumcount = 0;
 
 		for (unsigned char diff = 1; diff < SAMPELCOUNT && sumtime < timediff; diff++)
@@ -79,9 +80,9 @@ private:
 
 	static WaterFlow* _ISRInstance;
 
-	static unsigned int ScaleCount(unsigned int count, unsigned long totaltime, unsigned long scaletotime)
+	static unsigned int ScaleCount(unsigned int count, uint32_t totaltime, uint32_t scaletotime)
 	{
-		return (unsigned long)count * scaletotime / totaltime;
+		return (uint32_t)count * scaletotime / totaltime;
 	}
 
 	static unsigned char NextIndex(unsigned char idx, unsigned char count)
@@ -91,7 +92,7 @@ private:
 
 	static unsigned char PrevIndex(unsigned char idx, unsigned char count)
 	{
-		return (idx >= count) ? idx - count : (SAMPELCOUNT)-(count - idx);
+		return (idx >= count) ? idx - count : (SAMPELCOUNT) - (count - idx);
 	}
 
 	void TestSampleTime()
@@ -117,18 +118,17 @@ private:
 		_countTime[_countIdx] = millis() - _countTime[_countIdx];
 
 		// set next (no cli => cache)
-		uint8_t idxnext = (_countIdx + 1) % SAMPELCOUNT;
-		_count[idxnext] = 0;
+		uint8_t idxnext     = (_countIdx + 1) % SAMPELCOUNT;
+		_count[idxnext]     = 0;
 		_countTime[idxnext] = millis();
-		_countUntil = _countTime[idxnext] + SAMPELTIME;
-		_countIdx = idxnext;
+		_countUntil         = _countTime[idxnext] + SAMPELTIME;
+		_countIdx           = idxnext;
 	}
 
-	unsigned long _countUntil;
+	uint32_t               _countUntil;
 	volatile unsigned char _countIdx = 0;
-	volatile int _count[SAMPELCOUNT];
-	unsigned long _countTime[SAMPELCOUNT];
+	volatile int           _count[SAMPELCOUNT];
+	uint32_t               _countTime[SAMPELCOUNT];
 };
 
 ////////////////////////////////////////////////////////////
-

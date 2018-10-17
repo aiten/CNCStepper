@@ -63,7 +63,7 @@
 #define NOT_A_PIN 0
 #define NOT_A_PORT 0
 
-#define NOT_AN_INTERRUPT -1
+#define NOT_AN_INTERRUPT (-1)
 
 
 #define ISR(a) void a(void)
@@ -83,35 +83,39 @@
 #define eeprom_read_block(a,b,c) memcpy(a,b,c)
 #define eeprom_write_block(a,b,c) memcpy(b,a,c)
 
-inline void eeprom_write_dword(uint32_t *  __p, uint32_t  	__value) { *__p = __value;  }
-inline uint32_t eeprom_read_dword(const uint32_t * __p) { return *__p;  }
-inline uint8_t eeprom_read_byte(const uint8_t * __p) { return *__p; }
+inline void     eeprom_write_dword(uint32_t*      __p, uint32_t __value) { *__p = __value; }
+inline uint32_t eeprom_read_dword(const uint32_t* __p) { return *__p; }
+inline uint8_t  eeprom_read_byte(const uint8_t*   __p) { return *__p; }
 
 #define __FlashStringHelper char
 #define F(a) a
 #define PROGMEM 
-inline char pgm_read_byte(const char* p) { return *p; }
-typedef  const char* PGM_P;
+inline char         pgm_read_byte(const char* p) { return *p; }
+typedef const char* PGM_P;
 
 
-inline void attachInterrupt(uint8_t, void(*)(), int /* mode */) {};
+inline void attachInterrupt(uint8_t, void (*)(), int /* mode */) {};
+
 inline void detachInterrupt(uint8_t) {};
 
 inline uint8_t digitalPinToInterrupt(uint8_t p) { return ((p) == 2 ? 0 : ((p) == 3 ? 1 : NOT_AN_INTERRUPT)); }
 
-typedef unsigned char	uint8_t;
-typedef signed char		int8_t;
+typedef unsigned char uint8_t;
+typedef signed char   int8_t;
 
 
-inline void analogWrite(short, int)	{};
-inline int analogRead(short) { return 0; };
-inline void digitalWrite(short, short)	{};
-extern uint8_t digitalRead(short pin);
-inline void pinMode(short, short)		{};
+inline void analogWrite(int16_t, int) {};
+inline int  analogRead(int16_t ) { return 0; };
+
+inline void    digitalWrite(int16_t, int16_t) {};
+extern uint8_t digitalRead(int16_t pin);
+
+inline void pinMode(int16_t, int16_t) {};
 
 #define DIGITALREADNOVALUE 255
-extern std::function<uint8_t(short)> digitalReadEvent;
-extern uint8_t digitalReadFromFile(short pin);
+extern std::function<uint8_t(int16_t)> digitalReadEvent;
+
+extern uint8_t digitalReadFromFile(int16_t pin);
 
 #define LED_BUILTIN (13)
 
@@ -126,28 +130,28 @@ extern uint8_t digitalReadFromFile(short pin);
 
 static uint8_t A0 = PIN_A0;
 
-static uint8_t PORTA;
-static uint8_t PORTB;
-static uint8_t PORTC;
-static uint8_t PORTD;
-static uint8_t PORTE;
-static uint8_t PORTF;
-static uint8_t PORTK;
-static uint8_t PORTL;
-static uint8_t DDRL;
-static uint8_t DDRD;
-static uint8_t DDRB;
-static uint8_t TCCR0A;
-static uint8_t TCCR0B;
-static unsigned short TCNT0;
-static uint8_t TIMSK0;
-static unsigned short TIFR0;
-static unsigned short OCR0B;
-static uint8_t TCCR1A;
-static uint8_t TCCR1B;
-static unsigned short TCNT1;
-static uint8_t TIMSK1;
-static unsigned short TIFR1;
+static uint8_t  PORTA;
+static uint8_t  PORTB;
+static uint8_t  PORTC;
+static uint8_t  PORTD;
+static uint8_t  PORTE;
+static uint8_t  PORTF;
+static uint8_t  PORTK;
+static uint8_t  PORTL;
+static uint8_t  DDRL;
+static uint8_t  DDRD;
+static uint8_t  DDRB;
+static uint8_t  TCCR0A;
+static uint8_t  TCCR0B;
+static uint16_t TCNT0;
+static uint8_t  TIMSK0;
+static uint16_t TIFR0;
+static uint16_t OCR0B;
+static uint8_t  TCCR1A;
+static uint8_t  TCCR1B;
+static uint16_t TCNT1;
+static uint8_t  TIMSK1;
+static uint16_t TIFR1;
 
 static uint8_t PINA;
 static uint8_t PINA0;
@@ -226,114 +230,123 @@ static uint8_t PINL3;
 
 static uint8_t SREG;
 
-inline unsigned long   pgm_read_dword(const void* p) { return *(unsigned long*)p; }
-inline unsigned short  pgm_read_word(const void* p) { return *(unsigned short*)p; }
-inline  uint8_t  pgm_read_byte(const void* p) { return *(uint8_t*)p; }
-inline  const void* pgm_read_ptr(const void* p)  { return *((void **) p); }
+inline uint32_t    pgm_read_dword(const void* p) { return *(uint32_t*)(p); }
+inline uint16_t    pgm_read_word(const void*  p) { return *(uint16_t*)(p); }
+inline uint8_t     pgm_read_byte(const void*  p) { return *(uint8_t*)(p); }
+inline const void* pgm_read_ptr(const void*   p) { return *((void **)(p)); }
 
 //extern unsigned int GetTickCount();
 #pragma warning(suppress: 28159)
-inline unsigned long millis() { return GetTickCount(); }
+inline uint32_t millis() { return GetTickCount(); }
 
 //extern void Sleep(unsigned int ms);
-inline void delay(unsigned long ms) { Sleep(ms); }
+inline void delay(uint32_t ms) { Sleep(ms); }
 
 #define STDIO 0
 #define HEX 16
+
 class Stream
 {
 public:
+
 	Stream()
 	{
-		_istty = _isatty(STDIO)!=0;
+		_istty = _isatty(STDIO) != 0;
 	}
 
-	void SetIdle(void(*pIdle)())	{ _pIdle = pIdle;  }
+	virtual ~Stream() = default;
 
-	void print(char c)				{ printf("%c", c); };
-	void print(unsigned int ui)		{ printf("%u", ui); };
-	void print(int i)				{ printf("%i", i); };
-	void print(long l)				{ printf("%li", l); };
-	void print(unsigned long ul)	{ printf("%lu", ul); };
-	void print(unsigned long ul, uint8_t base)
+	void SetIdle(void (*pIdle)()) { _pIdle = pIdle; }
+
+	void print(char         c) { printf("%c", c); };
+	void print(unsigned int ui) { printf("%u", ui); };
+	void print(int          i) { printf("%i", i); };
+	//	void print(int32_t          l) { printf("%li", l); };
+	//	void print(uint32_t ul) { printf("%lu", ul); };
+
+	void print(uint32_t ul, uint8_t base)
 	{
-		if (base == 10) printf("%lu", ul);
+		if (base == 10) printf("%u", ul);
 		if (base == 16) printf("%x", ul);
 	}
-	void print(const char*s)		{ printf("%s", s); };
-	void print(float f)				{ printf("%f", f); };
 
-	void println()					{ printf("\n"); };
-	void println(unsigned int ui)	{ printf("%u\n", ui); };
-	void println(char c)			{ printf("%c\n", c); };
-	void println(int i)				{ printf("%i\n", i); };
-	void println(long l)			{ printf("%li\n", l); };
-	void println(unsigned long ul)	{ printf("%lu\n", ul); };
-	void println(unsigned long ul, uint8_t base) { print(ul, base); println(); };
-	void println(const char*s)		{ printf("%s\n", s); };
-	void println(float f)			{ printf("%f\n", f); };
+	void print(const char* s) { printf("%s", s); };
+	void print(float       f) { printf("%f", f); };
 
-	void begin(int )				{ };
-	virtual int available()	 		{
-										if  (_last)
-											return 1;
+	void println() { printf("\n"); };
+	void println(unsigned int ui) { printf("%u\n", ui); };
+	void println(char         c) { printf("%c\n", c); };
+	void println(int          i) { printf("%i\n", i); };
+	//	void println(int32_t          l) { printf("%li\n", l); };
+	//	void println(uint32_t ul) { printf("%lu\n", ul); };
 
-										if (!_istty)
-										{
-											if (feof(stdin) != 0)
-											{
-												_istty = true;
-												return 0;
-											}
-										}
-										if (!_istty || _kbhit())
-											return 1; 
-		
-										if (_pIdle) _pIdle(); 
-										return 0; 
-									}
-	virtual char read()				{
-										char ch=_last;
-										if (ch)
-										{
-											_last = 0;
-										}
-										else
-										{
-											if (_istty)
-											{
-												ch = (char)_getwch();
-												if (ch == '\r')
-													_last = '\n';
-											}
-											else
-											{
-												ch = (char)_fgetchar();
-											}
-										}
+	void println(uint32_t ul, uint8_t base)
+	{
+		print(ul, base);
+		println();
+	};
+	void println(const char* s) { printf("%s\n", s); };
+	void println(float       f) { printf("%f\n", f); };
 
-										_putch(ch);
-										return ch;
-									}
+	void begin(int) { };
+
+	virtual int available()
+	{
+		if (_last)
+			return 1;
+
+		if (!_istty)
+		{
+			if (feof(stdin) != 0)
+			{
+				_istty = true;
+				return 0;
+			}
+		}
+		if (!_istty || _kbhit())
+			return 1;
+
+		if (_pIdle) _pIdle();
+		return 0;
+	}
+
+	virtual char read()
+	{
+		char ch = _last;
+		if (ch)
+		{
+			_last = 0;
+		}
+		else
+		{
+			if (_istty)
+			{
+				ch = char(_getwch());
+				if (ch == '\r')
+					_last = '\n';
+			}
+			else
+			{
+				ch = char(_fgetchar());
+			}
+		}
+
+		_putch(ch);
+		return ch;
+	}
 
 private:
 
-	void(*_pIdle)() = NULL;
-	char _last=0;
-	bool _istty;
-
+	void (*_pIdle)() = nullptr;
+	char   _last     = 0;
+	bool   _istty;
 };
 
-class HardwareSerial : public Stream
-{
-};
+class HardwareSerial : public Stream {};
 
-class CSerial : public HardwareSerial
-{
-};
+class CSerial : public HardwareSerial {};
 
 
 extern CSerial Serial;
 
 #define __attribute__
-

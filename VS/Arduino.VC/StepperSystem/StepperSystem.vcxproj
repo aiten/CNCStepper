@@ -85,7 +85,7 @@
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\Steppers\StepperTB6560.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\Steppers\StepperTB6560_pins.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\UtilitiesStepperLib.h" />
-    <ClInclude Include="..\Include\arduino.h" />
+    <ClInclude Include="..\Include\Arduino.h" />
     <ClInclude Include="..\Include\HardwareSerial.h" />
     <ClInclude Include="..\Include\LiquidCrystal_I2C.h" />
     <ClInclude Include="..\Include\SD.h" />
@@ -128,7 +128,7 @@
     <ClCompile Include="..\..\..\Sketch\libraries\StepperLib\src\Steppers\StepperL298N.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\StepperLib\src\Steppers\StepperSMC800.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\StepperLib\src\UtilitiesStepperLib.cpp" />
-    <ClCompile Include="..\Include\arduino.cpp" />
+    <ClCompile Include="..\Include\Arduino.cpp" />
     <ClCompile Include="..\MsvcStepper\MsvcStepper.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

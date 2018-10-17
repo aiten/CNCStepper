@@ -9,15 +9,11 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CDenavitHartenberg::CDenavitHartenberg()
-{
-}
+CDenavitHartenberg::CDenavitHartenberg() {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CDenavitHartenberg::~CDenavitHartenberg()
-{
-}
+CDenavitHartenberg::~CDenavitHartenberg() {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -30,7 +26,7 @@ void CDenavitHartenberg::InitMatrix(CMatrix4x4<float>& m, float in[NUM_AXIS])
 	float servo3 = in[2];
 
 	float pos1 = servo1;
-	float pos2 = float((M_PI)+servo2);
+	float pos2 = float((M_PI) + servo2);
 	float pos3 = servo3;
 
 	float pos4 = float(M_PI + (M_PI - pos1 - pos2));
@@ -53,9 +49,9 @@ void CDenavitHartenberg::InitMatrix(CMatrix4x4<float>& m, float in[NUM_AXIS])
 
 void CDenavitHartenberg::ToPosition(float in[NUM_AXIS], float out[3])
 {
-	float v[4] = { 0, 0, 0, 1 };
+	float             v[4] = { 0, 0, 0, 1 };
 	CMatrix4x4<float> A;
-	
+
 	InitMatrix(A, in);
 
 	TestConvert(A, v);
@@ -69,30 +65,30 @@ void CDenavitHartenberg::ToPosition(float in[NUM_AXIS], float out[3])
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CDenavitHartenberg::FromPosition(float posxyz[3], float angles[NUM_AXIS],float epsilon)
+void CDenavitHartenberg::FromPosition(float posxyz[3], float angles[NUM_AXIS], float epsilon)
 {
 	float angle = float(M_PI + 0.1);
 
 	SSearchDef search[] =
 	{
-		{ 0 , angle, angle/10 },
+		{ 0, angle, angle / 10 },
 		{ 0, angle, angle / 10 },
 		{ -angle, angle, angle / 10 }
 	};
 
 	for (uint8_t j = 0; j < 3; j++)
-		angles[j] = (search[j].max - search[j].min) / 2 + search[j].min;
+		angles[j]  = (search[j].max - search[j].min) / 2 + search[j].min;
 
 	if (true)
 	{
 		unsigned int count;
-		uint8_t i=0;
-		float diff=FLT_MAX;
+		uint8_t      i    = 0;
+		float        diff = FLT_MAX;
 
-		for (count=0;count<10000;count++)
+		for (count = 0; count < 10000; count++)
 		{
 			diff = SearchStep(posxyz, angles, i, diff, search[i]);
-			
+
 			if (diff < epsilon)
 				break;
 #define TEST_U
@@ -108,17 +104,16 @@ void CDenavitHartenberg::FromPosition(float posxyz[3], float angles[NUM_AXIS],fl
 				i = 0;
 		}
 
-//		for (i = 0; i < NUM_AXIS; i++)
-//			printf("dist:%f ", search[i].dist);
-//		printf("max:%i\n", count);
+		//		for (i = 0; i < NUM_AXIS; i++)
+		//			printf("dist:%f ", search[i].dist);
+		//		printf("max:%i\n", count);
 	}
 	else if (true)
 	{
-		float v[4] = { 0, 0, 0, 1 };
+		float             v[4] = { 0, 0, 0, 1 };
 		CMatrix4x4<float> A;
 
 		//InitMatrix(A, in);
-
 	}
 	else if (false)
 	{
@@ -134,10 +129,8 @@ void CDenavitHartenberg::FromPosition(float posxyz[3], float angles[NUM_AXIS],fl
 				}
 			}
 		}
-		printf("max:%i\n",(unsigned int )i);
-
+		printf("max:%i\n", (unsigned int)i);
 	}
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -204,11 +197,11 @@ float CDenavitHartenberg::SearchStep(float pos[3], float inout[NUM_AXIS], uint8_
 float CDenavitHartenberg::SearchMinOld(float pos[3], float inout[NUM_AXIS], uint8_t idx, SSearchDef& def, float epsilon)
 {
 	float opdpos = inout[idx];
-	float dist = def.dist;
-	
-	float oldiff = CalcDist(pos, inout);
-	float diff = oldiff;
-	unsigned short count = 0;
+	float dist   = def.dist;
+
+	float    oldiff = CalcDist(pos, inout);
+	float    diff   = oldiff;
+	uint16_t count  = 0;
 
 	while (true)
 	{
@@ -231,13 +224,13 @@ float CDenavitHartenberg::SearchMinOld(float pos[3], float inout[NUM_AXIS], uint
 
 		diff = CalcDist(pos, inout);
 
-		if (diff < epsilon) 
+		if (diff < epsilon)
 			break;
 
 		if (diff > oldiff)
 		{
 			inout[idx] = oldpos;
-			dist = -dist / 2;
+			dist       = -dist / 2;
 			count++;
 		}
 		else if (newpos == def.max)
@@ -261,14 +254,14 @@ float CDenavitHartenberg::SearchMinOld(float pos[3], float inout[NUM_AXIS], uint
 
 float CDenavitHartenberg::CalcDist(float pos[3], float in[NUM_AXIS])
 {
-	float v[4] = { 0, 0, 0, 1 };
+	float             v[4] = { 0, 0, 0, 1 };
 	CMatrix4x4<float> A;
 
 	InitMatrix(A, in);
-	TestConvert(A, v,true);
+	TestConvert(A, v, true);
 
-	float dist = 0;
-	for (uint8_t i = 0; i < 3; i++)
+	float        dist = 0;
+	for (uint8_t i    = 0; i < 3; i++)
 		dist += (pos[i] - v[i]) * (pos[i] - v[i]);
 
 	return dist;
@@ -279,12 +272,12 @@ float CDenavitHartenberg::CalcDist(float pos[3], float in[NUM_AXIS])
 #define FORMAT_MM "%.0f:%.0f:%.0f"
 #define FORMAT_GRAD "%.0f:%.0f:%.0f"
 
-void CDenavitHartenberg::TestConvert(CMatrix4x4<float>&m, float inout[4], bool out)
+void CDenavitHartenberg::TestConvert(CMatrix4x4<float>& m, float inout[4], bool out)
 {
 	float d[4];
 
 	m.Mul(inout, d);
-	
+
 	if (out)
 		memcpy(inout, d, sizeof(d));
 
@@ -304,23 +297,23 @@ x[n] - solution vector
 
 bool CDenavitHartenberg::Jacobi(double a[][MAXSIZE], double b[], int n, int maxiter, double tol, double x[])
 {
-	int numiter = 0;
-	bool tolexceeded = true;
-	int i, j;
+	int    numiter     = 0;
+	bool   tolexceeded = true;
+	int    i, j;
 	double xold[MAXSIZE];
 	double sum;
 
-	for (i = 0; i < n; i++)
+	for (i   = 0; i < n; i++)
 		x[i] = b[i] / a[i][i];
 
 	while (tolexceeded && numiter < maxiter)
 	{
-		for (i = 0; i < n; ++i)
+		for (i      = 0; i < n; ++i)
 			xold[i] = x[i];
 
 		for (i = 0; i < n; ++i)
 		{
-			sum = b[i];
+			sum    = b[i];
 			for (j = 0; j < n; ++j)
 				if (i != j)
 					sum -= a[i][j] * xold[j];
@@ -328,7 +321,7 @@ bool CDenavitHartenberg::Jacobi(double a[][MAXSIZE], double b[], int n, int maxi
 			x[i] = sum / a[i][i];
 		}
 		tolexceeded = false;
-		for (i = 0; i < n; i++)
+		for (i      = 0; i < n; i++)
 			if (fabs(x[i] - xold[i]) > fabs(xold[i] * tol))
 				tolexceeded = true;
 		++numiter;

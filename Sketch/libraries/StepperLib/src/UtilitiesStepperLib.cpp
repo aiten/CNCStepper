@@ -30,19 +30,19 @@
 
 ////////////////////////////////////////////////////////
 
-uint8_t ToPrecisionU10(unsigned short v)
+uint8_t ToPrecisionU10(uint16_t v)
 {
-	if (v < 1)   return 0;
-	if (v < 10)  return 1;
+	if (v < 1) return 0;
+	if (v < 10) return 1;
 	if (v < 100) return 2;
 	if (v < 1000) return 3;
 	if (v < 10000) return 4;
 	return 5;
 }
 
-uint8_t ToPrecisionU10(unsigned long v)
+uint8_t ToPrecisionU10(uint32_t v)
 {
-	if (v < 10000) return ToPrecisionU10((unsigned short) v);
+	if (v < 10000) return ToPrecisionU10(uint16_t(v));
 	if (v < 100000) return 5;
 	if (v < 1000000) return 6;
 	if (v < 10000000) return 7;
@@ -51,18 +51,21 @@ uint8_t ToPrecisionU10(unsigned long v)
 	return 10;
 }
 
-uint8_t ToPrecisionS10(long v)
+uint8_t ToPrecisionS10(int32_t v)
 {
-	if (v < 0) return ToPrecisionU10((unsigned long) -v);
-	return ToPrecisionU10((unsigned long) v);
+	if (v < 0)
+	{
+		return ToPrecisionU10(uint32_t(-v));
+	}
+	return ToPrecisionU10(uint32_t(v));
 }
 
 
 ////////////////////////////////////////////////////////
 
-uint8_t ToPrecisionU2(unsigned short v)
+uint8_t ToPrecisionU2(uint16_t v)
 {
-	register uint8_t i = 0;
+	uint8_t i = 0;
 	for (; v != 0; i++)
 	{
 		v /= 2;
@@ -70,9 +73,9 @@ uint8_t ToPrecisionU2(unsigned short v)
 	return i;
 }
 
-uint8_t ToPrecisionU2(unsigned long v)
+uint8_t ToPrecisionU2(uint32_t v)
 {
-	register uint8_t i = 0;
+	uint8_t i = 0;
 	for (; v != 0; i++)
 	{
 		v /= 2;
@@ -80,22 +83,25 @@ uint8_t ToPrecisionU2(unsigned long v)
 	return i;
 }
 
-uint8_t ToPrecisionS2(long v)
+uint8_t ToPrecisionS2(int32_t v)
 {
-	if (v < 0) return ToPrecisionU2((unsigned long)-v);
-	return ToPrecisionU2((unsigned long)v);
+	if (v < 0)
+	{
+		return ToPrecisionU2(uint32_t(-v));
+	}
+	return ToPrecisionU2(uint32_t(v));
 }
 
 ////////////////////////////////////////////////////////
 
-unsigned long _ulsqrt_round(unsigned long val, bool round)
+uint32_t _ulsqrt_round(uint32_t val, bool round)
 {
-	unsigned long temp;
-	unsigned long g = 0;
-	unsigned long b = 0x8000;
-	unsigned long bshft = 15;
-	uint8_t i;
-	for (i = 0; i < 15; i++)
+	uint32_t temp;
+	uint32_t g     = 0;
+	uint32_t b     = 0x8000;
+	uint32_t bshft = 15;
+
+	for (uint8_t i = 0; i < 15; i++)
 	{
 		temp = g;
 		temp = temp + (b >> 1);
@@ -117,21 +123,23 @@ unsigned long _ulsqrt_round(unsigned long val, bool round)
 	}
 
 	if (round && val > g)
+	{
 		g++;
+	}
 
 	return g;
 }
 
 ////////////////////////////////////////////////////////
 
-unsigned long _ulsqrt_round(unsigned long val)
+uint32_t _ulsqrt_round(uint32_t val)
 {
 	return _ulsqrt_round(val, true);
 }
 
 ////////////////////////////////////////////////////////
 
-unsigned long _ulsqrt(unsigned long val)
+uint32_t _ulsqrt(uint32_t val)
 {
 	return _ulsqrt_round(val, false);
 }

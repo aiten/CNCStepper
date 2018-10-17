@@ -21,8 +21,7 @@
 
 //////////////////////////////////////////
 
-template <class T>
-class CSingleton
+template <class T> class CSingleton
 {
 private:
 	static T* _instance;
@@ -31,10 +30,10 @@ public:
 
 	CSingleton()
 	{
-		_instance = (T*) this;
+		_instance = (T*)this;
 	}
 
-	static T* GetInstance()	{ return _instance; }
+	static T* GetInstance() { return _instance; }
 };
 
 //////////////////////////////////////////

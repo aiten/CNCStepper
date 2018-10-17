@@ -31,40 +31,53 @@ public:
 
 public:
 
-	menupos_t GetPosition() const									{ return _position; }
-	void SetPosition(menupos_t itemIdx, menupos_t position)			{ _itemIdx = itemIdx;  _position = position; _empty = false; }
-	void SetPosition(menupos_t itemIdx)								{ SetPosition(itemIdx, itemIdx); }
+	menupos_t GetPosition() const { return _position; }
 
-	menupos_t GetItemIdx() const									{ return _itemIdx; }
+	void SetPosition(menupos_t itemIdx, menupos_t position)
+	{
+		_itemIdx  = itemIdx;
+		_position = position;
+		_empty    = false;
+	}
 
-	menupos_t GetOffset() const										{ return _offset; }
+	void SetPosition(menupos_t itemIdx) { SetPosition(itemIdx, itemIdx); }
 
-	void AdjustOffset(menupos_t menuEntries, menupos_t firstline, menupos_t lastline);
-	uint8_t ToPrintLine(menupos_t firstline, menupos_t lastline, menupos_t i);		// return 255 if not to print
+	menupos_t GetItemIdx() const { return _itemIdx; }
 
-	uintptr_t GetParam() const										{ return _param;  }
-	void SetParam(uintptr_t param)									{ _param = param; }
+	menupos_t GetOffset() const { return _offset; }
 
-	void Clear()													{ _itemIdx = 0;  _offset = 0;  _position = 0; _empty = true; }
-	bool IsCleared() const											{ return _empty; }
+	void    AdjustOffset(menupos_t menuEntries, menupos_t firstline, menupos_t lastline);
+	uint8_t ToPrintLine(menupos_t  firstline, menupos_t   lastline, menupos_t  i);		// return 255 if not to print
+
+	uintptr_t GetParam() const { return _param; }
+	void      SetParam(uintptr_t param) { _param = param; }
+
+	void Clear()
+	{
+		_itemIdx  = 0;
+		_offset   = 0;
+		_position = 0;
+		_empty    = true;
+	}
+
+	bool IsCleared() const { return _empty; }
 
 protected:
 
 	//////////////////////////////////////////
 
-	void SetOffset(menupos_t offset)								{ _offset = offset; }
-	void AddOffset(menupos_t offset)								{ _offset += offset; }
-	void SubOffset(menupos_t offset)								{ _offset -= offset; }
+	void SetOffset(menupos_t offset) { _offset = offset; }
+	void AddOffset(menupos_t offset) { _offset += offset; }
+	void SubOffset(menupos_t offset) { _offset -= offset; }
 
 private:
 
-	menupos_t			_itemIdx;									// current "itemIdx" in MenuDef
-	menupos_t			_position;									// current selected menu
-	menupos_t			_offset;									// start of menuitem to draw 
-	bool				_empty;										// empty - => cleared
+	menupos_t _itemIdx;									// current "itemIdx" in MenuDef
+	menupos_t _position;								// current selected menu
+	menupos_t _offset;									// start of menuitem to draw 
+	bool      _empty;									// empty - => cleared
 
-	uintptr_t			_param;										// "user" value of current position  
-
+	uintptr_t _param;									// "user" value of current position  
 };
 
 ////////////////////////////////////////////////////////

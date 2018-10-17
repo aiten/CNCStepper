@@ -38,19 +38,21 @@
 
 ////////////////////////////////////////////////////////////
 
-struct CGCodeParser::SModalState CGCodeParser::_modalstate;
+struct CGCodeParser::SModalState    CGCodeParser::_modalstate;
 struct CGCodeParser::SModelessState CGCodeParser::_modlessstate;
 
 ////////////////////////////////////////////////////////////
 
-bool CGCodeParser::SetParamCommand(param_t /* paramNo */)	{ return false; }
+bool CGCodeParser::SetParamCommand(param_t /* paramNo */) { return false; }
 
 ////////////////////////////////////////////////////////////
 
 bool CGCodeParser::InitParse()
 {
 	if (!super::InitParse())
+	{
 		return false;
+	}
 
 	_modlessstate.Init();
 	return true;				// continue
@@ -77,19 +79,19 @@ bool CGCodeParser::GetParamOrExpression(mm1000_t* value, bool convertToInch)
 	if (_reader->GetChar() == '[')
 	{
 		const char* start = _reader->GetBuffer();
-		char ch = _reader->GetNextChar();
-		uint8_t count = 1;
+		char        ch    = _reader->GetNextChar();
+		uint8_t     count = 1;
 
 		while (!_reader->IsEOC(ch))
 		{
-			if (ch=='[')
+			if (ch == '[')
 			{
 				count++;
 			}
 			else if (ch == ']')
 			{
 				count--;
-				if (count==0)
+				if (count == 0)
 				{
 					_reader->GetNextChar();
 					CStreamReader::CSetTemporary terminate(_reader->GetBuffer());
@@ -113,7 +115,7 @@ bool CGCodeParser::GetParamOrExpression(mm1000_t* value, bool convertToInch)
 		Error(MESSAGE_EXPR_MISSINGRPARENTHESIS);
 		return true;
 	}
-		
+
 	return super::GetParamOrExpression(value, convertToInch);
 }
 
@@ -125,8 +127,10 @@ void CGCodeParser::CommentMessage(char* start)
 	if (isMsg)
 	{
 		start += 5;
-		while (start+1 < _reader->GetBuffer())
+		while (start + 1 < _reader->GetBuffer())
+		{
 			StepperSerial.print(*(start++));
+		}
 		StepperSerial.println();
 	}
 	else
@@ -136,7 +140,7 @@ void CGCodeParser::CommentMessage(char* start)
 		if (isMsg)
 		{
 			start += 7;
-			const char*current = _reader->GetBuffer();
+			const char* current = _reader->GetBuffer();
 			while (start + 1 < current)
 			{
 				char ch = *(start++);
@@ -145,13 +149,13 @@ void CGCodeParser::CommentMessage(char* start)
 					_reader->ResetBuffer(start);
 
 					param_t paramNo = ParseParamNo();
-					const SParamInfo*item = FindParamInfoByParamNo(paramNo);
+					auto    item    = FindParamInfoByParamNo(paramNo);
 
 					if (!IsError())
 					{
 						if (item)
 						{
-							PrintParamValue(item, (axis_t) (paramNo - item->GetParamNo()));
+							PrintParamValue(item, axis_t(paramNo - item->GetParamNo()));
 						}
 						else
 						{
@@ -159,7 +163,7 @@ void CGCodeParser::CommentMessage(char* start)
 						}
 					}
 
-					start = (char*) _reader->GetBuffer();
+					start = (char*)_reader->GetBuffer();
 				}
 				else
 				{
@@ -181,22 +185,24 @@ param_t CGCodeParser::ParseParamNo()
 		// format: <_varname : axis >
 		// e.g.    <_home:x>
 		_reader->GetNextChar();
-		char ch = _reader->SkipSpacesToUpper();
+		char        ch    = _reader->SkipSpacesToUpper();
 		const char* start = _reader->GetBuffer();
-		const char* colon = NULL;
+		const char* colon = nullptr;
 
 		if (!CStreamReader::IsAlpha(ch))
 		{
-			Error(MESSAGE_GCODE_VaribaleMustStartWithAlpha); return 0;
+			Error(MESSAGE_GCODE_VaribaleMustStartWithAlpha);
+			return 0;
 		}
 
-		while (CStreamReader::IsAlpha(ch) || CStreamReader::IsDigit(ch) || ch==':')
+		while (CStreamReader::IsAlpha(ch) || CStreamReader::IsDigit(ch) || ch == ':')
 		{
 			if (ch == ':')
 			{
-				if (colon != NULL)
+				if (colon != nullptr)
 				{
-					Error(MESSAGE_GCODE_NoValidVaribaleName); return 0;
+					Error(MESSAGE_GCODE_NoValidVaribaleName);
+					return 0;
 				}
 				colon = _reader->GetBuffer();
 			}
@@ -209,19 +215,21 @@ param_t CGCodeParser::ParseParamNo()
 
 		if (ch != '>')
 		{
-			Error(MESSAGE_GCODE_NoValidVaribaleName); return 0;
+			Error(MESSAGE_GCODE_NoValidVaribaleName);
+			return 0;
 		}
 
 		_reader->GetNextChar();
 
 		CStreamReader::CSetTemporary terminate(end);
-		axis_t a=X_AXIS;
+		axis_t                       a = X_AXIS;
 
-		if (colon != NULL)
+		if (colon != nullptr)
 		{
 			if (colon[2] != 0 || (a = CharToAxis(CStreamReader::Toupper(colon[1]))) >= NUM_AXIS)
 			{
-				Error(MESSAGE_GCODE_NoValidVaribaleName); return 0;
+				Error(MESSAGE_GCODE_NoValidVaribaleName);
+				return 0;
 			}
 		}
 
@@ -229,11 +237,12 @@ param_t CGCodeParser::ParseParamNo()
 
 		const SParamInfo* param = FindParamInfoByText(start);
 
-		if (param != NULL)
+		if (param != nullptr)
 		{
-			if (param->GetAllowAxisOfs()==false && colon != NULL)
+			if (!param->GetAllowAxisOfs() && colon != nullptr)
 			{
-				Error(MESSAGE_GCODE_NoValidVaribaleName); return 0;
+				Error(MESSAGE_GCODE_NoValidVaribaleName);
+				return 0;
 			}
 			return param->GetParamNo() + a;
 		}
@@ -257,7 +266,9 @@ mm1000_t CGCodeParser::ParseParameter(bool convertToInch)
 {
 	param_t paramNo = ParseParamNo();
 	if (paramNo)
+	{
 		return GetParamValue(paramNo, convertToInch);
+	}
 
 	Error(MESSAGE_GCODE_ParameterNotFound);
 	return 0;
@@ -274,10 +285,12 @@ static bool IsModifyParam(param_t paramNo)
 
 uint8_t CGCodeParser::ParamNoToParamIdx(param_t paramNo)
 {
-	for (uint8_t idx = 0; idx<NUM_PARAMETER;idx++)
+	for (uint8_t idx = 0; idx < NUM_PARAMETER; idx++)
 	{
-		if (((uint8_t) paramNo) == _modalstate.ParamNoToIdx[idx])
+		if (uint8_t(paramNo) == _modalstate.ParamNoToIdx[idx])
+		{
 			return idx;
+		}
 	}
 
 	// return 255 of not found
@@ -289,14 +302,14 @@ uint8_t CGCodeParser::ParamNoToParamIdx(param_t paramNo)
 // 5420-5428 - Current Position including offsets in current program units (X Y Z A B C U V W)
 // customized extension
 
-mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertUnits)
+mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertToInch)
 {
 	if (IsModifyParam(paramNo))
 	{
-		uint8_t paramIdx = ParamNoToParamIdx(paramNo);
-		float paramValue = paramIdx != 255 ? _modalstate.Parameter[paramIdx] : 0.0f;
+		uint8_t paramIdx   = ParamNoToParamIdx(paramNo);
+		float   paramValue = paramIdx != 255 ? _modalstate.Parameter[paramIdx] : 0.0f;
 
-		if (convertUnits)
+		if (convertToInch)
 		{
 			paramValue *= 25.4f;
 		}
@@ -304,32 +317,34 @@ mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertUnits)
 		return CMm1000::ConvertFrom(paramValue);
 	}
 
-	const SParamInfo*param = FindParamInfoByParamNo(paramNo);
+	const SParamInfo* param = FindParamInfoByParamNo(paramNo);
 
-	if (param != NULL)
+	if (param != nullptr)
 	{
-		axis_t axis = (axis_t) (paramNo - param->GetParamNo());
+		auto axis = axis_t(paramNo - param->GetParamNo());
 		switch (param->GetParamNo())
 		{
 			case PARAMSTART_G28HOME:
 			{
 				mm1000_t pos = CStepper::GetInstance()->GetLimitMin(axis);
 				if (CStepper::GetInstance()->IsUseReference(CStepper::GetInstance()->ToReferenceId(axis, false)))	// max refmove
+				{
 					pos = CStepper::GetInstance()->GetLimitMax(axis);
+				}
 				return GetParamAsPosition(pos, axis);
 			}
-			case PARAMSTART_G92OFFSET:			return GetParamAsMm1000(super::_modalstate.G92Pospreset[axis], axis);
-			case PARAMSTART_CURRENTPOS:			return GetParamAsMm1000(GetRelativePosition(axis), axis);
-			case PARAMSTART_CURRENTABSPOS:		return GetParamAsMm1000(CMotionControlBase::GetInstance()->GetPosition(axis), axis);
-			case PARAMSTART_PROBEPOS:			return GetParamAsMm1000(GetRelativePosition(_modalstate.G38ProbePos[axis],axis), axis);
-			case PARAMSTART_PROBEOK:			return _modalstate.IsProbeOK?1:0;
-			case PARAMSTART_BACKLASH:			return GetParamAsPosition(CStepper::GetInstance()->GetBacklash(axis), axis);
-			case PARAMSTART_BACKLASH_FEEDRATE:  return CMotionControlBase::GetInstance()->ToMm1000(0, CStepper::GetInstance()->GetBacklash()) * 60;
-			case PARAMSTART_MAX:				return GetParamAsPosition(CStepper::GetInstance()->GetLimitMax(axis), axis);
-			case PARAMSTART_MIN:				return GetParamAsPosition(CStepper::GetInstance()->GetLimitMin(axis), axis);
-			case PARAMSTART_ACC:				return CStepper::GetInstance()->GetAcc(axis);
-			case PARAMSTART_DEC:				return CStepper::GetInstance()->GetDec(axis);
-			case PARAMSTART_JERK:				return CStepper::GetInstance()->GetJerkSpeed(axis);
+			case PARAMSTART_G92OFFSET: return GetParamAsMm1000(super::_modalstate.G92Pospreset[axis], axis);
+			case PARAMSTART_CURRENTPOS: return GetParamAsMm1000(GetRelativePosition(axis), axis);
+			case PARAMSTART_CURRENTABSPOS: return GetParamAsMm1000(CMotionControlBase::GetInstance()->GetPosition(axis), axis);
+			case PARAMSTART_PROBEPOS: return GetParamAsMm1000(GetRelativePosition(_modalstate.G38ProbePos[axis], axis), axis);
+			case PARAMSTART_PROBEOK: return _modalstate.IsProbeOK ? 1 : 0;
+			case PARAMSTART_BACKLASH: return GetParamAsPosition(CStepper::GetInstance()->GetBacklash(axis), axis);
+			case PARAMSTART_BACKLASH_FEEDRATE: return CMotionControlBase::GetInstance()->ToMm1000(0, CStepper::GetInstance()->GetBacklash()) * 60;
+			case PARAMSTART_MAX: return GetParamAsPosition(CStepper::GetInstance()->GetLimitMax(axis), axis);
+			case PARAMSTART_MIN: return GetParamAsPosition(CStepper::GetInstance()->GetLimitMin(axis), axis);
+			case PARAMSTART_ACC: return CStepper::GetInstance()->GetAcc(axis);
+			case PARAMSTART_DEC: return CStepper::GetInstance()->GetDec(axis);
+			case PARAMSTART_JERK: return CStepper::GetInstance()->GetJerkSpeed(axis);
 
 			case PARAMSTART_G54OFFSET + 0 * PARAMSTART_G54FF_OFFSET:
 			case PARAMSTART_G54OFFSET + 1 * PARAMSTART_G54FF_OFFSET:
@@ -338,14 +353,17 @@ mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertUnits)
 			case PARAMSTART_G54OFFSET + 4 * PARAMSTART_G54FF_OFFSET:
 			case PARAMSTART_G54OFFSET + 5 * PARAMSTART_G54FF_OFFSET:
 			{
-				uint8_t idx = (uint8_t)((param->GetParamNo() - PARAMSTART_G54OFFSET) / PARAMSTART_G54FF_OFFSET);
+				auto idx = uint8_t((param->GetParamNo() - PARAMSTART_G54OFFSET) / PARAMSTART_G54FF_OFFSET);
 				if (idx < G54ARRAYSIZE)
+				{
 					return GetParamAsMm1000(_modalstate.G54Pospreset[idx][axis], axis);
+				}
 				break;
 			}
-			case PARAMSTART_FEEDRATE:			return GetG1FeedRate();
-			case PARAMSTART_CONTROLLERFAN:		return CControl::GetInstance()->IOControl(CControl::ControllerFan);
-			case PARAMSTART_RAPIDMOVEFEED:		return -GetG0FeedRate();
+			case PARAMSTART_FEEDRATE: return GetG1FeedRate();
+			case PARAMSTART_CONTROLLERFAN: return CControl::GetInstance()->IOControl(CControl::ControllerFan);
+			case PARAMSTART_RAPIDMOVEFEED: return -GetG0FeedRate();
+			default: break;
 		}
 	}
 
@@ -359,16 +377,19 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 {
 	CGCodeExpressionParser exprpars(this);
 	exprpars.Parse();
+
 	if (exprpars.IsError())
+	{
 		Error(exprpars.GetError());
+	}
 	else
 	{
-		mm1000_t mm1000 = CMm1000::ConvertFrom(exprpars.Answer);
+		mm1000_t mm1000   = CMm1000::ConvertFrom(exprpars.Answer);
 		uint32_t intvalue = exprpars.Answer;
-		const SParamInfo*param = FindParamInfoByParamNo(paramNo);
+		auto     param    = FindParamInfoByParamNo(paramNo);
 
-		if (IsModifyParam(paramNo))				
-		{ 
+		if (IsModifyParam(paramNo))
+		{
 			uint8_t paramIdx = ParamNoToParamIdx(paramNo);
 
 			if (paramIdx == 255)
@@ -376,12 +397,12 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 				if (exprpars.Answer != 0.0)
 				{
 					uint8_t idx;
-					for (idx = 0; idx<NUM_PARAMETER;idx++)
+					for (idx = 0; idx < NUM_PARAMETER; idx++)
 					{
 						if (_modalstate.ParamNoToIdx[idx] == 0)
 						{
-							_modalstate.ParamNoToIdx[idx] = (uint8_t)paramNo;
-							_modalstate.Parameter[idx] = exprpars.Answer;
+							_modalstate.ParamNoToIdx[idx] = uint8_t(paramNo);
+							_modalstate.Parameter[idx]    = exprpars.Answer;
 							break;
 						}
 					}
@@ -389,8 +410,8 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 					{
 						Error(MESSAGE_GCODE_NoParamSlotAvailable);
 					}
-				}			
-			} 
+				}
+			}
 			else if (exprpars.Answer == 0.0)
 			{
 				// free slot
@@ -401,20 +422,56 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 				_modalstate.Parameter[paramIdx] = exprpars.Answer;
 			}
 		}
-		else if (param != NULL)
+		else if (param != nullptr)
 		{
-			axis_t axis = (axis_t)(paramNo - param->GetParamNo());
+			auto axis = axis_t(paramNo - param->GetParamNo());
 			switch (param->GetParamNo())
 			{
-				case PARAMSTART_BACKLASH:			{ CStepper::GetInstance()->SetBacklash(axis, (mdist_t)GetParamAsMachine(mm1000, axis));	break;  }
-				case PARAMSTART_BACKLASH_FEEDRATE:	{ CStepper::GetInstance()->SetBacklash((steprate_t)GetParamAsFeedrate(mm1000, axis)); break; }
-				case PARAMSTART_CONTROLLERFAN:		{ CControl::GetInstance()->IOControl(CControl::ControllerFan, (unsigned short)intvalue);	break;  }
-				case PARAMSTART_RAPIDMOVEFEED:		{ SetG0FeedRate(-CFeedrate1000::ConvertFrom(exprpars.Answer)); break;	}
-				case PARAMSTART_MAX:				{ CStepper::GetInstance()->SetLimitMax(axis, GetParamAsMachine(mm1000, axis));	break;	}
-				case PARAMSTART_MIN:				{ CStepper::GetInstance()->SetLimitMin(axis, GetParamAsMachine(mm1000, axis));	break;	}
-				case PARAMSTART_ACC:				{ CStepper::GetInstance()->SetAcc(axis, (steprate_t)intvalue); break;	}
-				case PARAMSTART_DEC:				{ CStepper::GetInstance()->SetDec(axis, (steprate_t)intvalue); break;	}
-				case PARAMSTART_JERK:				{ CStepper::GetInstance()->SetJerkSpeed(axis, (steprate_t)intvalue); break; }
+				case PARAMSTART_BACKLASH:
+				{
+					CStepper::GetInstance()->SetBacklash(axis, mdist_t(GetParamAsMachine(mm1000, axis)));
+					break;
+				}
+				case PARAMSTART_BACKLASH_FEEDRATE:
+				{
+					CStepper::GetInstance()->SetBacklash(steprate_t(GetParamAsFeedrate(mm1000, axis)));
+					break;
+				}
+				case PARAMSTART_CONTROLLERFAN:
+				{
+					CControl::GetInstance()->IOControl(CControl::ControllerFan, uint16_t(intvalue));
+					break;
+				}
+				case PARAMSTART_RAPIDMOVEFEED:
+				{
+					SetG0FeedRate(-CFeedrate1000::ConvertFrom(exprpars.Answer));
+					break;
+				}
+				case PARAMSTART_MAX:
+				{
+					CStepper::GetInstance()->SetLimitMax(axis, GetParamAsMachine(mm1000, axis));
+					break;
+				}
+				case PARAMSTART_MIN:
+				{
+					CStepper::GetInstance()->SetLimitMin(axis, GetParamAsMachine(mm1000, axis));
+					break;
+				}
+				case PARAMSTART_ACC:
+				{
+					CStepper::GetInstance()->SetAcc(axis, steprate_t(intvalue));
+					break;
+				}
+				case PARAMSTART_DEC:
+				{
+					CStepper::GetInstance()->SetDec(axis, steprate_t(intvalue));
+					break;
+				}
+				case PARAMSTART_JERK:
+				{
+					CStepper::GetInstance()->SetJerkSpeed(axis, steprate_t(intvalue));
+					break;
+				}
 
 				case PARAMSTART_G54OFFSET + 0 * PARAMSTART_G54FF_OFFSET:
 				case PARAMSTART_G54OFFSET + 1 * PARAMSTART_G54FF_OFFSET:
@@ -423,7 +480,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 				case PARAMSTART_G54OFFSET + 4 * PARAMSTART_G54FF_OFFSET:
 				case PARAMSTART_G54OFFSET + 5 * PARAMSTART_G54FF_OFFSET:
 				{
-					uint8_t idx = (uint8_t)((param->GetParamNo() - PARAMSTART_G54OFFSET) / PARAMSTART_G54FF_OFFSET);
+					auto idx = uint8_t((param->GetParamNo() - PARAMSTART_G54OFFSET) / PARAMSTART_G54FF_OFFSET);
 					if (idx < G54ARRAYSIZE)
 					{
 						_modalstate.G54Pospreset[idx][axis] = mm1000;
@@ -431,12 +488,17 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 					break;
 				}
 
-				default:							Error(MESSAGE_GCODE_ParameterReadOnly);	return;
+				default:
+				{
+					Error(MESSAGE_GCODE_ParameterReadOnly);
+					return;
+				}
 			}
 		}
 		else
 		{
-			Error(MESSAGE_GCODE_UnspportedParameterNumber);	return;
+			Error(MESSAGE_GCODE_UnspportedParameterNumber);
+			return;
 		}
 
 		// rest of line only comment allowed!
@@ -445,26 +507,29 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 }
 ////////////////////////////////////////////////////////////
 
-const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfo(uintptr_t param, bool(*check)(const SParamInfo*, uintptr_t param))
+const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfo(uintptr_t param, bool (*check)(const SParamInfo*, uintptr_t))
 {
-	const SParamInfo* item = &_paramdef[0];
+	auto item = &_paramdef[0];
 	while (item->GetParamNo() != 0)
 	{
-		if (check(item, param)) return item;
+		if (check(item, param))
+		{
+			return item;
+		}
 		item++;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 ////////////////////////////////////////////////////////////
 
 const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfoByText(const char* text)
 {
-	return FindParamInfo((uintptr_t) text, [](const SParamInfo* p, uintptr_t x) -> bool
+	return FindParamInfo(uintptr_t(text), [](const SParamInfo* p, uintptr_t x) -> bool
 	{
 		const char* text = p->GetText();
-		return text != NULL && strcasecmp_P((const char*)x, text) == 0;
+		return text != nullptr && strcasecmp_P((const char*)x, text) == 0;
 	});
 }
 
@@ -472,9 +537,9 @@ const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfoByText(const char* te
 
 const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfoByParamNo(param_t paramNo)
 {
-	return FindParamInfo((uintptr_t) paramNo, [](const SParamInfo* p, uintptr_t x) -> bool
+	return FindParamInfo(uintptr_t(paramNo), [](const SParamInfo* p, uintptr_t x) -> bool
 	{
-		param_t findparamNo = (param_t)x;
+		auto findparamNo = param_t(x);
 		return p->GetParamNo() == findparamNo ||	// exact same paramno
 			(p->GetAllowAxisOfs() && p->GetParamNo() <= findparamNo && p->GetParamNo() + NUM_AXIS > findparamNo);	// diff with axis
 	});
@@ -482,44 +547,44 @@ const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfoByParamNo(param_t par
 
 ////////////////////////////////////////////////////////////
 
-static const char _feedrate[] PROGMEM = "_feedrate";
-static const char _g28home[] PROGMEM = "_g28home";
-static const char _g92home[] PROGMEM = "_g92home";
-static const char _g54home[] PROGMEM = "_g54home";
-static const char _g55home[] PROGMEM = "_g55home";
-static const char _g56home[] PROGMEM = "_g56home";
-static const char _g57home[] PROGMEM = "_g57home";
-static const char _g58home[] PROGMEM = "_g58home";
-static const char _g59home[] PROGMEM = "_g59home";
-static const char _currentPos[] PROGMEM = "_current";
+static const char _feedrate[] PROGMEM      = "_feedrate";
+static const char _g28home[] PROGMEM       = "_g28home";
+static const char _g92home[] PROGMEM       = "_g92home";
+static const char _g54home[] PROGMEM       = "_g54home";
+static const char _g55home[] PROGMEM       = "_g55home";
+static const char _g56home[] PROGMEM       = "_g56home";
+static const char _g57home[] PROGMEM       = "_g57home";
+static const char _g58home[] PROGMEM       = "_g58home";
+static const char _g59home[] PROGMEM       = "_g59home";
+static const char _currentPos[] PROGMEM    = "_current";
 static const char _currentAbsPos[] PROGMEM = "_currentAbs";
-static const char _probePos[] PROGMEM = "_probePos";
-static const char _probeOk[] PROGMEM = "_probeOK";
-static const char _backlash[] PROGMEM = "_backlash";
-static const char _backlashfeed[] PROGMEM = "_backlashfeed";
-static const char _minPos[] PROGMEM = "_minPos";
-static const char _maxPos[] PROGMEM = "_maxPos";
-static const char _acc[] PROGMEM = "_acc";
-static const char _dec[] PROGMEM = "_dec";
-static const char _jerk[] PROGMEM = "_jerk";
-static const char _fan[] PROGMEM = "_fan";
-static const char _g0feedrate[] PROGMEM = "_g0feedrate";
-static const char _xPos[] PROGMEM = "_x";
-static const char _yPos[] PROGMEM = "_y";
-static const char _zPos[] PROGMEM = "_z";
-static const char _aPos[] PROGMEM = "_a";
-static const char _bPos[] PROGMEM = "_b";
-static const char _cPos[] PROGMEM = "_c";
+static const char _probePos[] PROGMEM      = "_probePos";
+static const char _probeOk[] PROGMEM       = "_probeOK";
+static const char _backlash[] PROGMEM      = "_backlash";
+static const char _backlashfeed[] PROGMEM  = "_backlashfeed";
+static const char _minPos[] PROGMEM        = "_minPos";
+static const char _maxPos[] PROGMEM        = "_maxPos";
+static const char _acc[] PROGMEM           = "_acc";
+static const char _dec[] PROGMEM           = "_dec";
+static const char _jerk[] PROGMEM          = "_jerk";
+static const char _fan[] PROGMEM           = "_fan";
+static const char _g0feedrate[] PROGMEM    = "_g0feedrate";
+static const char _xPos[] PROGMEM          = "_x";
+static const char _yPos[] PROGMEM          = "_y";
+static const char _zPos[] PROGMEM          = "_z";
+static const char _aPos[] PROGMEM          = "_a";
+static const char _bPos[] PROGMEM          = "_b";
+static const char _cPos[] PROGMEM          = "_c";
 
 const CGCodeParser::SParamInfo CGCodeParser::_paramdef[] PROGMEM =
 {
-	{ PARAMSTART_G28HOME,		_g28home,	true,	CGCodeParser::SParamInfo::IsMm1000 },
-	{ PARAMSTART_G92OFFSET,		_g92home,	true,	CGCodeParser::SParamInfo::IsMm1000 },
-	{ PARAMSTART_CURRENTPOS,	_currentPos,true,	CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_G28HOME, _g28home, true, CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_G92OFFSET, _g92home, true, CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_CURRENTPOS, _currentPos, true, CGCodeParser::SParamInfo::IsMm1000 },
 
-	{ PARAMSTART_CURRENTPOS,	_xPos,      false,	CGCodeParser::SParamInfo::IsMm1000 },
-	{ PARAMSTART_CURRENTPOS+1,	_yPos,      false,	CGCodeParser::SParamInfo::IsMm1000 },
-	{ PARAMSTART_CURRENTPOS+2,	_zPos,      false,	CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_CURRENTPOS, _xPos, false, CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_CURRENTPOS + 1, _yPos, false, CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_CURRENTPOS + 2, _zPos, false, CGCodeParser::SParamInfo::IsMm1000 },
 #if NUM_AXIS > 3
 	{ PARAMSTART_CURRENTPOS+3,	_aPos,      false,	CGCodeParser::SParamInfo::IsMm1000 },
 #if NUM_AXIS > 4
@@ -530,36 +595,36 @@ const CGCodeParser::SParamInfo CGCodeParser::_paramdef[] PROGMEM =
 #endif
 #endif
 
-	{ PARAMSTART_CURRENTABSPOS,	_currentAbsPos,true,		CGCodeParser::SParamInfo::IsMm1000 },
-	{ PARAMSTART_PROBEPOS,		_probePos,	true,		CGCodeParser::SParamInfo::IsMm1000 },
-	{ PARAMSTART_PROBEOK,		_probeOk,	false,			CGCodeParser::SParamInfo::IsInt },
-	{ PARAMSTART_BACKLASH,	_backlash,		true,			CGCodeParser::SParamInfo::IsMm1000 },
-	{ PARAMSTART_BACKLASH_FEEDRATE,	_backlashfeed,	false,	CGCodeParser::SParamInfo::IsMm1000 },
-	{ PARAMSTART_MAX,			_maxPos,	true,			CGCodeParser::SParamInfo::IsMm1000 },
-	{ PARAMSTART_MIN,			_minPos,	true,			CGCodeParser::SParamInfo::IsInt },
-	{ PARAMSTART_ACC,			_acc,		true,			CGCodeParser::SParamInfo::IsInt },
-	{ PARAMSTART_DEC,			_dec,		true,			CGCodeParser::SParamInfo::IsInt },
-	{ PARAMSTART_JERK,			_jerk,		true,			CGCodeParser::SParamInfo::IsInt },
-	{ PARAMSTART_CONTROLLERFAN,	_fan,		false,			CGCodeParser::SParamInfo::IsInt },
-	{ PARAMSTART_RAPIDMOVEFEED,	_g0feedrate,false,			CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_CURRENTABSPOS, _currentAbsPos, true, CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_PROBEPOS, _probePos, true, CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_PROBEOK, _probeOk, false, CGCodeParser::SParamInfo::IsInt },
+	{ PARAMSTART_BACKLASH, _backlash, true, CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_BACKLASH_FEEDRATE, _backlashfeed, false, CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_MAX, _maxPos, true, CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_MIN, _minPos, true, CGCodeParser::SParamInfo::IsInt },
+	{ PARAMSTART_ACC, _acc, true, CGCodeParser::SParamInfo::IsInt },
+	{ PARAMSTART_DEC, _dec, true, CGCodeParser::SParamInfo::IsInt },
+	{ PARAMSTART_JERK, _jerk, true, CGCodeParser::SParamInfo::IsInt },
+	{ PARAMSTART_CONTROLLERFAN, _fan, false, CGCodeParser::SParamInfo::IsInt },
+	{ PARAMSTART_RAPIDMOVEFEED, _g0feedrate, false, CGCodeParser::SParamInfo::IsMm1000 },
 
-	{ PARAMSTART_G54OFFSET + 0 * PARAMSTART_G54FF_OFFSET,	_g54home,	true,			CGCodeParser::SParamInfo::IsMm1000 },
-	{ PARAMSTART_G54OFFSET + 1 * PARAMSTART_G54FF_OFFSET,	_g55home,	true,			CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_G54OFFSET + 0 * PARAMSTART_G54FF_OFFSET, _g54home, true, CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_G54OFFSET + 1 * PARAMSTART_G54FF_OFFSET, _g55home, true, CGCodeParser::SParamInfo::IsMm1000 },
 #if G54ARRAYSIZE > 2
-	{ PARAMSTART_G54OFFSET + 2 * PARAMSTART_G54FF_OFFSET,	_g56home,	true,			CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_G54OFFSET + 2 * PARAMSTART_G54FF_OFFSET, _g56home, true, CGCodeParser::SParamInfo::IsMm1000 },
 #if G54ARRAYSIZE > 3
-	{ PARAMSTART_G54OFFSET + 3 * PARAMSTART_G54FF_OFFSET,	_g57home,	true,			CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_G54OFFSET + 3 * PARAMSTART_G54FF_OFFSET, _g57home, true, CGCodeParser::SParamInfo::IsMm1000 },
 #if G54ARRAYSIZE > 4
-	{ PARAMSTART_G54OFFSET + 4 * PARAMSTART_G54FF_OFFSET,	_g58home,	true,			CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_G54OFFSET + 4 * PARAMSTART_G54FF_OFFSET, _g58home, true, CGCodeParser::SParamInfo::IsMm1000 },
 #if G54ARRAYSIZE > 5
-	{ PARAMSTART_G54OFFSET + 5 * PARAMSTART_G54FF_OFFSET,	_g59home,	true,			CGCodeParser::SParamInfo::IsMm1000 },
+	{ PARAMSTART_G54OFFSET + 5 * PARAMSTART_G54FF_OFFSET, _g59home, true, CGCodeParser::SParamInfo::IsMm1000 },
 #endif
 #endif
 #endif
 #endif
 
-	{ PARAMSTART_FEEDRATE,	_feedrate, false,			CGCodeParser::SParamInfo::IsMm1000 },
-	{ 0,NULL,false }
+	{ PARAMSTART_FEEDRATE, _feedrate, false, CGCodeParser::SParamInfo::IsMm1000 },
+	{ 0, nullptr, false }
 };
 
 ////////////////////////////////////////////////////////////
@@ -568,7 +633,7 @@ void CGCodeParser::PrintParam(const CGCodeParser::SParamInfo* item, axis_t axis)
 {
 	const char* paramname = item->GetText();
 	StepperSerial.print('#');
-	if (paramname != NULL)
+	if (paramname != nullptr)
 	{
 		StepperSerial.print('<');
 		StepperSerial.print(paramname);
@@ -581,7 +646,7 @@ void CGCodeParser::PrintParam(const CGCodeParser::SParamInfo* item, axis_t axis)
 		}
 		StepperSerial.print(F(">="));
 
-		PrintParamValue(item,ofs);
+		PrintParamValue(item, ofs);
 		StepperSerial.print(F("\t\t;"));
 		StepperSerial.print(item->GetParamNo() + ofs);
 		StepperSerial.println();
@@ -614,9 +679,9 @@ void CGCodeParser::PrintParamValue(param_t paramNo)
 {
 	if (IsModifyParam(paramNo))
 	{
-		uint8_t paramIdx = ParamNoToParamIdx(paramNo);
+		uint8_t  paramIdx   = ParamNoToParamIdx(paramNo);
 		mm1000_t paramvalue = paramIdx != 255 ? GetParamValue(_modalstate.ParamNoToIdx[paramIdx], false) : 0;
-		char tmp[16];
+		char     tmp[16];
 		StepperSerial.println(CMm1000::ToString(paramvalue, tmp, 3));
 	}
 }
@@ -625,14 +690,14 @@ void CGCodeParser::PrintParamValue(param_t paramNo)
 
 void CGCodeParser::PrintAllParam()
 {
-	for (uint8_t idx=0;idx<NUM_PARAMETER;idx++)
+	for (uint8_t paramNo : _modalstate.ParamNoToIdx)
 	{
-		if (_modalstate.ParamNoToIdx[idx] != 0)
+		if (paramNo != 0)
 		{
 			StepperSerial.print('#');
-			StepperSerial.print((uint16_t)_modalstate.ParamNoToIdx[idx]);
+			StepperSerial.print(uint16_t(paramNo));
 			StepperSerial.print('=');
-			PrintParamValue(_modalstate.ParamNoToIdx[idx]);
+			PrintParamValue(paramNo);
 		}
 	}
 	const SParamInfo* item = &_paramdef[0];
@@ -655,8 +720,8 @@ void CGCodeParser::PrintAllParam()
 
 ////////////////////////////////////////////////////////////
 
-mm1000_t CGCodeParser::CalcAllPreset(axis_t axis)			
-{ 
+mm1000_t CGCodeParser::CalcAllPreset(axis_t axis)
+{
 	return GetG54PosPreset(axis) + (IsG53Present() ? 0 : super::GetG92PosPreset(axis) + GetToolHeightPosPreset(axis));
 }
 
@@ -703,9 +768,12 @@ bool CGCodeParser::Command(char ch)
 			return true;
 		}
 
-		// case '-':
+			// case '-':
 		case '!':
-		case '&': CommandEscape(); return true;
+		case '&': CommandEscape();
+			return true;
+
+		default: break;
 	}
 
 	return super::Command(ch);
@@ -720,27 +788,30 @@ bool CGCodeParser::GCommand(uint8_t gcode)
 
 	switch (gcode)
 	{
-		case 10:	G10Command(); return true;
-		case 38:	G38Command(); return true;
-		case 40:	G40Command(); return true;
-		case 41:	G41Command(); return true;
-		case 42:	G42Command(); return true;
-		case 43:	G43Command(); return true;
-		case 52:	InfoNotImplemented(); return true;
-		case 53:	G53Command(); return true;
-		case 54:	G5xCommand(1); return true;
-		case 55:	G5xCommand(2); return true;
-		case 56:	G5xCommand(3); return true;
-		case 57:	G5xCommand(4); return true;
-		case 58:	G5xCommand(5); return true;
-		case 59:	G5xCommand(6); return true;
-		case 68:	G68Command(); return true;
-		case 69:	G69Command(); return true;
-		case 81:	G81Command(); return true;
-		case 82:	G82Command(); return true;
-		case 83:	G83Command(); return true;
-		case 98:	G98Command(); return true;
-		case 99:	G99Command();  return true;
+		// @formatter:off — disable formatter after this line
+		case 10: G10Command();	return true;
+		case 38: G38Command();	return true;
+		case 40: G40Command();	return true;
+		case 41: G41Command();	return true;
+		case 42: G42Command();	return true;
+		case 43: G43Command();	return true;
+		case 52: InfoNotImplemented();	return true;
+		case 53: G53Command();	return true;
+		case 54: G5xCommand(1);	return true;
+		case 55: G5xCommand(2);	return true;
+		case 56: G5xCommand(3);	return true;
+		case 57: G5xCommand(4);	return true;
+		case 58: G5xCommand(5);	return true;
+		case 59: G5xCommand(6);	return true;
+		case 68: G68Command();	return true;
+		case 69: G69Command();	return true;
+		case 81: G81Command();	return true;
+		case 82: G82Command();	return true;
+		case 83: G83Command();	return true;
+		case 98: G98Command();	return true;
+		case 99: G99Command();	return true;
+		default: break;
+			// @formatter:on — enable formatter after this line
 	}
 	return false;
 }
@@ -754,20 +825,23 @@ bool CGCodeParser::MCommand(mcode_t mcode)
 
 	switch (mcode)
 	{
-		case 0:	M00Command(); return true;
-		case 1:	M01Command(); return true;
-		case 2:	M02Command(); return true;
-		case 6: M06Command(); return true;
-		case 8: M08Command(); return true;
-		case 10: M10Command(); return true;
-		case 11: M11Command(); return true;
-		case 110: M110Command(); return true;
-		case 111: M111Command(); return true;
-		case 114: M114Command(); return true;
-		case 220: M220Command(); return true;
+		// @formatter:off — disable formatter after this line
+		case 0: M00Command();	return true;
+		case 1: M01Command();	return true;
+		case 2: M02Command();	return true;
+		case 6: M06Command();	return true;
+		case 8: M08Command();	return true;
+		case 10: M10Command();	return true;
+		case 11: M11Command();	return true;
+		case 110: M110Command();	return true;
+		case 111: M111Command();	return true;
+		case 114: M114Command();	return true;
+		case 220: M220Command();	return true;
 #ifndef REDUCED_SIZE
-		case 300: M300Command(); return true;
+		case 300: M300Command();	return true;
 #endif
+		default: break;
+			// @formatter:on — enable formatter after this line
 	}
 	return false;
 }
@@ -790,9 +864,9 @@ void CGCodeParser::ParameterCommand()
 			}
 			else
 			{
-				for (uint8_t idx = 0;idx<NUM_PARAMETER;idx++)
+				for (unsigned char& paramNo : _modalstate.ParamNoToIdx)
 				{
-					_modalstate.ParamNoToIdx[idx] = 0;
+					paramNo = 0;
 				}
 			}
 		}
@@ -805,16 +879,20 @@ void CGCodeParser::ParameterCommand()
 
 	param_t paramNo = ParseParamNo();
 	if (IsError())
+	{
 		return;
+	}
 
 	if (_reader->SkipSpaces() != '=')
 	{
-		Error(MESSAGE_GCODE_EqExpected);	
+		Error(MESSAGE_GCODE_EqExpected);
 		return;
 	}
 	_reader->GetNextCharSkipScaces();
-	if (CheckError()) 
+	if (CheckError())
+	{
 		return;
+	}
 
 	if (!SetParamCommand(paramNo))
 	{
@@ -880,14 +958,14 @@ void CGCodeParser::GetL81(SAxisMove& move, uint8_t& l)
 	move.bitfield.bit.L = true;
 
 	_reader->GetNextChar();
-	unsigned long myL = GetUint32OrParam();
+	uint32_t myL = GetUint32OrParam();
 
 	if (myL == 0 || myL > 255)
 	{
 		Error(MESSAGE_GCODE_LmustBe1_255);
 		return;
 	}
-	l = (uint8_t)myL;
+	l = uint8_t(myL);
 }
 
 ////////////////////////////////////////////////////////////
@@ -917,18 +995,27 @@ void CGCodeParser::GetQ81(SAxisMove& move)
 
 void CGCodeParser::G10Command()
 {
-	uint8_t specified = 0;
-	uint8_t l=0;
-	uint8_t p=0;
-	uint8_t g90or91 = 90;
+	uint8_t   specified = 0;
+	uint8_t   l         = 0;
+	uint8_t   p         = 0;
+	uint8_t   g90or91   = 90;
 	SAxisMove move(false);
 
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS) GetAxis(axis, move, AbsolutPosition);
-		else if (ch == 'L')					  GetUint8(l, specified, 0);
-		else if (ch == 'P')					  GetUint8(p, specified, 1);
+		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		{
+			GetAxis(axis, move, AbsolutPosition);
+		}
+		else if (ch == 'L')
+		{
+			GetUint8(l, specified, 0);
+		}
+		else if (ch == 'P')
+		{
+			GetUint8(p, specified, 1);
+		}
 		else if (ch == 'G')
 		{
 			GetUint8(g90or91, specified, 7);
@@ -937,21 +1024,43 @@ void CGCodeParser::G10Command()
 				Error(MESSAGE_GCODE_G90OR91);
 			}
 		}
-		else break;
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return; }
+		if (CheckError())
+		{
+			return;
+		}
 	}
 
-	if (IsBitClear(specified, 0)) { Error(MESSAGE_GCODE_LExpected); return; }
-	if (IsBitClear(specified, 1)) { Error(MESSAGE_GCODE_PExpected); return; }
+	if (IsBitClear(specified, 0))
+	{
+		Error(MESSAGE_GCODE_LExpected);
+		return;
+	}
+	if (IsBitClear(specified, 1))
+	{
+		Error(MESSAGE_GCODE_PExpected);
+		return;
+	}
 
 	switch (l)
 	{
-		default: Error(MESSAGE_GCODE_UnsupportedLvalue); return;
+		default: Error(MESSAGE_GCODE_UnsupportedLvalue);
+			return;
 		case 2:
 		{
-			if (p == 0) { p = _modalstate.ZeroPresetIdx; }		// current
-			if (p > G54ARRAYSIZE)  { Error(MESSAGE_GCODE_UnsupportedCoordinateSystemUseG54Instead); return; }
+			if (p == 0)
+			{	// current
+				p = _modalstate.ZeroPresetIdx;
+			}
+			if (p > G54ARRAYSIZE)
+			{
+				Error(MESSAGE_GCODE_UnsupportedCoordinateSystemUseG54Instead);
+				return;
+			}
 
 			for (uint8_t axis = 0; axis < NUM_AXIS; axis++)
 			{
@@ -980,11 +1089,16 @@ void CGCodeParser::G38Command()
 
 	switch (subCode)
 	{
-		case 2: G31Command(super::_modalstate.ProbeOnValue); break;
-		case 4: G31Command(!super::_modalstate.ProbeOnValue); break;
-		case 12: G38CenterProbe(super::_modalstate.ProbeOnValue); return;
-		case 14: G38CenterProbe(!super::_modalstate.ProbeOnValue); return;
-		default: ErrorNotImplemented(); return;
+		case 2: G31Command(super::_modalstate.ProbeOnValue);
+			break;
+		case 4: G31Command(!super::_modalstate.ProbeOnValue);
+			break;
+		case 12: G38CenterProbe(super::_modalstate.ProbeOnValue);
+			return;
+		case 14: G38CenterProbe(!super::_modalstate.ProbeOnValue);
+			return;
+		default: ErrorNotImplemented();
+			return;
 	}
 
 	_modalstate.IsProbeOK = !IsError();
@@ -1004,11 +1118,23 @@ void CGCodeParser::G38CenterProbe(bool probevalue)
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS) GetAxis(axis, move, RelativPosition);
-		else if (ch == 'F') GetFeedrate(move);
-		else break;
+		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		{
+			GetAxis(axis, move, RelativPosition);
+		}
+		else if (ch == 'F')
+		{
+			GetFeedrate(move);
+		}
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return; }
+		if (CheckError())
+		{
+			return;
+		}
 	}
 
 	CMotionControlBase::GetInstance()->GetPositions(_modalstate.G38ProbePos);
@@ -1018,7 +1144,9 @@ void CGCodeParser::G38CenterProbe(bool probevalue)
 		if (IsBitSet(move.axes, axis))
 		{
 			if (!CenterProbeCommand(move, probevalue, axis))
+			{
 				return;
+			}
 		}
 	}
 }
@@ -1032,19 +1160,25 @@ bool CGCodeParser::CenterProbeCommand(SAxisMove& move, bool probevalue, axis_t a
 	movenew.newpos[axis] += move.newpos[axis];
 
 	_modalstate.IsProbeOK = ProbeCommand(movenew, probevalue);
-	if (!_modalstate.IsProbeOK) return false;
-	
+	if (!_modalstate.IsProbeOK)
+	{
+		return false;
+	}
+
 	mm1000_t pos = CMotionControlBase::GetInstance()->GetPosition(axis);
 	movenew.newpos[axis] -= move.newpos[axis];
 	CMotionControlBase::GetInstance()->MoveAbs(movenew.newpos, super::_modalstate.G0FeedRate);
 	movenew.newpos[axis] -= move.newpos[axis];
-	
+
 	_modalstate.IsProbeOK = ProbeCommand(movenew, probevalue);
-	if (!_modalstate.IsProbeOK) return false;
-	
+	if (!_modalstate.IsProbeOK)
+	{
+		return false;
+	}
+
 	_modalstate.G38ProbePos[axis] = CMotionControlBase::GetInstance()->GetPosition(axis) + (pos - CMotionControlBase::GetInstance()->GetPosition(axis)) / 2;
 	CMotionControlBase::GetInstance()->MoveAbs(_modalstate.G38ProbePos, super::_modalstate.G0FeedRate);
-	
+
 	return true;
 }
 
@@ -1052,13 +1186,13 @@ bool CGCodeParser::CenterProbeCommand(SAxisMove& move, bool probevalue, axis_t a
 
 void CGCodeParser::G41Command()
 {
-/*
-		if (_reader->SkipSpacesToUpper() == 'D')
-		{
-			_reader->GetNextChar();
-			GetUint16OrParam();			// ignore it
-		}
-*/
+	/*
+			if (_reader->SkipSpacesToUpper() == 'D')
+			{
+				_reader->GetNextChar();
+				GetUint16OrParam();			// ignore it
+			}
+	*/
 	ErrorNotImplemented();
 }
 
@@ -1066,13 +1200,13 @@ void CGCodeParser::G41Command()
 
 void CGCodeParser::G42Command()
 {
-/*
-	if (_reader->SkipSpacesToUpper() == 'D')
-	{
-		_reader->GetNextChar();
-		GetUint16OrParam();			// ignore it
-	}
-*/
+	/*
+		if (_reader->SkipSpacesToUpper() == 'D')
+		{
+			_reader->GetNextChar();
+			GetUint16OrParam();			// ignore it
+		}
+	*/
 	ErrorNotImplemented();
 }
 
@@ -1084,11 +1218,15 @@ void CGCodeParser::G43Command()
 	{
 		_reader->GetNextChar();
 		toolnr_t tool = GetUint16OrParam();
-		if (IsError()) return;
+		if (IsError())
+		{
+			return;
+		}
 
 		if (!CGCodeTools::GetInstance()->IsValidTool(tool))
 		{
-			Error(MESSAGE_GCODE_NoValidTool); return;
+			Error(MESSAGE_GCODE_NoValidTool);
+			return;
 		}
 		_modalstate.ToolHeigtCompensation = CGCodeTools::GetInstance()->GetHeight(tool);
 	}
@@ -1103,7 +1241,9 @@ void CGCodeParser::G43Command()
 void CGCodeParser::GetG68IJK(axis_t axis, SAxisMove& move, mm1000_t offset[NUM_AXISXYZ])
 {
 	if (!CheckAxisSpecified(axis, move.bitfield.all))
+	{
 		return;
+	}
 
 	_reader->GetNextChar();
 
@@ -1132,14 +1272,22 @@ void CGCodeParser::G68Command()
 
 	switch (subcode)
 	{
-		case 10: G68Ext10Command(); break;
-		case 11: G68Ext11Command(); break;
-		case 12: G68Ext12Command(); break;
-		case 13: G68ExtXXCommand(X_AXIS); break;
-		case 14: G68ExtXXCommand(Y_AXIS); break;
-		case 15: G68ExtXXCommand(Z_AXIS); break;
-		case 255: G68CommandDefault(); break;
-		default:	ErrorNotImplemented(); return;
+		case 10: G68Ext10Command();
+			break;
+		case 11: G68Ext11Command();
+			break;
+		case 12: G68Ext12Command();
+			break;
+		case 13: G68ExtXXCommand(X_AXIS);
+			break;
+		case 14: G68ExtXXCommand(Y_AXIS);
+			break;
+		case 15: G68ExtXXCommand(Z_AXIS);
+			break;
+		case 255: G68CommandDefault();
+			break;
+		default: ErrorNotImplemented();
+			return;
 	}
 
 	SetPositionAfterG68G69();
@@ -1155,39 +1303,59 @@ void CGCodeParser::G68CommandDefault()
 	}
 
 	SAxisMove move(true);
-	mm1000_t r;
-	mm1000_t offset[NUM_AXISXYZ] = { 0, 0, 0 };
-	mm1000_t vect[NUM_AXISXYZ] = { 0, 0, 0 };
+	mm1000_t  r;
+	mm1000_t  offset[NUM_AXISXYZ] = { 0, 0, 0 };
+	mm1000_t  vect[NUM_AXISXYZ]   = { 0, 0, 0 };
 
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)				GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
-		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)	GetG68IJK(axis, move, vect);
-		else if (ch == 'R')										GetAngleR(move, r);
-		else break;
+		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
+		{
+			GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+		}
+		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)
+		{
+			GetG68IJK(axis, move, vect);
+		}
+		else if (ch == 'R')
+		{
+			GetAngleR(move, r);
+		}
+		else
+		{
+			break;
+		}
 
 		if (CheckError()) { return; }
 	}
 
-	if (!move.bitfield.bit.R)			{ Error(MESSAGE_GCODE_MissingR); return; }
-
-	memcpy(offset, move.newpos,sizeof(offset));	// use current position!
-/*
-	for (uint8_t axis = 0; axis < NUM_AXIS; axis++)
+	if (!move.bitfield.bit.R)
 	{
-		if (IsBitSet(move.axes, axis))
-		{
-			offset[axis] = move.newpos[axis];
-		}
+		Error(MESSAGE_GCODE_MissingR);
+		return;
 	}
-*/
+
+	memcpy(offset, move.newpos, sizeof(offset));	// use current position!
+	/*
+		for (uint8_t axis = 0; axis < NUM_AXIS; axis++)
+		{
+			if (IsBitSet(move.axes, axis))
+			{
+				offset[axis] = move.newpos[axis];
+			}
+		}
+	*/
 
 	if (move.GetIJK())
 	{
 		//3D
 		// see vect with GetG67IJK
-		if (vect[0] == 0 && vect[1] && vect[2])			{ Error(MESSAGE_GCODE_IJKVECTORIS0); return; }
+		if (vect[0] == 0 && vect[1] && vect[2])
+		{
+			Error(MESSAGE_GCODE_IJKVECTORIS0);
+			return;
+		}
 	}
 	else
 	{
@@ -1195,7 +1363,7 @@ void CGCodeParser::G68CommandDefault()
 		vect[super::_modalstate.Plane_axis_2] = 1000;
 	}
 
-	CMotionControl::GetInstance()->SetRotate(CMm1000::DegreeToRAD(r),vect,offset);
+	CMotionControl::GetInstance()->SetRotate(CMm1000::DegreeToRAD(r), vect, offset);
 }
 
 ////////////////////////////////////////////////////////////
@@ -1205,8 +1373,11 @@ void CGCodeParser::G68Ext10Command()
 	// Clear (all and set to 0), no iJK, no xyz
 
 	mm1000_t offset[NUM_AXISXYZ] = { 0, 0, 0 };
+
 	for (uint8_t axis = 0; axis < NUM_AXISXYZ; axis++)
-		CMotionControl::GetInstance()->SetRotate2D(axis,0.0);
+	{
+		CMotionControl::GetInstance()->SetRotate2D(axis, 0.0);
+	}
 	CMotionControl::GetInstance()->SetOffset2D(offset);
 }
 
@@ -1221,10 +1392,19 @@ void CGCodeParser::G68Ext11Command()
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)	GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
-		else break;
+		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
+		{
+			GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+		}
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return; }
+		if (CheckError())
+		{
+			return;
+		}
 	}
 
 	CMotionControl::GetInstance()->SetOffset2D(move.newpos);
@@ -1238,27 +1418,41 @@ void CGCodeParser::G68Ext12Command()
 	// xyz missing => no chang of offset
 
 	SAxisMove move(true);
-	mm1000_t vect[NUM_AXISXYZ] = { 0, 0, 0 };
+	mm1000_t  vect[NUM_AXISXYZ] = { 0, 0, 0 };
 
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)				GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
-		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)	GetG68IJK(axis, move, vect);
-		else break;
+		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
+		{
+			GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+		}
+		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)
+		{
+			GetG68IJK(axis, move, vect);
+		}
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return; }
+		if (CheckError())
+		{
+			return;
+		}
 	}
 
 	if (move.axes)
+	{
 		CMotionControl::GetInstance()->SetOffset2D(move.newpos);
+	}
 
 	for (uint8_t axis = 0; axis < NUM_AXISXYZ; axis++)
 	{
 		if (IsBitSet(move.GetIJK(), axis))
 		{
-				// angle
-			CMotionControl::GetInstance()->SetRotate2D(axis,CMm1000::DegreeToRAD(vect[axis]));
+			// angle
+			CMotionControl::GetInstance()->SetRotate2D(axis, CMm1000::DegreeToRAD(vect[axis]));
 		}
 	}
 }
@@ -1270,25 +1464,38 @@ void CGCodeParser::G68ExtXXCommand(axis_t rotaxis)
 	// calculate angle(X)
 
 	SAxisMove move(true);
-	mm1000_t vect[NUM_AXISXYZ] = { 0, 0, 0 };
-	
+	mm1000_t  vect[NUM_AXISXYZ] = { 0, 0, 0 };
+
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)			  GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
-		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ) 
+		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
+		{
+			GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+		}
+		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)
 		{
 			if (rotaxis == axis)
+			{
 				Error(MESSAGE_GCODE_SPECIFIED);
+			}
 			else
+			{
 				GetG68IJK(axis, move, vect);
+			}
 		}
-		else break;
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return; }
+		if (CheckError())
+		{
+			return;
+		}
 	}
 
-	float pos1=(float) (move.newpos[rotaxis] - CMotionControl::GetInstance()->GetOffset2D(rotaxis));
+	float pos1 = float(move.newpos[rotaxis] - CMotionControl::GetInstance()->GetOffset2D(rotaxis));
 	float pos2;
 	float angle;
 
@@ -1297,26 +1504,42 @@ void CGCodeParser::G68ExtXXCommand(axis_t rotaxis)
 
 	switch (rotaxis)
 	{
-		case X_AXIS: axis2=Y_AXIS;axis3=Z_AXIS; break;
-		case Y_AXIS: axis2=Z_AXIS;axis3=X_AXIS; break;
-		case Z_AXIS: axis2=X_AXIS;axis3=Y_AXIS; break;
-		default: InfoNotImplemented(); return;
+		case X_AXIS:
+		{
+			axis2 = Y_AXIS;
+			axis3 = Z_AXIS;
+			break;
+		}
+		case Y_AXIS:
+		{
+			axis2 = Z_AXIS;
+			axis3 = X_AXIS;
+			break;
+		}
+		case Z_AXIS:
+		{
+			axis2 = X_AXIS;
+			axis3 = Y_AXIS;
+			break;
+		}
+		default: InfoNotImplemented();
+			return;
 	}
 
-	if (IsBitSet(move.GetIJK(),axis3))
+	if (IsBitSet(move.GetIJK(), axis3))
 	{
 		// calc angle
-		pos2 = (float)(move.newpos[axis2] -  CMotionControl::GetInstance()->GetOffset2D(axis2) - vect[axis3]) ;
-		angle = atan2(pos2,pos1);
-		CMotionControl::GetInstance()->SetRotate2D(axis3,angle);
-		pos1 = hypotf(pos1,pos2);	// correction for 2nd rotation axis
+		pos2  = float(move.newpos[axis2] - CMotionControl::GetInstance()->GetOffset2D(axis2) - vect[axis3]);
+		angle = atan2(pos2, pos1);
+		CMotionControl::GetInstance()->SetRotate2D(axis3, angle);
+		pos1 = hypotf(pos1, pos2);	// correction for 2nd rotation axis
 	}
-	if (IsBitSet(move.GetIJK(),axis2))
+	if (IsBitSet(move.GetIJK(), axis2))
 	{
 		// calc angle
-		pos2 = (float)(move.newpos[axis3] -  CMotionControl::GetInstance()->GetOffset2D(axis3) - vect[axis2]);
-		angle = atan2(pos2,pos1);
-		CMotionControl::GetInstance()->SetRotate2D(axis2,angle);
+		pos2  = float(move.newpos[axis3] - CMotionControl::GetInstance()->GetOffset2D(axis3) - vect[axis2]);
+		angle = atan2(pos2, pos1);
+		CMotionControl::GetInstance()->SetRotate2D(axis2, angle);
 	}
 }
 
@@ -1344,7 +1567,10 @@ void CGCodeParser::G5xCommand(uint8_t idx)
 {
 	// G54 => idx = 1 => arraysize==1
 
-	if (CutterRadiosIsOn()) return;
+	if (CutterRadiosIsOn())
+	{
+		return;
+	}
 
 	if (idx > G54ARRAYSIZE)
 	{
@@ -1353,7 +1579,7 @@ void CGCodeParser::G5xCommand(uint8_t idx)
 	}
 
 	_modlessstate.ZeroPresetIdx = _modalstate.ZeroPresetIdx = idx;
-	CLcd::InvalidateLcd(); 
+	CLcd::InvalidateLcd();
 }
 
 ////////////////////////////////////////////////////////////
@@ -1367,15 +1593,39 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) <= Z_AXIS)				GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
-		else if (ch == 'R')									GetR81(move);
-		else if (ch == 'L')									GetL81(move, l);
-		else if (ch == 'F')									GetFeedrate(move);
-		else if (ch == 'P' && useP)							GetP81(move);
-		else if (ch == 'Q' && useQ)							GetQ81(move);
-		else break;
+		if ((axis = CharToAxis(ch)) <= Z_AXIS)
+		{
+			GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+		}
+		else if (ch == 'R')
+		{
+			GetR81(move);
+		}
+		else if (ch == 'L')
+		{
+			GetL81(move, l);
+		}
+		else if (ch == 'F')
+		{
+			GetFeedrate(move);
+		}
+		else if (ch == 'P' && useP)
+		{
+			GetP81(move);
+		}
+		else if (ch == 'Q' && useQ)
+		{
+			GetQ81(move);
+		}
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return; }
+		if (CheckError())
+		{
+			return;
+		}
 	}
 
 	if (!CheckError() && move.axes)
@@ -1428,15 +1678,21 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 
 			MoveStart(false);
 			CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalstate.G0FeedRate);
-			if (CheckError()) { return; }
+			if (CheckError())
+			{
+				return;
+			}
 
 			// 2. Step: GoTo z(R) (fast)
 			pos[super::_modalstate.Plane_axis_2] = _modalstate.G8xR;
 			CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalstate.G0FeedRate);
-			if (CheckError()) { return; }
+			if (CheckError())
+			{
+				return;
+			}
 
 			mm1000_t nextPlan2 = _modalstate.G8xR;
-			bool finalMove = false;
+			bool     finalMove = false;
 
 			while (!finalMove)
 			{
@@ -1467,10 +1723,13 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 				MoveStart(true);
 				pos[super::_modalstate.Plane_axis_2] = nextPlan2;
 				CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalstate.G1FeedRate);
-				if (CheckError()) { return; }
+				if (CheckError())
+				{
+					return;
+				}
 
 				// 3.a. Step: Wait
-				if (useP &&  _modalstate.G8xP != 0)
+				if (useP && _modalstate.G8xP != 0)
 				{
 					Wait(_modalstate.G8xP);
 				}
@@ -1491,7 +1750,10 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 
 				MoveStart(false);
 				CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalstate.G0FeedRate);
-				if (CheckError()) { return; }
+				if (CheckError())
+				{
+					return;
+				}
 			}
 		}
 	}
@@ -1501,7 +1763,7 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 
 void CGCodeParser::G73Command()
 {
-	super::_modalstate.LastCommand = (LastCommandCB) &CGCodeParser::G73Command;
+	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G73Command);
 
 	SAxisMove move(true);
 	G8xCommand(move, false, true, true);
@@ -1511,7 +1773,7 @@ void CGCodeParser::G73Command()
 
 void CGCodeParser::G81Command()
 {
-	super::_modalstate.LastCommand = (LastCommandCB) &CGCodeParser::G81Command;
+	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G81Command);
 
 	SAxisMove move(true);
 	G8xCommand(move, false, false, false);
@@ -1521,8 +1783,8 @@ void CGCodeParser::G81Command()
 
 void CGCodeParser::G82Command()
 {
-	super::_modalstate.LastCommand = (LastCommandCB) &CGCodeParser::G82Command;
-	
+	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G82Command);
+
 	SAxisMove move(true);
 	G8xCommand(move, true, false, false);
 }
@@ -1531,7 +1793,7 @@ void CGCodeParser::G82Command()
 
 void CGCodeParser::G83Command()
 {
-	super::_modalstate.LastCommand = (LastCommandCB) &CGCodeParser::G83Command;
+	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G83Command);
 
 	SAxisMove move(true);
 	G8xCommand(move, false, true, false);
@@ -1553,9 +1815,7 @@ void CGCodeParser::M01Command()
 	CControl::GetInstance()->StopProgram(true);
 }
 
-void CGCodeParser::M02Command()
-{
-}
+void CGCodeParser::M02Command() {}
 
 ////////////////////////////////////////////////////////////
 
@@ -1594,7 +1854,7 @@ void CGCodeParser::M110Command()
 {
 	// set linenumber
 
-	unsigned long linenumber = 0;
+	uint32_t linenumber = 0;
 
 	if (_reader->SkipSpacesToUpper() == 'N')
 	{
@@ -1602,7 +1862,10 @@ void CGCodeParser::M110Command()
 		linenumber = GetUInt32();
 	}
 
-	if (!ExpectEndOfCommand()) { return; }
+	if (!ExpectEndOfCommand())
+	{
+		return;
+	}
 
 	super::_modalstate.LineNumber = linenumber;
 }
@@ -1618,7 +1881,10 @@ void CGCodeParser::M111Command()
 		_modalstate._debuglevel = GetUInt8();
 	}
 
-	if (!ExpectEndOfCommand()) { return; }
+	if (!ExpectEndOfCommand())
+	{
+		return;
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -1635,7 +1901,10 @@ void CGCodeParser::M114Command()
 
 	_OkMessage = postype == 1 ? PrintRelPosition : PrintAbsPosition;
 
-	if (!ExpectEndOfCommand()) { return; }
+	if (!ExpectEndOfCommand())
+	{
+		return;
+	}
 }
 
 
@@ -1649,7 +1918,10 @@ void CGCodeParser::M220Command()
 	{
 		_reader->GetNextChar();
 		uint8_t speedInP = GetUInt8();
-		if (IsError()) return;
+		if (IsError())
+		{
+			return;
+		}
 		CStepper::GetInstance()->SetSpeedOverride(CStepper::PToSpeedOverride(speedInP));
 	}
 	else
@@ -1665,11 +1937,11 @@ void CGCodeParser::M220Command()
 
 void CGCodeParser::M300Command()
 {
-	SPlayTone tone[2];
-	const SPlayTone* mytone = tone;
-	bool fromprogmem = false;
+	SPlayTone        tone[2];
+	const SPlayTone* mytone      = tone;
+	bool             fromprogmem = false;
 
-	tone[0].Tone = ToneA4;
+	tone[0].Tone     = ToneA4;
 	tone[0].Duration = MilliSecToDuration(500);
 
 	tone[1].Tone = ToneEnd;
@@ -1678,24 +1950,49 @@ void CGCodeParser::M300Command()
 	{
 		_reader->GetNextChar();
 		unsigned int freq = GetUInt16();
-		tone[0].Tone = (ETone)FreqToTone(freq);
-		if (IsError()) return;
+		tone[0].Tone      = ETone(FreqToTone(freq));
+		if (IsError())
+		{
+			return;
+		}
 
 		switch (freq)
 		{
-			case 1: mytone = SPlayTone::PlayOK; fromprogmem = true; break;
-			case 2: mytone = SPlayTone::PlayError; fromprogmem = true; break;
-			case 3: mytone = SPlayTone::PlayInfo; fromprogmem = true; break;
+			case 1:
+			{
+				mytone      = SPlayTone::PlayOK;
+				fromprogmem = true;
+				break;
+			}
+			case 2:
+			{
+				mytone      = SPlayTone::PlayError;
+				fromprogmem = true;
+				break;
+			}
+			case 3:
+			{
+				mytone      = SPlayTone::PlayInfo;
+				fromprogmem = true;
+				break;
+			}
+			default: break;
 		}
 	}
 	if (!fromprogmem && _reader->SkipSpacesToUpper() == 'P')
 	{
 		_reader->GetNextChar();
 		tone[0].Duration = MilliSecToDuration(GetUInt16());
-		if (IsError()) return;
+		if (IsError())
+		{
+			return;
+		}
 	}
 
-	if (!ExpectEndOfCommand()) { return; }
+	if (!ExpectEndOfCommand())
+	{
+		return;
+	}
 
 	if (CLcd::GetInstance())
 	{
@@ -1733,12 +2030,10 @@ void CGCodeParser::CNCLibCommandExtensions()
 			{
 				CControl::GetInstance()->Kill();
 			}
-			else
-			{
-			}
-
 			break;
 		}
+		default: break;
+
 	}
 }
 

@@ -34,11 +34,11 @@
 ////////////////////////////////////////////////////////
 
 #define X_MAXSIZE 400000				// in mm1000_t
-#define Y_MAXSIZE 380000 
-#define Z_MAXSIZE 100000 
-#define A_MAXSIZE 50000 
-#define B_MAXSIZE 360000 
-#define C_MAXSIZE 360000 
+#define Y_MAXSIZE 380000
+#define Z_MAXSIZE 100000
+#define A_MAXSIZE 50000
+#define B_MAXSIZE 360000
+#define C_MAXSIZE 360000
 
 ////////////////////////////////////////////////////////
 
@@ -127,4 +127,3 @@
 ////////////////////////////////////////////////////////
 
 #define MESSAGE_MYCONTROL_Starting					F("Laser:" __DATE__ )
-

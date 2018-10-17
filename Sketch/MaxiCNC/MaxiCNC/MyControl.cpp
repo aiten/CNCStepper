@@ -31,10 +31,10 @@
 
 ////////////////////////////////////////////////////////////
 
-CMyControl Control;
-CGCodeTools GCodeTools;
-CMotionControl MotionControl;
-CConfigEeprom Eprom;
+CMyControl      Control;
+CGCodeTools     GCodeTools;
+CMotionControl  MotionControl;
+CConfigEeprom   Eprom;
 HardwareSerial& StepperSerial = Serial;
 
 ////////////////////////////////////////////////////////////
@@ -49,9 +49,9 @@ const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 {
 	EPROM_SIGNATURE,
 	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
-	GetInfo1a(),GetInfo1b(),
+	GetInfo1a(), GetInfo1b(),
 	0,
-	STEPPERDIRECTION,0,0,SPINDEL_FADETIMEDELAY,
+	STEPPERDIRECTION, 0, 0,SPINDEL_FADETIMEDELAY,
 	SPINDLE_MAXSPEED,
 	CNC_JERKSPEED,
 	CNC_MAXSPEED,
@@ -59,11 +59,11 @@ const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 	CNC_DEC,
 	STEPRATERATE_REFMOVE,
 	MOVEAWAYFROMREF_MM1000,
-	X_STEPSPERMM/1000.0,
+	X_STEPSPERMM / 1000.0,
 	{
-		{ X_MAXSIZE,     X_USEREFERENCE, REFMOVE_1_AXIS,  X_REFERENCEHITVALUE_MIN, X_REFERENCEHITVALUE_MAX,	0,	0,	0,	0,  0.0, 25000 },
-		{ Y_MAXSIZE,     Y_USEREFERENCE, REFMOVE_2_AXIS,  Y_REFERENCEHITVALUE_MIN, Y_REFERENCEHITVALUE_MAX,	0,	0,	0,	0,  0.0, 25000 },
-		{ Z_MAXSIZE,     Z_USEREFERENCE, REFMOVE_3_AXIS,  Z_REFERENCEHITVALUE_MIN, Z_REFERENCEHITVALUE_MAX,	0,	0,	0,	0,  0.0, 25000 },
+		{ X_MAXSIZE, X_USEREFERENCE, REFMOVE_1_AXIS, X_REFERENCEHITVALUE_MIN, X_REFERENCEHITVALUE_MAX, 0, 0, 0, 0, 0.0, 25000 },
+		{ Y_MAXSIZE, Y_USEREFERENCE, REFMOVE_2_AXIS, Y_REFERENCEHITVALUE_MIN, Y_REFERENCEHITVALUE_MAX, 0, 0, 0, 0, 0.0, 25000 },
+		{ Z_MAXSIZE, Z_USEREFERENCE, REFMOVE_3_AXIS, Z_REFERENCEHITVALUE_MIN, Z_REFERENCEHITVALUE_MAX, 0, 0, 0, 0, 0.0, 25000 },
 #if NUM_AXIS > 3
 		{ A_MAXSIZE,     A_USEREFERENCE, REFMOVE_4_AXIS,  A_REFERENCEHITVALUE_MIN, A_REFERENCEHITVALUE_MAX,	0,	0,	0,	0,  0.0, 25000 },
 #endif
@@ -115,14 +115,14 @@ void CMyControl::Init()
 
 #ifdef DISABLE_ISANYREFERENCE
 
-  CStepper::GetInstance()->SetCheckForReference(false);
+	CStepper::GetInstance()->SetCheckForReference(false);
 
 #endif
 }
 
 ////////////////////////////////////////////////////////////
 
-void CMyControl::IOControl(uint8_t tool, unsigned short level)
+void CMyControl::IOControl(uint8_t tool, uint16_t level)
 {
 	if (!_data.IOControl(tool, level))
 	{
@@ -132,17 +132,17 @@ void CMyControl::IOControl(uint8_t tool, unsigned short level)
 
 ////////////////////////////////////////////////////////////
 
-unsigned short CMyControl::IOControl(uint8_t tool)
+uint16_t CMyControl::IOControl(uint8_t tool)
 {
 	switch (tool)
 	{
 #ifndef REDUCED_SIZE
 		case SpindleCW:
-		case SpindleCCW:	{ return _data._spindle.IsOn(); }
-		case Coolant:		{ return _data._coolant.IsOn(); }
+		case SpindleCCW: { return _data._spindle.IsOn(); }
+		case Coolant: { return _data._coolant.IsOn(); }
 		case ControllerFan: { return _data._controllerfan.GetLevel(); }
 #endif
-		case Probe:			{ return _data._probe.IsOn(); }
+		case Probe: { return _data._probe.IsOn(); }
 	}
 
 	return super::IOControl(tool);

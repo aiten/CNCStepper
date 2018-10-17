@@ -52,9 +52,9 @@ public:
 
 	virtual void Kill() override;
 
-	virtual void IOControl(uint8_t tool, unsigned short level) override;
+	virtual void IOControl(uint8_t tool, uint16_t level) override;
 #ifndef REDUCED_SIZE
-	virtual unsigned short IOControl(uint8_t tool) override;
+	virtual uint16_t IOControl(uint8_t tool) override;
 #endif
 
 protected:
@@ -64,7 +64,7 @@ protected:
 
 	virtual void TimerInterrupt() override;
 	virtual bool Parse(CStreamReader* reader, Stream* output) override;
-	virtual void Idle(unsigned int idletime) override;
+	virtual void Idle(unsigned int    idletime) override;
 
 	virtual bool IsKill() override;
 	virtual void Poll() override;
@@ -76,28 +76,28 @@ public:
 	struct SMyCNCEeprom
 	{
 		CConfigEeprom::SCNCEeprom _std;
-		feedrate_t	pendownFeedrate;
-		feedrate_t	penupFeedrate;
+		feedrate_t                pendownFeedrate;
+		feedrate_t                penupFeedrate;
 
-		feedrate_t	movependownFeedrate;
-		feedrate_t	movepenupFeedrate;
-		feedrate_t	movepenchangeFeedrate;
+		feedrate_t movependownFeedrate;
+		feedrate_t movepenupFeedrate;
+		feedrate_t movepenchangeFeedrate;
 
-		mm1000_t	pendownpos;
-		mm1000_t	penuppos;
+		mm1000_t pendownpos;
+		mm1000_t penuppos;
 
-		mm1000_t	penchangepos_x;
-		mm1000_t	penchangepos_y;
-		mm1000_t	penchangepos_z;
+		mm1000_t penchangepos_x;
+		mm1000_t penchangepos_y;
+		mm1000_t penchangepos_z;
 
-		mm1000_t	penchangepos_x_ofs;
-		mm1000_t	penchangepos_y_ofs;
+		mm1000_t penchangepos_x_ofs;
+		mm1000_t penchangepos_y_ofs;
 
-		unsigned short penchangeServoClampOpenPos;
-		unsigned short penchangeServoClampClosePos;
+		uint16_t penchangeServoClampOpenPos;
+		uint16_t penchangeServoClampClosePos;
 
-		unsigned short penchangeServoClampOpenDelay;
-		unsigned short penchangeServoClampCloseDelay;
+		uint16_t penchangeServoClampOpenDelay;
+		uint16_t penchangeServoClampCloseDelay;
 	};
 
 private:
@@ -113,14 +113,3 @@ private:
 ////////////////////////////////////////////////////////
 
 extern CMyControl Control;
-
-
-
-
-
-
-
-
-
-
-

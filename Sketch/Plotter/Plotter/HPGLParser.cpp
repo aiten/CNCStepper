@@ -46,7 +46,7 @@ CHPGLParser::SState CHPGLParser::_state;
 
 ////////////////////////////////////////////////////////////
 
-mm1000_t CHPGLParser::HPGLToMM1000X(long xx)
+mm1000_t CHPGLParser::HPGLToMM1000X(int32_t xx)
 {
 	// HPGL unit is 1/40 mm => 0.025mm
 	return (xx + _state._HPOffsetX) * 25;
@@ -54,7 +54,7 @@ mm1000_t CHPGLParser::HPGLToMM1000X(long xx)
 
 ////////////////////////////////////////////////////////////
 
-mm1000_t CHPGLParser::HPGLToMM1000Y(long yy)
+mm1000_t CHPGLParser::HPGLToMM1000Y(int32_t yy)
 {
 	return (yy + _state._HPOffsetY) * 25;
 }
@@ -76,16 +76,56 @@ void CHPGLParser::Parse()
 	if (_reader->GetChar())
 	{
 		_reader->SkipSpaces();
-		if (IsToken(F("SP"), false, false)) { SelectPenCommand();	return; }
-		if (IsToken(F("VS"), false, false)) { PenVelocityCommand();	return; }
-		if (IsToken(F("VN"), false, false)) { PenVelocityNormalCommand();	return; }
-		if (IsToken(F("IN"), false, false)) { InitCommand();		return; }
-		if (IsToken(F("PD"), false, false)) { PenMoveCommand(PD);	return; }
-		if (IsToken(F("PU"), false, false)) { PenMoveCommand(PU);	return; }
-		if (IsToken(F("PA"), false, false)) { PenMoveCommand(PA);	return; }
-		if (IsToken(F("PR"), false, false)) { PenMoveCommand(PR);	return; }
-		if (IsToken(F("LT"), false, false)) { IgnoreCommand();		return; }
-		if (IsToken(F("WU"), false, false)) { IgnoreCommand();		return; }
+		if (IsToken(F("SP"), false, false))
+		{
+			SelectPenCommand();
+			return;
+		}
+		if (IsToken(F("VS"), false, false))
+		{
+			PenVelocityCommand();
+			return;
+		}
+		if (IsToken(F("VN"), false, false))
+		{
+			PenVelocityNormalCommand();
+			return;
+		}
+		if (IsToken(F("IN"), false, false))
+		{
+			InitCommand();
+			return;
+		}
+		if (IsToken(F("PD"), false, false))
+		{
+			PenMoveCommand(PD);
+			return;
+		}
+		if (IsToken(F("PU"), false, false))
+		{
+			PenMoveCommand(PU);
+			return;
+		}
+		if (IsToken(F("PA"), false, false))
+		{
+			PenMoveCommand(PA);
+			return;
+		}
+		if (IsToken(F("PR"), false, false))
+		{
+			PenMoveCommand(PR);
+			return;
+		}
+		if (IsToken(F("LT"), false, false))
+		{
+			IgnoreCommand();
+			return;
+		}
+		if (IsToken(F("WU"), false, false))
+		{
+			IgnoreCommand();
+			return;
+		}
 
 		Error(MESSAGE_GCODE_IllegalCommand);
 	}
@@ -117,20 +157,42 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 
 	switch (cmdidx)
 	{
-		case PU:	Plotter.DelayPenUp();		_state.FeedRate = _state.FeedRateUp; break;
-		case PD:	Plotter.PenDown();			_state.FeedRate = _state.FeedRateDown; break;
-		case PA:	_state._HPGLIsAbsolut = true;	break;
-		case PR:	_state._HPGLIsAbsolut = false;	break;
+		case PU: Plotter.DelayPenUp();
+			_state.FeedRate = _state.FeedRateUp;
+			break;
+		case PD: Plotter.PenDown();
+			_state.FeedRate = _state.FeedRateDown;
+			break;
+		case PA: _state._HPGLIsAbsolut = true;
+			break;
+		case PR: _state._HPGLIsAbsolut = false;
+			break;
 	}
 
-	if (IsToken(F("PD"), false, false)) { PenMoveCommand(PD);	return; }
-	if (IsToken(F("PU"), false, false)) { PenMoveCommand(PU);	return; }
-	if (IsToken(F("PA"), false, false)) { PenMoveCommand(PA);	return; }
-	if (IsToken(F("PR"), false, false)) { PenMoveCommand(PR);	return; }
+	if (IsToken(F("PD"), false, false))
+	{
+		PenMoveCommand(PD);
+		return;
+	}
+	if (IsToken(F("PU"), false, false))
+	{
+		PenMoveCommand(PU);
+		return;
+	}
+	if (IsToken(F("PA"), false, false))
+	{
+		PenMoveCommand(PA);
+		return;
+	}
+	if (IsToken(F("PR"), false, false))
+	{
+		PenMoveCommand(PR);
+		return;
+	}
 
 	while (IsInt(_reader->GetChar()))
 	{
-		long xIn = GetInt32();
+		int32_t xIn = GetInt32();
 
 		//all blank or colon
 
@@ -149,9 +211,9 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 			return;
 		}
 
-		long yIn = GetInt32();
+		int32_t yIn = GetInt32();
 
-		if (_reader->IsError())	goto ERROR_MISSINGARGUMENT;
+		if (_reader->IsError()) goto ERROR_MISSINGARGUMENT;
 
 		mm1000_t x = HPGLToMM1000X(xIn);
 		mm1000_t y = HPGLToMM1000Y(yIn);
@@ -202,14 +264,13 @@ void CHPGLParser::PenVelocityNormalCommand()
 ////////////////////////////////////////////////////////////
 
 void CHPGLParser::PenVelocityCommand()
-{ 
-	long velocityCmPerSec = GetInt32Scale(10, 1000000, 3, 255);
+{
+	int32_t velocityCmPerSec = GetInt32Scale(10, 1000000, 3, 255);
 
 	if (IsError()) return;
 
 	// feedrate is => mm_1000 / min
-	_state.FeedRateDown = CMotionControlBase::GetInstance()->GetMaxFeedRate(X_AXIS,velocityCmPerSec * 60l * 10l);
+	_state.FeedRateDown = CMotionControlBase::GetInstance()->GetMaxFeedRate(X_AXIS, velocityCmPerSec * 60l * 10l);
 
 	ReadAndSkipSemicolon();
 }
-

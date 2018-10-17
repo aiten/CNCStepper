@@ -25,19 +25,17 @@ class CPushButton
 {
 public:
 
-	CPushButton()
-	{
-	}
+	CPushButton() = default;
 
 	CPushButton(pin_t pin, uint8_t onValue)
 	{
 		SetPin(pin, onValue);
 	}
 
-	void SetPin(pin_t pin, uint8_t onValue)		
-	{ 
-		_pin=pin; 
-		_onvalue = onValue; 
+	void SetPin(pin_t pin, uint8_t onValue)
+	{
+		_pin     = pin;
+		_onvalue = onValue;
 		CHAL::pinModeInputPullUp(_pin);
 	}
 
@@ -47,32 +45,37 @@ public:
 		switch (_state)
 		{
 			case ButtonOff:
+			{
 				if (isOn)
 				{
 					_state = ButtonPressed;
 				}
 				break;
+			}
 
 			case ButtonPressed:
+			{
 				if (!isOn)
 				{
 					_state = ButtonPressedOff;
 				}
 				break;
+			}
 
-			case ButtonPressedOff:
-				break;
+			case ButtonPressedOff: break;
 
 			case ExpectButtonOff:
+			{
 				if (!isOn)
 				{
 					_state = ButtonOff;
 				}
 				break;
+			}
 		}
 	}
 
-	bool IsPressed()
+	bool IsPressed() const
 	{
 		// current state!!!!!
 		// use IsOn() 
@@ -101,19 +104,18 @@ public:
 
 protected:
 
-	pin_t	_pin = 0;
-	uint8_t	_onvalue = 0;
+	pin_t   _pin     = 0;
+	uint8_t _onvalue = 0;
 
 	enum EButtonState
 	{
-		ButtonOff = 0,			// button not pressed, not waiting
-		ButtonPressed,			// report pressed if IsOn is called, Button still pressed, wait for Button Off
-		ButtonPressedOff,		// Pressed an released but not reported
-		ExpectButtonOff			// reported on IsOn, wait for "Off"
+		ButtonOff = 0,		// button not pressed, not waiting
+		ButtonPressed,		// report pressed if IsOn is called, Button still pressed, wait for Button Off
+		ButtonPressedOff,	// Pressed an released but not reported
+		ExpectButtonOff		// reported on IsOn, wait for "Off"
 	};
 
 	EnumAsByte(EButtonState) _state = ButtonOff;
-
 };
 
 ////////////////////////////////////////////////////////

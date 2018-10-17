@@ -27,55 +27,57 @@
 
 class CMenuBase
 {
-
 public:
 
-	CMenuBase()														{ SetMenu(NULL); }
+	CMenuBase() { SetMenu(nullptr); }
 
 	struct SMenuItemDef;
 	struct SMenuDef;
 
-	typedef uint8_t menupos_t;
-	typedef void(CMenuBase::*MenuFunction)(const SMenuItemDef*);
+	typedef uint8_t   menupos_t;
 	typedef uintptr_t menuparam_t;
+
+	typedef void (CMenuBase::*MenuFunction)(const SMenuItemDef*);
 
 	struct SMenuItemDef
 	{
 	public:
-		const char* _text;
+		const char*  _text;
 		MenuFunction _buttonpress;
-		menuparam_t _param1;
-		menuparam_t _param2;
-		menuparam_t _param3;
+		menuparam_t  _param1;
+		menuparam_t  _param2;
+		menuparam_t  _param3;
 	public:
-		const __FlashStringHelper* GetText() const					{ return (const __FlashStringHelper*)pgm_read_ptr(&this->_text); }
-		MenuFunction GetButtonPress()const;
-		menuparam_t GetParam1()	const								{ return (menuparam_t)pgm_read_ptr(&this->_param1); }
-		menuparam_t GetParam2()	const								{ return (menuparam_t)pgm_read_ptr(&this->_param2); }
-		menuparam_t GetParam3()	const								{ return (menuparam_t)pgm_read_ptr(&this->_param3); }
+		FLSTR        GetText() const { return FLSTR(pgm_read_ptr(&this->_text)); }
+		MenuFunction GetButtonPress() const;
+		menuparam_t  GetParam1() const { return menuparam_t(pgm_read_ptr(&this->_param1)); }
+		menuparam_t  GetParam2() const { return menuparam_t(pgm_read_ptr(&this->_param2)); }
+		menuparam_t  GetParam3() const { return menuparam_t(pgm_read_ptr(&this->_param3)); }
 	};
 
 	struct SMenuDef
 	{
 	public:
-		const char* _text;
+		const char*         _text;
 		const SMenuItemDef* _items;
-		menuparam_t _param1;
-		menuparam_t _param2;
+		menuparam_t         _param1;
+		menuparam_t         _param2;
 
 		uint8_t GetItemCount() const
 		{
 			const SMenuItemDef* items = GetItems();
+
 			for (uint8_t x = 0;; x++)
 			{
-				if (items[x].GetText() == NULL) return x;
+				if (items[x].GetText() == nullptr) return x;
 			}
 		}
 
-		uint8_t FindMenuIdx(uintptr_t param, bool(*check)(const SMenuItemDef*, uintptr_t param)) const
+		uint8_t FindMenuIdx(uintptr_t param, bool (*check)(const SMenuItemDef*, uintptr_t)) const
 		{
 			const SMenuItemDef* item = &GetItems()[0];
-			for (uint8_t x = 0; item->GetText() != NULL; x++, item++)
+
+			for (uint8_t x = 0; item->GetText() != nullptr; x++, item++)
 			{
 				if (check(item, param)) return x;
 			}
@@ -84,72 +86,77 @@ public:
 		}
 
 	public:
-		const __FlashStringHelper* GetText() const					{ return (const __FlashStringHelper*)pgm_read_ptr(&this->_text); }
-		const SMenuItemDef* GetItems() const						{ return (const SMenuItemDef*)pgm_read_ptr(&this->_items); }
-		menuparam_t GetParam1()	const								{ return (menuparam_t)pgm_read_ptr(&this->_param1); }
-		menuparam_t GetParam2()	const								{ return (menuparam_t)pgm_read_ptr(&this->_param2); }
+		FLSTR               GetText() const { return FLSTR(pgm_read_ptr(&this->_text)); }
+		const SMenuItemDef* GetItems() const { return (const SMenuItemDef*)pgm_read_ptr(&this->_items); }
+		menuparam_t         GetParam1() const { return menuparam_t(pgm_read_ptr(&this->_param1)); }
+		menuparam_t         GetParam2() const { return menuparam_t(pgm_read_ptr(&this->_param2)); }
 	};
 
 public:
 
-	menupos_t GetMenuItemCount();
-	const __FlashStringHelper*  GetItemText(menupos_t idx);
-	const __FlashStringHelper*  GetText();
+	menupos_t GetMenuItemCount() const;
+	FLSTR     GetItemText(menupos_t idx) const;
+	FLSTR     GetText() const;
 
-	CMenuNavigator& GetNavigator()									{ return _menuNavigator; }
+	CMenuNavigator& GetNavigator() { return _menuNavigator; }
 
-	void SetMainMenu()												{ SetMenu(_main); }
+	void SetMainMenu() { SetMenu(_main); }
 
-	bool Select(menupos_t idx);
-	virtual void Changed()=0;
+	bool         Select(menupos_t idx);
+	virtual void Changed() =0;
 
-	void OKBeep()													{ return CLcd::GetInstance()->OKBeep(); };
-	void ErrorBeep()												{ return CLcd::GetInstance()->ErrorBeep(); };
+	void OKBeep() { return CLcd::GetInstance()->OKBeep(); };
+	void ErrorBeep() { return CLcd::GetInstance()->ErrorBeep(); };
 
-	const SMenuDef*GetMenuDef() { return _current; }
-	const SMenuDef*GetMainMenuDef() { return _main; }
+	const SMenuDef* GetMenuDef() const { return _current; }
+	const SMenuDef* GetMainMenuDef() const { return _main; }
 
-	protected:
-
-	//////////////////////////////////////////
-
-	bool PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, const __FlashStringHelper* cmd, Stream* output=NULL)	{ return CLcd::GetInstance()->PostCommand(syntaxtype,cmd,output); }
-	bool PostCommand(char* cmd, Stream* output=NULL)				{ return CLcd::GetInstance()->PostCommand(cmd,output); }
-	uint8_t InitPostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, char* cmd)			{ return CLcd::GetInstance()->InitPostCommand(syntaxtype,cmd); }
+protected:
 
 	//////////////////////////////////////////
 
-	const SMenuDef*		_main=NULL;
+	bool PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, FLSTR cmd, Stream* output = nullptr) { return CLcd::GetInstance()->PostCommand(syntaxtype, cmd, output); }
+	bool PostCommand(char*                        cmd, Stream*      output              = nullptr) { return CLcd::GetInstance()->PostCommand(cmd, output); }
+
+	uint8_t InitPostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, char* cmd) { return CLcd::GetInstance()->InitPostCommand(syntaxtype, cmd); }
+
+	//////////////////////////////////////////
+
+	const SMenuDef* _main = nullptr;
 
 private:
 
-	CMenuNavigator		_menuNavigator;
-	const SMenuDef*		_current;
+	CMenuNavigator  _menuNavigator;
+	const SMenuDef* _current;
 
 public:
 
-	void MenuButtonPressSetMenu(const SMenuItemDef*);				// param1 => new menu, param2 != 0 => SetPosition, MenuFunction must be MenuButtonPressSetMenu & Menu = param2
-	void MenuButtonPressMenuBack(const SMenuItemDef*);				// param1 => new menu, find and set position to "this" menu in new menu
-	uint8_t FindMenuIndexBack();									// find MenuBack in this(current) menu
+	void    MenuButtonPressSetMenu(const SMenuItemDef* ); // param1 => new menu, param2 != 0 => SetPosition, MenuFunction must be MenuButtonPressSetMenu & Menu = param2
+	void    MenuButtonPressMenuBack(const SMenuItemDef*); // param1 => new menu, find and set position to "this" menu in new menu
+	uint8_t FindMenuIndexBack();                          // find MenuBack in this(current) menu
 
-	void MenuButtonPressSetCommand(const SMenuItemDef*def);			// param1 => const char* to command
+	void MenuButtonPressSetCommand(const SMenuItemDef* def); // param1 => const char* to command
 
-	void SetMenu(const SMenuDef* pMenu)								{ _current = pMenu; _menuNavigator.Clear(); };
+	void SetMenu(const SMenuDef* pMenu)
+	{
+		_current = pMenu;
+		_menuNavigator.Clear();
+	};
 
 	////////////////////////////////////////////////////////
 
-	void MenuButtonPressHomeA(axis_t axis);
-	void MenuButtonPressHome(const SMenuItemDef*);					// param1 : axis
-	void MenuButtonPressProbe(axis_t axis);
-	void MenuButtonPressProbe(const SMenuItemDef*);					// param1 : axis
-	void MenuButtonPressSpindle(const SMenuItemDef*);
-	void MenuButtonPressCoolant(const SMenuItemDef*);
-	void MenuButtonPressMoveG92(const SMenuItemDef*);
-	void MenuButtonPressMove(const SMenuItemDef*);					// param1 : enum EMoveType, TODO=>String
-	void MenuButtonPressRotate(const SMenuItemDef*);
+	void MenuButtonPressHomeA(axis_t                 axis);
+	void MenuButtonPressHome(const SMenuItemDef*     ); // param1 : axis
+	void MenuButtonPressProbe(axis_t                 axis);
+	void MenuButtonPressProbe(const SMenuItemDef*    ); // param1 : axis
+	void MenuButtonPressSpindle(const SMenuItemDef*  );
+	void MenuButtonPressCoolant(const SMenuItemDef*  );
+	void MenuButtonPressMoveG92(const SMenuItemDef*  );
+	void MenuButtonPressMove(const SMenuItemDef*     ); // param1 : enum EMoveType, TODO=>String
+	void MenuButtonPressRotate(const SMenuItemDef*   );
 	void MenuButtonPressResurrect(const SMenuItemDef*);
-	void MenuButtonPressHold(const SMenuItemDef*);
-	void MenuButtonPressResume(const SMenuItemDef*);
+	void MenuButtonPressHold(const SMenuItemDef*     );
+	void MenuButtonPressResume(const SMenuItemDef*   );
 
 
 	enum EMoveType

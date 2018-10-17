@@ -33,6 +33,8 @@ void CHelpParser::Parse()
 {
 	_reader->SkipSpaces();
 
+	// @formatter:off — disable formatter after this line
+
 	if (IsToken(F("s"), true, false)) { SetSpeed(); return; }
 
 	if (IsToken(F("r1"), true, false)) { MoveRel(X_AXIS); return; }
@@ -75,27 +77,33 @@ void CHelpParser::Parse()
 		if (IsToken(F("ic"), true, false)) { MyGoToReference(C_AXIS); return; }
 		if (IsToken(F("i!"), true, false)) { if (CheckEOC())	::GoToReference();	return; }
 		*/
-	if (IsToken(F("i!"), true, false)) { if (CheckEOC())	CControl::GetInstance()->GoToReference();	return; }
+	if (IsToken(F("i!"), true, false))	{ if (CheckEOC())	CControl::GetInstance()->GoToReference();	return; }
 	if (IsToken(F("!"), true, false))	{ if (CheckEOC()) { CControl::GetInstance()->Kill(); } return; }
 	if (IsToken(F("?"), true, false))	{ if (CheckEOC()) { CStepper::GetInstance()->Dump(CStepper::DumpAll); }	return; }
 
+	// @formatter:on — enable formatter after this line
+
 #ifndef REDUCED_SIZE
-	
-	uint8_t i;
 
 	if (IsToken(F("-"), true, false))
 	{
 		if (CheckEOC())
 		{
-			for (i = 0; i < NUM_AXIS - 1; i++)
+			for (uint8_t i = 0; i < NUM_AXIS - 1; i++)
 			{
-				StepperSerial.print(CStepper::GetInstance()->GetCurrentPosition(i)); StepperSerial.print(F(":"));
+				StepperSerial.print(CStepper::GetInstance()->GetCurrentPosition(i));
+				StepperSerial.print(F(":"));
 			}
-			StepperSerial.print(CStepper::GetInstance()->GetCurrentPosition(NUM_AXIS - 1)); StepperSerial.println();
+			StepperSerial.print(CStepper::GetInstance()->GetCurrentPosition(NUM_AXIS - 1));
+			StepperSerial.println();
 		}
 		return;
 	}
-	if (IsToken(F("w"), true, false))  { if (CheckEOC())	{ CStepper::GetInstance()->WaitBusy(); } return; }
+	
+	// @formatter:off — disable formatter after this line
+	if (IsToken(F("w"), true, false))	{ if (CheckEOC()) {	CStepper::GetInstance()->WaitBusy();} return; }
+	// @formatter:on — enable formatter after this line
+
 #endif
 
 	Error(F("Illegal command"));
@@ -111,13 +119,13 @@ bool CHelpParser::SetSpeed()
 
 	if (IsUInt(_reader->GetChar()))
 	{
-		max = (steprate_t)GetUInt32();
+		max = steprate_t(GetUInt32());
 		if (IsUInt(_reader->SkipSpaces()))
 		{
-			acc = (steprate_t)GetUInt32();
+			acc = steprate_t(GetUInt32());
 			if (IsUInt(_reader->SkipSpaces()))
 			{
-				dec = (steprate_t)GetUInt32();
+				dec = steprate_t(GetUInt32());
 			}
 		}
 	}
@@ -134,13 +142,13 @@ bool CHelpParser::SetSpeed()
 
 bool CHelpParser::MoveAbs()
 {
-	udist_t pos[NUM_AXIS] = { 0 };
+	udist_t position[NUM_AXIS] = { 0 };
 
-	for (uint8_t axis = 0; axis < NUM_AXIS; axis++)
+	for (uint32_t& pos : position)
 	{
 		if (IsUInt(_reader->SkipSpaces()))
 		{
-			pos[axis] = GetUInt32();
+			pos = GetUInt32();
 		}
 		else
 		{
@@ -150,7 +158,7 @@ bool CHelpParser::MoveAbs()
 
 	if (CheckEOC())
 	{
-		CStepper::GetInstance()->MoveAbs(pos);
+		CStepper::GetInstance()->MoveAbs(position);
 	}
 
 	return true;
@@ -161,10 +169,12 @@ bool CHelpParser::MoveAbs()
 bool CHelpParser::MoveAbs(axis_t axis)
 {
 	if (axis > NUM_AXIS)
+	{
 		return true;
+	}
 
 	udist_t dist = 0;
-	char ch = _reader->SkipSpaces();
+	char    ch   = _reader->SkipSpaces();
 
 	if (IsUInt(ch))
 	{
@@ -172,7 +182,9 @@ bool CHelpParser::MoveAbs(axis_t axis)
 	}
 
 	if (CheckEOC())
+	{
 		CStepper::GetInstance()->MoveAbs(axis, dist, 0);
+	}
 
 	return true;
 }
@@ -181,13 +193,13 @@ bool CHelpParser::MoveAbs(axis_t axis)
 
 bool CHelpParser::MoveRel()
 {
-	sdist_t pos[NUM_AXIS] = { 0 };
+	sdist_t position[NUM_AXIS] = { 0 };
 
-	for (uint8_t axis = 0; axis < NUM_AXIS; axis++)
+	for (int32_t& pos : position)
 	{
 		if (IsInt(_reader->SkipSpaces()))
 		{
-			pos[axis] = GetInt32();
+			pos = GetInt32();
 		}
 		else
 		{
@@ -197,7 +209,7 @@ bool CHelpParser::MoveRel()
 
 	if (CheckEOC())
 	{
-		CStepper::GetInstance()->MoveRel(pos);
+		CStepper::GetInstance()->MoveRel(position);
 	}
 
 	return true;
@@ -208,10 +220,12 @@ bool CHelpParser::MoveRel()
 bool CHelpParser::MoveRel(axis_t axis)
 {
 	if (axis > NUM_AXIS)
+	{
 		return true;
+	}
 
 	sdist_t dist = 0;
-	char ch = _reader->SkipSpaces();
+	char    ch   = _reader->SkipSpaces();
 
 	if (IsInt(ch))
 	{
@@ -219,7 +233,9 @@ bool CHelpParser::MoveRel(axis_t axis)
 	}
 
 	if (CheckEOC())
+	{
 		CStepper::GetInstance()->MoveRel(axis, dist, 0);
+	}
 
 	return true;
 }
@@ -229,10 +245,12 @@ bool CHelpParser::MoveRel(axis_t axis)
 bool CHelpParser::SetPosition(axis_t axis)
 {
 	if (axis > NUM_AXIS)
+	{
 		return true;
+	}
 
 	udist_t dist = 0;
-	char ch = _reader->SkipSpaces();
+	char    ch   = _reader->SkipSpaces();
 
 	if (IsUInt(ch))
 	{
@@ -240,7 +258,9 @@ bool CHelpParser::SetPosition(axis_t axis)
 	}
 
 	if (CheckEOC())
+	{
 		CStepper::GetInstance()->SetPosition(axis, dist);
+	}
 
 	return true;
 }
@@ -250,10 +270,14 @@ bool CHelpParser::SetPosition(axis_t axis)
 bool CHelpParser::MyGoToReference(axis_t axis)
 {
 	if (axis > NUM_AXIS)
+	{
 		return true;
+	}
 
 	if (CheckEOC())
+	{
 		CControl::GetInstance()->GoToReference(axis, 0, axis != Z_AXIS);
+	}
 
 	return true;
 }
@@ -263,7 +287,9 @@ bool CHelpParser::MyGoToReference(axis_t axis)
 bool CHelpParser::CheckEOC()
 {
 	if (_reader->IsError())
+	{
 		return false;
+	}
 
 	char ch = _reader->SkipSpaces();
 	if (!_reader->IsEOC(ch))

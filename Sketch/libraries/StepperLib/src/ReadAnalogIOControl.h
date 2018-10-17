@@ -21,38 +21,36 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PIN>
-class CReadAnalogIOControl
+template <pin_t PIN> class CReadAnalogIOControl
 {
 public:
 
-	void Init()		// init and set default value
+	void Init() // init and set default value
 	{
-    CHAL::pinMode(PIN,INPUT);
+		CHAL::pinMode(PIN, INPUT);
 	}
 
-  int Read()
-  {
-    return constrain(
-              map(CHAL::analogRead(PIN), _minRead, _maxRead, _min, _max), 
-              _min, 
-              _max);
-  }
+	int Read()
+	{
+		return constrain(
+			map(CHAL::analogRead(PIN), _minRead, _maxRead, _min, _max),
+			_min,
+			_max);
+	}
 
-  void SetMinMax(int min, int max)
-  {
-    _min = min;
-    _max = max;
-  }
+	void SetMinMax(int min, int max)
+	{
+		_min = min;
+		_max = max;
+	}
 
 private:
 
-  int _min = 0;
-  int _max = 256;
+	int _min = 0;
+	int _max = 256;
 
-  int _minRead = 0;         // minimum sensor value
-  int _maxRead = 1023;      // maximum sensor value
-
+	int _minRead = 0;    // minimum sensor value
+	int _maxRead = 1023; // maximum sensor value
 };
 
 ////////////////////////////////////////////////////////

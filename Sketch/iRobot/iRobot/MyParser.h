@@ -35,16 +35,16 @@ private:
 
 public:
 
-	CMyParser(CStreamReader* reader,Stream* output) : super(reader,output)		{  }
+	CMyParser(CStreamReader* reader, Stream* output) : super(reader, output) { }
 
 protected:
 
 	// overrides to exend parser
 
-//	virtual bool InitParse() override;						// begin parsing of a command (override for prechecks)
-//	virtual bool GCommand(gcode_t gcode) override;
+	//	virtual bool InitParse() override;						// begin parsing of a command (override for prechecks)
+	//	virtual bool GCommand(gcode_t gcode) override;
 	virtual bool MCommand(mcode_t mcode) override;
-//	virtual bool Command(char ch) override;
+	//	virtual bool Command(char ch) override;
 
 private:
 
@@ -59,4 +59,3 @@ private:
 };
 
 ////////////////////////////////////////////////////////
-

@@ -26,7 +26,7 @@
 
 #define Servo Adafruit_TiCoServo
 
-#define MG995_MIN_PULSE_WIDTH       600 
+#define MG995_MIN_PULSE_WIDTH       600
 #define MG995_MAX_PULSE_WIDTH		2000
 #define MG995_MAX_PULSE_DIFF		(MG995_MAX_PULSE_WIDTH-MG995_MIN_PULSE_WIDTH)
 #define MG995_MAX_ROTATION			M_PI
@@ -63,27 +63,26 @@ private:
 	typedef CStepper super;
 public:
 
-	CStepperServo();
+	             CStepperServo();
 	virtual void Init() override;
 
-	void SetServo();   
+	void SetServo();
 
 protected:
 
-	virtual void  SetEnable(axis_t axis, uint8_t level, bool force) override;
-	virtual uint8_t GetEnable(axis_t axis) override;
-	virtual void Step(const uint8_t cnt[NUM_AXIS], uint8_t directionUp, bool isSameDirection) override;
+	virtual void    SetEnable(axis_t   axis, uint8_t level, bool force) override;
+	virtual uint8_t GetEnable(axis_t   axis) override;
+	virtual void    Step(const uint8_t cnt[NUM_AXIS], uint8_t directionUp, bool isSameDirection) override;
 
 public:
 
 	virtual uint8_t GetReferenceValue(uint8_t referenceid) override;
-	virtual bool IsAnyReference() override;
+	virtual bool    IsAnyReference() override;
 
-////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////
 
 private:
 
-  Servo		_servo[NUM_AXIS];
-  udist_t	_lastPos[NUM_AXIS];
-
+	Servo   _servo[NUM_AXIS];
+	udist_t _lastPos[NUM_AXIS];
 };

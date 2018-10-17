@@ -45,29 +45,29 @@ namespace StepperSystemTest
 		}
 
 		char TestResultOKDir[_MAX_PATH] = { 0 };
-		char TestResultDir[_MAX_PATH] = { 0 };
+		char TestResultDir[_MAX_PATH]   = { 0 };
 
 		char TestResultOKFile[_MAX_PATH] = { 0 };
-		char TestResultFile[_MAX_PATH] = { 0 };
+		char TestResultFile[_MAX_PATH]   = { 0 };
 
-		char* AddFileName(char*dest, const char* start, const char*filename)
+		char* AddFileName(char* dest, const char* start, const char* filename)
 		{
-			strcpy_s(dest,sizeof(dest), start);
-			strcat_s(dest, sizeof(dest), "Test_");
-			strcat_s(dest, sizeof(dest), filename);
+			strcpy_s(dest, _MAX_PATH, start);
+			strcat_s(dest, _MAX_PATH, "Test_");
+			strcat_s(dest, _MAX_PATH, filename);
 
 			return dest;
 		}
 
-		char* GetResultFileName(const char*filename) { return AddFileName(TestResultFile, TestResultDir, filename); }
-		char* GetResultOkFileName(const char*filename) { return AddFileName(TestResultOKFile, TestResultOKDir, filename); };
+		char* GetResultFileName(const char*   filename) { return AddFileName(TestResultFile, TestResultDir, filename); }
+		char* GetResultOkFileName(const char* filename) { return AddFileName(TestResultOKFile, TestResultOKDir, filename); };
 
 		void CreateTestFile(const char* filename)
 		{
 			Stepper.EndTest(GetResultFileName(filename));
 		}
 
-		void Init(char*exename)
+		void Init(char* exename)
 		{
 			::GetTempPathA(_MAX_PATH, TestResultDir);
 
@@ -79,7 +79,7 @@ namespace StepperSystemTest
 
 		void AssertFile(const char* filename)
 		{
-			const char* pathname_src = GetResultFileName(filename);
+			const char* pathname_src  = GetResultFileName(filename);
 			const char* pathname_dest = GetResultOkFileName(filename);
 
 			if (overrideTestOK)		// create Test result file as OK
@@ -96,8 +96,8 @@ namespace StepperSystemTest
 			fopen_s(&fsrc, pathname_src, "rt");
 			fopen_s(&fdest, pathname_dest, "rt");
 
-			Assert::IsTrue(fsrc != NULL);
-			Assert::IsTrue(fdest != NULL);
+			Assert::IsTrue(fsrc != nullptr);
+			Assert::IsTrue(fdest != nullptr);
 
 			char lines[512];
 			char lined[512];
@@ -107,7 +107,7 @@ namespace StepperSystemTest
 			while (src)
 			{
 				char* dest = fgets(lined, sizeof(lined), fdest);
-				Assert::IsTrue(dest != NULL);
+				Assert::IsTrue(dest != nullptr);
 				if (strcmp(src, dest) != 0)
 				{
 					Assert::Fail();
@@ -120,13 +120,12 @@ namespace StepperSystemTest
 
 			fclose(fsrc);
 			fclose(fdest);
-
 		}
 
 		void AssertMove(mdist_t steps, CMsvcStepper::SMovementX mv)
 		{
 			Assert::IsTrue(mv.mv.IsActiveMove());
-			Assert::AreEqual((long) steps, (long) mv.mv.GetSteps());
+			Assert::AreEqual((long)steps, (long)mv.mv.GetSteps());
 		}
 
 		void AssertWait(mdist_t steps, CMsvcStepper::SMovementX mv)
@@ -162,49 +161,49 @@ namespace StepperSystemTest
 
 		TEST_METHOD(StepperTest)
 		{
-/*
-			TestAcc5000Dec();
-			TestAcc25000Dec();
-			TestAccCutDec();
-			TestAcc1000Acc1500Dec800Dec();
-			TestAcc1000AccCutDec800();
-			TestMergeRamp();
-			TestAcc5000DecCutAcc4800Dec();
-			TestUpDown();
-			TestStepUp();
-			TestSpeedUp();
-			TestBreakDown();
-			TestBreakDownPause();
-			TestBreakDownDelay();
-			TestJunctionSpeedSameDirection();
-			TestJunctionSpeedDifferentDirection();
-			TestJunctionYLessSpeed();
-			TestCircle();
-			TestX();
-			TestLastMoveTo0();
-			TestJerkSameDirection();
-			TestJerkSameDifferentDirection();
-			TestLongSlow();
-			TestVeryFast();
-			TestSetMaxAxixSpeed();
-			TestWait();
-			TestVerySlow();
-			TestStopMove();
-			TestWaitHold();
-			TestPause1();
-			TestPause2();
-			TestPause3();
-			TestPause4();
-
-			TestIo();
-*/
-/*
-			// very long running!!!!
-			TestDiffMultiplierAbs();
-			TestDiffMultiplierLoop();
-
-			TestFile();
-*/
+			/*
+						TestAcc5000Dec();
+						TestAcc25000Dec();
+						TestAccCutDec();
+						TestAcc1000Acc1500Dec800Dec();
+						TestAcc1000AccCutDec800();
+						TestMergeRamp();
+						TestAcc5000DecCutAcc4800Dec();
+						TestUpDown();
+						TestStepUp();
+						TestSpeedUp();
+						TestBreakDown();
+						TestBreakDownPause();
+						TestBreakDownDelay();
+						TestJunctionSpeedSameDirection();
+						TestJunctionSpeedDifferentDirection();
+						TestJunctionYLessSpeed();
+						TestCircle();
+						TestX();
+						TestLastMoveTo0();
+						TestJerkSameDirection();
+						TestJerkSameDifferentDirection();
+						TestLongSlow();
+						TestVeryFast();
+						TestSetMaxAxixSpeed();
+						TestWait();
+						TestVerySlow();
+						TestStopMove();
+						TestWaitHold();
+						TestPause1();
+						TestPause2();
+						TestPause3();
+						TestPause4();
+			
+						TestIo();
+			*/
+			/*
+						// very int32_t running!!!!
+						TestDiffMultiplierAbs();
+						TestDiffMultiplierLoop();
+			
+						TestFile();
+			*/
 		}
 
 		TEST_METHOD(StepperAcc5000Dec)
@@ -400,11 +399,11 @@ namespace StepperSystemTest
 			Stepper.SetJerkSpeed(Z_AXIS, 1000);
 			Stepper.SetJerkSpeed(A_AXIS, 1000);
 			Stepper.SetJerkSpeed(B_AXIS, 1000);
-			double r_mm = 40.0;
-			mdist_t r = (mdist_t)FromMM(r_mm);
-			mdist_t x = r;
-			mdist_t y = r;
-			int n = (int)(2.0 * r_mm * M_PI * 3 + 72); // 2 * r * 3 * 3 + 72;			// 2*r*PI*3 + 72) => r must be mm;
+			double  r_mm = 40.0;
+			mdist_t r    = (mdist_t)FromMM(r_mm);
+			mdist_t x    = r;
+			mdist_t y    = r;
+			int     n    = (int)(2.0 * r_mm * M_PI * 3 + 72); // 2 * r * 3 * 3 + 72;			// 2*r*PI*3 + 72) => r must be mm;
 			Polygon(Stepper, x, y, r, n, 0, 10000);
 			Stepper.EndTest();
 		}
@@ -413,12 +412,18 @@ namespace StepperSystemTest
 		{
 			Stepper.InitTest();
 			int count = 0;
-			Stepper.CStepper::MoveRel(0, 300, 1000); count += 300;
-			Stepper.CStepper::MoveRel(0, 800, 2000); count += 800;
-			Stepper.CStepper::MoveRel(0, 1500, 3000); count += 1500;
-			Stepper.CStepper::MoveRel(0, 3500, 5000); count += 3500;
-			Stepper.CStepper::MoveRel(0, 300, 500); count += 300;
-			Stepper.CStepper::MoveRel(0, 550, 5000); count += 550;
+			Stepper.CStepper::MoveRel(0, 300, 1000);
+			count += 300;
+			Stepper.CStepper::MoveRel(0, 800, 2000);
+			count += 800;
+			Stepper.CStepper::MoveRel(0, 1500, 3000);
+			count += 1500;
+			Stepper.CStepper::MoveRel(0, 3500, 5000);
+			count += 3500;
+			Stepper.CStepper::MoveRel(0, 300, 500);
+			count += 300;
+			Stepper.CStepper::MoveRel(0, 550, 5000);
+			count += 550;
 			CreateTestFile("X.csv");
 		}
 
@@ -512,7 +517,7 @@ namespace StepperSystemTest
 
 		TEST_METHOD(StepperDiffMultiplierLoop)
 		{
-			for (udist_t x = 0; x < 300; x++)
+			for (udist_t     x = 0; x < 300; x++)
 				for (udist_t y = 0; y < x; y++)
 				{
 					Stepper.InitTest();
@@ -584,7 +589,7 @@ namespace StepperSystemTest
 			Stepper.OptimizeMovementQueue(true);			// calc ramp
 			Stepper.CStepper::PauseMove();
 
-			Assert::AreEqual((uint8_t) 4, Stepper.GetMovementCount());
+			Assert::AreEqual((uint8_t)4, Stepper.GetMovementCount());
 			AssertMove(2500, Stepper.GetMovement(0));
 			AssertWait(65535, Stepper.GetMovement(1));
 			AssertMove(100, Stepper.GetMovement(2));
@@ -604,7 +609,7 @@ namespace StepperSystemTest
 			Stepper.OptimizeMovementQueue(true);			// calc ramp
 			Stepper.CStepper::PauseMove();
 
-			Assert::AreEqual((uint8_t) 4, Stepper.GetMovementCount());
+			Assert::AreEqual((uint8_t)4, Stepper.GetMovementCount());
 			AssertMove(2500, Stepper.GetMovement(0));
 			AssertMove(1000, Stepper.GetMovement(1));
 			AssertWait(65535, Stepper.GetMovement(2));
@@ -710,16 +715,16 @@ namespace StepperSystemTest
 			Stepper.SetJerkSpeed(2, 4000);
 
 			//		FILE *f = fopen("P:\\Arduino\\MyStepper.Moves\\plt\\motoguzz.plt","rt");
-			FILE *f;
-			fopen_s(&f,"c:\\tmp\\testc.hpgl", "rt");
+			FILE* f;
+			fopen_s(&f, "c:\\tmp\\testc.hpgl", "rt");
 
 			bool penIsUp = true;
-			int line = 0;
+			int  line    = 0;
 
 			while (!feof(f))
 			{
 				char cmd[16];
-				int x, y;
+				int  x, y;
 				//			int cnt=fscanf(f,"%2s%i%i;",&cmd,&x,&y);
 				int cnt = fscanf_s(f, "%2s %i,%i;", cmd, _countof(cmd), &x, &y);
 
@@ -750,7 +755,6 @@ namespace StepperSystemTest
 					Stepper.MoveAbs3(ToHP(x), ToHP(y), 0);
 					//printf("Stepper.MoveAbs3(%u,%u,0,5000);\n",ToHP(x),ToHP(y),0);
 				}
-
 			}
 			fclose(f);
 			CreateTestFile("TR99_File.csv");
@@ -758,7 +762,7 @@ namespace StepperSystemTest
 
 		void WriteStepperTestMovement()
 		{
-			FILE*f;
+			FILE* f;
 			fopen_s(&f, "c:\\tmp\\test.txt", "wt");
 
 			fprintf(f, "\tAssert(%i, Stepper.GetMovementCount());\n", (int)Stepper.GetMovementCount());
@@ -783,6 +787,5 @@ namespace StepperSystemTest
 
 			fclose(f);
 		}
-
 	};
 }

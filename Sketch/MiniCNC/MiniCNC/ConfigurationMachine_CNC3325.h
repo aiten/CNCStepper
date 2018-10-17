@@ -37,11 +37,11 @@
 ////////////////////////////////////////////////////////
 
 #define X_MAXSIZE 150000        // in mm1000_t
-#define Y_MAXSIZE 105000 
-#define Z_MAXSIZE 30000 
-#define A_MAXSIZE 360000 
-#define B_MAXSIZE 360000 
-#define C_MAXSIZE 360000 
+#define Y_MAXSIZE 105000
+#define Z_MAXSIZE 30000
+#define A_MAXSIZE 360000
+#define B_MAXSIZE 360000
+#define C_MAXSIZE 360000
 
 ////////////////////////////////////////////////////////
 
@@ -115,4 +115,3 @@
 ////////////////////////////////////////////////////////
 
 #define MESSAGE_MYCONTROL_Starting          F("CNC-3325:" __DATE__ )
-

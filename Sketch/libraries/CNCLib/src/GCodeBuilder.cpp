@@ -30,7 +30,7 @@
 
 ////////////////////////////////////////////////////////////
 
-CGCodeBuilder& CGCodeBuilder::Add(const __FlashStringHelper* cmd)
+CGCodeBuilder& CGCodeBuilder::Add(FLSTR cmd)
 {
 	strcat_P(_commandstring, (const char*) cmd);
 	return *this;
@@ -57,8 +57,8 @@ CGCodeBuilder& CGCodeBuilder::Add(mm1000_t mm1000)
 
 CGCodeBuilder& CGCodeBuilder::AddAxisName(axis_t axis)
 {
-	uint8_t len = (uint8_t)strlen(_commandstring);
-	_commandstring[len] = AxisToChar(axis);
+	auto len                = uint8_t(strlen(_commandstring));
+	_commandstring[len]     = AxisToChar(axis);
 	_commandstring[len + 1] = 0;
 	return *this;
 }

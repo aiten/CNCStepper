@@ -34,7 +34,6 @@ namespace StepperSystemTest
 
 		TEST_METHOD(ToStringSDistTest)
 		{
-
 			char tmp[20];
 
 			Assert::AreEqual("           0", CSDist::ToString(0, tmp, 12));
@@ -52,7 +51,6 @@ namespace StepperSystemTest
 
 		TEST_METHOD(ToStringMm1000Test)
 		{
-
 			char tmp[20];
 
 			Assert::AreEqual("    0.000", CMm1000::ToString(0, tmp, 9, 3));

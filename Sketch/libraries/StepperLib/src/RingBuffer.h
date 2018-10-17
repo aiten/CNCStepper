@@ -25,8 +25,8 @@
 
 //////////////////////////////////////////
 
-template <class T, const uint8_t maxsize>		// do not use maxsize > 254 (255 is used internal)
-class CRingBufferQueue								// maxxsize should be 2^n (because of % operation)
+template <class T, const uint8_t maxsize> // do not use maxsize > 254 (255 is used internal)
+class CRingBufferQueue                    // maxxsize should be 2^n (because of % operation)
 {
 public:
 
@@ -38,7 +38,7 @@ public:
 	void Dequeue()
 	{
 		CCriticalRegion crit;
-		_head = NextIndex(_head);
+		_head  = NextIndex(_head);
 		_empty = _head == _nexttail;
 	}
 
@@ -46,7 +46,7 @@ public:
 	{
 		CCriticalRegion crit;
 		_nexttail = NextIndex(_nexttail);
-		_empty = false;
+		_empty    = false;
 	}
 
 	void Enqueue(T value)
@@ -59,21 +59,21 @@ public:
 	{
 		CCriticalRegion crit;
 		_nexttail = NextIndex(_nexttail, cnt);
-		_empty = false;
+		_empty    = false;
 	}
 
 	void RemoveTail()
 	{
 		CCriticalRegion crit;
 		_nexttail = PrevIndex(_nexttail);
-		_empty = _head == _nexttail;
+		_empty    = _head == _nexttail;
 	}
 
 	void RemoveTail(uint8_t tail)
 	{
 		CCriticalRegion crit;
 		_nexttail = NextIndex(tail);
-		_empty = _head == _nexttail;
+		_empty    = _head == _nexttail;
 	}
 
 	bool IsEmpty() const
@@ -127,29 +127,32 @@ public:
 
 	// next functions no check if empty or full
 
-	T& Head()                       { return Buffer[GetHeadPos()]; }
-	T& Tail()                       { return Buffer[GetTailPos()]; }
-	T& NextTail()                   { return Buffer[GetNextTailPos()]; }
-	T& NextTail(uint8_t ofs)  { return Buffer[NextIndex(GetNextTailPos(), ofs)]; }
+	T& Head() { return Buffer[GetHeadPos()]; }
+	T& Tail() { return Buffer[GetTailPos()]; }
+	T& NextTail() { return Buffer[GetNextTailPos()]; }
+	T& NextTail(uint8_t ofs) { return Buffer[NextIndex(GetNextTailPos(), ofs)]; }
 
-	T* SaveTail()                   { return IsEmpty() ? 0 : &Tail(); }
-	T* SaveHead()                   { return IsEmpty() ? 0 : &Head(); }
+	T* SaveTail() { return IsEmpty() ? 0 : &Tail(); }
+	T* SaveHead() { return IsEmpty() ? 0 : &Head(); }
 
-	T* GetNext(uint8_t idx)	{
+	T* GetNext(uint8_t idx)
+	{
 		idx = NextIndex(idx);
 		return idx != _nexttail && IsInQueue(idx) ? &Buffer[idx] : NULL;
 	}
-	T* GetPrev(uint8_t idx)	
+
+	T* GetPrev(uint8_t idx)
 	{
-		if (idx == _head) return NULL;
+		if (idx == _head) return nullptr;
 		idx = PrevIndex(idx);
 		return IsInQueue(idx) ? &Buffer[idx] : NULL;
 	}
-	uint8_t GetHeadPos() const		{ return _head; }
-	uint8_t GetNextTailPos() const	{ return _nexttail; }
-	uint8_t GetTailPos() const		{ return PrevIndex(_nexttail); }
 
-	bool IsInQueue(uint8_t idx) const	
+	uint8_t GetHeadPos() const { return _head; }
+	uint8_t GetNextTailPos() const { return _nexttail; }
+	uint8_t GetTailPos() const { return PrevIndex(_nexttail); }
+
+	bool IsInQueue(uint8_t idx) const
 	{
 		if (_empty) return false;
 		if (_nexttail == _head) return true;
@@ -158,29 +161,34 @@ public:
 	}
 
 	// iteration from head to tail (H2T)
-	uint8_t H2TInit() const					{ return  _empty ? 255 : _head; }
-	bool H2TTest(uint8_t idx) const			{ return  idx != 255; }
-	uint8_t H2TInc(uint8_t idx) const	{ idx = NextIndex(idx); return idx == _nexttail ? 255 : idx; }
+	uint8_t H2TInit() const { return _empty ? 255 : _head; }
+	bool    H2TTest(uint8_t idx) const { return idx != 255; }
+
+	uint8_t H2TInc(uint8_t idx) const
+	{
+		idx = NextIndex(idx);
+		return idx == _nexttail ? 255 : idx;
+	}
 
 	// iteration from tail to head (T2H)
-	uint8_t T2HInit() const					{ return  _empty ? 255 : GetTailPos(); }
-	bool T2HTest(uint8_t idx) const			{ return  idx != 255; }
-	uint8_t T2HInc(uint8_t idx) const	{ return idx == _head ? 255 : PrevIndex(idx); }
+	uint8_t T2HInit() const { return _empty ? 255 : GetTailPos(); }
+	bool    T2HTest(uint8_t idx) const { return idx != 255; }
+	uint8_t T2HInc(uint8_t  idx) const { return idx == _head ? 255 : PrevIndex(idx); }
 
 	void Clear()
 	{
 		CCriticalRegion crit;
-		_head = 0;
+		_head     = 0;
 		_nexttail = 0;
-		_empty = true;
+		_empty    = true;
 	}
 
 private:
 	// often accessed members first => is faster
 
-	volatile uint8_t	_head;      // index of head of queue
-	volatile uint8_t	_nexttail;  // index of next free tail (NOT tail position)
-	volatile bool			_empty;		// distinguish between full and empty
+	volatile uint8_t _head;     // index of head of queue
+	volatile uint8_t _nexttail; // index of next free tail (NOT tail position)
+	volatile bool    _empty;    // distinguish between full and empty
 
 public:
 
@@ -192,12 +200,12 @@ public:
 
 	uint8_t NextIndex(uint8_t idx) const
 	{
-		return (uint8_t)((idx + 1)) % (maxsize);
+		return uint8_t((idx + 1)) % (maxsize);
 	}
 
 	uint8_t NextIndex(uint8_t idx, uint8_t count) const
 	{
-		return (uint8_t)((idx + count)) % (maxsize);
+		return uint8_t((idx + count)) % (maxsize);
 	}
 
 	uint8_t PrevIndex(uint8_t idx) const
@@ -207,6 +215,6 @@ public:
 
 	uint8_t PrevIndex(uint8_t idx, uint8_t count) const
 	{
-		return (idx >= count) ? idx - count : (maxsize)-(count - idx);
+		return (idx >= count) ? idx - count : (maxsize) - (count - idx);
 	}
 };

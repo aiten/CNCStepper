@@ -83,9 +83,16 @@ protected:
 
 	////////////////////////////////////////////////////////
 
-	virtual void  SetEnable(axis_t /* axis */, uint8_t level, bool /* force */) override
+	virtual void SetEnable(axis_t /* axis */, uint8_t level, bool /* force */) override
 	{
-		if (level != LevelOff)	HALFastdigitalWrite(CNCSHIELD_ENABLE_PIN,CNCSHIELD_PIN_ENABLE_ON);	else	HALFastdigitalWrite(CNCSHIELD_ENABLE_PIN,CNCSHIELD_PIN_ENABLE_OFF);
+		if (level != LevelOff)
+		{
+			HALFastdigitalWrite(CNCSHIELD_ENABLE_PIN, CNCSHIELD_PIN_ENABLE_ON);
+		}
+		else
+		{
+			HALFastdigitalWrite(CNCSHIELD_ENABLE_PIN, CNCSHIELD_PIN_ENABLE_OFF);
+		}
 	}
 
 	////////////////////////////////////////////////////////
@@ -108,12 +115,14 @@ protected:
 
 	static void SetDirection(axisArray_t directionUp)
 	{
+		// @formatter:off — disable formatter after this line
 		if ((directionUp&(1 << X_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_X_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_X_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
 		if ((directionUp&(1 << Y_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_Y_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_Y_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
 		if ((directionUp&(1 << Z_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_Z_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_Z_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
 #if CNCSHIELD_NUM_AXIS > 3
 		if ((directionUp&(1 << A_AXIS)) != 0) HALFastdigitalWriteNC(CNCSHIELD_A_DIR_PIN, CNCSHIELD_PIN_DIR_OFF); else HALFastdigitalWriteNC(CNCSHIELD_A_DIR_PIN, CNCSHIELD_PIN_DIR_ON);
 #endif
+		// @formatter:on — enable formatter after this line
 	}
 
 	////////////////////////////////////////////////////////
@@ -132,9 +141,9 @@ protected:
 
 	static void ClearStepPin()
 	{
-		HALFastdigitalWriteNC(CNCSHIELD_X_STEP_PIN, CNCSHIELD_PIN_STEP_ON); 
-		HALFastdigitalWriteNC(CNCSHIELD_Y_STEP_PIN, CNCSHIELD_PIN_STEP_ON); 
-		HALFastdigitalWriteNC(CNCSHIELD_Z_STEP_PIN, CNCSHIELD_PIN_STEP_ON); 
+		HALFastdigitalWriteNC(CNCSHIELD_X_STEP_PIN, CNCSHIELD_PIN_STEP_ON);
+		HALFastdigitalWriteNC(CNCSHIELD_Y_STEP_PIN, CNCSHIELD_PIN_STEP_ON);
+		HALFastdigitalWriteNC(CNCSHIELD_Z_STEP_PIN, CNCSHIELD_PIN_STEP_ON);
 #if CNCSHIELD_NUM_AXIS > 3
 		HALFastdigitalWriteNC(CNCSHIELD_A_STEP_PIN, CNCSHIELD_PIN_STEP_ON); 
 #endif
@@ -181,7 +190,7 @@ protected:
 		if (steps[X_AXIS] > cnt) { pending++; }
 		if (steps[Y_AXIS] > cnt) { pending++; }
 		if (steps[Z_AXIS] > cnt) { pending++; }
-#if CNCSHIELD_NUM_AXIS > 3		    
+#if CNCSHIELD_NUM_AXIS > 3
 		if (steps[E0_AXIS] > cnt) { pending++;; }
 #endif
 		return pending;
@@ -203,6 +212,7 @@ public:
 			case 3: return HALFastdigitalRead(CNCSHIELD_Y_MIN_PIN);
 			case 4:
 			case 5: return HALFastdigitalRead(CNCSHIELD_Z_MIN_PIN);
+			default: break;
 		}
 		return 255;
 	}

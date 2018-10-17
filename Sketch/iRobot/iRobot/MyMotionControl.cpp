@@ -40,7 +40,7 @@
 #define A SEGMENT2
 #define B SEGMENT1
 #define H 105000.0f	//  105.0   // height start first segement
-#define E SEGMENT3	
+#define E SEGMENT3
 
 #define Amm mm1000_t(A)
 #define Bmm mm1000_t(B)
@@ -72,20 +72,18 @@
 
 /////////////////////////////////////////////////////////
 
-CMyMotionControl::CMyMotionControl()
-{
-}
+CMyMotionControl::CMyMotionControl() {}
 
 /////////////////////////////////////////////////////////
 
-inline float FromMs(mm1000_t ms,axis_t /* axis */)
+inline float FromMs(mm1000_t ms, axis_t /* axis */)
 {
 	return float(ms / MsForPI * MY_PI);
 }
 
 /////////////////////////////////////////////////////////
 
-inline mm1000_t ToMs(float angle,axis_t /* axis */)
+inline mm1000_t ToMs(float angle, axis_t /* axis */)
 {
 	return (mm1000_t)(angle * MsForPI / MY_PI);
 }
@@ -101,7 +99,7 @@ inline bool IsFloatOK(float val)
 
 inline int ToGRADRound(float a)
 {
-	return (int) (a*180.0 / MY_PI + 0.5);
+	return (int)(a * 180.0 / MY_PI + 0.5);
 }
 
 /////////////////////////////////////////////////////////
@@ -141,12 +139,12 @@ void CMyMotionControl::AdjustFromAngle(float angle[NUM_AXIS])
 
 void CMyMotionControl::TransformFromMachinePosition(const udist_t src[NUM_AXIS], mm1000_t dest[NUM_AXIS])
 {
-	super::TransformFromMachinePosition(src,dest);
+	super::TransformFromMachinePosition(src, dest);
 
 	float angle[NUM_AXIS];
 
 	for (axis_t i = 0; i < SEGMENTCOUNT; i++)
-		angle[i] = FromMs(dest[i], i);
+		angle[i]  = FromMs(dest[i], i);
 
 	AdjustFromAngle(angle);
 	FromAngle(angle, dest);
@@ -157,10 +155,10 @@ void CMyMotionControl::TransformFromMachinePosition(const udist_t src[NUM_AXIS],
 bool CMyMotionControl::TransformPosition(const mm1000_t src[NUM_AXIS], mm1000_t dest[NUM_AXIS])
 {
 	float angle[NUM_AXIS];
-	
+
 	if (!super::TransformPosition(src, dest))
 		return false;
-		
+
 	if (!ToAngle(dest, angle))
 	{
 		Error(F("TransformPosition: geometry"));
@@ -170,7 +168,7 @@ bool CMyMotionControl::TransformPosition(const mm1000_t src[NUM_AXIS], mm1000_t 
 	AdjustToAngle(angle);
 
 	for (axis_t i = 0; i < SEGMENTCOUNT; i++)
-		dest[i] = ToMs(angle[i], X_AXIS);
+		dest[i]   = ToMs(angle[i], X_AXIS);
 
 	return true;
 }
@@ -179,39 +177,39 @@ bool CMyMotionControl::TransformPosition(const mm1000_t src[NUM_AXIS], mm1000_t 
 
 bool CMyMotionControl::ToAngle(const mm1000_t pos[NUM_AXIS], float angle[NUM_AXIS])
 {
-	float x = (float) pos[0];
-	float y = (float) pos[1];
-	float z = (float) pos[2];
+	float x = float(pos[0]);
+	float y = float(pos[1]);
+	float z = float(pos[2]);
 
-	float s = sqrt(x*x + y*y);
+	float s = sqrt(x * x + y * y);
 
-	float c2 = (s - E)*(s - E) + (z - H)*(z - H);
-	float c = sqrt(c2);										// triangle for first and second segment
+	float c2 = (s - E) * (s - E) + (z - H) * (z - H);
+	float c  = sqrt(c2);										// triangle for first and second segment
 
 	float alpha1 = (s - E) == 0.0 ? 0.0f : atanf((z - H) / (s - E));	// "base" angle of c
-	float alpha = acosf((B*B + c2 - A*A) / (2.0f*B*c));
-	float gamma = acosf((A*A + B*B - c2) / (2.0f*A*B));
+	float alpha  = acosf((B * B + c2 - A * A) / (2.0f * B * c));
+	float gamma  = acosf((A * A + B * B - c2) / (2.0f * A * B));
 
 	angle[0] = (alpha + alpha1);
 	angle[1] = gamma;
-	if (x==0.0)
+	if (x == 0.0)
 	{
-		angle[2] = y>0.0 ? float(MY_PI/2.0) : - float(MY_PI/2.0);
+		angle[2] = y > 0.0 ? float(MY_PI / 2.0) : - float(MY_PI / 2.0);
 	}
 	else
 	{
 		angle[2] = atan(y / x);
 	}
-	if (x<0.0) 
+	if (x < 0.0)
 	{
 		angle[2] = MY_PI + angle[2];
 		if (angle[2] >= MY_PI)
 			angle[2] -= 2.0 * MY_PI;
 	}
 
-	if (!IsFloatOK(angle[0]))	return false;
-	if (!IsFloatOK(angle[1]))	return false;
-	if (!IsFloatOK(angle[2]))	return false;
+	if (!IsFloatOK(angle[0])) return false;
+	if (!IsFloatOK(angle[1])) return false;
+	if (!IsFloatOK(angle[2])) return false;
 
 	return true;
 }
@@ -220,10 +218,10 @@ bool CMyMotionControl::ToAngle(const mm1000_t pos[NUM_AXIS], float angle[NUM_AXI
 
 bool CMyMotionControl::FromAngle(const float angle[NUM_AXIS], mm1000_t dest[NUM_AXIS])
 {
-	float c2 = (A*A + B*B - 2.0f * A * B * cosf(angle[1]));
-	float c = sqrtf(c2);
+	float c2 = (A * A + B * B - 2.0f * A * B * cosf(angle[1]));
+	float c  = sqrtf(c2);
 
-	float alpha = acosf((c2 + B*B - A*A) / (2.0f*B*c));
+	float alpha  = acosf((c2 + B * B - A * A) / (2.0f * B * c));
 	float alpha1 = angle[0] - alpha;
 
 	float s = cosf(alpha1) * c + E;
@@ -231,7 +229,7 @@ bool CMyMotionControl::FromAngle(const float angle[NUM_AXIS], mm1000_t dest[NUM_
 	dest[0] = CMm1000::Cast(cosf(angle[2]) * s);
 	dest[1] = CMm1000::Cast(sinf(angle[2]) * s);
 
-	dest[2] = CMm1000::Cast(H + sinf(alpha1)*c);
+	dest[2] = CMm1000::Cast(H + sinf(alpha1) * c);
 
 	return true;
 }
@@ -240,61 +238,61 @@ bool CMyMotionControl::FromAngle(const float angle[NUM_AXIS], mm1000_t dest[NUM_
 
 void CMyMotionControl::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedrate)
 {
-	unsigned short movecount = 1;
+	uint16_t movecount = 1;
 	mm1000_t nextto[NUM_AXIS];
 	mm1000_t totaldist[NUM_AXIS];
 
-	mm1000_t maxdist=0;
-	const mm1000_t splitdist=SPLITMOVEDIST;
+	mm1000_t       maxdist   = 0;
+	const mm1000_t splitdist = SPLITMOVEDIST;
 
 	axis_t i;
 
 	for (i = 0; i < NUM_AXIS; i++)
 	{
-		mm1000_t dist=to[i]-_current[i];
-		totaldist[i] = dist;
+		mm1000_t dist = to[i] - _current[i];
+		totaldist[i]  = dist;
 
-		if (dist<0) dist = -dist;
-		if (dist >  maxdist)
+		if (dist < 0) dist = -dist;
+		if (dist > maxdist)
 			maxdist = dist;
 	}
 
 	if (maxdist > splitdist)
 	{
-		movecount = (unsigned short)(maxdist / splitdist);
+		movecount = (uint16_t)(maxdist / splitdist);
 		if ((maxdist % splitdist) != 0)
 			movecount++;
 	}
 
-	for (unsigned short j = movecount-1; j > 0; j--)
+	for (uint16_t j = movecount - 1; j > 0; j--)
 	{
 		for (i = 0; i < NUM_AXIS; i++)
 		{
 			mm1000_t newxtpos = RoundMulDivI32(totaldist[i], j, movecount);
-			nextto[i] = to[i] - newxtpos;
+			nextto[i]         = to[i] - newxtpos;
 		}
 
-		super::MoveAbs(nextto,feedrate);
+		super::MoveAbs(nextto, feedrate);
 		if (IsError()) return;
 	}
 
-	super::MoveAbs(to,feedrate);
+	super::MoveAbs(to, feedrate);
 }
 
 /////////////////////////////////////////////////////////
 
 void CMyMotionControl::MoveAngle(const mm1000_t dest[NUM_AXIS])
 {
-	udist_t		to[NUM_AXIS] = { 0 };
+	udist_t to[NUM_AXIS] = { 0 };
 
 	axis_t i;
 
-	for (i = 0; i<SEGMENTCOUNT; i++)
+	for (i    = 0; i < SEGMENTCOUNT; i++)
 		to[i] = ToMs(ToAngleRAD(dest[i]), i);
 
-	for (i= 0;i<NUM_AXIS;i++)
+	for (i = 0; i < NUM_AXIS; i++)
 	{
-		if (to[i]==0)
+		if (to[i] == 0)
 			to[i] = CStepper::GetInstance()->GetCurrentPosition(i);
 	}
 
@@ -307,22 +305,22 @@ void CMyMotionControl::MoveAngle(const mm1000_t dest[NUM_AXIS])
 void CMyMotionControl::MoveAngleLog(const mm1000_t dest[NUM_AXIS])
 {
 	axis_t i;
-	float angle[NUM_AXIS] = { 0.0 };
+	float  angle[NUM_AXIS] = { 0.0 };
 
-	for (i = 0; i<SEGMENTCOUNT; i++)
+	for (i       = 0; i < SEGMENTCOUNT; i++)
 		angle[i] = FromMs(CStepper::GetInstance()->GetCurrentPosition(i), i);
 
 	AdjustFromAngle(angle);
 
 	mm1000_t to[NUM_AXIS];
-	memcpy(to,_current,sizeof(_current));
+	memcpy(to, _current, sizeof(_current));
 
-	for (i = 0; i<SEGMENTCOUNT; i++)
-		if (dest[i] != 0)  angle[i] = ToAngleRAD(dest[i]);
+	for (i                         = 0; i < SEGMENTCOUNT; i++)
+		if (dest[i] != 0) angle[i] = ToAngleRAD(dest[i]);
 
 	FromAngle(angle, to);
 
-	MoveAbs(to,CGCodeParserBase::GetG1FeedRate());
+	MoveAbs(to, CGCodeParserBase::GetG1FeedRate());
 }
 
 /////////////////////////////////////////////////////////
@@ -330,7 +328,7 @@ void CMyMotionControl::MoveAngleLog(const mm1000_t dest[NUM_AXIS])
 void CMyMotionControl::PrintInfo()
 {
 	float angle[NUM_AXIS];
-	
+
 	if (!ToAngle(_current, angle))
 	{
 		Error(F("TransformPosition: geometry"));
@@ -338,18 +336,26 @@ void CMyMotionControl::PrintInfo()
 
 	char tmp[16];
 
-	StepperSerial.print(ToGRADRound(angle[0])); StepperSerial.print(F(":"));
-	StepperSerial.print(ToGRADRound(angle[1])); StepperSerial.print(F(":"));
-	StepperSerial.print(ToGRADRound(angle[2])); StepperSerial.print(F("=>"));
+	StepperSerial.print(ToGRADRound(angle[0]));
+	StepperSerial.print(F(":"));
+	StepperSerial.print(ToGRADRound(angle[1]));
+	StepperSerial.print(F(":"));
+	StepperSerial.print(ToGRADRound(angle[2]));
+	StepperSerial.print(F("=>"));
 
 	AdjustToAngle(angle);
 
-	StepperSerial.print(ToGRADRound(angle[0])); StepperSerial.print(F(":"));
-	StepperSerial.print(ToGRADRound(angle[1])); StepperSerial.print(F(":"));
-	StepperSerial.print(ToGRADRound(angle[2])); StepperSerial.print(F("=>"));
+	StepperSerial.print(ToGRADRound(angle[0]));
+	StepperSerial.print(F(":"));
+	StepperSerial.print(ToGRADRound(angle[1]));
+	StepperSerial.print(F(":"));
+	StepperSerial.print(ToGRADRound(angle[2]));
+	StepperSerial.print(F("=>"));
 
-	StepperSerial.print(CMm1000::ToString(ToMs(angle[0],X_AXIS), tmp, 3)); StepperSerial.print(F(":"));
-	StepperSerial.print(CMm1000::ToString(ToMs(angle[1],Y_AXIS), tmp, 3)); StepperSerial.print(F(":"));
+	StepperSerial.print(CMm1000::ToString(ToMs(angle[0],X_AXIS), tmp, 3));
+	StepperSerial.print(F(":"));
+	StepperSerial.print(CMm1000::ToString(ToMs(angle[1],Y_AXIS), tmp, 3));
+	StepperSerial.print(F(":"));
 	StepperSerial.print(CMm1000::ToString(ToMs(angle[2],Z_AXIS), tmp, 3));
 }
 
@@ -417,18 +423,18 @@ void CMyMotionControl::UnitTest()
 	Test(300000, 150000, 200000, true);
 }
 
-inline float ToRAD(float a)   { return (a*180.0f / MY_PI); }
-inline float ToMM(mm1000_t a) { return (a / 1000.0f); }
-inline bool CompareMaxDiff(mm1000_t a, mm1000_t b, mm1000_t diff = 10) { return  (abs(a - b) >= diff); }
+inline float ToRAD(float             a) { return (a * 180.0f / MY_PI); }
+inline float ToMM(mm1000_t           a) { return (a / 1000.0f); }
+inline bool  CompareMaxDiff(mm1000_t a, mm1000_t b, mm1000_t diff = 10) { return (abs(a - b) >= diff); }
 
 #define FORMAT_MM "%.0f:%.0f:%.0f"
 #define FORMAT_GRAD "%.0f:%.0f:%.0f"
 
 bool CMyMotionControl::Test(mm1000_t src1, mm1000_t src2, mm1000_t src3, bool printOK)
 {
-	float angle[NUM_AXIS];
+	float    angle[NUM_AXIS];
 	mm1000_t src[NUM_AXIS] = { src1, src2, src3 };
-	axis_t i;
+	axis_t   i;
 
 	if (!ToAngle(src, angle))
 		return false;
@@ -440,12 +446,12 @@ bool CMyMotionControl::Test(mm1000_t src1, mm1000_t src2, mm1000_t src3, bool pr
 		for (i = 0; i < SEGMENTCOUNT; i++)
 		{
 			mm1000_t tmp = ToMs(angle[i], i);
-			a[i] = FromMs(tmp, i);
+			a[i]         = FromMs(tmp, i);
 		}
 	}
 	else
 	{
-		for (i = 0; i < SEGMENTCOUNT; i++)
+		for (i   = 0; i < SEGMENTCOUNT; i++)
 			a[i] = angle[i];
 	}
 
@@ -454,8 +460,8 @@ bool CMyMotionControl::Test(mm1000_t src1, mm1000_t src2, mm1000_t src3, bool pr
 	FromAngle(a, dest);
 
 	bool isError = false;
-	for (i = 0; i < SEGMENTCOUNT && !isError; i++)
-		isError = CompareMaxDiff(src[i], dest[i]);
+	for (i       = 0; i < SEGMENTCOUNT && !isError; i++)
+		isError  = CompareMaxDiff(src[i], dest[i]);
 
 	if (printOK || isError)
 	{

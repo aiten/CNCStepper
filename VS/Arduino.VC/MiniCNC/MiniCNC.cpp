@@ -30,13 +30,12 @@ static void setup();
 static void loop();
 static void Idle();
 
-CMsvcStepper MyStepper;
+CMsvcStepper    MyStepper;
 class CStepper& Stepper = MyStepper;
 
-int _tmain(int /* argc */, _TCHAR* /* argv */ [])
+int _tmain(int /* argc */, _TCHAR* /* argv */[])
 {
-
-	digitalReadEvent = [](short pin)
+	digitalReadEvent = [](int16_t pin)
 	{
 		switch (pin)
 		{
@@ -57,18 +56,18 @@ int _tmain(int /* argc */, _TCHAR* /* argv */ [])
 	MyStepper.EndTest();
 }
 
-void setup() 
-{     
+void setup()
+{
 	MyStepper.DelayOptimization = false;
-	MyStepper.UseSpeedSign = true;
-	MyStepper.CacheSize = 50000;
+	MyStepper.UseSpeedSign      = true;
+	MyStepper.CacheSize         = 50000;
 	MyStepper.InitTest("MiniCNC.csv");
 	Serial.SetIdle(Idle);
 }
 
-void loop() 
+void loop()
 {
-  Control.Run();
+	Control.Run();
 }
 
 static void Idle()

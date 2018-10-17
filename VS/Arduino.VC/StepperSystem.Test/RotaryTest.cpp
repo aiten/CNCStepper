@@ -74,10 +74,9 @@ namespace StepperSystemTest
 
 
 			Assert::AreEqual(0, rotary.GetPos());
-			CRotaryButton<signed int, 1>::ERotaryEvent revent;
 
 			// nothing changed
-			revent = rotary.Tick(1, 1);
+			CRotaryButton<signed int, 1>::ERotaryEvent revent = rotary.Tick(1, 1);
 			Assert::AreEqual((int)rotary.Nothing, (int)revent);
 			Assert::AreEqual(0, rotary.GetPos());
 
@@ -154,6 +153,7 @@ namespace StepperSystemTest
 		TEST_METHOD(RotaryAccuracCWTest)
 		{
 			const int ACCURACY = 4;
+
 			CRotaryButton<signed int, ACCURACY> rotary;
 
 			int i;

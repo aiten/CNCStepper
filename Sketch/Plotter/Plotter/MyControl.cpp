@@ -35,8 +35,8 @@
 
 ////////////////////////////////////////////////////////////
 
-CMotionControl MotionControl;
-CConfigEeprom Eprom;
+CMotionControl  MotionControl;
+CConfigEeprom   Eprom;
 HardwareSerial& StepperSerial = Serial;
 
 ////////////////////////////////////////////////////////////
@@ -49,24 +49,24 @@ HardwareSerial& StepperSerial = Serial;
 
 const CMyControl::SMyCNCEeprom CMyControl::_eepromFlash PROGMEM =
 {
-  {
-	EPROM_SIGNATURE_PLOTTER,
-	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
-	COMMANDSYNTAX_CLEAR(GetInfo1a()) | COMMANDSYNTAX_VALUE(CConfigEeprom::HPGL),GetInfo1b(),
-	0,
-	STEPPERDIRECTION,0,0,SPINDEL_FADETIMEDELAY,
-	SPINDLE_MAXSPEED,
-	CNC_JERKSPEED,
-	CNC_MAXSPEED,
-	CNC_ACC,
-	CNC_DEC,
-	STEPRATERATE_REFMOVE,
-	MOVEAWAYFROMREF_MM1000,
-	X_STEPSPERMM / 1000.0,
 	{
-		{ X_MAXSIZE,     X_USEREFERENCE, REFMOVE_1_AXIS,  X_REFERENCEHITVALUE_MIN, X_REFERENCEHITVALUE_MAX },
-		{ Y_MAXSIZE,     Y_USEREFERENCE, REFMOVE_2_AXIS,  Y_REFERENCEHITVALUE_MIN, Y_REFERENCEHITVALUE_MAX },
-		{ Z_MAXSIZE,     Z_USEREFERENCE, REFMOVE_3_AXIS,  Z_REFERENCEHITVALUE_MIN, Z_REFERENCEHITVALUE_MAX },
+		EPROM_SIGNATURE_PLOTTER,
+		NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
+		COMMANDSYNTAX_CLEAR(GetInfo1a()) | COMMANDSYNTAX_VALUE(CConfigEeprom::HPGL), GetInfo1b(),
+		0,
+		STEPPERDIRECTION, 0, 0,SPINDEL_FADETIMEDELAY,
+		SPINDLE_MAXSPEED,
+		CNC_JERKSPEED,
+		CNC_MAXSPEED,
+		CNC_ACC,
+		CNC_DEC,
+		STEPRATERATE_REFMOVE,
+		MOVEAWAYFROMREF_MM1000,
+		X_STEPSPERMM / 1000.0,
+		{
+			{ X_MAXSIZE, X_USEREFERENCE, REFMOVE_1_AXIS, X_REFERENCEHITVALUE_MIN, X_REFERENCEHITVALUE_MAX },
+			{ Y_MAXSIZE, Y_USEREFERENCE, REFMOVE_2_AXIS, Y_REFERENCEHITVALUE_MIN, Y_REFERENCEHITVALUE_MAX },
+			{ Z_MAXSIZE, Z_USEREFERENCE, REFMOVE_3_AXIS, Z_REFERENCEHITVALUE_MIN, Z_REFERENCEHITVALUE_MAX },
 #if NUM_AXIS > 3
 		{ A_MAXSIZE,     A_USEREFERENCE, REFMOVE_4_AXIS,  A_REFERENCEHITVALUE_MIN, A_REFERENCEHITVALUE_MAX },
 #endif
@@ -76,8 +76,8 @@ const CMyControl::SMyCNCEeprom CMyControl::_eepromFlash PROGMEM =
 #if NUM_AXIS > 5
 		{ C_MAXSIZE,     C_USEREFERENCE, REFMOVE_6_AXIS,  C_REFERENCEHITVALUE_MIN, C_REFERENCEHITVALUE_MAX },
 #endif
-	}
-  },
+		}
+	},
 	// Plotter EEprom Extension
 
 	PLOTTER_DEFAULT_PENDOWN_FEEDRATE,
@@ -125,7 +125,7 @@ void CMyControl::Init()
 	_servo1.attach(SERVO1_PIN);
 
 #if PENTYPE == PENTYPE_SERVO
-  _servo2.attach(SERVO2_PIN);
+	_servo2.attach(SERVO2_PIN);
 #endif
 
 	InitSD(SD_ENABLE_PIN);
@@ -133,12 +133,14 @@ void CMyControl::Init()
 
 ////////////////////////////////////////////////////////////
 
-void CMyControl::IOControl(uint8_t tool, unsigned short level)
+void CMyControl::IOControl(uint8_t tool, uint16_t level)
 {
 	switch (tool)
 	{
-		case Servo1:	_servo1.write(level); return;
-		case Servo2:	_servo2.write(level); return;
+		case Servo1: _servo1.write(level);
+			return;
+		case Servo2: _servo2.write(level);
+			return;
 	}
 
 	if (!_data.IOControl(tool, level))
@@ -149,7 +151,7 @@ void CMyControl::IOControl(uint8_t tool, unsigned short level)
 
 ////////////////////////////////////////////////////////////
 
-unsigned short CMyControl::IOControl(uint8_t tool)
+uint16_t CMyControl::IOControl(uint8_t tool)
 {
 	switch (tool)
 	{
@@ -161,8 +163,8 @@ unsigned short CMyControl::IOControl(uint8_t tool)
 #endif
 		case Probe: { return _data._probe.IsOn(); }
 
-		case Servo1:	return (unsigned short) _servo1.readMicroseconds();
-		case Servo2:	return (unsigned short) _servo2.readMicroseconds();
+		case Servo1: return (uint16_t)_servo1.readMicroseconds();
+		case Servo2: return (uint16_t)_servo2.readMicroseconds();
 	}
 
 	return super::IOControl(tool);
@@ -272,13 +274,3 @@ bool CMyControl::Parse(CStreamReader* reader, Stream* output)
 }
 
 ////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-

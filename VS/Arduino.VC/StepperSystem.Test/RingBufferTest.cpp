@@ -32,7 +32,7 @@ namespace StepperSystemTest
 	struct SRingbuffer
 	{
 		double d = 0;
-		int i = 0;
+		int    i = 0;
 	};
 
 	TEST_CLASS(CRingBufferTest)
@@ -110,6 +110,7 @@ namespace StepperSystemTest
 			Assert::AreEqual(buffersize, buffer.Count());
 
 			uint8_t insertat = buffer.NextIndex(buffer.GetHeadPos(), insertoffset);
+
 			buffer.InsertTail(insertat)->i = 2000;
 
 			Assert::AreEqual((uint8_t)(buffersize + 1), buffer.Count());

@@ -21,8 +21,7 @@
 
 ////////////////////////////////////////////////////////
 
-template <pin_t PIN, uint8_t ONVALUE, unsigned long STABLETIME>
-class CReadPinIOTriggerControl
+template <pin_t PIN, uint8_t ONVALUE, uint32_t STABLETIME> class CReadPinIOTriggerControl
 {
 public:
 
@@ -35,22 +34,23 @@ public:
 	{
 		if (CHAL::digitalRead(PIN) == ONVALUE)
 		{
-			unsigned long now = millis();
+			uint32_t now = millis();
 
-			if (_timeOn == 0)	// first on
+			if (_timeOn == 0) // first on
 			{
 				_timeOn = now;
 			}
-			
+
 			return (now - _timeOn >= STABLETIME);
 		}
 
 		_timeOn = 0;
 		return false;
 	}
+
 private:
 
-	unsigned long _timeOn = 0;
+	uint32_t _timeOn = 0;
 };
 
 ////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Include\arduino.h">
+    <ClInclude Include="..\Include\Arduino.h">
       <Filter>MsvcExt</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\HardwareSerial.h">
@@ -362,7 +362,7 @@
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\Menu3D.cpp">
       <Filter>CNCLibEx</Filter>
     </ClCompile>
-    <ClCompile Include="..\Include\arduino.cpp">
+    <ClCompile Include="..\Include\Arduino.cpp">
       <Filter>MsvcExt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\Src\SDDirReader.cpp">

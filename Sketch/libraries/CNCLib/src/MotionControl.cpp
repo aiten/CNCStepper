@@ -32,7 +32,7 @@
 
 CMotionControl::CMotionControl()
 {
-	SetOffset2D(NULL);
+	SetOffset2D(nullptr);
 }
 
 /////////////////////////////////////////////////////////
@@ -41,16 +41,16 @@ void CMotionControl::SetRotate(float rad, const mm1000_t vect[NUM_AXISXYZ], cons
 {
 	_angle = rad;
 
-	if (rad==0.0)
+	if (rad == 0.0)
 	{
 		_rotateType = NoRotate;
 	}
 	else
 	{
 		_rotateType = Rotate;
-		memcpy(_rotateOffset,ofs,sizeof(_rotateOffset));
-		memcpy(_vect,vect,sizeof(_vect));
-		_rotate3D.Set(rad,vect);
+		memcpy(_rotateOffset, ofs, sizeof(_rotateOffset));
+		memcpy(_vect, vect, sizeof(_vect));
+		_rotate3D.Set(rad, vect);
 	}
 }
 
@@ -70,13 +70,13 @@ void CMotionControl::SetRotate2D(axis_t axis, float rad)
 {
 	if (rad != 0.0)
 	{
-		if (axis==Y_AXIS) rad = -rad;
-		BitSet(_rotateEnabled2D,axis);
+		if (axis == Y_AXIS) rad = -rad;
+		BitSet(_rotateEnabled2D, axis);
 		_rotate2D[axis].Set(rad);
 	}
 	else
 	{
-		BitClear(_rotateEnabled2D,axis);
+		BitClear(_rotateEnabled2D, axis);
 	}
 }
 
@@ -84,13 +84,13 @@ void CMotionControl::SetRotate2D(axis_t axis, float rad)
 
 void CMotionControl::SetOffset2D(const mm1000_t ofs[NUM_AXISXYZ])
 {
-	if (ofs!=NULL)
+	if (ofs != nullptr)
 	{
-		memcpy(_rotateOffset2D,ofs,sizeof(_rotateOffset2D));
+		memcpy(_rotateOffset2D, ofs, sizeof(_rotateOffset2D));
 	}
 	else
 	{
-		memset(_rotateOffset2D,0,sizeof(_rotateOffset2D));
+		memset(_rotateOffset2D, 0, sizeof(_rotateOffset2D));
 	}
 }
 
@@ -100,12 +100,12 @@ void CMotionControl::SetOffset2D(const mm1000_t ofs[NUM_AXISXYZ])
 void CMotionControl::TransformFromMachinePosition(const udist_t src[NUM_AXIS], mm1000_t dest[NUM_AXIS])
 {
 	super::TransformFromMachinePosition(src, dest);
-	
+
 	if (_rotateEnabled2D)
 	{
-		float x = (float)(dest[X_AXIS] - _rotateOffset2D[X_AXIS]);
-		float y = (float)(dest[Y_AXIS] - _rotateOffset2D[Y_AXIS]);
-		float z = (float)(dest[Z_AXIS] - _rotateOffset2D[Z_AXIS]);
+		auto x = float(dest[X_AXIS] - _rotateOffset2D[X_AXIS]);
+		auto y = float(dest[Y_AXIS] - _rotateOffset2D[Y_AXIS]);
+		auto z = float(dest[Z_AXIS] - _rotateOffset2D[Z_AXIS]);
 
 		if (IsBitSet(_rotateEnabled2D, Z_AXIS))
 		{
@@ -131,9 +131,9 @@ void CMotionControl::TransformFromMachinePosition(const udist_t src[NUM_AXIS], m
 		if (_rotateType != RotateInvert)
 		{
 			_rotateType = RotateInvert;
-			_rotate3D.Set(-_angle,_vect);
+			_rotate3D.Set(-_angle, _vect);
 		}
-		_rotate3D.Rotate(dest,_rotateOffset,dest);
+		_rotate3D.Rotate(dest, _rotateOffset, dest);
 	}
 }
 
@@ -149,18 +149,18 @@ bool CMotionControl::TransformPosition(const mm1000_t src[NUM_AXIS], mm1000_t de
 		if (_rotateType != Rotate)
 		{
 			_rotateType = Rotate;
-			_rotate3D.Set(_angle,_vect);
+			_rotate3D.Set(_angle, _vect);
 		}
-		
+
 		_rotate3D.Rotate(dest, _rotateOffset, dest);
 	}
 
 	if (_rotateEnabled2D)
 	{
-		float x = (float)(dest[X_AXIS] - _rotateOffset2D[X_AXIS]);
-		float y = (float)(dest[Y_AXIS] - _rotateOffset2D[Y_AXIS]);
-		float z = (float)(dest[Z_AXIS] - _rotateOffset2D[Z_AXIS]);
-		
+		auto x = float(dest[X_AXIS] - _rotateOffset2D[X_AXIS]);
+		auto y = float(dest[Y_AXIS] - _rotateOffset2D[Y_AXIS]);
+		auto z = float(dest[Z_AXIS] - _rotateOffset2D[Z_AXIS]);
+
 		if (IsBitSet(_rotateEnabled2D, X_AXIS))
 		{
 			_rotate2D[X_AXIS].Rotate(y, z);
@@ -186,11 +186,12 @@ bool CMotionControl::TransformPosition(const mm1000_t src[NUM_AXIS], mm1000_t de
 
 void CMotionControl::SRotate3D::Set(float rad, const mm1000_t vect[NUM_AXISXYZ])
 {
-	float n1 = (float) vect[0];
-	float n2 = (float) -vect[1];		// Y_AXIS 
-	float n3 = (float) vect[2];
+	auto n1 = float(vect[0]);
+	auto n2 = float(-vect[1]); // Y_AXIS 
+	auto n3 = float(vect[2]);
 
-	float vectorlenght = sqrt(n1*n1 + n2*n2 + n3*n3);
+	float vectorlenght = sqrt(n1 * n1 + n2 * n2 + n3 * n3);
+
 	n1 = n1 / vectorlenght;
 	n2 = n2 / vectorlenght;
 	n3 = n3 / vectorlenght;
@@ -198,41 +199,41 @@ void CMotionControl::SRotate3D::Set(float rad, const mm1000_t vect[NUM_AXISXYZ])
 	float cosa = cos(rad);
 	float sina = sin(rad);
 
-	_vect[0][0] = n1*n1*(1-cosa) + cosa;
-	_vect[0][1] = n1*n2*(1-cosa) - n3*sina;
-	_vect[0][2] = n1*n3*(1-cosa) + n2*sina;
+	_vect[0][0] = n1 * n1 * (1 - cosa) + cosa;
+	_vect[0][1] = n1 * n2 * (1 - cosa) - n3 * sina;
+	_vect[0][2] = n1 * n3 * (1 - cosa) + n2 * sina;
 
-	_vect[1][0] = n1*n2*(1-cosa) + n3*sina;
-	_vect[1][1] = n2*n2*(1-cosa) + cosa;
-	_vect[1][2] = n2*n3*(1-cosa) - n1*sina;
+	_vect[1][0] = n1 * n2 * (1 - cosa) + n3 * sina;
+	_vect[1][1] = n2 * n2 * (1 - cosa) + cosa;
+	_vect[1][2] = n2 * n3 * (1 - cosa) - n1 * sina;
 
-	_vect[2][0] = n1*n3*(1-cosa) - n2*sina;
-	_vect[2][1] = n2*n3*(1-cosa) + n1*sina;
-	_vect[2][2] = n3*n3*(1-cosa) + cosa;
+	_vect[2][0] = n1 * n3 * (1 - cosa) - n2 * sina;
+	_vect[2][1] = n2 * n3 * (1 - cosa) + n1 * sina;
+	_vect[2][2] = n3 * n3 * (1 - cosa) + cosa;
 }
 
 /////////////////////////////////////////////////////////
 
-void CMotionControl::SRotate3D::Rotate(float&x, float&y, float&z)
+void CMotionControl::SRotate3D::Rotate(float& x, float& y, float& z)
 {
 	float fx = x;
 	float fy = y;
 	float fz = z;
 
-	x = fx*_vect[0][0] + fy*_vect[0][1] + fz*_vect[0][2];
-	y = fx*_vect[1][0] + fy*_vect[1][1] + fz*_vect[1][2];
-	z = fx*_vect[2][0] + fy*_vect[2][1] + fz*_vect[2][2];
+	x = fx * _vect[0][0] + fy * _vect[0][1] + fz * _vect[0][2];
+	y = fx * _vect[1][0] + fy * _vect[1][1] + fz * _vect[1][2];
+	z = fx * _vect[2][0] + fy * _vect[2][1] + fz * _vect[2][2];
 }
 
 /////////////////////////////////////////////////////////
 
 void CMotionControl::SRotate3D::Rotate(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXISXYZ], mm1000_t dest[NUM_AXIS])
 {
-	float x = (float)(src[X_AXIS] - ofs[X_AXIS]);
-	float y = (float)(src[Y_AXIS] - ofs[Y_AXIS]);
-	float z = (float)(src[Z_AXIS] - ofs[Z_AXIS]);
+	auto x = float(src[X_AXIS] - ofs[X_AXIS]);
+	auto y = float(src[Y_AXIS] - ofs[Y_AXIS]);
+	auto z = float(src[Z_AXIS] - ofs[Z_AXIS]);
 
-	Rotate(x,y,z);
+	Rotate(x, y, z);
 
 	dest[X_AXIS] = CMm1000::Cast(x) + ofs[X_AXIS];
 	dest[Y_AXIS] = CMm1000::Cast(y) + ofs[Y_AXIS];
@@ -378,45 +379,49 @@ void CMotionControl::UnitTest()
 #endif
 }
 
-inline bool CompareMaxDiff(mm1000_t a, mm1000_t b, mm1000_t diff = 3) { return  (abs(a - b) >= diff); }
+inline bool CompareMaxDiff(mm1000_t a, mm1000_t b, mm1000_t diff = 3) { return (abs(a - b) >= diff); }
 
-bool CMotionControl::Test3D(const mm1000_t src[NUM_AXIS],const mm1000_t ofs[NUM_AXIS],mm1000_t dest[NUM_AXIS], mm1000_t vect[NUM_AXIS], float angle, bool printOK)
+bool CMotionControl::Test3D(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXIS], mm1000_t dest[NUM_AXIS], mm1000_t vect[NUM_AXIS], float angle, bool printOK)
 {
-	SetRotate(angle,vect,ofs);
-	return Test(src,ofs,dest, printOK, [=] () -> void { 
+	SetRotate(angle, vect, ofs);
+	return Test(src, ofs, dest, printOK, [=]() -> void
+	{
 		DumpArray<mm1000_t, NUM_AXIS>(F("Vector"), vect, false);
 		DumpType<float>(F("Angle"), angle, false);
-	}	);
+	});
 }
 
-bool CMotionControl::Test2D(const mm1000_t src[NUM_AXIS],const mm1000_t ofs[NUM_AXIS],mm1000_t dest[NUM_AXIS], float angle[NUM_AXIS], bool printOK)
+bool CMotionControl::Test2D(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXIS], mm1000_t dest[NUM_AXIS], float angle[NUM_AXIS], bool printOK)
 {
 	SetOffset2D(ofs);
-	SetRotate2D(0,angle[0]);
-	SetRotate2D(1,angle[1]);
-	SetRotate2D(2,angle[2]);
-	return Test(src,ofs,dest, printOK, [angle] () -> void { 
+	SetRotate2D(0, angle[0]);
+	SetRotate2D(1, angle[1]);
+	SetRotate2D(2, angle[2]);
+	return Test(src, ofs, dest, printOK, [angle]() -> void
+	{
 		DumpArray<float,NUM_AXIS>(F("Angle"), angle, false);
-	}	);
+	});
 }
 
-bool CMotionControl::Test(const mm1000_t src[NUM_AXIS],const mm1000_t ofs[NUM_AXIS],mm1000_t dest[NUM_AXIS], bool printOK, std::function<void()> print)
+bool CMotionControl::Test(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXIS], mm1000_t dest[NUM_AXIS], bool printOK, const std::function<void()> print)
 {
-	udist_t	to_m[NUM_AXIS];
+	udist_t  to_m[NUM_AXIS];
 	mm1000_t toorig[NUM_AXIS];
 
-	memcpy(dest,src,sizeof(toorig));
+	memcpy(dest, src, sizeof(toorig));
 
 	bool isError = false;
 
-	if (TransformPosition(src,dest))
+	if (TransformPosition(src, dest))
 	{
 		ToMachine(dest, to_m);
 
-		TransformFromMachinePosition(to_m,toorig);
+		TransformFromMachinePosition(to_m, toorig);
 
 		for (uint8_t i = 0; i < NUM_AXIS && !isError; i++)
+		{
 			isError = CompareMaxDiff(src[i], toorig[i]);
+		}
 	}
 	else
 	{
@@ -432,7 +437,9 @@ bool CMotionControl::Test(const mm1000_t src[NUM_AXIS],const mm1000_t ofs[NUM_AX
 		DumpArray<mm1000_t, NUM_AXIS>(F("Back"), toorig, false);
 
 		if (isError)
+		{
 			printf(" ERROR");
+		}
 
 		printf("\n");
 	}

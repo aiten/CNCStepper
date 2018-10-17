@@ -33,7 +33,7 @@
 
 ////////////////////////////////////////////////////////
 
-#ifndef SPINDLE_FADETIME 
+#ifndef SPINDLE_FADETIME
 #define SPINDLE_FADETIME 8
 #endif
 
@@ -49,30 +49,30 @@
 struct ControlData
 {
 #ifdef SPINDLE_ENABLE_PIN
-	#ifdef SPINDLE_ANALOGSPEED
-		#ifdef SPINDLE_ISLASER
-			CAnalog8IOControl<SPINDLE_ENABLE_PIN> _spindle;
-			inline uint8_t ConvertSpindleSpeedToIO(unsigned short level) { return (uint8_t)level; }
-		#elif defined(SPINDLE_FADE)
-			#ifdef SPINDLE_DIR_PIN
+#ifdef SPINDLE_ANALOGSPEED
+#ifdef SPINDLE_ISLASER
+	CAnalog8IOControl<SPINDLE_ENABLE_PIN> _spindle;
+	inline uint8_t                        ConvertSpindleSpeedToIO(uint16_t level) { return (uint8_t)level; }
+#elif defined(SPINDLE_FADE)
+#ifdef SPINDLE_DIR_PIN
 				CAnalog8XIOControlSmooth<SPINDLE_ENABLE_PIN, SPINDLE_DIR_PIN> _spindle;
-				inline int16_t ConvertSpindleSpeedToIO(unsigned short level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
+				inline int16_t ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
 				#undef SPINDLE_DIR_PIN
 				#define SPINDLESPEEDISINT
 				#define SPINDLESMOOTH
-			#else
+#else
 				CAnalog8IOControlSmooth<SPINDLE_ENABLE_PIN> _spindle;
-				inline uint8_t ConvertSpindleSpeedToIO(unsigned short level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
+				inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
 			#define SPINDLESMOOTH
-			#endif
-		#else	
+#endif
+#else
 			CAnalog8IOControl<SPINDLE_ENABLE_PIN> _spindle;
-			inline uint8_t ConvertSpindleSpeedToIO(unsigned short level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
-		#endif
-	#else
+			inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
+#endif
+#else
 		COnOffIOControl<SPINDLE_ENABLE_PIN, SPINDLE_DIGITAL_ON, SPINDLE_DIGITAL_OFF> _spindle;
-		inline uint8_t ConvertSpindleSpeedToIO(unsigned short level) { return (uint8_t)level; }
-	#endif
+		inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return (uint8_t)level; }
+#endif
 #ifdef SPINDLE_DIR_PIN
 	COnOffIOControl<SPINDLE_DIR_PIN, SPINDLE_DIR_CLW, SPINDLE_DIR_CCLW> _spindleDir;
 #else
@@ -81,8 +81,8 @@ struct ControlData
 #else
 	CDummyIOControl _spindle;
 	CDummyIOControl _spindleDir;
-	inline uint8_t ConvertSpindleSpeedToIO(unsigned short level) { return (uint8_t)level; }
-#endif  
+	inline uint8_t  ConvertSpindleSpeedToIO(uint16_t level) { return uint8_t(level); }
+#endif
 
 #ifdef COOLANT_PIN
 	COnOffIOControl<COOLANT_PIN, COOLANT_PIN_ON, COOLANT_PIN_OFF> _coolant;
@@ -106,7 +106,7 @@ struct ControlData
 #endif
 
 #if defined(HOLD_PIN) && defined(RESUME_PIN)
-	CPushButtonLow<HOLD_PIN, HOLD_PIN_ON> _hold;
+	CPushButtonLow<HOLD_PIN, HOLD_PIN_ON>     _hold;
 	CPushButtonLow<RESUME_PIN, RESUME_PIN_ON> _resume;
 #else
 	CDummyIOControl _hold;
@@ -132,7 +132,7 @@ struct ControlData
 	inline bool IsControllerFanTimeout() { return millis() - CStepper::GetInstance()->IdleTime() > CONTROLLERFAN_ONTIME; }
 #else
 	CDummyIOControl _controllerfan;
-	inline bool IsControllerFanTimeout() { return false; }
+	inline bool     IsControllerFanTimeout() { return false; }
 #endif
 
 	inline void Init()
@@ -152,7 +152,7 @@ struct ControlData
 		_holdresume.Init();
 	}
 
-	inline bool IOControl(uint8_t tool, unsigned short level)
+	inline bool IOControl(uint8_t tool, uint16_t level)
 	{
 		switch (tool)
 		{
@@ -162,12 +162,25 @@ struct ControlData
 #else
 
 			case CControl::SpindleCW:
-			case CControl::SpindleCCW:		_spindle.On(ConvertSpindleSpeedToIO(level)); 
-											_spindleDir.Set(tool == CControl::SpindleCCW);	
-											return true;
+			case CControl::SpindleCCW:
+			{
+				_spindle.On(ConvertSpindleSpeedToIO(level));
+				_spindleDir.Set(tool == CControl::SpindleCCW);
+				return true;
+			}
 #endif
-			case CControl::Coolant:			_coolant.Set(level > 0); return true;
-			case CControl::ControllerFan:	_controllerfan.SetLevel((uint8_t)level); return true;
+			case CControl::Coolant:
+			{
+				_coolant.Set(level > 0);
+				return true;
+			}
+			case CControl::ControllerFan:
+			{
+				_controllerfan.SetLevel(uint8_t(level));
+				return true;
+			}
+
+			default: break;
 		}
 		return false;
 	}
@@ -213,6 +226,8 @@ struct ControlData
 					_controllerfan.Off();
 				}
 				break;
+
+			default: break;
 		}
 	}
 };
@@ -258,7 +273,7 @@ constexpr uint16_t GetInfo1a()
 #if defined(__AVR_ARCH__) || defined(__SAMD21G18A__)
 		CConfigEeprom::HAVE_EEPROM |
 #elif  defined(__SAM3X8E__)
-//		(CHAL::HaveEeprom() ? CConfigEeprom::HAVE_EEPROM : 0) |
+		//		(CHAL::HaveEeprom() ? CConfigEeprom::HAVE_EEPROM : 0) |
 #endif
 #ifdef MYUSE_LCD
 		CConfigEeprom::HAVE_SD |

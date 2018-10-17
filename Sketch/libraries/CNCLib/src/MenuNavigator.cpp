@@ -37,7 +37,7 @@ void CMenuNavigator::AdjustOffset(menupos_t menuEntries, menupos_t firstline, me
 
 	if (pos == 0)
 	{
-		SetOffset(0);				// first menuitem selected => move to first line
+		SetOffset(0); // first menuitem selected => move to first line
 	}
 	else if (pos - 1 < GetOffset())
 	{
@@ -48,7 +48,7 @@ void CMenuNavigator::AdjustOffset(menupos_t menuEntries, menupos_t firstline, me
 	{
 		if (pos == menuEntries - 1)
 		{
-			AddOffset(pos + firstline - GetOffset() - lastline);	// last menuitem selected => move to last line
+			AddOffset(pos + firstline - GetOffset() - lastline); // last menuitem selected => move to last line
 		}
 		else if (((pos + 1) + firstline - GetOffset()) > lastline)
 		{
@@ -63,10 +63,9 @@ uint8_t CMenuNavigator::ToPrintLine(menupos_t firstline, menupos_t lastline, men
 {
 	// return 255 if not to print
 
-	uint8_t printtorow = i + firstline - GetOffset();	// may overrun => no need to check for minus
+	uint8_t printtorow = i + firstline - GetOffset(); // may overrun => no need to check for minus
 	if (printtorow >= firstline && printtorow <= lastline)
 		return printtorow;
 
 	return 255;
 }
-

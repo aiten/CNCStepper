@@ -38,9 +38,12 @@ bool CMyParser::MCommand(mcode_t mcode)
 
 	switch (mcode)
 	{
-		case 116: _OkMessage = PrintInfo; return true;
-		case 117: M117Command(); return true;
-		case 118: M118Command(); return true;
+		case 116: _OkMessage = PrintInfo;
+			return true;
+		case 117: M117Command();
+			return true;
+		case 118: M118Command();
+			return true;
 	}
 
 	return false;
@@ -50,8 +53,8 @@ bool CMyParser::MCommand(mcode_t mcode)
 
 void CMyParser::PrintInfo()
 {
-//	PrintPosition();
-	((CMyMotionControl*) CMotionControlBase::GetInstance())->PrintInfo();
+	//	PrintPosition();
+	((CMyMotionControl*)CMotionControlBase::GetInstance())->PrintInfo();
 }
 
 ////////////////////////////////////////////////////////////
@@ -78,7 +81,7 @@ void CMyParser::M117Command()
 
 	if (GetAxisAbs(move))
 	{
-		CMyMotionControl* pMC = (CMyMotionControl*) CMotionControlBase::GetInstance();
+		CMyMotionControl* pMC = (CMyMotionControl*)CMotionControlBase::GetInstance();
 		pMC->MoveAngle(move.newpos);
 	}
 }
@@ -91,7 +94,7 @@ void CMyParser::M118Command()
 
 	if (GetAxisAbs(move))
 	{
-		CMyMotionControl* pMC = (CMyMotionControl*) CMotionControlBase::GetInstance();
+		CMyMotionControl* pMC = (CMyMotionControl*)CMotionControlBase::GetInstance();
 		pMC->MoveAngleLog(move.newpos);
 	}
 }

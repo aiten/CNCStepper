@@ -29,7 +29,6 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace StepperSystemTest
 {
-
 	TEST_CLASS(CMatrix4x4Test)
 	{
 	public:
@@ -56,8 +55,8 @@ namespace StepperSystemTest
 		{
 			float out[4];
 
-			float t[4][4] = { { 1.0, 2.0, 3.0, 4.0 },{ 5.0, 6.0, 7.0, 8.0 },{ 9.0, 10.0, 11.0, 12.0 },{ 13.0, 14.0, 15.0, 16.0 } };
-			float t2[4][4] = { { 5.0, 4.0, 3.0, 2.0 },{ 9.0, 8.0, 7.0, 6.0 },{ 13.0, 12.0, 11.0, 10.0 },{ 17.0, 16.0, 15.0, 14.0 } };
+			float t[4][4]  = { { 1.0, 2.0, 3.0, 4.0 }, { 5.0, 6.0, 7.0, 8.0 }, { 9.0, 10.0, 11.0, 12.0 }, { 13.0, 14.0, 15.0, 16.0 } };
+			float t2[4][4] = { { 5.0, 4.0, 3.0, 2.0 }, { 9.0, 8.0, 7.0, 6.0 }, { 13.0, 12.0, 11.0, 10.0 }, { 17.0, 16.0, 15.0, 14.0 } };
 
 			//////////////////////////////////////////
 			//Test Compare
@@ -83,9 +82,7 @@ namespace StepperSystemTest
 				{
 					Assert::Fail(L"Error Compare\n");
 				}
-				else
-				{
-				}
+				else { }
 			}
 
 			//////////////////////////////////////////
@@ -94,9 +91,9 @@ namespace StepperSystemTest
 				CMatrix4x4<float> T1(t);
 				CMatrix4x4<float> T2(t);
 
-				CMatrix4x4<float> T3 = T1*T2;
+				CMatrix4x4<float> T3 = T1 * T2;
 
-				float r[4][4] = { { 90.0, 100.0, 110.0, 120.0 },{ 202.0, 228.0, 254.0, 280.0 },{ 314.0, 356.0, 398.0, 440.0 },{ 426.0, 484.0, 542.0, 600.0 } };
+				float r[4][4] = { { 90.0, 100.0, 110.0, 120.0 }, { 202.0, 228.0, 254.0, 280.0 }, { 314.0, 356.0, 398.0, 440.0 }, { 426.0, 484.0, 542.0, 600.0 } };
 
 				CMatrix4x4<float> T4(r);
 
@@ -111,9 +108,8 @@ namespace StepperSystemTest
 			{
 				CMatrix4x4<float> T1(t);
 				CMatrix4x4<float> T2(t2);
-				CMatrix4x4<float> T3;
+				CMatrix4x4<float> T3 = T2 * T1;
 
-				T3 = T2*T1;
 				T2 *= T1;
 
 				if (T2 != T3)
@@ -124,10 +120,12 @@ namespace StepperSystemTest
 
 			//////////////////////////////////////////
 			{
-				CMatrix4x4<float> T1; T1.InitDenavitHartenberg1Rot(float(M_PI_4));
-				CMatrix4x4<float> T2; T2.InitDenavitHartenberg1Rot(-float(M_PI_4));
+				CMatrix4x4<float> T1;
+				T1.InitDenavitHartenberg1Rot(float(M_PI_4));
+				CMatrix4x4<float> T2;
+				T2.InitDenavitHartenberg1Rot(-float(M_PI_4));
 
-				CMatrix4x4<float> T3 = T1*T2;
+				CMatrix4x4<float> T3 = T1 * T2;
 				CMatrix4x4<float> T4 = T4.InitDenavitHartenbergNOP();
 
 
@@ -139,8 +137,9 @@ namespace StepperSystemTest
 
 			//////////////////////////////////////////
 			{
-				const float angle = float(M_PI / 5);
-				CMatrix4x4<float> T1; T1.InitDenavitHartenberg1Rot(angle);
+				const float       angle = float(M_PI / 5);
+				CMatrix4x4<float> T1;
+				T1.InitDenavitHartenberg1Rot(angle);
 
 				float in1[][4] = {
 					{ 1, 0, 0, 1 },
@@ -164,10 +163,12 @@ namespace StepperSystemTest
 			//////////////////////////////////////////
 
 			{
-				CMatrix4x4<float> T1; T1.InitDenavitHartenberg2Trans(float(M_PI_4));
-				CMatrix4x4<float> T2; T2.InitDenavitHartenberg2Trans(-float(M_PI_4));
+				CMatrix4x4<float> T1;
+				T1.InitDenavitHartenberg2Trans(float(M_PI_4));
+				CMatrix4x4<float> T2;
+				T2.InitDenavitHartenberg2Trans(-float(M_PI_4));
 
-				CMatrix4x4<float> T3 = T1*T2;
+				CMatrix4x4<float> T3 = T1 * T2;
 				CMatrix4x4<float> T4 = T4.InitDenavitHartenbergNOP();
 
 
@@ -179,8 +180,9 @@ namespace StepperSystemTest
 
 			//////////////////////////////////////////
 			{
-				const float d = float(M_PI / 5);
-				CMatrix4x4<float> T1; T1.InitDenavitHartenberg2Trans(d);
+				const float       d = float(M_PI / 5);
+				CMatrix4x4<float> T1;
+				T1.InitDenavitHartenberg2Trans(d);
 
 				float in1[][4] = {
 					{ 1, 0, 0, 1 },
@@ -204,10 +206,12 @@ namespace StepperSystemTest
 			//////////////////////////////////////////
 
 			{
-				CMatrix4x4<float> T1; T1.InitDenavitHartenberg3Trans(float(M_PI_4));
-				CMatrix4x4<float> T2; T2.InitDenavitHartenberg3Trans(-float(M_PI_4));
+				CMatrix4x4<float> T1;
+				T1.InitDenavitHartenberg3Trans(float(M_PI_4));
+				CMatrix4x4<float> T2;
+				T2.InitDenavitHartenberg3Trans(-float(M_PI_4));
 
-				CMatrix4x4<float> T3 = T1*T2;
+				CMatrix4x4<float> T3 = T1 * T2;
 				CMatrix4x4<float> T4 = T4.InitDenavitHartenbergNOP();
 
 
@@ -219,8 +223,9 @@ namespace StepperSystemTest
 
 			//////////////////////////////////////////
 			{
-				const float a = float(M_PI / 5);
-				CMatrix4x4<float> T1; T1.InitDenavitHartenberg3Trans(a);
+				const float       a = float(M_PI / 5);
+				CMatrix4x4<float> T1;
+				T1.InitDenavitHartenberg3Trans(a);
 
 				float in1[][4] = {
 					{ 1, 0, 0, 1 },
@@ -244,10 +249,12 @@ namespace StepperSystemTest
 			//////////////////////////////////////////
 
 			{
-				CMatrix4x4<float> T1; T1.InitDenavitHartenberg4Rot(float(M_PI_4));
-				CMatrix4x4<float> T2; T2.InitDenavitHartenberg4Rot(-float(M_PI_4));
+				CMatrix4x4<float> T1;
+				T1.InitDenavitHartenberg4Rot(float(M_PI_4));
+				CMatrix4x4<float> T2;
+				T2.InitDenavitHartenberg4Rot(-float(M_PI_4));
 
-				CMatrix4x4<float> T3 = T1*T2;
+				CMatrix4x4<float> T3 = T1 * T2;
 				CMatrix4x4<float> T4 = T4.InitDenavitHartenbergNOP();
 
 
@@ -259,8 +266,9 @@ namespace StepperSystemTest
 
 			//////////////////////////////////////////
 			{
-				const float angle = float(M_PI / 5);
-				CMatrix4x4<float> T1; T1.InitDenavitHartenberg4Rot(angle);
+				const float       angle = float(M_PI / 5);
+				CMatrix4x4<float> T1;
+				T1.InitDenavitHartenberg4Rot(angle);
 
 				float in1[][4] = {
 					{ 1, 0, 0, 1 },
@@ -286,13 +294,15 @@ namespace StepperSystemTest
 			{
 				float alpha = float(M_PI / 5);
 				float theta = float(M_PI / 6);
-				float a = 1.123456f;
-				float d = 4.321f;
+				float a     = 1.123456f;
+				float d     = 4.321f;
 
-				CMatrix4x4<float> T1; T1.InitDenavitHartenberg(a, alpha, theta, d);
-				CMatrix4x4<float> T2; T2.InitDenavitHartenbergInverse(a, alpha, theta, d);
+				CMatrix4x4<float> T1;
+				T1.InitDenavitHartenberg(a, alpha, theta, d);
+				CMatrix4x4<float> T2;
+				T2.InitDenavitHartenbergInverse(a, alpha, theta, d);
 
-				CMatrix4x4<float> T3 = T1*T2;
+				CMatrix4x4<float> T3 = T1 * T2;
 				CMatrix4x4<float> T4 = T4.InitDenavitHartenbergNOP();
 
 
@@ -307,17 +317,22 @@ namespace StepperSystemTest
 			{
 				float alpha = float(M_PI / 5);
 				float theta = float(M_PI / 6);
-				float a = 1.123456f;
-				float d = 4.321f;
+				float a     = 1.123456f;
+				float d     = 4.321f;
 
-				CMatrix4x4<float> T10; T10.InitDenavitHartenberg(a, alpha, d, theta);
+				CMatrix4x4<float> T10;
+				T10.InitDenavitHartenberg(a, alpha, d, theta);
 
-				CMatrix4x4<float> T1; T1.InitDenavitHartenberg1Rot(theta);
-				CMatrix4x4<float> T2; T2.InitDenavitHartenberg2Trans(d);
-				CMatrix4x4<float> T3; T3.InitDenavitHartenberg3Trans(a);
-				CMatrix4x4<float> T4; T4.InitDenavitHartenberg4Rot(alpha);
+				CMatrix4x4<float> T1;
+				T1.InitDenavitHartenberg1Rot(theta);
+				CMatrix4x4<float> T2;
+				T2.InitDenavitHartenberg2Trans(d);
+				CMatrix4x4<float> T3;
+				T3.InitDenavitHartenberg3Trans(a);
+				CMatrix4x4<float> T4;
+				T4.InitDenavitHartenberg4Rot(alpha);
 
-				CMatrix4x4<float> T5 = T1*T2*T3*T4;
+				CMatrix4x4<float> T5 = T1 * T2 * T3 * T4;
 
 				if (!T5.IsEqual(T10, 0.00001f))
 				{
@@ -329,11 +344,13 @@ namespace StepperSystemTest
 
 			{
 				float alpha = float(M_PI_2);
-				float v[4] = { 1, 1, 1, 1 };
+				float v[4]  = { 1, 1, 1, 1 };
 
 
-				CMatrix4x4<float> T10; T10.InitDenavitHartenberg(0, alpha, 0, 0);
-				CMatrix4x4<float> T4; T4.InitDenavitHartenberg4Rot(alpha);
+				CMatrix4x4<float> T10;
+				T10.InitDenavitHartenberg(0, alpha, 0, 0);
+				CMatrix4x4<float> T4;
+				T4.InitDenavitHartenberg4Rot(alpha);
 
 				if (!T4.IsEqual(T10, 0.00001f))
 				{

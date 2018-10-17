@@ -36,7 +36,7 @@
 #define TB6560_REF_ON	0
 #define TB6560_REF_OFF	1
 
-#define TB6560_X_STEP_PIN		2		
+#define TB6560_X_STEP_PIN		2
 #define TB6560_X_DIR_PIN		3
 #define TB6560_X_ENABLE_PIN		4
 #define TB6560_X_MIN_PIN		

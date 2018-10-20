@@ -38,7 +38,7 @@
 #include "RotaryButton.h"
 
 #include "Menu3D.h"
-#include "U8GLcd.h"
+#include "U8gLcd.h"
 
 #include "GCodeParser.h"
 #include "GCode3DParser.h"

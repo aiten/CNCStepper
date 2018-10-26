@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\..\..\sketch\libraries\CNCLib\src\Matrix4x4.h"
+#include "..\..\..\Sketch\libraries\CNCLib\src\Matrix4x4.h"
 
 class CDenavitHartenberg
 {

@@ -22,7 +22,7 @@
 
 #include "..\MsvcStepper\MsvcStepper.h"
 #include "TestTools.h"
-#include "..\..\..\sketch\MiniLaser\MiniLaser\MyControl.h"
+#include "..\..\..\Sketch\MiniLaser\MiniLaser\MyControl.h"
 
 CSerial Serial;
 

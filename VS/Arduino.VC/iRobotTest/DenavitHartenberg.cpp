@@ -4,7 +4,7 @@
 #include "..\MsvcStepper\MsvcStepper.h"
 #include "TestTools.h"
 
-#include "..\..\..\sketch\libraries\CNCLib\src\Matrix4x4.h"
+#include "..\..\..\Sketch\libraries\CNCLib\src\Matrix4x4.h"
 #include "DenavitHartenberg.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -53,7 +53,7 @@ void CMsvcStepper::OnWait(EnumAsByte(EWaitType) wait)
 	__super::OnWait(wait);
 	DoISR();
 
-	if (wait == MovementQueueFull && CanQueueMovement()) // doISR has finsihed move
+	if (wait == MovementQueueFull && CanQueueMovement()) // doISR has finished move
 	{
 		SMovement& mv = _movements._queue.Head();
 		while (!mv.IsFinished())

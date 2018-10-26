@@ -24,10 +24,10 @@
 #include <stdio.h>
 #include <memory.h>
 
-#include "..\..\..\sketch\libraries\StepperLib\src\StepperLib.h"
-#include "..\..\..\sketch\libraries\CNCLib\src\MessageCNCLib.h"
-#include "..\..\..\sketch\libraries\CNCLib\src\GCodeParserBase.h"
-#include "..\..\..\sketch\libraries\CNCLib\src\DecimalAsInt.h"
+#include "..\..\..\Sketch\libraries\StepperLib\src\StepperLib.h"
+#include "..\..\..\Sketch\libraries\CNCLib\src\MessageCNCLib.h"
+#include "..\..\..\Sketch\libraries\CNCLib\src\GCodeParserBase.h"
+#include "..\..\..\Sketch\libraries\CNCLib\src\DecimalAsInt.h"
 
 #define _STORETIMEVALUES	100000
 #define NUM_AXIS_MVC		5

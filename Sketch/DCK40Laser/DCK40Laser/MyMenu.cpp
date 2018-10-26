@@ -58,7 +58,7 @@ void CMyMenu::MenuButtonPressMoveNextAxis(const SMenuItemDef* def)
 	axis_t axis = (axis_t)(unsigned int)GetMenuDef()->GetParam1();
 	axis        = (axis + ((int)def->GetParam1()) + LCD_NUMAXIS) % LCD_NUMAXIS;
 
-	const SMenuDef* nextMenu = (const SMenuDef*)_mainMenuItems[axis].GetParam1();
+	auto nextMenu = (const SMenuDef*)_mainMenuItems[axis].GetParam1();
 
 	SetMenu(nextMenu);
 	GetNavigator().SetPosition(old);

@@ -22,8 +22,8 @@
 
 #include "..\MsvcStepper\MsvcStepper.h"
 #include "TestTools.h"
-#include "..\..\..\sketch\DCK40Laser\DCK40Laser\MyControl.h"
-#include "..\..\..\sketch\DCK40Laser\DCK40Laser\MyLcd.h"
+#include "..\..\..\Sketch\DCK40Laser\DCK40Laser\MyControl.h"
+#include "..\..\..\Sketch\DCK40Laser\DCK40Laser\MyLcd.h"
 
 #include <SPI.h>
 #include <SD.h>

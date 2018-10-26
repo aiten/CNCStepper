@@ -20,9 +20,9 @@
 #include <math.h>
 #include "..\MsvcStepper\MsvcStepper.h"
 #include "TestTools.h"
-#include "..\..\..\sketch\Plotter\Plotter\MyControl.h"
-#include "..\..\..\sketch\Plotter\Plotter\MyLcd.h"
-#include "..\..\..\sketch\Plotter\Plotter\PlotterControl.h"
+#include "..\..\..\Sketch\Plotter\Plotter\MyControl.h"
+#include "..\..\..\Sketch\Plotter\Plotter\MyLcd.h"
+#include "..\..\..\Sketch\Plotter\Plotter\PlotterControl.h"
 
 #include <SPI.h>
 #include <SD.h>

@@ -168,7 +168,7 @@ namespace StepperSystemTest
 			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
 			Assert::AreEqual((uint8_t)0, spindle.GetCurrentIOLevel());
 
-			// delay is 0 => inc eache call to "poll"
+			// delay is 0 => inc each call to "poll"
 
 			for (uint8_t i = 1; i < 100; i++)
 			{

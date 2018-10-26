@@ -21,7 +21,7 @@
 #include <math.h>
 
 #include "..\MsvcStepper\MsvcStepper.h"
-#include "..\..\..\sketch\Laser\Laser\MyControl.h"
+#include "..\..\..\Sketch\Laser\Laser\MyControl.h"
 
 CSerial Serial;
 

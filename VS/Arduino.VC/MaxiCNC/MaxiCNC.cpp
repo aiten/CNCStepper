@@ -22,8 +22,8 @@
 
 #include "..\MsvcStepper\MsvcStepper.h"
 #include "TestTools.h"
-#include "..\..\..\sketch\MaxiCNC\MaxiCNC\MyControl.h"
-#include "..\..\..\sketch\MaxiCNC\MaxiCNC\MyLcd.h"
+#include "..\..\..\Sketch\MaxiCNC\MaxiCNC\MyControl.h"
+#include "..\..\..\Sketch\MaxiCNC\MaxiCNC\MyLcd.h"
 
 #include <SPI.h>
 #include <SD.h>

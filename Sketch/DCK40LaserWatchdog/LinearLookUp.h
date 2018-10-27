@@ -37,14 +37,14 @@ public:
 #if defined(__AVR_ARCH__)
 
 		if (TInput(1) / 2 != 0)
-			return (TInput)pgm_read_float(&_pTable[i].input);
+			return (TInput)pgm_read_float(&_table[i].input);
 		if (sizeof(TInput) == 4)
-			return (TInput)pgm_read_dword(&_pTable[i].input);
+			return (TInput)pgm_read_dword(&_table[i].input);
 		if (sizeof(TInput) == 2)
-			return (TInput)pgm_read_word(&_pTable[i].input);
-		return (TInput)pgm_read_byte(&_pTable[i].input);
+			return (TInput)pgm_read_word(&_table[i].input);
+		return (TInput)pgm_read_byte(&_table[i].input);
 #else
-		return _pTable[i].input;
+		return _table[i].input;
 #endif
 	}
 
@@ -52,14 +52,14 @@ public:
 	{
 #if defined(__AVR_ARCH__)
 		if (TOutput(1) / 2 != 0)
-			return (TOutput)pgm_read_float(&_pTable[i].output);
+			return (TOutput)pgm_read_float(&_table[i].output);
 		if (sizeof(TOutput) == 4)
-			return (TOutput)pgm_read_dword(&_pTable[i].output);
+			return (TOutput)pgm_read_dword(&_table[i].output);
 		if (sizeof(TOutput) == 2)
-			return (TOutput)pgm_read_word(&_pTable[i].output);
-		return (TOutput)pgm_read_byte(&_pTable[i].output);
+			return (TOutput)pgm_read_word(&_table[i].output);
+		return (TOutput)pgm_read_byte(&_table[i].output);
 #else
-		return _pTable[i].output;
+		return _table[i].output;
 #endif
 	}
 
@@ -79,9 +79,9 @@ public:
 		// binary serach
 
 		index_t left  = 0;
-		index_t right = _tabelSize - 1;
+		index_t right = _tableSize - 1;
 
-		if (_tabelSize == 0) return TOutput(0);
+		if (_tableSize == 0) return TOutput(0);
 
 		while (true)
 		{
@@ -113,7 +113,7 @@ public:
 				}
 				else
 				{
-					if (c == (_tabelSize - 1))
+					if (c == (_tableSize - 1))
 					{
 						// no approximation => input > last table entry 
 						return GetOutput(c);
@@ -132,12 +132,12 @@ public:
 
 	CLinearLookup(const SLookupTable* pTable, index_t tabelSize)
 	{
-		_tabelSize = tabelSize;
-		_pTable    = pTable;
+		_tableSize = tabelSize;
+		_table    = pTable;
 	}
 
 private:
 
-	const SLookupTable* _pTable;
-	uint8_t             _tabelSize;
+	const SLookupTable* _table;
+	uint8_t             _tableSize;
 };

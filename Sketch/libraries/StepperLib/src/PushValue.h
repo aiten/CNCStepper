@@ -25,21 +25,21 @@ template <class T> class CPushValue
 {
 private:
 
-	T* _Value;
+	T* _value;
 	T  _oldValue;
 
 public:
 
 	CPushValue(T* remember, T newValue)
 	{
-		_Value    = remember;
+		_value    = remember;
 		_oldValue = *remember;
 		*remember = newValue;
 	}
 
 	~CPushValue()
 	{
-		*_Value = _oldValue;
+		*_value = _oldValue;
 	}
 };
 

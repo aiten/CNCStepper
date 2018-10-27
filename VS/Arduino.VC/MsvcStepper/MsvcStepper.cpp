@@ -110,12 +110,12 @@ void CMsvcStepper::OnIdle(uint32_t idletime)
 
 ////////////////////////////////////////////////////////////
 
-uint8_t CMsvcStepper::GetReferenceValue(uint8_t referenceid)
+uint8_t CMsvcStepper::GetReferenceValue(uint8_t referenceId)
 {
-	uint8_t refhitvalue = _pod._referenceHitValue[referenceid];
-	uint8_t refoffvalue = _pod._referenceHitValue[referenceid] == LOW ? HIGH : LOW;
+	uint8_t refhitvalue = _pod._referenceHitValue[referenceId];
+	uint8_t refoffvalue = _pod._referenceHitValue[referenceId] == LOW ? HIGH : LOW;
 
-	if (!_isReferenceMove || referenceid != _isReferenceId)
+	if (!_isReferenceMove || referenceId != _isReferenceId)
 	{
 		return refoffvalue;
 	}
@@ -127,12 +127,12 @@ uint8_t CMsvcStepper::GetReferenceValue(uint8_t referenceid)
 
 ////////////////////////////////////////////////////////////
 
-bool CMsvcStepper::MoveReference(axis_t axis, uint8_t referenceid, bool toMin, steprate_t vMax, sdist_t maxdist, sdist_t distToRef, sdist_t distIfRefIsOn)
+bool CMsvcStepper::MoveReference(axis_t axis, uint8_t referenceId, bool toMin, steprate_t vMax, sdist_t maxdist, sdist_t distToRef, sdist_t distIfRefIsOn)
 {
 	_referenceMoveSteps = 15;
 	_isReferenceMove    = true;
-	_isReferenceId      = referenceid;
-	bool ret            = __super::MoveReference(axis, referenceid, toMin, vMax, maxdist, distToRef, distIfRefIsOn);
+	_isReferenceId      = referenceId;
+	bool ret            = __super::MoveReference(axis, referenceId, toMin, vMax, maxdist, distToRef, distIfRefIsOn);
 	_isReferenceMove    = false;
 	return ret;
 }

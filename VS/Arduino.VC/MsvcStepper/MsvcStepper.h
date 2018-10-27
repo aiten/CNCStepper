@@ -92,7 +92,7 @@ public:
 	virtual void SetIdleTimer() override;             // set idle Timer
 
 	virtual void OptimizeMovementQueue(bool force) override;
-	virtual bool MoveReference(axis_t       axis, uint8_t referenceid, bool toMin, steprate_t vMax, sdist_t maxdist, sdist_t distToRef, sdist_t distIfRefIsOn) override;
+	virtual bool MoveReference(axis_t       axis, uint8_t referenceId, bool toMin, steprate_t vMax, sdist_t maxdist, sdist_t distToRef, sdist_t distIfRefIsOn) override;
 
 	// Test extensions
 

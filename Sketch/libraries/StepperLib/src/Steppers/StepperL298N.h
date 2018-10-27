@@ -50,7 +50,7 @@ protected:
 public:
 
 	virtual bool    IsAnyReference() override;
-	virtual uint8_t GetReferenceValue(uint8_t referenceid) override;
+	virtual uint8_t GetReferenceValue(uint8_t referenceId) override;
 
 	// Set before Init()
 	// @formatter:off — disable formatter after this line

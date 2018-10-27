@@ -236,7 +236,7 @@ protected:
 
 		while (_setState != NextIsDone)
 		{
-			_setState = MyStep(_mysteps, (EnumAsByte(ESetPinState)) _setState, _myCnt);
+			_setState = MyStep(_mySteps, (EnumAsByte(ESetPinState)) _setState, _myCnt);
 			Delay1(RAMPSFD_NUM_AXIS);
 		}
 
@@ -256,7 +256,7 @@ protected:
 
 	static void HandleStepPinInterrupt()
 	{
-		_setState = MyStep(_mysteps, (EnumAsByte(ESetPinState)) _setState, _myCnt);
+		_setState = MyStep(_mySteps, (EnumAsByte(ESetPinState)) _setState, _myCnt);
 		if (_setState == NextIsDone)
 			CHAL::StopTimer2();
 		else
@@ -354,9 +354,9 @@ public:
 
 	////////////////////////////////////////////////////////
 
-	virtual uint8_t GetReferenceValue(uint8_t referenceid) override
+	virtual uint8_t GetReferenceValue(uint8_t referenceId) override
 	{
-		switch (referenceid)
+		switch (referenceId)
 		{
 			case 0: return HALFastdigitalRead(RAMPSFD_X_MIN_PIN);
 			case 1: return HALFastdigitalRead(RAMPSFD_X_MAX_PIN);

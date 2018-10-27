@@ -25,9 +25,9 @@ template <pin_t PIN, uint8_t ONVALUE, uint32_t STABLETIME> class CReadPinIOTrigg
 {
 public:
 
-	static void Init(uint8_t inputmode = INPUT_PULLUP)
+	static void Init(uint8_t inputMode = INPUT_PULLUP)
 	{
-		CHAL::pinMode(PIN, inputmode);
+		CHAL::pinMode(PIN, inputMode);
 	}
 
 	bool IsOn()

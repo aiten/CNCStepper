@@ -201,10 +201,10 @@ public:
 
 	////////////////////////////////////////////////////////
 
-	virtual uint8_t GetReferenceValue(uint8_t referenceid) override
+	virtual uint8_t GetReferenceValue(uint8_t referenceId) override
 	{
 		// min and max is the same pin
-		switch (referenceid)
+		switch (referenceId)
 		{
 			case 0:
 			case 1: return HALFastdigitalRead(CNCSHIELD_X_MIN_PIN);

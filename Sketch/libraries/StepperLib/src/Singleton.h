@@ -30,7 +30,7 @@ public:
 
 	CSingleton()
 	{
-		_instance = (T*)this;
+		_instance = static_cast<T*>(this);
 	}
 
 	static T* GetInstance() { return _instance; }

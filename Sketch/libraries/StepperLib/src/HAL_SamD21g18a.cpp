@@ -35,7 +35,7 @@ void TC5_Handler()
 {
 	TcCount16* TC = GetTimer0Struct();
 
-	if (TC->INTFLAG.bit.OVF == 1)                     // A overflow caused the interrupt
+	if (TC->INTFLAG.bit.OVF == 1)                    // A overflow caused the interrupt
 	{
 		TC->INTFLAG.bit.OVF = 1;                     // writing a one clears the flag ovf flag
 		WaitForSyncTC(TC);
@@ -49,7 +49,7 @@ void TC4_Handler()
 {
 	TcCount16* TC = GetTimer1Struct();
 
-	if (TC->INTFLAG.bit.OVF == 1)                     // A overflow caused the interrupt
+	if (TC->INTFLAG.bit.OVF == 1)                    // A overflow caused the interrupt
 	{
 		TC->INTFLAG.bit.OVF = 1;                     // writing a one clears the flag ovf flag
 		WaitForSyncTC(TC);

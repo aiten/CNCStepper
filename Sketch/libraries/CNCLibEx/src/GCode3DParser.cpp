@@ -99,7 +99,7 @@ bool CGCode3DParser::MCommand(mcode_t mcode)
 		case 30: M30Command();	return true;
 		case 115: _OkMessage = PrintVersion; return true;
 		default: break;
-		// @formatter:on — enable formatter after this line
+			// @formatter:on — enable formatter after this line
 	}
 
 	return false;

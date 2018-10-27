@@ -91,7 +91,7 @@ inline void  CHAL::InitTimer0(HALEvent evt)
 
 inline void CHAL::StartTimer0(timer_t)
 {
-	// shared with millis => set only interrup mask!
+	// shared with millis => set only interrupt mask!
 	TIMSK0 |= (1<<OCIE0B);  
 	OCR0B = 128;
 }

@@ -131,7 +131,7 @@ void CMyControl::IOControl(uint8_t tool, uint16_t level)
 			_laserVacuum.Set(level > 0);
 			return;
 		}
-		//  case Coolant: _laserWater.Set(level > 0); return; do not allow water turn off
+			//  case Coolant: _laserWater.Set(level > 0); return; do not allow water turn off
 		default: break;
 	}
 

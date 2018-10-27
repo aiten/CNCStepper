@@ -84,7 +84,7 @@ uint8_t CStepperServo::GetEnable(axis_t /* axis */)
 
 ////////////////////////////////////////////////////////
 
-uint8_t CStepperServo::GetReferenceValue(uint8_t /* referenceid */)
+uint8_t CStepperServo::GetReferenceValue(uint8_t /* referenceId */)
 {
 	return false;
 }

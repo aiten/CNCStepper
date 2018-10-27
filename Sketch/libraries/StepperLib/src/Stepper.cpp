@@ -39,7 +39,7 @@ CStepper::CStepper()
 
 template <> CStepper* CSingleton<CStepper>::_instance = nullptr;
 
-uint8_t          CStepper::_mysteps[NUM_AXIS];
+uint8_t          CStepper::_mySteps[NUM_AXIS];
 volatile uint8_t CStepper::_setState;
 uint8_t          CStepper::_myCnt;
 
@@ -54,8 +54,8 @@ void CStepper::InitMemVar()
 	// look to ASM => more for() are faster an smaller
 
 #if USESLIP
-	for (i=0;i<NUM_AXIS;i++)	_SlipSum[i]=0;
-	for (i=0;i<NUM_AXIS;i++)	_Slip[i]=0;
+	for (i=0;i<NUM_AXIS;i++)	_slipSum[i]=0;
+	for (i=0;i<NUM_AXIS;i++)	_slip[i]=0;
 #endif
 
 #ifndef REDUCED_SIZE
@@ -332,7 +332,7 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 
 	// memset(this, 0, sizeof(SMovement)); => set al memvars!!!
 
-	_pStepper            = pStepper;
+	_stepper            = pStepper;
 	_pod._move._timerMax = timerMax;
 
 	_backlash = false;
@@ -341,7 +341,7 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 	memcpy(_distance_, dist, sizeof(_distance_));
 
 #ifdef _MSC_VER
-	strcpy_s(_mvMSCInfo, _pStepper->MSCInfo);
+	strcpy_s(_mvMSCInfo, _stepper->MSCInfo);
 #endif
 
 	// calculate relative speed for axis => limit speed for axis
@@ -503,7 +503,7 @@ void CStepper::SMovement::InitMove(CStepper* pStepper, SMovement* mvPrev, mdist_
 	}
 	else
 	{
-		_pod._move._timerEndPossible = _pStepper->GetTimer(_steps, GetUpTimerAcc());
+		_pod._move._timerEndPossible = _stepper->GetTimer(_steps, GetUpTimerAcc());
 	}
 
 	_pod._move._ramp.RampUp(this, _pod._move._timerRun, timer_t(-1));
@@ -520,7 +520,7 @@ void CStepper::SMovement::InitStop(SMovement* mvPrev, timer_t timer, timer_t dec
 	// must be a copy off current (executing) move
 	*this = *mvPrev;
 
-	mvPrev->_steps = _pStepper->_movementstate._n; // stop now
+	mvPrev->_steps = _stepper->_movementState._n; // stop now
 
 	_pod._move._timerDec = dectimer;
 
@@ -548,7 +548,7 @@ void CStepper::SMovement::InitWait(CStepper* pStepper, mdist_t steps, timer_t ti
 	//this is no POD because of methode's => *this = SMovement();		
 	memset(this, 0, sizeof(SMovement)); // init with 0
 
-	_pStepper                        = pStepper;
+	_stepper                        = pStepper;
 	_steps                           = steps;
 	_pod._wait._timer                = timer;
 	_pod._wait._checkWaitConditional = checkWaitConditional;
@@ -561,7 +561,7 @@ void CStepper::SMovement::InitIoControl(CStepper* pStepper, uint8_t tool, uint16
 	//this is no POD because of methode's => *this = SMovement();		
 	memset(this, 0, sizeof(SMovement)); // init with 0
 
-	_pStepper       = pStepper;
+	_stepper       = pStepper;
 	_pod._io._tool  = tool;
 	_pod._io._level = level;
 	_state          = StateReadyIo;
@@ -744,8 +744,8 @@ bool CStepper::SMovement::Ramp(SMovement* mvNext)
 		CCriticalRegion crit;
 
 		if (IsReadyForMove() ||
-			(IsUpMove() && _pStepper->_movementstate._n < tmpramp._upSteps) ||    // in acc
-			(IsRunMove() && _pStepper->_movementstate._n < tmpramp._downStartAt)) // in run
+			(IsUpMove() && _stepper->_movementState._n < tmpramp._upSteps) ||    // in acc
+			(IsRunMove() && _stepper->_movementState._n < tmpramp._downStartAt)) // in run
 		{
 			_pod._move._ramp = tmpramp;
 			return true;
@@ -774,7 +774,7 @@ void CStepper::SMovement::AdjustJunktionSpeedH2T(SMovement* mvPrev, SMovement* m
 			else
 			{
 				// just continue accelerate to the end of the move
-				_pod._move._timerEndPossible = _pStepper->GetTimerAccelerating(_steps, _pod._move._ramp._timerStart, GetUpTimerAcc());
+				_pod._move._timerEndPossible = _stepper->GetTimerAccelerating(_steps, _pod._move._ramp._timerStart, GetUpTimerAcc());
 			}
 		}
 		else
@@ -782,7 +782,7 @@ void CStepper::SMovement::AdjustJunktionSpeedH2T(SMovement* mvPrev, SMovement* m
 	}
 	else
 	{
-		_pod._move._timerEndPossible = _pStepper->GetTimerAccelerating(_steps, mvPrev->IsActiveMove() ? (mvPrev->IsProcessingMove() ? mvPrev->_pod._move._ramp._timerStop : mvPrev->_pod._move._timerEndPossible) : -1, GetUpTimerAcc());
+		_pod._move._timerEndPossible = _stepper->GetTimerAccelerating(_steps, mvPrev->IsActiveMove() ? (mvPrev->IsProcessingMove() ? mvPrev->_pod._move._ramp._timerStop : mvPrev->_pod._move._timerEndPossible) : -1, GetUpTimerAcc());
 
 		if (_pod._move._timerEndPossible > _pod._move._timerMax)
 		{
@@ -820,13 +820,13 @@ bool CStepper::SMovement::AdjustJunktionSpeedT2H(SMovement* mvPrev, SMovement* m
 	if (mvNext == nullptr)
 	{
 		// last element in queue, v(end) = 0, we have to stop
-		_pStepper->_movements._timerStartPossible = _pStepper->GetTimer(_steps, GetDownTimerDec());
+		_stepper->_movements._timerStartPossible = _stepper->GetTimer(_steps, GetDownTimerDec());
 	}
 	else
 	{
 		// calculate new speed at start of move
 		// assume _timerStartPossible (of next move) at end
-		_pStepper->_movements._timerStartPossible = _pStepper->GetTimerAccelerating(_steps, _pStepper->_movements._timerStartPossible, GetDownTimerDec());
+		_stepper->_movements._timerStartPossible = _stepper->GetTimerAccelerating(_steps, _stepper->_movements._timerStartPossible, GetDownTimerDec());
 	}
 
 	if (mvPrev != nullptr)
@@ -837,12 +837,12 @@ bool CStepper::SMovement::AdjustJunktionSpeedT2H(SMovement* mvPrev, SMovement* m
 			return true; // waitstate => no optimize, break here
 
 		// prev element available, calculate junction speed
-		timer_t junctiontoPrev = max(_pod._move._timerMaxJunction, _pStepper->_movements._timerStartPossible);
+		timer_t junctiontoPrev = max(_pod._move._timerMaxJunction, _stepper->_movements._timerStartPossible);
 		if (junctiontoPrev == _pod._move._timerJunctionToPrev)
 			return true; // nothing changed (prev movementes do not change)
 
 		_pod._move._timerJunctionToPrev           = junctiontoPrev;
-		_pStepper->_movements._timerStartPossible = _pod._move._timerJunctionToPrev;
+		_stepper->_movements._timerStartPossible = _pod._move._timerJunctionToPrev;
 	}
 
 	return false;
@@ -902,8 +902,8 @@ void CStepper::SMovement::CalcMaxJunktionSpeed(SMovement* mvPrev)
 			mdist_t d1 = mvPrev->GetDistance(i);
 			mdist_t d2 = GetDistance(i);
 
-			steprate_t v1 = _pStepper->TimerToSpeed(mvPrev->_pod._move._timerMax);
-			steprate_t v2 = _pStepper->TimerToSpeed(_pod._move._timerMax);
+			steprate_t v1 = _stepper->TimerToSpeed(mvPrev->_pod._move._timerMax);
+			steprate_t v2 = _stepper->TimerToSpeed(_pod._move._timerMax);
 
 			if (d1 != s1)
 			{
@@ -922,10 +922,10 @@ void CStepper::SMovement::CalcMaxJunktionSpeed(SMovement* mvPrev)
 				// same direction (v1 and v2 not 0)
 				vdiff = v1 > v2 ? v1 - v2 : v2 - v1;
 
-				if (vdiff > int32_t(_pStepper->_pod._maxJerkSpeed[i]))
+				if (vdiff > int32_t(_stepper->_pod._maxJerkSpeed[i]))
 				{
 					// reduce total speed by ratio maxJerk <=> current jerk
-					timerMaxJunction             = _pStepper->SpeedToTimer(steprate_t(RoundMulDivUInt(_pStepper->TimerToSpeed(timerMaxJunction_), _pStepper->_pod._maxJerkSpeed[i], steprate_t(vdiff))));
+					timerMaxJunction             = _stepper->SpeedToTimer(steprate_t(RoundMulDivUInt(_stepper->TimerToSpeed(timerMaxJunction_), _stepper->_pod._maxJerkSpeed[i], steprate_t(vdiff))));
 					_pod._move._timerMaxJunction = max(_pod._move._timerMaxJunction, min(timerMaxJunction, timerMaxJunctionAcc));
 				}
 			}
@@ -940,10 +940,10 @@ void CStepper::SMovement::CalcMaxJunktionSpeed(SMovement* mvPrev)
 				}
 				else
 				{
-					if (vdiff > int32_t(_pStepper->_pod._maxJerkSpeed[i]))
+					if (vdiff > int32_t(_stepper->_pod._maxJerkSpeed[i]))
 					{
 						// reduce total speed by ratio maxJerk <=> current jerk
-						timerMaxJunction             = _pStepper->SpeedToTimer(steprate_t(RoundMulDivUInt(_pStepper->TimerToSpeed(timerMaxJunction_), _pStepper->_pod._maxJerkSpeed[i], steprate_t(vdiff))));
+						timerMaxJunction             = _stepper->SpeedToTimer(steprate_t(RoundMulDivUInt(_stepper->TimerToSpeed(timerMaxJunction_), _stepper->_pod._maxJerkSpeed[i], steprate_t(vdiff))));
 						_pod._move._timerMaxJunction = max(_pod._move._timerMaxJunction, min(timerMaxJunction, timerMaxJunctionAcc));
 					}
 				}
@@ -1284,7 +1284,7 @@ void CStepper::StopMove(steprate_t v0Dec)
 		if (mv.IsActiveWait())
 		{
 			CCriticalRegion critical;
-			_movementstate._n = mv._steps;
+			_movementState._n = mv._steps;
 		}
 		else
 		{
@@ -1305,7 +1305,7 @@ void CStepper::StopMove(steprate_t v0Dec)
 				SubTotalSteps();
 
 				_movements._queue.RemoveTail(_movements._queue.GetHeadPos());
-				_movements._queue.NextTail().InitStop(&mv, _movementstate._timer, dectimer);
+				_movements._queue.NextTail().InitStop(&mv, _movementState._timer, dectimer);
 				_movements._queue.Enqueue();
 			}
 
@@ -1410,7 +1410,7 @@ void CStepper::SubTotalSteps()
 			_pod._totalSteps -= mv._steps;
 			if (mv.IsProcessingMove())
 			{
-				_pod._totalSteps += _movementstate._n;
+				_pod._totalSteps += _movementState._n;
 			}
 		}
 	}
@@ -1424,7 +1424,7 @@ void CStepper::EmergencyStopResurrect()
 {
 	AbortMove(); // make sure nothing is running
 	_pod._emergencyStop = false;
-	_pod._fatalerror    = nullptr;
+	_pod._fatalError    = nullptr;
 }
 
 ////////////////////////////////////////////////////////
@@ -1701,10 +1701,10 @@ void CStepper::StepRequest(bool isr)
 
 #if defined (stepperstatic_)
 
-CStepper::SMovementState CStepper::_movementstate;
+CStepper::SMovementState CStepper::_movementState;
 CRingBufferQueue<CStepper::SStepBuffer, STEPBUFFERSIZE> CStepper::_steps;
 CStepper::SMovements CStepper::_movements;
-CStepper* CStepper::SMovement::_pStepper;
+CStepper* CStepper::SMovement::_stepper;
 
 #endif
 
@@ -1801,7 +1801,7 @@ bool CStepper::SMovement::IsEndWait() const
 	if (_pod._wait._checkWaitConditional)
 	{
 		// wait only if Stepper is "checkWaitConditional"
-		if (!_pStepper->IsPauseMove() && !_pStepper->IsWaitConditional())
+		if (!_stepper->IsPauseMove() && !_stepper->IsWaitConditional())
 		{
 			return true;
 		}
@@ -1819,8 +1819,8 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 	axis_t i;
 	do
 	{
-		CStepper*       pStepper = _pStepper;
-		SMovementState* pState   = &pStepper->_movementstate;
+		CStepper*       pStepper = _stepper;
+		SMovementState* pState   = &pStepper->_movementState;
 
 		if (pStepper->_steps.IsFull() || ((_state == SMovement::StateReadyWait || _state == SMovement::StateReadyIo) && pStepper->_steps.Count() > SYNC_STEPBUFFERCOUNT)
 		)
@@ -2105,13 +2105,13 @@ void CStepper::QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool direct
 		// calc slip
 		if (_refMove == SMNoRefMove)
 		{
-			if ((_Slip[i]>0 && d[i]>0) || (_Slip[i]<0 && d[i]<0))
+			if ((_slip[i]>0 && d[i]>0) || (_slip[i]<0 && d[i]<0))
 			{
-				_SlipSum[i] += abs(d[i]);
-				slip = (int)_SlipSum[i] / _Slip[i];
+				_slipSum[i] += abs(d[i]);
+				slip = (int)_slipSum[i] / _slip[i];
 				if (slip)
 				{
-					_SlipSum[i] -= slip*_Slip[i];
+					_slipSum[i] -= slip*_slip[i];
 					d[i] += slip;
 					_currentpos[i] -= slip;
 					_StepOffset[i] = (_StepOffset[i] + slip) & 0xf;
@@ -2242,26 +2242,26 @@ bool CStepper::MoveUntil(uint8_t referenceId, bool referencevalue, uint16_t stab
 
 ////////////////////////////////////////////////////////
 
-bool CStepper::MoveAwayFromReference(axis_t axis, uint8_t referenceid, sdist_t dist, steprate_t vMax)
+bool CStepper::MoveAwayFromReference(axis_t axis, uint8_t referenceId, sdist_t dist, steprate_t vMax)
 {
-	if (IsReferenceTest(referenceid))
+	if (IsReferenceTest(referenceId))
 	{
 		Info(MESSAGE_STEPPER_IsReferenceIsOn);
 		CPushValue<bool> OldCheckForReference(&_pod._checkReference, false);
 		MoveAwayFromReference(axis, dist, vMax);
 
-		if (!MoveUntil(referenceid, false, REFERENCESTABLETIME))
+		if (!MoveUntil(referenceId, false, REFERENCESTABLETIME))
 		{
 			return false;
 		}
 	}
 
-	return !IsReferenceTest(referenceid);
+	return !IsReferenceTest(referenceId);
 }
 
 ////////////////////////////////////////////////////////
 
-bool CStepper::MoveReference(axis_t axis, uint8_t referenceid, bool toMin, steprate_t vMax, sdist_t maxdist, sdist_t distToRef, sdist_t distIfRefIsOn)
+bool CStepper::MoveReference(axis_t axis, uint8_t referenceId, bool toMin, steprate_t vMax, sdist_t maxdist, sdist_t distToRef, sdist_t distIfRefIsOn)
 {
 	WaitBusy();
 
@@ -2315,15 +2315,15 @@ bool CStepper::MoveReference(axis_t axis, uint8_t referenceid, bool toMin, stepr
 
 	bool ret = false;
 
-	if (MoveAwayFromReference(axis, referenceid, distIfRefIsOn, vMax))
+	if (MoveAwayFromReference(axis, referenceId, distIfRefIsOn, vMax))
 	{
 		// move to reference
 		MoveRel(axis, maxdist, vMax);
-		if (MoveUntil(referenceid, true, REFERENCESTABLETIME))
+		if (MoveUntil(referenceId, true, REFERENCESTABLETIME))
 		{
 			// ref reached => move away
 			MoveRel(axis, distIfRefIsOn, vMax);
-			if (MoveUntil(referenceid, false, REFERENCESTABLETIME))
+			if (MoveUntil(referenceId, false, REFERENCESTABLETIME))
 			{
 				// move distToRef from change
 				if (distToRef)
@@ -2507,7 +2507,7 @@ void CStepper::SetPosition(axis_t axis, udist_t pos)
 {
 	WaitBusy();
 #ifdef USESLIP
-	_SlipSum[axis] = 0;
+	_slipSum[axis] = 0;
 #endif
 	_pod._current[axis]       = pos;
 	_pod._calculatedpos[axis] = pos;
@@ -2519,7 +2519,7 @@ void CStepper::SetPosition(axis_t axis, udist_t pos)
 
 void CStepper::SetSlip(int d[NUM_AXIS])
 {
-	memcpy(_Slip,d,sizeof(d[0])*NUM_AXIS);
+	memcpy(_slip,d,sizeof(d[0])*NUM_AXIS);
 }
 
 #endif
@@ -2645,7 +2645,7 @@ void CStepper::SMovement::Dump(uint8_t idx, uint8_t options)
 	DumpType<uint8_t>(F("Idx"), idx, false);
 	if (idx == 0)
 	{
-		_pStepper->_movementstate.Dump(options);
+		_stepper->_movementState.Dump(options);
 	}
 	DumpType<udist_t>(F("Steps"), _steps, false);
 	DumpType<udist_t>(F("State"), _state, false);

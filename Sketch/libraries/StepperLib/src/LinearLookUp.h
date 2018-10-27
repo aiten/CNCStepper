@@ -38,19 +38,19 @@ public:
 
 		if (TInput(1) / 2 != 0)
 		{
-			return (TInput)pgm_read_float(&_pTable[i].input);
+			return (TInput)pgm_read_float(&_table[i].input);
 		}
 		if (sizeof(TInput) == 4)
 		{
-			return (TInput)pgm_read_dword(&_pTable[i].input);
+			return (TInput)pgm_read_dword(&_table[i].input);
 		}
 		if (sizeof(TInput) == 2)
 		{
-			return (TInput)pgm_read_word(&_pTable[i].input);
+			return (TInput)pgm_read_word(&_table[i].input);
 		}
-		return (TInput)pgm_read_byte(&_pTable[i].input);
+		return (TInput)pgm_read_byte(&_table[i].input);
 #else
-		return _pTable[i].input;
+		return _table[i].input;
 #endif
 	}
 
@@ -59,41 +59,41 @@ public:
 #if defined(__AVR_ARCH__)
 		if (TOutput(1) / 2 != 0)
 		{
-			return (TOutput)pgm_read_float(&_pTable[i].output);
+			return (TOutput)pgm_read_float(&_table[i].output);
 		}
 		if (sizeof(TOutput) == 4)
 		{
-			return (TOutput)pgm_read_dword(&_pTable[i].output);
+			return (TOutput)pgm_read_dword(&_table[i].output);
 		}
 		if (sizeof(TOutput) == 2)
 		{
-			return (TOutput)pgm_read_word(&_pTable[i].output);
+			return (TOutput)pgm_read_word(&_table[i].output);
 		}
-		return (TOutput)pgm_read_byte(&_pTable[i].output);
+		return (TOutput)pgm_read_byte(&_table[i].output);
 #else
-		return _pTable[i].output;
+		return _table[i].output;
 #endif
 	}
 
 	TOutput LinearInterpolation(TInput input, index_t i) const
 	{
-		TInput  distinput  = input - GetInput(i);
-		TInput  diffinput  = GetInput(i + 1) - GetInput(i);
-		TOutput diffoutput = GetOutput(i + 1) - GetOutput(i);
+		TInput  distInput  = input - GetInput(i);
+		TInput  diffInput  = GetInput(i + 1) - GetInput(i);
+		TOutput diffOutput = GetOutput(i + 1) - GetOutput(i);
 
-		//return pTable[i].output + ( distinput / diffinput  ) * diffoutput; => OK if TInput is float
-		return GetOutput(i) + (distinput * diffoutput) / diffinput;
+		//return pTable[i].output + ( distInput / diffInput  ) * diffOutput; => OK if TInput is float
+		return GetOutput(i) + (distInput * diffOutput) / diffInput;
 	}
 
 	TOutput Lookup(TInput input) const
 	{
 		// table must be sorted!!!!
-		// binary serach
+		// binary search
 
 		index_t left  = 0;
-		index_t right = _tabelSize - 1;
+		index_t right = _tableSize - 1;
 
-		if (_tabelSize == 0) return TOutput(0);
+		if (_tableSize == 0) return TOutput(0);
 
 		while (true)
 		{
@@ -125,7 +125,7 @@ public:
 				}
 				else
 				{
-					if (c == (_tabelSize - 1))
+					if (c == (_tableSize - 1))
 					{
 						// no approximation => input > last table entry 
 						return GetOutput(c);
@@ -142,14 +142,14 @@ public:
 		}
 	}
 
-	CLinearLookup(const SLookupTable* pTable, index_t tabelSize)
+	CLinearLookup(const SLookupTable* pTable, index_t tableSize)
 	{
-		_tabelSize = tabelSize;
-		_pTable    = pTable;
+		_tableSize = tableSize;
+		_table    = pTable;
 	}
 
 private:
 
-	const SLookupTable* _pTable;
-	uint8_t             _tabelSize;
+	const SLookupTable* _table;
+	uint8_t             _tableSize;
 };

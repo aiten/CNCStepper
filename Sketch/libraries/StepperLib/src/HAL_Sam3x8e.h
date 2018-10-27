@@ -91,7 +91,7 @@ inline void CHAL::EnableInterrupts()		{	cpu_irq_enable(); }
 inline irqflags_t CHAL::GetSREG()			{ return cpu_irq_save(); }
 inline void CHAL::SetSREG(irqflags_t a)		{ cpu_irq_restore(a); }
 
-// use CAN as backgroundworker thread
+// use CAN as BackGroundWorker thread
 #define IRQTYPE CAN0_IRQn
 
 inline void CHAL::BackgroundRequest()			{ NVIC_SetPendingIRQ(IRQTYPE); }

@@ -2033,7 +2033,6 @@ void CGCodeParser::CNCLibCommandExtensions()
 			break;
 		}
 		default: break;
-
 	}
 }
 

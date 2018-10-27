@@ -96,8 +96,8 @@ uint8_t CHAL::digitalRead(pin_t pin)
 	}
 
 	// If the pin that support PWM output, we need to turn it off
-// before getting a digital reading.
-//	if (timer != NOT_ON_TIMER) turnOffPWM(timer);
+	// before getting a digital reading.
+	//	if (timer != NOT_ON_TIMER) turnOffPWM(timer);
 
 	if (*portInputRegister(port) & bit)
 	{
@@ -117,7 +117,7 @@ void CHAL::analogWrite8(pin_t pin, uint8_t val)
 #else
 
 // care about size
-// => do not call digitalwrite (use CHAL::digitalWrite)
+// => do not call digitalWrite (use CHAL::digitalWrite)
 
 #define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
 #define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))

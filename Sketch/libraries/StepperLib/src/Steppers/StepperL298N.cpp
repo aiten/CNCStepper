@@ -233,11 +233,11 @@ void CStepperL298N::SetPhase(axis_t axis, uint8_t bitmask)
 
 ////////////////////////////////////////////////////////
 
-uint8_t CStepperL298N::GetReferenceValue(uint8_t referenceid)
+uint8_t CStepperL298N::GetReferenceValue(uint8_t referenceId)
 {
-	if (_pinRef[referenceid] != 0)
+	if (_pinRef[referenceId] != 0)
 	{
-		return CHAL::digitalRead(_pinRef[referenceid]);
+		return CHAL::digitalRead(_pinRef[referenceId]);
 	}
 
 	return 255;

@@ -52,7 +52,7 @@
 #define SPEED_MULTIPLIER_6	(MAXINTERRUPTSPEED*5)
 #define SPEED_MULTIPLIER_7	(MAXINTERRUPTSPEED*6)
 
-#define TIMEROVERHEAD		(0)				// decrease Timervalue for ISR overhead before set new timer
+#define TIMEROVERHEAD		(0)				// decrease TimerValue for ISR overhead before set new timer
 
 inline void CHAL::DisableInterrupts() { cli(); }
 inline void CHAL::EnableInterrupts() { sei(); }

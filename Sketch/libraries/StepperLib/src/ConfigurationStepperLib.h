@@ -45,10 +45,10 @@ extern class HardwareSerial& StepperSerial;
 
 ////////////////////////////////////////////////////////
 
-typedef uint8_t axis_t; // type for "axis"
+typedef uint8_t axis_t;		// type for "axis"
 
-typedef int32_t  sdist_t; // type of stepper coord system (signed)
-typedef uint32_t udist_t; // type of stepper coord system (unsigned)
+typedef int32_t  sdist_t;	// type of stepper coord system (signed)
+typedef uint32_t udist_t;	// type of stepper coord system (unsigned)
 
 typedef const __FlashStringHelper* FLSTR;
 
@@ -189,7 +189,7 @@ typedef uint32_t steprate_t; // tpye for speed (Hz), Steps/sec
 #ifdef _MSC_VER
 
 #define EnumAsByte(a) a
-#define debugvirtula virtual
+#define debugvirtual virtual
 #define stepperstatic 
 #define stepperstatic_avr 
 
@@ -205,7 +205,7 @@ typedef uint32_t steprate_t; // tpye for speed (Hz), Steps/sec
 #define stepperstatic static
 #define stepperstatic_
 #define EnumAsByte(a) uint8_t			// use a 8 bit enum (and not 16, see compiler output)
-#define debugvirtula						// only used in msvc for debugging - not used on AVR controller 
+#define debugvirtual					// only used in msvc for debugging - not used on AVR controller 
 
 #endif
 
@@ -215,13 +215,13 @@ typedef uint32_t steprate_t; // tpye for speed (Hz), Steps/sec
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef uint8_t axisArray_t; // on bit per axis
+typedef uint8_t axisArray_t;			// on bit per axis
 
 #if NUM_AXIS > 3
-typedef uint32_t DirCount_t;			// 4 bit for eache axis (0..7) count, 8 dirup, see DirCountAll_t
+typedef uint32_t DirCount_t;			// 4 bit for each axis (0..7) count, 8 dirUp, see DirCountAll_t
 #define DirCountBytes 4
 #else
-typedef uint16_t DirCount_t; // 4 bit for eache axis (0..7) count, 8 dirup 
+typedef uint16_t DirCount_t;			// 4 bit for each axis (0..7) count, 8 dirUp 
 #define DirCountBytes 2
 #endif
 

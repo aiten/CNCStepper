@@ -269,7 +269,7 @@ inline void CHAL::StartTimer0(timer_t delay)
 
 	TC->CTRLA.reg |= TC_CTRLA_ENABLE;
 
-	// dont care about wait (we are in ISR)
+	// don't care about wait (we are in ISR)
 	// WaitForSyncTC(TC);
 }
 
@@ -294,7 +294,7 @@ inline void  CHAL::InitTimer0(HALEvent evt)
 
 	// Interrupts
 	TC->INTENSET.reg = 0;                     // disable all interrupts
-	TC->INTENSET.bit.OVF = 1;                 // enable overfollow
+	TC->INTENSET.bit.OVF = 1;                 // enable overflow
 
 	NVIC_DisableIRQ(TC5_IRQn);				  // Configure interrupt request
 	NVIC_ClearPendingIRQ(TC5_IRQn);
@@ -329,7 +329,7 @@ inline void CHAL::StartTimer1OneShot(timer_t delay)
 	
 	TC->CTRLA.reg |= TC_CTRLA_ENABLE;
 
-	// dont care about wait (we are in ISR)
+	// don't care about wait (we are in ISR)
 	WaitForSyncTC(TC);
 
 //	if (timer_count != 64516)
@@ -368,7 +368,7 @@ inline void  CHAL::InitTimer1OneShot(HALEvent evt)
 
 		// Interrupts
 	TC->INTENSET.reg = 0;                     // disable all interrupts
-	TC->INTENSET.bit.OVF = 1;                 // enable overfollow
+	TC->INTENSET.bit.OVF = 1;                 // enable overflow
 
 	NVIC_DisableIRQ(TC4_IRQn);				  // Configure interrupt request
 	NVIC_ClearPendingIRQ(TC4_IRQn);

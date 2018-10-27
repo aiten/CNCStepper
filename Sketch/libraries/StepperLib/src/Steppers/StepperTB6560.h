@@ -168,10 +168,10 @@ public:
 
 	////////////////////////////////////////////////////////
 
-	virtual uint8_t GetReferenceValue(uint8_t referenceid) override
+	virtual uint8_t GetReferenceValue(uint8_t referenceId) override
 	{
 		/*
-		switch (referenceid)
+		switch (referenceId)
 		{
 		case 0: return HALFastdigitalRead(TB6560_X_MIN_PIN) == TB6560_REF_ON;
 		case 1: return HALFastdigitalRead(TB6560_X_MAX_PIN) == TB6560_REF_ON;

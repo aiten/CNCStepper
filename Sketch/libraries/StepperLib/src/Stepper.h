@@ -66,14 +66,14 @@ public:
 		LastStepperEvent = OnIoEvent
 	};
 
-#define LevelToProcent(a) ((a)*100/255)
-#define ProcentToLevel(a) ((a)*255/100)
+#define LevelToPercent(a) ((a)*100/255)
+#define PercentToLevel(a) ((a)*255/100)
 
 	enum ELevel
 	{
 		LevelMax=255,
-		Level20P = ProcentToLevel(20),
-		Level60P = ProcentToLevel(60),
+		Level20P = PercentToLevel(20),
+		Level60P = PercentToLevel(60),
 		LevelOff = 0
 	};
 
@@ -107,9 +107,12 @@ public:
 		StepperEvent _event;
 		uintptr_t    _eventParam;
 
-		bool Call(CStepper* stepper, EnumAsByte(CStepper::EStepperEvent) eventType, uintptr_t addInfo)
+		bool Call(CStepper* stepper, EnumAsByte(CStepper::EStepperEvent) eventType, uintptr_t addInfo) const
 		{
-			if (_event) return _event(stepper, _eventParam, eventType, addInfo);
+			if (_event)
+			{
+				return _event(stepper, _eventParam, eventType, addInfo);
+			}
 			return true;
 		}
 	};
@@ -134,9 +137,9 @@ public:
 	error_t GetError() const { return _pod._error; }
 	void    ClearError() { _pod._error = nullptr; }
 
-	bool    IsFatalError() const { return _pod._fatalerror != nullptr; };
-	error_t GetFatalError() const { return _pod._fatalerror; }
-	void    ClearFatalError() { _pod._fatalerror = nullptr; }
+	bool    IsFatalError() const { return _pod._fatalError != nullptr; };
+	error_t GetFatalError() const { return _pod._fatalError; }
+	void    ClearFatalError() { _pod._fatalError = nullptr; }
 
 
 	void SetMaxSpeed(axis_t axis, steprate_t vMax) { _pod._timerMax[axis]  = SpeedToTimer(vMax); }
@@ -243,7 +246,7 @@ public:
 	bool IsUseReference(uint8_t       referneceid) const { return _pod._referenceHitValue[referneceid] != 255; }
 	bool IsUseReference(axis_t        axis, bool toMin) const { return IsUseReference(ToReferenceId(axis, toMin)); }
 
-	debugvirtula bool MoveReference(axis_t axis, uint8_t referenceid, bool toMin, steprate_t vMax, sdist_t maxdist = 0, sdist_t distToRef = 0, sdist_t distIfRefIsOn = 0);
+	debugvirtual bool MoveReference(axis_t axis, uint8_t referenceId, bool toMin, steprate_t vMax, sdist_t maxDist = 0, sdist_t distToRef = 0, sdist_t distIfRefIsOn = 0);
 	void              SetPosition(axis_t   axis, udist_t pos);
 
 	//////////////////////////////
@@ -307,8 +310,8 @@ public:
 	static uint8_t ToReferenceId(axis_t axis, bool minRef) { return axis * 2 + (minRef ? 0 : 1); }
 
 	virtual bool    IsAnyReference() = 0;
-	virtual uint8_t GetReferenceValue(uint8_t referenceid) = 0;
-	bool            IsReferenceTest(uint8_t   referenceid) { return GetReferenceValue(referenceid) == _pod._referenceHitValue[referenceid]; }
+	virtual uint8_t GetReferenceValue(uint8_t referenceId) = 0;
+	bool            IsReferenceTest(uint8_t   referenceId) { return GetReferenceValue(referenceId) == _pod._referenceHitValue[referenceId]; }
 
 	void            SetEnableAll(uint8_t level);				// level 0-255
 	virtual void    SetEnable(axis_t     axis, uint8_t level, bool force) = 0;
@@ -358,8 +361,8 @@ protected:
 
 	void QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], steprate_t vMax);
 
-	debugvirtula void StepRequest(bool           isr);
-	debugvirtula void OptimizeMovementQueue(bool force);
+	debugvirtual void StepRequest(bool           isr);
+	debugvirtual void OptimizeMovementQueue(bool force);
 
 	////////////////////////////////////////////////////////
 
@@ -437,7 +440,7 @@ protected:
 		axisArray_t _invertdirection;							// invert direction
 
 		error_t _error;
-		error_t _fatalerror;
+		error_t _fatalError;
 
 		uint8_t _timeOutEnable[NUM_AXIS];					// enabletimeout in sec if no step (0.. disable, always enabled)
 		uint8_t _timeEnable[NUM_AXIS];						// 0: active, do not turn off, else time to turn off
@@ -535,7 +538,7 @@ protected:
 			struct SIoControl _io;
 		}                     _pod;
 
-		stepperstatic CStepper* _pStepper;						// give access to stepper (not static if multiinstance)  
+		stepperstatic CStepper* _stepper;						// give access to stepper (not static if multiinstance)  
 
 		timer_t GetUpTimerAcc() const { return _pod._move._timerAcc; }
 		timer_t GetUpTimerDec() const { return _pod._move._timerDec; }
@@ -639,7 +642,7 @@ protected:
 		void Dump(uint8_t options);
 	};
 
-	stepperstatic SMovementState _movementstate;
+	stepperstatic SMovementState _movementState;
 
 	/////////////////////////////////////////////////////////////////////
 	// internal ringbuffer for steps (after calculating acc and dec)
@@ -650,7 +653,7 @@ protected:
 		DirCount_t DirStepCount;								// direction and count
 		timer_t    Timer;
 #ifdef _MSC_VER
-		mdist_t                   _distance[NUM_AXIS];						// to calculate relative speed
+		mdist_t                   _distance[NUM_AXIS];			// to calculate relative speed
 		mdist_t                   _steps;
 		SMovement::EMovementState _state;
 		mdist_t                   _n;
@@ -682,15 +685,15 @@ private:
 
 protected:
 
-	debugvirtula void OnIdle(uint32_t              idletime);				// called in ISR
-	debugvirtula void OnWait(EnumAsByte(EWaitType) wait);			// wait for finish move or movementqueue full
-	debugvirtula void OnStart();									// startup of movement
+	debugvirtual void OnIdle(uint32_t              idleTime);		// called in ISR
+	debugvirtual void OnWait(EnumAsByte(EWaitType) wait);			// wait for finish move or movementQueue full
+	debugvirtual void OnStart();									// startup of movement
 
-	debugvirtula void OnError(error_t   error);
-	debugvirtula void OnWarning(error_t warning);
-	debugvirtula void OnInfo(error_t    info);
+	debugvirtual void OnError(error_t   error);
+	debugvirtual void OnWarning(error_t warning);
+	debugvirtual void OnInfo(error_t    info);
 
-	void FatalError(error_t error) { _pod._fatalerror = error; }
+	void FatalError(error_t error) { _pod._fatalError = error; }
 
 	void Error(error_t error)
 	{
@@ -706,7 +709,7 @@ protected:
 
 protected:
 
-	bool         MoveAwayFromReference(axis_t axis, uint8_t referenceid, sdist_t dist, steprate_t vMax);
+	bool         MoveAwayFromReference(axis_t axis, uint8_t referenceId, sdist_t dist, steprate_t vMax);
 	virtual void MoveAwayFromReference(axis_t axis, sdist_t dist, steprate_t     vMax) { MoveRel(axis, dist, vMax); };
 
 #ifdef _MSC_VER
@@ -727,21 +730,21 @@ private:
 
 protected:
 
-	debugvirtula void InitTimer() { CHAL::InitTimer1OneShot(HandleInterrupt); }
-	debugvirtula void RemoveTimer() { CHAL::RemoveTimer1(); }
+	debugvirtual void InitTimer() { CHAL::InitTimer1OneShot(HandleInterrupt); }
+	debugvirtual void RemoveTimer() { CHAL::RemoveTimer1(); }
 
-	debugvirtula void StartTimer(timer_t timer);
-	debugvirtula void SetIdleTimer();
+	debugvirtual void StartTimer(timer_t timer);
+	debugvirtual void SetIdleTimer();
 
 	static void HandleInterrupt() { GetInstance()->StepRequest(true); }
 	static void HandleBackground() { GetInstance()->Background(); }
 
 
 	////////////////////////////////////////////////////////
-	// timer supportes pin for step / dir (A4998)
+	// timer supports pin for step / dir (A4998)
 protected:
 
-	static uint8_t          _mysteps[NUM_AXIS];
+	static uint8_t          _mySteps[NUM_AXIS];
 	static volatile uint8_t _setState;
 	static uint8_t          _myCnt;
 
@@ -755,7 +758,7 @@ protected:
 
 	static void InitStepDirTimer(const uint8_t steps[NUM_AXIS])
 	{
-		memcpy(_mysteps, steps, sizeof(_mysteps));
+		memcpy(_mySteps, steps, sizeof(_mySteps));
 		_myCnt    = 0;
 		_setState = NextIsSetPin;
 	}

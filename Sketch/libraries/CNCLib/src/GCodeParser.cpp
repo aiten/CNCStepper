@@ -333,7 +333,7 @@ mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertToInch)
 				}
 				return GetParamAsPosition(pos, axis);
 			}
-			case PARAMSTART_G92OFFSET: return GetParamAsMm1000(super::_modalstate.G92Pospreset[axis], axis);
+			case PARAMSTART_G92OFFSET: return GetParamAsMm1000(super::_modalState.G92Pospreset[axis], axis);
 			case PARAMSTART_CURRENTPOS: return GetParamAsMm1000(GetRelativePosition(axis), axis);
 			case PARAMSTART_CURRENTABSPOS: return GetParamAsMm1000(CMotionControlBase::GetInstance()->GetPosition(axis), axis);
 			case PARAMSTART_PROBEPOS: return GetParamAsMm1000(GetRelativePosition(_modalState.G38ProbePos[axis], axis), axis);
@@ -928,7 +928,7 @@ void CGCodeParser::GetR81(SAxisMove& move)
 	move.bitfield.bit.R = true;
 
 	_reader->GetNextChar();
-	_modalState.G8xR = ParseCoordinate(super::_modalstate.Plane_axis_2, CMotionControlBase::GetInstance()->GetPosition(super::_modalstate.Plane_axis_2), super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+	_modalState.G8xR = ParseCoordinate(super::_modalState.Plane_axis_2, CMotionControlBase::GetInstance()->GetPosition(super::_modalState.Plane_axis_2), super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 }
 
 ////////////////////////////////////////////////////////////
@@ -980,7 +980,7 @@ void CGCodeParser::GetQ81(SAxisMove& move)
 	move.bitfield.bit.Q = true;
 
 	_reader->GetNextChar();
-	mm1000_t q = ParseCoordinate(super::_modalstate.Plane_axis_2, 0, AbsolutPosition);
+	mm1000_t q = ParseCoordinate(super::_modalState.Plane_axis_2, 0, AbsolutPosition);
 
 	if (q <= 0)
 	{
@@ -1089,13 +1089,13 @@ void CGCodeParser::G38Command()
 
 	switch (subCode)
 	{
-		case 2: G31Command(super::_modalstate.ProbeOnValue);
+		case 2: G31Command(super::_modalState.ProbeOnValue);
 			break;
-		case 4: G31Command(!super::_modalstate.ProbeOnValue);
+		case 4: G31Command(!super::_modalState.ProbeOnValue);
 			break;
-		case 12: G38CenterProbe(super::_modalstate.ProbeOnValue);
+		case 12: G38CenterProbe(super::_modalState.ProbeOnValue);
 			return;
-		case 14: G38CenterProbe(!super::_modalstate.ProbeOnValue);
+		case 14: G38CenterProbe(!super::_modalState.ProbeOnValue);
 			return;
 		default: ErrorNotImplemented();
 			return;
@@ -1167,7 +1167,7 @@ bool CGCodeParser::CenterProbeCommand(SAxisMove& move, bool probevalue, axis_t a
 
 	mm1000_t pos = CMotionControlBase::GetInstance()->GetPosition(axis);
 	movenew.newpos[axis] -= move.newpos[axis];
-	CMotionControlBase::GetInstance()->MoveAbs(movenew.newpos, super::_modalstate.G0FeedRate);
+	CMotionControlBase::GetInstance()->MoveAbs(movenew.newpos, super::_modalState.G0FeedRate);
 	movenew.newpos[axis] -= move.newpos[axis];
 
 	_modalState.IsProbeOK = ProbeCommand(movenew, probevalue);
@@ -1177,7 +1177,7 @@ bool CGCodeParser::CenterProbeCommand(SAxisMove& move, bool probevalue, axis_t a
 	}
 
 	_modalState.G38ProbePos[axis] = CMotionControlBase::GetInstance()->GetPosition(axis) + (pos - CMotionControlBase::GetInstance()->GetPosition(axis)) / 2;
-	CMotionControlBase::GetInstance()->MoveAbs(_modalState.G38ProbePos, super::_modalstate.G0FeedRate);
+	CMotionControlBase::GetInstance()->MoveAbs(_modalState.G38ProbePos, super::_modalState.G0FeedRate);
 
 	return true;
 }
@@ -1312,7 +1312,7 @@ void CGCodeParser::G68CommandDefault()
 		axis_t axis;
 		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
 		{
-			GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+			GetAxis(axis, move, super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
 		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)
 		{
@@ -1360,7 +1360,7 @@ void CGCodeParser::G68CommandDefault()
 	else
 	{
 		//2D
-		vect[super::_modalstate.Plane_axis_2] = 1000;
+		vect[super::_modalState.Plane_axis_2] = 1000;
 	}
 
 	CMotionControl::GetInstance()->SetRotate(CMm1000::DegreeToRAD(r), vect, offset);
@@ -1394,7 +1394,7 @@ void CGCodeParser::G68Ext11Command()
 		axis_t axis;
 		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
 		{
-			GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+			GetAxis(axis, move, super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
 		else
 		{
@@ -1425,7 +1425,7 @@ void CGCodeParser::G68Ext12Command()
 		axis_t axis;
 		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
 		{
-			GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+			GetAxis(axis, move, super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
 		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)
 		{
@@ -1471,7 +1471,7 @@ void CGCodeParser::G68ExtXXCommand(axis_t rotaxis)
 		axis_t axis;
 		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
 		{
-			GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+			GetAxis(axis, move, super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
 		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)
 		{
@@ -1595,7 +1595,7 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 		axis_t axis;
 		if ((axis = CharToAxis(ch)) <= Z_AXIS)
 		{
-			GetAxis(axis, move, super::_modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+			GetAxis(axis, move, super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
 		else if (ch == 'R')
 		{
@@ -1636,15 +1636,15 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 			return;
 		}
 
-		if (IsBitSet(move.axes, super::_modalstate.Plane_axis_2))
+		if (IsBitSet(move.axes, super::_modalState.Plane_axis_2))
 		{
-			_modalState.G8xPlane2 = move.newpos[super::_modalstate.Plane_axis_2];
+			_modalState.G8xPlane2 = move.newpos[super::_modalState.Plane_axis_2];
 		}
 
 		mm1000_t pos[NUM_AXIS];
 		CMotionControlBase::GetInstance()->GetPositions(pos);
 
-		mm1000_t origPlane2 = pos[super::_modalstate.Plane_axis_2];
+		mm1000_t origPlane2 = pos[super::_modalState.Plane_axis_2];
 
 		bool drillDown = origPlane2 > _modalState.G8xPlane2;
 
@@ -1660,32 +1660,32 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 		{
 			// 1. Step: GoTo x:y (fast)
 			//          For rel move store relative distance in move.newpos
-			if (super::_modalstate.IsAbsolut || i == 0)
+			if (super::_modalState.IsAbsolut || i == 0)
 			{
-				pos[super::_modalstate.Plane_axis_0] = move.newpos[super::_modalstate.Plane_axis_0];
-				pos[super::_modalstate.Plane_axis_1] = move.newpos[super::_modalstate.Plane_axis_1];
-				if (!super::_modalstate.IsAbsolut)
+				pos[super::_modalState.Plane_axis_0] = move.newpos[super::_modalState.Plane_axis_0];
+				pos[super::_modalState.Plane_axis_1] = move.newpos[super::_modalState.Plane_axis_1];
+				if (!super::_modalState.IsAbsolut)
 				{
-					move.newpos[super::_modalstate.Plane_axis_0] -= CMotionControlBase::GetInstance()->GetPosition(super::_modalstate.Plane_axis_0);
-					move.newpos[super::_modalstate.Plane_axis_1] -= CMotionControlBase::GetInstance()->GetPosition(super::_modalstate.Plane_axis_1);
+					move.newpos[super::_modalState.Plane_axis_0] -= CMotionControlBase::GetInstance()->GetPosition(super::_modalState.Plane_axis_0);
+					move.newpos[super::_modalState.Plane_axis_1] -= CMotionControlBase::GetInstance()->GetPosition(super::_modalState.Plane_axis_1);
 				}
 			}
 			else
 			{
-				pos[super::_modalstate.Plane_axis_0] += move.newpos[super::_modalstate.Plane_axis_0];
-				pos[super::_modalstate.Plane_axis_1] += move.newpos[super::_modalstate.Plane_axis_1];
+				pos[super::_modalState.Plane_axis_0] += move.newpos[super::_modalState.Plane_axis_0];
+				pos[super::_modalState.Plane_axis_1] += move.newpos[super::_modalState.Plane_axis_1];
 			}
 
 			MoveStart(false);
-			CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalstate.G0FeedRate);
+			CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalState.G0FeedRate);
 			if (CheckError())
 			{
 				return;
 			}
 
 			// 2. Step: GoTo z(R) (fast)
-			pos[super::_modalstate.Plane_axis_2] = _modalState.G8xR;
-			CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalstate.G0FeedRate);
+			pos[super::_modalState.Plane_axis_2] = _modalState.G8xR;
+			CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalState.G0FeedRate);
 			if (CheckError())
 			{
 				return;
@@ -1721,8 +1721,8 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 
 				// 3. Step: Goto Z (with feedrate)
 				MoveStart(true);
-				pos[super::_modalstate.Plane_axis_2] = nextPlan2;
-				CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalstate.G1FeedRate);
+				pos[super::_modalState.Plane_axis_2] = nextPlan2;
+				CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalState.G1FeedRate);
 				if (CheckError())
 				{
 					return;
@@ -1737,19 +1737,19 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 				// 4. Step: Goto init Z or R (fast) see G98
 				if (finalMove)
 				{
-					pos[super::_modalstate.Plane_axis_2] = (_modalState.IsG98) ? origPlane2 : _modalState.G8xR;
+					pos[super::_modalState.Plane_axis_2] = (_modalState.IsG98) ? origPlane2 : _modalState.G8xR;
 				}
 				else if (useMinQ)
 				{
-					pos[super::_modalstate.Plane_axis_2] = nextPlan2 + (drillDown ? G73RETRACTION : -G73RETRACTION);
+					pos[super::_modalState.Plane_axis_2] = nextPlan2 + (drillDown ? G73RETRACTION : -G73RETRACTION);
 				}
 				else
 				{
-					pos[super::_modalstate.Plane_axis_2] = _modalState.G8xR;
+					pos[super::_modalState.Plane_axis_2] = _modalState.G8xR;
 				}
 
 				MoveStart(false);
-				CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalstate.G0FeedRate);
+				CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalState.G0FeedRate);
 				if (CheckError())
 				{
 					return;
@@ -1763,7 +1763,7 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 
 void CGCodeParser::G73Command()
 {
-	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G73Command);
+	super::_modalState.LastCommand = LastCommandCB(&CGCodeParser::G73Command);
 
 	SAxisMove move(true);
 	G8xCommand(move, false, true, true);
@@ -1773,7 +1773,7 @@ void CGCodeParser::G73Command()
 
 void CGCodeParser::G81Command()
 {
-	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G81Command);
+	super::_modalState.LastCommand = LastCommandCB(&CGCodeParser::G81Command);
 
 	SAxisMove move(true);
 	G8xCommand(move, false, false, false);
@@ -1783,7 +1783,7 @@ void CGCodeParser::G81Command()
 
 void CGCodeParser::G82Command()
 {
-	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G82Command);
+	super::_modalState.LastCommand = LastCommandCB(&CGCodeParser::G82Command);
 
 	SAxisMove move(true);
 	G8xCommand(move, true, false, false);
@@ -1793,7 +1793,7 @@ void CGCodeParser::G82Command()
 
 void CGCodeParser::G83Command()
 {
-	super::_modalstate.LastCommand = LastCommandCB(&CGCodeParser::G83Command);
+	super::_modalState.LastCommand = LastCommandCB(&CGCodeParser::G83Command);
 
 	SAxisMove move(true);
 	G8xCommand(move, false, true, false);
@@ -1867,7 +1867,7 @@ void CGCodeParser::M110Command()
 		return;
 	}
 
-	super::_modalstate.LineNumber = linenumber;
+	super::_modalState.LineNumber = linenumber;
 }
 ////////////////////////////////////////////////////////////
 

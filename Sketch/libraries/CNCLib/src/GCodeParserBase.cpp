@@ -61,7 +61,7 @@ bool CGCodeParserBase::_exit = false;
 
 ////////////////////////////////////////////////////////////
 
-struct CGCodeParserBase::SModalState    CGCodeParserBase::_modalstate;
+struct CGCodeParserBase::SModalState    CGCodeParserBase::_modalState;
 struct CGCodeParserBase::SModelessState CGCodeParserBase::_modlessstate;
 
 ////////////////////////////////////////////////////////////
@@ -173,7 +173,7 @@ char CGCodeParserBase::SkipSpacesOrComment()
 
 mm1000_t CGCodeParserBase::ParseCoordinateAxis(axis_t axis)
 {
-	return ParseCoordinate(IsBitSet(CGCodeParserBase::_modalstate.UnitConvert, axis));
+	return ParseCoordinate(IsBitSet(CGCodeParserBase::_modalState.UnitConvert, axis));
 }
 
 ////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ mm1000_t CGCodeParserBase::ParseCoordinate(bool convertUnits)
 {
 	_reader->SkipSpaces();
 
-	bool convertToInch = convertUnits && !_modalstate.UnitisMm;
+	bool convertToInch = convertUnits && !_modalState.UnitisMm;
 
 #ifndef REDUCED_SIZE
 
@@ -263,17 +263,17 @@ bool CGCodeParserBase::ParseLineNumber()
 #ifdef REDUCED_SIZE
 		_modalState.LineNumber = GetUInt16();
 #else
-		_modalstate.LineNumber = GetInt32();
+		_modalState.LineNumber = GetInt32();
 #endif
 
 		_reader->SkipSpaces();
 
 		_OkMessage = []()
 		{
-			StepperSerial.print(_modalstate.LineNumber);
+			StepperSerial.print(_modalState.LineNumber);
 #ifndef REDUCED_SIZE
 			StepperSerial.print(':');
-			StepperSerial.print(_modalstate.ReceivedLineNumber);
+			StepperSerial.print(_modalState.ReceivedLineNumber);
 #endif
 		};
 	}
@@ -285,14 +285,14 @@ bool CGCodeParserBase::ParseLineNumber()
 void CGCodeParserBase::MoveStart(bool cutmove)
 {
 	CControl::GetInstance()->CallOnEvent(CControl::OnStartCut, cutmove);
-	_modalstate.CutMove = cutmove;
+	_modalState.CutMove = cutmove;
 }
 
 ////////////////////////////////////////////////////////////
 
 void CGCodeParserBase::ConstantVelocity()
 {
-	if (!_modalstate.ConstantVelocity)
+	if (!_modalState.ConstantVelocity)
 	{
 		Wait(0);
 	}
@@ -327,7 +327,7 @@ mm1000_t CGCodeParserBase::CalcAllPreset(axis_t axis)
 void CGCodeParserBase::Parse()
 {
 #ifndef REDUCED_SIZE
-	_modalstate.ReceivedLineNumber++;
+	_modalState.ReceivedLineNumber++;
 #endif
 	do
 	{
@@ -441,7 +441,7 @@ bool CGCodeParserBase::GCommand(uint8_t gcode)
 		case 20: G20Command();	return true;
 		case 21: G21Command();	return true;
 		case 28: G28Command();	return true;
-		case 31: G31Command(_modalstate.ProbeOnValue);	return true;
+		case 31: G31Command(_modalState.ProbeOnValue);	return true;
 		case 61: G61Command();	return true;
 		case 64: G64Command();	return true;
 		case 90: G90Command();	return true;
@@ -473,8 +473,8 @@ bool CGCodeParserBase::MCommand(mcode_t mcode)
 		case 9: M09Command();	return true;
 
 		// probe config
-		case 100: _modalstate.ProbeOnValue = false;	return true;
-		case 101: _modalstate.ProbeOnValue = true;	return true;
+		case 100: _modalState.ProbeOnValue = false;	return true;
+		case 101: _modalState.ProbeOnValue = true;	return true;
 		default: break;
 			// @formatter:on — enable formatter after this line
 	}
@@ -590,11 +590,11 @@ void CGCodeParserBase::GetIJK(axis_t axis, SAxisMove& move, mm1000_t offset[2])
 
 	_reader->GetNextChar();
 
-	if (axis == _modalstate.Plane_axis_0)
+	if (axis == _modalState.Plane_axis_0)
 	{
 		offset[0] = ParseCoordinateAxis(axis);
 	}
-	else if (axis == _modalstate.Plane_axis_1)
+	else if (axis == _modalState.Plane_axis_1)
 	{
 		offset[1] = ParseCoordinateAxis(axis);
 	}
@@ -616,7 +616,7 @@ void CGCodeParserBase::GetRadius(SAxisMove& move, mm1000_t& radius)
 	move.bitfield.bit.R = true;
 
 	_reader->GetNextChar();
-	radius = ParseCoordinateAxis(_modalstate.Plane_axis_0);
+	radius = ParseCoordinateAxis(_modalState.Plane_axis_0);
 }
 
 ////////////////////////////////////////////////////////////
@@ -632,7 +632,7 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 	}
 	move.bitfield.bit.F = true;
 
-	if (!_modalstate.FeedRatePerUnit)
+	if (!_modalState.FeedRatePerUnit)
 	{
 		ErrorNotImplemented();
 		return;
@@ -659,7 +659,7 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 	}
 	// feedrate is 1/1000mm/min (scale 3) 
 
-	if (!_modalstate.UnitisMm)
+	if (!_modalState.UnitisMm)
 	{
 		//		feedrate = MulDivI32(feedrate, 254, 10);
 		feedrate = MulDivI32(feedrate, 127, 5);
@@ -677,9 +677,9 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 		feedrate = minfeedrate;
 	}
 
-	if (feedrate > _modalstate.G1MaxFeedRate)
+	if (feedrate > _modalState.G1MaxFeedRate)
 	{
-		feedrate = _modalstate.G1MaxFeedRate;
+		feedrate = _modalState.G1MaxFeedRate;
 	}
 
 	SetG1FeedRate(feedrate);
@@ -695,8 +695,8 @@ void CGCodeParserBase::GetG92Axis(axis_t axis, uint8_t& axes)
 	}
 
 	_reader->GetNextChar();
-	_modalstate.G92Pospreset[axis] = 0;	// clear this => can use CalcAllPreset
-	_modalstate.G92Pospreset[axis] = ParseCoordinateAxis(axis) + CMotionControlBase::GetInstance()->GetPosition(axis) - CalcAllPreset(axis);
+	_modalState.G92Pospreset[axis] = 0;	// clear this => can use CalcAllPreset
+	_modalState.G92Pospreset[axis] = ParseCoordinateAxis(axis) + CMotionControlBase::GetInstance()->GetPosition(axis) - CalcAllPreset(axis);
 }
 
 ////////////////////////////////////////////////////////////
@@ -705,9 +705,9 @@ bool CGCodeParserBase::LastCommand()
 {
 	const char* old = _reader->GetBuffer();
 
-	if (_modalstate.LastCommand != NULL)
+	if (_modalState.LastCommand != NULL)
 	{
-		(*this.*_modalstate.LastCommand)();
+		(*this.*_modalState.LastCommand)();
 	}
 
 	if (old == _reader->GetBuffer())
@@ -730,7 +730,7 @@ void CGCodeParserBase::G0001Command(bool isG00)
 	// g0 x10 F1 => error
 
 
-	_modalstate.LastCommand = isG00 ? &CGCodeParserBase::G00Command : &CGCodeParserBase::G01Command;
+	_modalState.LastCommand = isG00 ? &CGCodeParserBase::G00Command : &CGCodeParserBase::G01Command;
 	bool useG0Feed          = isG00;
 
 	SAxisMove move(true);
@@ -740,7 +740,7 @@ void CGCodeParserBase::G0001Command(bool isG00)
 		axis_t axis;
 		if ((axis = CharToAxis(ch)) < NUM_AXIS)
 		{
-			GetAxis(axis, move, _modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+			GetAxis(axis, move, _modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
 		else if (ch == 'F' && !isG00)
 		{
@@ -769,7 +769,7 @@ void CGCodeParserBase::G0001Command(bool isG00)
 	if (move.axes)
 	{
 		MoveStart(!isG00);
-		CMotionControlBase::GetInstance()->MoveAbs(move.newpos, useG0Feed ? _modalstate.G0FeedRate : _modalstate.G1FeedRate);
+		CMotionControlBase::GetInstance()->MoveAbs(move.newpos, useG0Feed ? _modalState.G0FeedRate : _modalState.G1FeedRate);
 		ConstantVelocity();
 	}
 }
@@ -778,7 +778,7 @@ void CGCodeParserBase::G0001Command(bool isG00)
 
 void CGCodeParserBase::G0203Command(bool isG02)
 {
-	_modalstate.LastCommand = isG02 ? &CGCodeParserBase::G02Command : &CGCodeParserBase::G03Command;
+	_modalState.LastCommand = isG02 ? &CGCodeParserBase::G02Command : &CGCodeParserBase::G03Command;
 
 	SAxisMove move(true);
 	mm1000_t  radius;
@@ -789,7 +789,7 @@ void CGCodeParserBase::G0203Command(bool isG02)
 		axis_t axis;
 		if ((axis = CharToAxis(ch)) < NUM_AXIS)
 		{
-			GetAxis(axis, move, _modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+			GetAxis(axis, move, _modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
 		else if ((axis = CharToAxisOffset(ch)) < NUM_AXIS)
 		{
@@ -832,8 +832,8 @@ void CGCodeParserBase::G0203Command(bool isG02)
 	if (move.bitfield.bit.R)
 	{
 		// Calculate the change in position aint32_t each selected axis
-		auto x = float(move.newpos[_modalstate.Plane_axis_0] - CMotionControlBase::GetInstance()->GetPosition(_modalstate.Plane_axis_0));
-		auto y = float(move.newpos[_modalstate.Plane_axis_1] - CMotionControlBase::GetInstance()->GetPosition(_modalstate.Plane_axis_1));
+		auto x = float(move.newpos[_modalState.Plane_axis_0] - CMotionControlBase::GetInstance()->GetPosition(_modalState.Plane_axis_0));
+		auto y = float(move.newpos[_modalState.Plane_axis_1] - CMotionControlBase::GetInstance()->GetPosition(_modalState.Plane_axis_1));
 		auto r = float(radius);
 
 		if (x == 0.0 && y == 0.0)
@@ -869,7 +869,7 @@ void CGCodeParserBase::G0203Command(bool isG02)
 	}
 
 	MoveStart(true);
-	CMotionControlBase::GetInstance()->Arc(move.newpos, offset[0], offset[1], _modalstate.Plane_axis_0, _modalstate.Plane_axis_1, isG02, _modalstate.G1FeedRate);
+	CMotionControlBase::GetInstance()->Arc(move.newpos, offset[0], offset[1], _modalState.Plane_axis_0, _modalState.Plane_axis_1, isG02, _modalState.G1FeedRate);
 	ConstantVelocity();
 }
 
@@ -917,9 +917,9 @@ void CGCodeParserBase::G04Command()
 
 void CGCodeParserBase::G171819Command(axis_t axis0, axis_t axis1, axis_t axis2)
 {
-	_modalstate.Plane_axis_0 = axis0;
-	_modalstate.Plane_axis_1 = axis1;
-	_modalstate.Plane_axis_2 = axis2;
+	_modalState.Plane_axis_0 = axis0;
+	_modalState.Plane_axis_1 = axis1;
+	_modalState.Plane_axis_2 = axis2;
 }
 
 ////////////////////////////////////////////////////////////
@@ -996,7 +996,7 @@ void CGCodeParserBase::G31Command(bool probevalue)
 		axis_t axis;
 		if ((axis = CharToAxis(ch)) < NUM_AXIS)
 		{
-			GetAxis(axis, move, _modalstate.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
+			GetAxis(axis, move, _modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
 		else if (ch == 'F')
 		{
@@ -1040,7 +1040,7 @@ bool CGCodeParserBase::ProbeCommand(SAxisMove& move, bool probevalue)
 		return false;
 	}
 
-	CMotionControlBase::GetInstance()->MoveAbs(move.newpos, _modalstate.G1FeedRate);
+	CMotionControlBase::GetInstance()->MoveAbs(move.newpos, _modalState.G1FeedRate);
 
 	if (!CStepper::GetInstance()->MoveUntil(G31TestProbe, probevalue))
 	{
@@ -1060,7 +1060,7 @@ void CGCodeParserBase::G91Command()
 	switch (subcode)
 	{
 		case 1: break;	//OK (I,J,K relative) = default
-		case 255: _modalstate.IsAbsolut = false;
+		case 255: _modalState.IsAbsolut = false;
 			break;
 		default: ErrorNotImplemented();
 			break;
@@ -1095,7 +1095,7 @@ void CGCodeParserBase::G92Command()
 	{
 		for (axes = 0; axes < NUM_AXIS; axes++)
 		{
-			_modalstate.G92Pospreset[axes] = 0;
+			_modalState.G92Pospreset[axes] = 0;
 		}
 	}
 
@@ -1118,7 +1118,7 @@ void CGCodeParserBase::SpindleSpeedCommand()
 
 #endif
 
-	_modalstate.SpindleSpeed = speed;
+	_modalState.SpindleSpeed = speed;
 }
 
 ////////////////////////////////////////////////////////////
@@ -1139,8 +1139,8 @@ void CGCodeParserBase::M0304Command(bool m3)
 		SpindleSpeedCommand();
 	}
 
-	_modalstate.SpindleOn = true;
-	CallIOControl(m3 ? CControl::SpindleCW : CControl::SpindleCCW, _modalstate.SpindleSpeed);
+	_modalState.SpindleOn = true;
+	CallIOControl(m3 ? CControl::SpindleCW : CControl::SpindleCCW, _modalState.SpindleSpeed);
 }
 
 ////////////////////////////////////////////////////////////

@@ -69,7 +69,7 @@ static const uint8_t stepperAdd[SMC800_NUM_AXIS] PROGMEM = { StepperX, StepperY,
 
 CStepperSMC800::CStepperSMC800()
 {
-	_num_axis = SMC800_NUM_AXIS;
+	_numAxes = SMC800_NUM_AXIS;
 }
 
 ////////////////////////////////////////////////////////

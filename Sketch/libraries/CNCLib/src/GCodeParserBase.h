@@ -59,26 +59,26 @@ public:
 
 	CGCodeParserBase(CStreamReader* reader, Stream* output) : super(reader, output) { };
 
-	static void     SetG0FeedRate(feedrate_t    feedrate) { _modalstate.G0FeedRate    = feedrate; }
-	static void     SetG1FeedRate(feedrate_t    feedrate) { _modalstate.G1FeedRate    = feedrate; }
-	static void     SetG1MaxFeedRate(feedrate_t feedrate) { _modalstate.G1MaxFeedRate = feedrate; }
-	static mm1000_t GetG92PosPreset(axis_t      axis) { return _modalstate.G92Pospreset[axis]; }
+	static void     SetG0FeedRate(feedrate_t    feedrate) { _modalState.G0FeedRate    = feedrate; }
+	static void     SetG1FeedRate(feedrate_t    feedrate) { _modalState.G1FeedRate    = feedrate; }
+	static void     SetG1MaxFeedRate(feedrate_t feedrate) { _modalState.G1MaxFeedRate = feedrate; }
+	static mm1000_t GetG92PosPreset(axis_t      axis) { return _modalState.G92Pospreset[axis]; }
 
-	static feedrate_t GetG0FeedRate() { return _modalstate.G0FeedRate; }
-	static feedrate_t GetG1FeedRate() { return _modalstate.G1FeedRate; }
+	static feedrate_t GetG0FeedRate() { return _modalState.G0FeedRate; }
+	static feedrate_t GetG1FeedRate() { return _modalState.G1FeedRate; }
 
-	static bool IsMm1000() { return _modalstate.UnitisMm; }
-	static bool IsInch(axis_t axis) { return !IsMm1000() && IsBitSet(_modalstate.UnitConvert, axis); }
+	static bool IsMm1000() { return _modalState.UnitisMm; }
+	static bool IsInch(axis_t axis) { return !IsMm1000() && IsBitSet(_modalState.UnitConvert, axis); }
 
-	static bool IsSpindleOn() { return _modalstate.SpindleOn; }
+	static bool IsSpindleOn() { return _modalState.SpindleOn; }
 
-	static bool    IsCutMove() { return _modalstate.CutMove; }
-	static int16_t GetSpindleSpeed() { return _modalstate.SpindleSpeed; }
+	static bool    IsCutMove() { return _modalState.CutMove; }
+	static int16_t GetSpindleSpeed() { return _modalState.SpindleSpeed; }
 
 	static void Init()
 	{
 		super::Init();
-		_modalstate.Init();
+		_modalState.Init();
 		_modlessstate.Init();
 	}
 
@@ -182,7 +182,7 @@ protected:
 		}
 	};
 
-	static SModalState _modalstate;
+	static SModalState _modalState;
 
 	////////////////////////////////////////////////////////
 	// Modeless State
@@ -320,19 +320,19 @@ private:
 	void G0203Command(bool isG02);
 	void G04Command();
 	void G171819Command(axis_t axis0, axis_t axis1, axis_t axis2);
-	void G20Command() { _modalstate.UnitisMm = false; };
-	void G21Command() { _modalstate.UnitisMm = true; };
+	void G20Command() { _modalState.UnitisMm = false; };
+	void G21Command() { _modalState.UnitisMm = true; };
 	void G28Command();
-	void G61Command() { _modalstate.ConstantVelocity = false; }
-	void G64Command() { _modalstate.ConstantVelocity = true; }
-	void G90Command() { _modalstate.IsAbsolut        = true; }
+	void G61Command() { _modalState.ConstantVelocity = false; }
+	void G64Command() { _modalState.ConstantVelocity = true; }
+	void G90Command() { _modalState.IsAbsolut        = true; }
 	void G91Command();
 	void G92Command();
 
 	void M0304Command(bool m3);					// spindle on CW/CCW
 	void M05Command()
 	{
-		_modalstate.SpindleOn = false;
+		_modalState.SpindleOn = false;
 		CallIOControl(CControl::SpindleCW, 0);
 	} //Spindle off
 

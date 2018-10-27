@@ -181,8 +181,8 @@ public:
 		}
 	}
 
-	void                       SetSpeedOverride(EnumAsByte(ESpeedOverride) speed) { _pod._speedoverride = speed; }
-	EnumAsByte(ESpeedOverride) GetSpeedOverride() { return _pod._speedoverride; }
+	void                       SetSpeedOverride(EnumAsByte(ESpeedOverride) speed) { _pod._speedOverride = speed; }
+	EnumAsByte(ESpeedOverride) GetSpeedOverride() const { return _pod._speedOverride; } 
 
 	static uint8_t                    SpeedOverrideToP(EnumAsByte(ESpeedOverride) speed) { return RoundMulDivU8(uint8_t(speed), 100, SpeedOverride100P); }
 	static EnumAsByte(ESpeedOverride) PToSpeedOverride(uint8_t                    speedP) { return EnumAsByte(ESpeedOverride)(RoundMulDivU8(speedP, SpeedOverride100P, 100)); }
@@ -197,9 +197,9 @@ public:
 	void SetCheckForReference(bool check) { _pod._checkReference = check; };
 	bool IsCheckForReference() const { return _pod._checkReference; }
 
-	void       SetBacklash(steprate_t speed) { _pod._timerbacklash = SpeedToTimer(speed); };
-	bool       IsSetBacklash() const { return timer_t(-1) != _pod._timerbacklash; }
-	steprate_t GetBacklash() const { return TimerToSpeed(_pod._timerbacklash); };
+	void       SetBacklash(steprate_t speed) { _pod._timerBacklash = SpeedToTimer(speed); };
+	bool       IsSetBacklash() const { return timer_t(-1) != _pod._timerBacklash; }
+	steprate_t GetBacklash() const { return TimerToSpeed(_pod._timerBacklash); };
 
 	bool IsBusy() const { return _pod._timerRunning; };
 	void WaitBusy();
@@ -210,7 +210,7 @@ public:
 	uint8_t GetEnableTimeout(axis_t axis) const { return _pod._timeOutEnable[axis]; }
 	void    SetEnableTimeout(axis_t axis, uint8_t sec) { _pod._timeOutEnable[axis] = sec; }
 
-	void SetDirection(axisArray_t direction) { _pod._invertdirection = direction; }
+	void SetDirection(axisArray_t direction) { _pod._invertDirection = direction; }
 
 #ifdef USESLIP
 	void SetSlip(int dist[NUM_AXIS]);
@@ -240,10 +240,10 @@ public:
 	void EmergencyStopResurrect();
 
 	bool IsWaitConditional() const { return _pod._isWaitConditional; }
-	void SetWaitConditional(bool conditionalwait) { _pod._isWaitConditional = conditionalwait; }
+	void SetWaitConditional(bool conditionalWait) { _pod._isWaitConditional = conditionalWait; }
 
-	void SetReferenceHitValue(uint8_t referneceid, uint8_t valueHit) { _pod._referenceHitValue[referneceid] = valueHit; }
-	bool IsUseReference(uint8_t       referneceid) const { return _pod._referenceHitValue[referneceid] != 255; }
+	void SetReferenceHitValue(uint8_t referenceId, uint8_t valueHit) { _pod._referenceHitValue[referenceId] = valueHit; }
+	bool IsUseReference(uint8_t       referenceId) const { return _pod._referenceHitValue[referenceId] != 255; }
 	bool IsUseReference(axis_t        axis, bool toMin) const { return IsUseReference(ToReferenceId(axis, toMin)); }
 
 	debugvirtual bool MoveReference(axis_t axis, uint8_t referenceId, bool toMin, steprate_t vMax, sdist_t maxDist = 0, sdist_t distToRef = 0, sdist_t distIfRefIsOn = 0);
@@ -259,28 +259,28 @@ public:
 
 	void MoveAbsEx(steprate_t         vMax, uint16_t axis, udist_t d, ...);	// repeat axis and d until axis not in 0 .. NUM_AXIS-1
 	void MoveRelEx(steprate_t         vMax, uint16_t axis, sdist_t d, ...);	// repeat axis and d until axis not in 0 .. NUM_AXIS-1
-	void Wait(unsigned int            sec100);							// unconditional wait
-	void WaitConditional(unsigned int sec100);				// conditional wait 
+	void Wait(unsigned int            sec100);								// unconditional wait
+	void WaitConditional(unsigned int sec100);								// conditional wait 
 	void IoControl(uint8_t            tool, uint16_t level);
 
-	bool MoveUntil(TestContinueMove testcontinue, uintptr_t param);
+	bool MoveUntil(TestContinueMove testContinue, uintptr_t param);
 
 	//////////////////////////////
 
-	const udist_t* GetPositions() const { return _pod._calculatedpos; }
-	void           GetPositions(udist_t pos[NUM_AXIS]) const { memcpy(pos, _pod._calculatedpos, sizeof(_pod._calculatedpos)); }
-	udist_t        GetPosition(axis_t   axis) const { return _pod._calculatedpos[axis]; }
+	const udist_t* GetPositions() const { return _pod._calculatedPos; }
+	void           GetPositions(udist_t pos[NUM_AXIS]) const { memcpy(pos, _pod._calculatedPos, sizeof(_pod._calculatedPos)); }
+	udist_t        GetPosition(axis_t   axis) const { return _pod._calculatedPos[axis]; }
 
 	void GetCurrentPositions(udist_t pos[NUM_AXIS]) const
 	{
-		CCriticalRegion crit;
+		CCriticalRegion criticalRegion;
 		memcpy(pos, _pod._current, sizeof(_pod._current));
 	}
 
 	udist_t GetCurrentPosition(axis_t axis) const
 	{
-		CCriticalRegion crit;
-		return (*((volatile udist_t*)&_pod._current[axis]));
+		CCriticalRegion criticalRegion;
+		return (*const_cast<volatile udist_t*>(&_pod._current[axis]));
 	}
 
 	udist_t GetLimitMax(axis_t axis) const { return _pod._limitMax[axis]; }
@@ -291,7 +291,7 @@ public:
 #endif
 
 	mdist_t     GetBacklash(axis_t axis) const { return _pod._backlash[axis]; }
-	axisArray_t GetLastDirection() const { return _pod._lastdirection; }		// check for backlash
+	axisArray_t GetLastDirection() const { return _pod._lastDirection; }		// check for backlash
 
 	steprate_t GetDefaultVmax() const { return TimerToSpeed(_pod._timerMaxDefault); }
 	steprate_t GetMaxSpeed(axis_t  axis) const { return min(GetDefaultVmax(),TimerToSpeed(_pod._timerMax[axis])); }
@@ -305,7 +305,7 @@ public:
 #endif
 	uint32_t IdleTime() const { return _pod._timerStartOrOnIdle; }
 
-	void AddEvent(StepperEvent event, uintptr_t eventparam, SEvent& oldevent);
+	void AddEvent(StepperEvent event, uintptr_t eventParam, SEvent& oldEvent);
 
 	static uint8_t ToReferenceId(axis_t axis, bool minRef) { return axis * 2 + (minRef ? 0 : 1); }
 
@@ -327,14 +327,14 @@ private:
 
 	void SetTimeoutAndEnable(axis_t i, uint8_t timeout, uint8_t level, bool force);
 
-	void QueueMove(const mdist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], timer_t timerMax, uint8_t stepmult);
+	void QueueMove(const mdist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], timer_t timerMax, uint8_t stepMult);
 	void QueueWait(const mdist_t dist, timer_t              timerMax, bool                 checkWaitConditional);
 
-	void EnqueuAndStartTimer(bool waitfinish);
+	void EnqueueAndStartTimer(bool waitFinish);
 	void WaitUntilCanQueue();
 	bool StartMovement();
 
-	int32_t CalcNextPos(udist_t current, udist_t dist, bool directionUp)
+	static int32_t CalcNextPos(udist_t current, udist_t dist, bool directionUp)
 	{
 		if (directionUp)
 		{
@@ -357,7 +357,7 @@ private:
 
 protected:
 
-	bool MoveUntil(uint8_t referenceId, bool referencevalue, uint16_t stabletime);
+	bool MoveUntil(uint8_t referenceId, bool referenceValue, uint16_t stableTime);
 
 	void QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], steprate_t vMax);
 
@@ -366,17 +366,17 @@ protected:
 
 	////////////////////////////////////////////////////////
 
-	timer_t GetTimer(mdist_t             steps, timer_t timerstart);										// calc "speed" after steps with constant a (from v0 = 0)
-	timer_t GetTimerAccelerating(mdist_t steps, timer_t timerv0, timer_t timerstart);			// calc "speed" after steps accelerating with constant a 
-	timer_t GetTimerDecelerating(mdist_t steps, timer_t timerv, timer_t  timerstart);			// calc "speed" after steps decelerating with constant a 
+	timer_t GetTimer(mdist_t             steps, timer_t timerStart);										// calc "speed" after steps with constant a (from v0 = 0)
+	timer_t GetTimerAccelerating(mdist_t steps, timer_t timerV0, timer_t timerStart);			// calc "speed" after steps accelerating with constant a 
+	timer_t GetTimerDecelerating(mdist_t steps, timer_t timerV, timer_t  timerStart);			// calc "speed" after steps decelerating with constant a 
 
-	static mdist_t GetAccSteps(timer_t timer, timer_t timerstart);										// from v=0
-	static mdist_t GetDecSteps(timer_t timer, timer_t timerstop) { return GetAccSteps(timer, timerstop); } // to v=0
+	static mdist_t GetAccSteps(timer_t timer, timer_t timerStart);										// from v=0
+	static mdist_t GetDecSteps(timer_t timer, timer_t timerStop) { return GetAccSteps(timer, timerStop); } // to v=0
 
-	static mdist_t GetAccSteps(timer_t timer1, timer_t timer2, timer_t timerstart);				// from v1 to v2 (v1<v2)
-	static mdist_t GetDecSteps(timer_t timer1, timer_t timer2, timer_t timerstop) { return GetAccSteps(timer2, timer1, timerstop); }
+	static mdist_t GetAccSteps(timer_t timer1, timer_t timer2, timer_t timerStart);				// from v1 to v2 (v1<v2)
+	static mdist_t GetDecSteps(timer_t timer1, timer_t timer2, timer_t timerStop) { return GetAccSteps(timer2, timer1, timerStop); }
 
-	static mdist_t GetSteps(timer_t timer1, timer_t timer2, timer_t timerstart, timer_t timerstop);		// from v1 to v2 (v1<v2 uses acc, dec otherwise)
+	static mdist_t GetSteps(timer_t timer1, timer_t timer2, timer_t timerStart, timer_t timerStop);		// from v1 to v2 (v1<v2 uses acc, dec otherwise)
 
 	uint32_t GetAccelerationFromTimer(mdist_t    timerV0);
 	uint32_t GetAccelerationFromSpeed(steprate_t speedV0) { return GetAccelerationFromTimer(SpeedToTimer(speedV0)); }
@@ -384,18 +384,18 @@ protected:
 	timer_t    SpeedToTimer(steprate_t speed) const;
 	steprate_t TimerToSpeed(timer_t    timer) const;
 
-	static uint8_t GetStepMultiplier(timer_t timermax);
+	static uint8_t GetStepMultiplier(timer_t timerMax);
 
 protected:
 
 	//////////////////////////////////////////
 	// often accessed members first => is faster
-	// even size of struct and 2byte alignement
+	// even size of struct and 2byte alignment
 
-	struct POD														// POD .. Plane Old Data Type => no Constructor => init with default value = 0
+	struct POD												// POD .. Plane Old Data Type => no Constructor => init with default value = 0
 	{
 		volatile bool _timerRunning;
-		bool          _checkReference;							// check for "IsReference" in ISR (while normal move)
+		bool          _checkReference;						// check for "IsReference" in ISR (while normal move)
 
 		bool _emergencyStop;
 		bool _isWaitConditional;							// wait on "Wait"
@@ -403,17 +403,17 @@ protected:
 		bool _waitFinishMove;
 		bool _limitCheck;
 
-		timer_t _timerbacklash;								// -1 or 0 for temporary enable/disable backlash without setting _backlash to 0
+		timer_t _timerBacklash;								// -1 or 0 for temporary enable/disable backlash without setting _backlash to 0
 
 #ifndef REDUCED_SIZE
-		uint32_t     _totalSteps;								// total steps since start
-		unsigned int _timerISRBusy;								// ISR while in ISR
+		uint32_t     _totalSteps;							// total steps since start
+		unsigned int _timerISRBusy;							// ISR while in ISR
 #endif
 
-		timer_t _timerMaxDefault;							// timervalue of vMax (if vMax = 0)
+		timer_t _timerMaxDefault;							// timerValue of vMax (if vMax = 0)
 
 		udist_t _current[NUM_AXIS];							// update in ISR
-		udist_t _calculatedpos[NUM_AXIS];					// calculated in advanced (use movement queue)
+		udist_t _calculatedPos[NUM_AXIS];					// calculated in advanced (use movement queue)
 
 		uint8_t _referenceHitValue[NUM_REFERENCE];			// each axis min and max - used in ISR LOW,HIGH, 255(not used)
 
@@ -430,19 +430,19 @@ protected:
 
 		mdist_t _backlash[NUM_AXIS];						// backlash of each axis (signed mdist_t/2)
 
-		uint32_t _timerStartOrOnIdle;						// timervalue if library start move or goes to Idle
-		uint32_t _timerLastCheckEnable;						// timervalue
+		uint32_t _timerStartOrOnIdle;						// timerValue if library start move or goes to Idle
+		uint32_t _timerLastCheckEnable;						// timerValue
 
 		uint8_t                             _idleLevel;											// level if idle (0..100)
-		volatile EnumAsByte(ESpeedOverride) _speedoverride;			// Speed override, 128 => 100% (change in irq possible)
+		volatile EnumAsByte(ESpeedOverride) _speedOverride;		// Speed override, 128 => 100% (change in irq possible)
 
-		axisArray_t _lastdirection;								// for backlash
-		axisArray_t _invertdirection;							// invert direction
+		axisArray_t _lastDirection;							// for backlash
+		axisArray_t _invertDirection;						// invert direction
 
 		error_t _error;
 		error_t _fatalError;
 
-		uint8_t _timeOutEnable[NUM_AXIS];					// enabletimeout in sec if no step (0.. disable, always enabled)
+		uint8_t _timeOutEnable[NUM_AXIS];					// enableTimeout in sec if no step (0.. disable, always enabled)
 		uint8_t _timeEnable[NUM_AXIS];						// 0: active, do not turn off, else time to turn off
 
 #ifdef USESLIP
@@ -450,17 +450,17 @@ protected:
 		int _slip[NUM_AXIS];
 #endif
 
-		bool        _pause;											// PauseMove is called
-		axisArray_t _lastDirectionUp;								// last paramter value of Steo()
+		bool        _pause;									// PauseMove is called
+		axisArray_t _lastDirectionUp;						// last paramter value of Steo()
 	}               _pod;
 
-	SEvent _event ALIGN_WORD;									// no POS => Constructor
-	axis_t _num_axis;											// actual axis (3 e.g. SMC800)
+	SEvent _event ALIGN_WORD;								// no POS => Constructor
+	axis_t _numAxes;										// actual axis (3 e.g. SMC800)
 
 	struct SMovementState;
 
 	/////////////////////////////////////////////////////////////////////
-	// internal ringbuffer for movement optimization
+	// internal ringBuffer for movement optimization
 
 	struct SMovement
 	{
@@ -486,17 +486,17 @@ protected:
 
 		mdist_t _steps;										// total movement steps (=distance)
 
-		EnumAsByte(EMovementState) _state;						// emums are 16 bit in gcc => force byte
+		EnumAsByte(EMovementState) _state;						// enums are 16 bit in gcc => force byte
 		bool                       _backlash;									// move is backlash
 
 		DirCount_t _dirCount;
 		DirCount_t _lastStepDirCount;
 
-		mdist_t _distance_[NUM_AXIS];						// distance adjusted with stepmultiplier => use GetDistance(axis)
+		mdist_t _distance_[NUM_AXIS];						// distance adjusted with stepMultiplier => use GetDistance(axis)
 
-		struct SRamp											// only modify in CCRiticalRegion
+		struct SRamp											// only modify in CCriticalRegion
 		{
-			timer_t _timerStart;								// start ramp with speed (tinmerValue)
+			timer_t _timerStart;								// start ramp with speed (timerValue)
 			timer_t _timerRun;
 			timer_t _timerStop;									// stop  ramp with speed (timerValue)
 
@@ -504,41 +504,41 @@ protected:
 			mdist_t _downSteps;									// steps needed for decelerating to v0
 			mdist_t _downStartAt;								// index of step to start with deceleration
 
-			mdist_t _nUpOffset;									// offset of n rampe calculation(acc) 
-			mdist_t _nDownOffset;								// offset of n rampe calculation(dec)
+			mdist_t _nUpOffset;									// offset of n ramp calculation(acc) 
+			mdist_t _nDownOffset;								// offset of n ramp calculation(dec)
 
-			void RampUp(SMovement*   pMovement, timer_t timerRun, timer_t timerJunction);
-			void RampDown(SMovement* pMovement, timer_t timerJunction);
-			void RampRun(SMovement*  pMovement);
+			void RampUp(SMovement*   movement, timer_t timerRun, timer_t timerJunction);
+			void RampDown(SMovement* movement, timer_t timerJunction);
+			void RampRun(SMovement*  movement);
 		};
 
 		union
 		{
 			struct SMove
 			{
-				timer_t _timerMax;										// timer for max requested speed
-				timer_t _timerRun;										// copy of _ramp. => modify during rampcalc
+				timer_t _timerMax;								// timer for max requested speed
+				timer_t _timerRun;								// copy of _ramp. => modify during ramp calc
 
-				timer_t _timerEndPossible;								// timer possible at end of last movement
-				timer_t _timerJunctionToPrev;							// used to calculate junction speed, stored in "next" step
-				timer_t _timerMaxJunction;								// max possible junction speed, stored in "next" step
+				timer_t _timerEndPossible;						// timer possible at end of last movement
+				timer_t _timerJunctionToPrev;					// used to calculate junction speed, stored in "next" step
+				timer_t _timerMaxJunction;						// max possible junction speed, stored in "next" step
 
-				struct SRamp _ramp;										// only modify in CCRiticalRegion
+				struct SRamp _ramp;								// only modify in CCriticalRegion
 
-				timer_t _timerAcc;										// timer for calc of acceleration while "up" state - depend on axis
-				timer_t _timerDec;										// timer for calc of decelerating while "down" state - depend on axis
+				timer_t _timerAcc;								// timer for calc of acceleration while "up" state - depend on axis
+				timer_t _timerDec;								// timer for calc of decelerating while "down" state - depend on axis
 			}           _move;
 
 			struct SWait
 			{
 				timer_t _timer;
-				bool    _checkWaitConditional;								// wait only if Stepper.SetConditionalWait is set
+				bool    _checkWaitConditional;					// wait only if Stepper.SetConditionalWait is set
 			}           _wait;
 
 			struct SIoControl _io;
 		}                     _pod;
 
-		stepperstatic CStepper* _stepper;						// give access to stepper (not static if multiinstance)  
+		stepperstatic CStepper* _stepper;						// give access to stepper (not static if multi instance)  
 
 		timer_t GetUpTimerAcc() const { return _pod._move._timerAcc; }
 		timer_t GetUpTimerDec() const { return _pod._move._timerDec; }
@@ -556,10 +556,10 @@ protected:
 
 		bool Ramp(SMovement* mvNext);
 
-		void CalcMaxJunktionSpeed(SMovement* mvPrev);
+		void CalcMaxJunctionSpeed(SMovement* mvPrev);
 
-		bool AdjustJunktionSpeedT2H(SMovement* mvPrev, SMovement* mvNext);
-		void AdjustJunktionSpeedH2T(SMovement* mvPrev, SMovement* mvNext);
+		bool AdjustJunctionSpeedT2H(SMovement* mvPrev, SMovement* mvNext);
+		void AdjustJunctionSpeedH2T(SMovement* mvPrev, SMovement* mvNext);
 
 		bool CalcNextSteps(bool continues);
 
@@ -569,27 +569,27 @@ protected:
 
 	public:
 
-		mdist_t GetSteps() { return _steps; }
+		mdist_t GetSteps() const { return _steps; }
 
-		bool IsActiveIo() const { return _state == StateReadyIo; }							// Ready from Io
+		bool IsActiveIo() const { return _state == StateReadyIo; }								// Ready from Io
 		bool IsActiveWait() const { return _state == StateReadyWait || _state == StateWait; }	// Ready from wait or waiting
 		bool IsActiveMove() const { return IsReadyForMove() || IsProcessingMove(); }			// Ready from move or moving
 		bool IsReadyForMove() const { return _state == StateReadyMove; }						// Ready for move but not started
-		bool IsProcessingMove() const { return _state >= StateUpAcc && _state <= StateDownAcc; }	// Move is currently processed (in acc,run or dec)
-		bool IsUpMove() const { return IsProcessingMove() && _state < StateRun; }			// Move in ramp acc state
-		bool IsRunOrUpMove() const { return IsProcessingMove() && _state <= StateRun; }		// Move in ramp run state
-		bool IsRunMove() const { return _state == StateRun; }								// Move in ramp run state
+		bool IsProcessingMove() const { return _state >= StateUpAcc && _state <= StateDownAcc; }// Move is currently processed (in acc,run or dec)
+		bool IsUpMove() const { return IsProcessingMove() && _state < StateRun; }				// Move in ramp acc state
+		bool IsRunOrUpMove() const { return IsProcessingMove() && _state <= StateRun; }			// Move in ramp run state
+		bool IsRunMove() const { return _state == StateRun; }									// Move in ramp run state
 		bool IsRunOrDownMove() const { return IsProcessingMove() && _state >= StateRun; }		// Move in ramp run state
-		bool IsDownMove() const { return IsProcessingMove() && _state > StateRun; }			// Move in ramp dec state
-		bool IsFinished() const { return _state == StateDone; }								// Move finished 
+		bool IsDownMove() const { return IsProcessingMove() && _state > StateRun; }				// Move in ramp dec state
+		bool IsFinished() const { return _state == StateDone; }									// Move finished 
 
 		bool IsSkipForOptimizing() const { return IsActiveIo(); }									// skip the entry when optimizing queue
 
-		void InitMove(CStepper*      pStepper, SMovement* mvPrev, mdist_t steps, const mdist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], timer_t timerMax);
-		void InitWait(CStepper*      pStepper, mdist_t    steps, timer_t  timer, bool          checkWaitConditional);
-		void InitIoControl(CStepper* pStepper, uint8_t    tool, uint16_t  level);
+		void InitMove(CStepper*      stepper, SMovement* mvPrev, mdist_t steps, const mdist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], timer_t timerMax);
+		void InitWait(CStepper*      stepper, mdist_t    steps, timer_t  timer, bool          checkWaitConditional);
+		void InitIoControl(CStepper* stepper, uint8_t    tool, uint16_t  level);
 
-		void InitStop(SMovement* mvPrev, timer_t timer, timer_t dectimer);
+		void InitStop(SMovement* mvPrev, timer_t timer, timer_t decTimer);
 
 		void SetBacklash() { _backlash = true; }
 
@@ -602,7 +602,7 @@ protected:
 
 	struct SMovements
 	{
-		timer_t                                         _timerStartPossible;							// timer for fastest possible start (break at the end)
+		timer_t                                         _timerStartPossible;					// timer for fastest possible start (break at the end)
 		CRingBufferQueue<SMovement, MOVEMENTBUFFERSIZE> _queue;
 	};
 
@@ -621,21 +621,21 @@ protected:
 
 		mdist_t _n;				// step within movement (1-_steps)
 		timer_t _timer;			// current timer
-		timer_t _rest;			// rest of rampcalculation
+		timer_t _rest;			// rest of ramp calculation
 
-		uint8_t _count;	// increment of _n
-		char    _dummyalign;
+		uint8_t _count;			// increment of _n
+		char    _dummyAlignment;
 
 #ifndef REDUCED_SIZE
-		uint32_t _sumTimer;	// for debug
+		uint32_t _sumTimer;		// for debug
 #endif
 
 		mdist_t _add[NUM_AXIS];
 
-		void Init(SMovement* pMovement);
+		void Init(SMovement* movement);
 
-		bool CalcTimerAcc(timer_t maxtimer, mdist_t n, uint8_t cnt);
-		bool CalcTimerDec(timer_t mintimer, mdist_t n, uint8_t cnt);
+		bool CalcTimerAcc(timer_t maxTimer, mdist_t n, uint8_t cnt);
+		bool CalcTimerDec(timer_t minTimer, mdist_t n, uint8_t cnt);
 
 	public:
 
@@ -645,7 +645,7 @@ protected:
 	stepperstatic SMovementState _movementState;
 
 	/////////////////////////////////////////////////////////////////////
-	// internal ringbuffer for steps (after calculating acc and dec)
+	// internal ringBuffer for steps (after calculating acc and dec)
 
 	struct SStepBuffer
 	{

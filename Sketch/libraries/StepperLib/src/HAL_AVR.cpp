@@ -96,7 +96,7 @@ uint8_t CHAL::digitalRead(pin_t pin)
 	}
 
 	// If the pin that support PWM output, we need to turn it off
-	// before getting a digital reading.
+// before getting a digital reading.
 	//	if (timer != NOT_ON_TIMER) turnOffPWM(timer);
 
 	if (*portInputRegister(port) & bit)

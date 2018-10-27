@@ -133,7 +133,7 @@ public:
 	CLinearLookup(const SLookupTable* pTable, index_t tabelSize)
 	{
 		_tableSize = tabelSize;
-		_table    = pTable;
+		_table     = pTable;
 	}
 
 private:

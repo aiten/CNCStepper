@@ -70,8 +70,9 @@ struct ControlData
 			inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
 #endif
 #else
-		COnOffIOControl<SPINDLE_ENABLE_PIN, SPINDLE_DIGITAL_ON, SPINDLE_DIGITAL_OFF> _spindle;
-		inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return (uint8_t)level; }
+	COnOffIOControl<SPINDLE_ENABLE_PIN, SPINDLE_DIGITAL_ON, SPINDLE_DIGITAL_OFF> _spindle;
+
+	inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return (uint8_t)level; }
 #endif
 #ifdef SPINDLE_DIR_PIN
 	COnOffIOControl<SPINDLE_DIR_PIN, SPINDLE_DIR_CLW, SPINDLE_DIR_CCLW> _spindleDir;

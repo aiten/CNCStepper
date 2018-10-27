@@ -93,7 +93,7 @@ public:
 	CGCodeParser(CStreamReader* reader, Stream* output) : super(reader, output) { };
 
 	static mm1000_t GetG54PosPreset(axis_t        axis);
-	static mm1000_t GetToolHeightPosPreset(axis_t axis) { return axis == super::_modalstate.Plane_axis_2 ? _modalState.ToolHeigtCompensation : 0; }
+	static mm1000_t GetToolHeightPosPreset(axis_t axis) { return axis == super::_modalState.Plane_axis_2 ? _modalState.ToolHeigtCompensation : 0; }
 	static void     SetG54PosPreset(axis_t        axis, mm1000_t pos) { _modalState.G54Pospreset[0][axis] = pos; }
 	static uint8_t  GetZeroPresetIdx() { return _modalState.ZeroPresetIdx; }
 	static void     SetZeroPresetIdx(uint8_t idx) { _modalState.ZeroPresetIdx = idx; }

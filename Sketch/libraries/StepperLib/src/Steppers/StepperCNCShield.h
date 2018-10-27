@@ -37,7 +37,7 @@ public:
 
 	CStepperCNCShield()
 	{
-		_num_axis = CNCSHIELD_NUM_AXIS;
+		_numAxes = CNCSHIELD_NUM_AXIS;
 	}
 
 	////////////////////////////////////////////////////////

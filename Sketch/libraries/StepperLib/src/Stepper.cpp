@@ -428,15 +428,11 @@ void CStepper::SMovement::InitMove(CStepper* stepper, SMovement* mvPrev, mdist_t
 							_distance_[i] = ((_distance_[i] / multiplier) + 1) * multiplier;
 						}
 					}
-#ifdef use16bit
+#
 					uint32_t distInit = _steps / maxMultiplier / 2;
-					uint32_t distSum = uint32_t(_distance_[i]) * uint32_t(calcFullSteps);
-					mdist_t s = mdist_t(((distInit + distSum) / uint32_t(_steps) * multiplier));
-#else
-					uint32_t distInit = _steps / maxMultiplier / 2;
-					uint64_t distSum  = uint64_t(_distance_[i]) * uint64_t(calcFullSteps);
-					auto     s        = mdist_t(((distInit + distSum) / uint64_t(_steps) * multiplier));
-#endif
+					uintXX_t distSum  = uintXX_t(_distance_[i]) * uintXX_t(calcFullSteps);
+					auto     s        = mdist_t(((distInit + distSum) / uintXX_t(_steps) * multiplier));
+
 					axisDiff = uint8_t(dist[i] - s); // must be in range 0..7
 				}
 				else
@@ -1820,7 +1816,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 	do
 	{
 		auto stepper = _stepper;
-		auto mvState  = &stepper->_movementState;
+		auto mvState = &stepper->_movementState;
 
 		if (stepper->_steps.IsFull() || ((_state == SMovement::StateReadyWait || _state == SMovement::StateReadyIo) && stepper->_steps.Count() > SYNC_STEPBUFFERCOUNT)
 		)
@@ -1949,8 +1945,8 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 						{ 307, 405 },
 						{ 289, 403 }
 					};
-					uint16_t mul   = pgm_read_word(&corrTab[mvState->_count - 2][0]);
-					uint16_t div   = pgm_read_word(&corrTab[mvState->_count - 2][1]);
+					uint16_t mul    = pgm_read_word(&corrTab[mvState->_count - 2][0]);
+					uint16_t div    = pgm_read_word(&corrTab[mvState->_count - 2][1]);
 					mvState->_timer = timer_t(MulDivU32(mvState->_timer, mul, div));
 				}
 				else if (mvState->_count <= 1 && _pod._move._ramp._nUpOffset == 0 && _state == StateUpDec)
@@ -1974,7 +1970,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 				if (n >= _pod._move._ramp._downStartAt)
 				{
 					mvState->_rest = 0;
-					_state        = _pod._move._ramp._timerStop > mvState->_timer ? StateDownDec : StateDownAcc;
+					_state         = _pod._move._ramp._timerStop > mvState->_timer ? StateDownDec : StateDownAcc;
 				}
 			}
 

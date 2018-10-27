@@ -47,8 +47,8 @@ extern class HardwareSerial& StepperSerial;
 
 typedef uint8_t axis_t;		// type for "axis"
 
-typedef int32_t  sdist_t;	// type of stepper coord system (signed)
-typedef uint32_t udist_t;	// type of stepper coord system (unsigned)
+typedef int32_t  sdist_t;	// type of stepper coordinate system (signed)
+typedef uint32_t udist_t;	// type of stepper coordinate system (unsigned)
 
 typedef const __FlashStringHelper* FLSTR;
 
@@ -159,12 +159,15 @@ ToDo;
 
 #define STEPRATE_MAX		(65535l)		// see range for steprate_t
 
-typedef uint16_t timer_t;			// timer tpye (16bit)
-typedef uint16_t mdist_t;			// tpye for one movement (16bit)
-typedef uint16_t steprate_t;		// tpye for speed (Hz), Steps/sec
+typedef uint16_t timer_t;			// timer type (16bit)
+typedef uint16_t mdist_t;			// type for one movement (16bit)
+typedef uint16_t steprate_t;		// type for speed (Hz), Steps/sec
 
 #define mudiv	udiv
 #define mudiv_t	udiv_t
+
+typedef uint32_t uintXX_t;	// 16 => 32
+typedef int32_t  intXX_t;	// 16 => 32;
 
 ////////////////////////////////////////////////////////
 
@@ -175,12 +178,15 @@ typedef uint16_t steprate_t;		// tpye for speed (Hz), Steps/sec
 
 #define STEPRATE_MAX		(128000l)	// limit steprate_t
 
-typedef uint32_t timer_t;    // timer tpye (32bit)
-typedef uint32_t mdist_t;    // tpye for one movement (32bit)
-typedef uint32_t steprate_t; // tpye for speed (Hz), Steps/sec
+typedef uint32_t timer_t;    // timer type (32bit)
+typedef uint32_t mdist_t;    // type for one movement (32bit)
+typedef uint32_t steprate_t; // type for speed (Hz), Steps/sec
 
 #define mudiv	ldiv
 #define mudiv_t	ldiv_t
+
+typedef uint64_t uintXX_t;		// 32 => 64 
+typedef int64_t  intXX_t;		// 32 => 64
 
 #endif
 

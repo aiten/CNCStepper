@@ -122,6 +122,7 @@ uint16_t CMyControl::IOControl(uint8_t tool)
 		case ControllerFan: { return _data._controllerfan.GetLevel(); }
 #endif
 		case Probe: { return _data._probe.IsOn(); }
+		default: break;
 	}
 
 	return super::IOControl(tool);

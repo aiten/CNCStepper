@@ -93,20 +93,20 @@ public:
 	CGCodeParser(CStreamReader* reader, Stream* output) : super(reader, output) { };
 
 	static mm1000_t GetG54PosPreset(axis_t        axis);
-	static mm1000_t GetToolHeightPosPreset(axis_t axis) { return axis == super::_modalstate.Plane_axis_2 ? _modalstate.ToolHeigtCompensation : 0; }
-	static void     SetG54PosPreset(axis_t        axis, mm1000_t pos) { _modalstate.G54Pospreset[0][axis] = pos; }
-	static uint8_t  GetZeroPresetIdx() { return _modalstate.ZeroPresetIdx; }
-	static void     SetZeroPresetIdx(uint8_t idx) { _modalstate.ZeroPresetIdx = idx; }
+	static mm1000_t GetToolHeightPosPreset(axis_t axis) { return axis == super::_modalstate.Plane_axis_2 ? _modalState.ToolHeigtCompensation : 0; }
+	static void     SetG54PosPreset(axis_t        axis, mm1000_t pos) { _modalState.G54Pospreset[0][axis] = pos; }
+	static uint8_t  GetZeroPresetIdx() { return _modalState.ZeroPresetIdx; }
+	static void     SetZeroPresetIdx(uint8_t idx) { _modalState.ZeroPresetIdx = idx; }
 
-	static bool IsG53Present() { return _modlessstate.ZeroPresetIdx == 0; }
+	static bool IsG53Present() { return _modlessState.ZeroPresetIdx == 0; }
 
 	static mm1000_t GetAllPreset(axis_t axis) { return GetG92PosPreset(axis) + GetG54PosPreset(axis) + GetToolHeightPosPreset(axis); }
 
 	static void Init()
 	{
 		super::Init();
-		_modalstate.Init();
-		_modlessstate.Init();
+		_modalState.Init();
+		_modlessState.Init();
 	}
 
 	static void InitAndSetFeedRate(feedrate_t feedrateG0, feedrate_t feedrateG1, feedrate_t feedrateG1max)
@@ -185,7 +185,7 @@ protected:
 		}
 	};
 
-	static SModalState _modalstate;
+	static SModalState _modalState;
 
 	////////////////////////////////////////////////////////
 	// Modeless State
@@ -196,18 +196,18 @@ protected:
 		void    Init()
 		{
 			//			*this = SModelessState();		// POD .. Plane Old Data Type => no Constructor => init with default value = 0
-			ZeroPresetIdx = _modalstate.ZeroPresetIdx;
+			ZeroPresetIdx = _modalState.ZeroPresetIdx;
 		}
 	};
 
-	static SModelessState _modlessstate;
+	static SModelessState _modlessState;
 
 	////////////////////////////////////////////////////////
 	// Parser structure
 
 	bool CutterRadiosIsOn()
 	{
-		if (_modalstate.CutterRadiusCompensation)
+		if (_modalState.CutterRadiusCompensation)
 		{
 			Info(MESSAGE_GCODE_G41G43AreNotAllowedWithThisCommand);
 			return true;
@@ -244,11 +244,11 @@ private:
 
 	void G10Command();
 	void G38Command();
-	void G40Command() { _modalstate.CutterRadiusCompensation = SModalState::CutterRadiusOff; }
+	void G40Command() { _modalState.CutterRadiusCompensation = SModalState::CutterRadiusOff; }
 	void G41Command();		// Cutter Radius Compensation left
 	void G42Command();		// Cutter Radius Compensation right
 	void G43Command();		// Tool Height Compensation 
-	void G49Command() { _modalstate.ToolHeigtCompensation = 0; }
+	void G49Command() { _modalState.ToolHeigtCompensation = 0; }
 	void G53Command();
 	void G68Command();
 	void G68CommandDefault();
@@ -263,8 +263,8 @@ private:
 	void G81Command();		// Basic drilling canned cycle
 	void G82Command();		// Spot Drilling Cycle
 	void G83Command();		// Peck Drilling for Deeper Holes
-	void G98Command() { _modalstate.IsG98 = true; };
-	void G99Command() { _modalstate.IsG98 = false; };
+	void G98Command() { _modalState.IsG98 = true; };
+	void G99Command() { _modalState.IsG98 = false; };
 
 	void M00Command();		// Compulsory stop
 	void M01Command();		// Optional stop

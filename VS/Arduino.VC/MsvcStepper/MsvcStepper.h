@@ -38,13 +38,13 @@ public:
 
 	CMsvcStepper();
 
-	virtual void OnIdle(uint32_t idletime) override;
+	virtual void OnIdle(uint32_t idleTime) override;
 	virtual void OnStart() override;
 	virtual void OnWait(EnumAsByte(EWaitType) wait) override;
 
 	virtual void Init() override;
 
-	virtual uint8_t GetReferenceValue(uint8_t referenceid) override;
+	virtual uint8_t GetReferenceValue(uint8_t referenceId) override;
 	virtual bool    IsAnyReference() override { return GetReferenceValue(0) == _pod._referenceHitValue[0]; };
 
 	void MoveRel3(sdist_t dX, sdist_t dY, sdist_t dZ, steprate_t vMax = 0) { MoveRelEx(vMax, X_AXIS, dX, Y_AXIS, dY, Z_AXIS, dZ, -1); }

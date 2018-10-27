@@ -58,7 +58,7 @@ public:
 
 	////////////////////////////////////////////////////////////
 
-	bool IsOn()
+	bool IsOn() const
 	{
 		return _isOn;
 	}

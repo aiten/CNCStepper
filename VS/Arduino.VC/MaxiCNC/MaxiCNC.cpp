@@ -45,6 +45,7 @@ int _tmain(int /* argc */, _TCHAR* /* argv */[])
 		switch (pin)
 		{
 			case CAT(BOARDNAME, _LCD_KILL_PIN): return CAT(BOARDNAME, _LCD_KILL_PIN_OFF);
+			default: break;
 		}
 		return DIGITALREADNOVALUE;
 	};

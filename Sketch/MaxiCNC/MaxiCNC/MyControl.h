@@ -64,7 +64,7 @@ protected:
 
 	virtual bool IsKill() override;
 	virtual void Poll() override;
-	virtual bool GoToReference(axis_t axis, steprate_t steprate, bool toMinRef) override;
+	virtual bool GoToReference(axis_t axis, steprate_t stepRate, bool toMinRef) override;
 
 	virtual bool OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t addInfo) override;
 

@@ -131,7 +131,8 @@ void CMyControl::IOControl(uint8_t tool, uint16_t level)
 			_laserVacuum.Set(level > 0);
 			return;
 		}
-			//  case Coolant: _laserWater.Set(level > 0); return; do not allow water turn off
+		//  case Coolant: _laserWater.Set(level > 0); return; do not allow water turn off
+		default: break;
 	}
 
 	if (!_data.IOControl(tool, level))
@@ -152,6 +153,7 @@ uint16_t CMyControl::IOControl(uint8_t tool)
 		case Coolant: { return _laserWater.IsOn(); }
 		case Vacuum: { return _laserVacuum.IsOn(); }
 		case ControllerFan: { return _data._controllerfan.GetLevel(); }
+		default: break;
 	}
 
 	return super::IOControl(tool);
@@ -242,10 +244,13 @@ bool CMyControl::OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t a
 			break;
 		}
 		case OnStartEvent:
+		{
 			_laserWater.On();
 			_laserVacuum.On();
 			break;
+		}
 		case OnIdleEvent:
+		{
 			if (_laserOnOff.IsOn() == false)
 			{
 				if (millis() - CStepper::GetInstance()->IdleTime() > LASERWATER_ONTIME)
@@ -258,6 +263,8 @@ bool CMyControl::OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t a
 				}
 			}
 			break;
+		}
+		default: break;
 	}
 
 	return super::OnEvent(eventType, addInfo);

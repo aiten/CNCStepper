@@ -55,10 +55,10 @@ void CMyMenu::MenuButtonPressMoveNextAxis(const SMenuItemDef* def)
 {
 	const uint8_t old = GetNavigator().GetItemIdx();
 
-	axis_t axis = (axis_t)(unsigned int)GetMenuDef()->GetParam1();
-	axis        = (axis + ((int)def->GetParam1()) + LCD_NUMAXIS) % LCD_NUMAXIS;
+	axis_t axis = axis_t(static_cast<unsigned int>(GetMenuDef()->GetParam1()));
+	axis        = (axis + int(def->GetParam1()) + LCD_NUMAXIS) % LCD_NUMAXIS;
 
-	auto nextMenu = (const SMenuDef*)_mainMenuItems[axis].GetParam1();
+	auto nextMenu = reinterpret_cast<const SMenuDef*>(_mainMenuItems[axis].GetParam1());
 
 	SetMenu(nextMenu);
 	GetNavigator().SetPosition(old);
@@ -112,21 +112,21 @@ const CMyMenu::SMenuItemDef CMyMenu::_mainMenuItems[] PROGMEM =
 
 const CMyMenu::SMenuItemDef CMyMenu::_moveMenuItems[] PROGMEM =
 {
-	{ _mNextAxis, (MenuFunction)&CMyMenu::MenuButtonPressMoveNextAxis, menuparam_t(1) },
-	{ _mPrevAxis, (MenuFunction)&CMyMenu::MenuButtonPressMoveNextAxis, menuparam_t(-1) },
-	{ _mP100, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveP100 },
-	{ _mP10, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveP10 },
-	{ _mP1, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveP1 },
-	{ _mP01, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveP01 },
-	{ _mP001, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveP001 },
-	{ _mM001, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveM001 },
-	{ _mM01, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveM01 },
-	{ _mM1, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveM1 },
-	{ _mM10, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveM10 },
-	{ _mM100, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveM100 },
-	{ _mHome, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveHome },
+	{ _mNextAxis, MenuFunction(&CMyMenu::MenuButtonPressMoveNextAxis), menuparam_t(1) },
+	{ _mPrevAxis, MenuFunction(&CMyMenu::MenuButtonPressMoveNextAxis), menuparam_t(-1) },
+	{ _mP100, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveP100) },
+	{ _mP10, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveP10) },
+	{ _mP1, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveP1) },
+	{ _mP01, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveP01) },
+	{ _mP001, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveP001) },
+	{ _mM001, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveM001) },
+	{ _mM01, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveM01) },
+	{ _mM1, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveM1) },
+	{ _mM10, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveM10) },
+	{ _mM100, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveM100) },
+	{ _mHome, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveHome) },
 	{ _mG92, &CMenuBase::MenuButtonPressMoveG92 },
-	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t)&_mainMenu },
+	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, menuparam_t(&_mainMenu) },
 	{ nullptr, nullptr }
 };
 
@@ -135,11 +135,11 @@ const CMyMenu::SMenuItemDef CMyMenu::_moveMenuItems[] PROGMEM =
 
 const CMyMenu::SMenuItemDef CMyMenu::_rotateMenuItems[] PROGMEM =
 {
-	{ _mRClr, &CMenuBase::MenuButtonPressRotate, (menuparam_t)RotateClear },
-	{ _mR0, &CMenuBase::MenuButtonPressRotate, (menuparam_t)RotateOffset },
-	{ _mRYZ, &CMenuBase::MenuButtonPressRotate, (menuparam_t)RotateSetYZ },
-	{ _mRX, &CMenuBase::MenuButtonPressRotate, (menuparam_t)RotateSetX },
-	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t)&_mainMenu },
+	{ _mRClr, &CMenuBase::MenuButtonPressRotate, menuparam_t(RotateClear) },
+	{ _mR0, &CMenuBase::MenuButtonPressRotate, menuparam_t(RotateOffset) },
+	{ _mRYZ, &CMenuBase::MenuButtonPressRotate, menuparam_t(RotateSetYZ) },
+	{ _mRX, &CMenuBase::MenuButtonPressRotate, menuparam_t(RotateSetX) },
+	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, menuparam_t(&_mainMenu) },
 	{ nullptr, nullptr }
 };
 
@@ -148,17 +148,17 @@ const CMyMenu::SMenuItemDef CMyMenu::_rotateMenuItems[] PROGMEM =
 
 const CMyMenu::SMenuItemDef CMyMenu::_SDSelectMenuItems[] PROGMEM =
 {
-	{ (const char*)(MENUENTRY_SDFILES), (MenuFunction)&CMenu3D::MenuButtonPressSDSelect },
-	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t)&_SDMenu },
+	{ static_cast<const char*>(MENUENTRY_SDFILES), MenuFunction(&CMenu3D::MenuButtonPressSDSelect) },
+	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, menuparam_t(&_SDMenu) },
 	{ nullptr, nullptr }
 };
 
 const CMyMenu::SMenuItemDef CMyMenu::_SDMenuItems[] PROGMEM =
 {
-	{ _mSDInit, &CMenuBase::MenuButtonPressSetCommand, (menuparam_t)_m21 },
-	{ _mSDStart, (MenuFunction)&CMenu3D::MenuButtonPressSDStart },
-	{ _mSDSelect, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_SDSelectMenu },
-	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t)&_mainMenu },
+	{ _mSDInit, &CMenuBase::MenuButtonPressSetCommand, menuparam_t(_m21) },
+	{ _mSDStart, MenuFunction(&CMenu3D::MenuButtonPressSDStart) },
+	{ _mSDSelect, &CMenuBase::MenuButtonPressSetMenu, menuparam_t(&_SDSelectMenu) },
+	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, menuparam_t(&_mainMenu) },
 	{ nullptr, nullptr }
 };
 
@@ -167,28 +167,28 @@ const CMyMenu::SMenuItemDef CMyMenu::_SDMenuItems[] PROGMEM =
 
 const CMyMenu::SMenuItemDef CMyMenu::_extraMenuItems[] PROGMEM =
 {
-	{ _mG92Clear, &CMenuBase::MenuButtonPressSetCommand, (menuparam_t)_g92 },
+	{ _mG92Clear, &CMenuBase::MenuButtonPressSetCommand, menuparam_t(_g92) },
 	//{ _mHomeZ,   &CMenuBase::MenuButtonPressHome, (menuparam_t)Z_AXIS },
 	//{ _mProbeZ,	 &CMenuBase::MenuButtonPressProbe, (menuparam_t)Z_AXIS },
 	//{ _mSpindle, &CMenuBase::MenuButtonPressSpindle },
 	//{ _mCoolant, &CMenuBase::MenuButtonPressCoolant },
-	{ _mFuerElise, (MenuFunction)&CMyMenu::MenuButtonPressFuerElise },
-	{ _mResurrect, (MenuFunction)&CMyMenu::MenuButtonPressResurrect },
-	{ _mHold, (MenuFunction)&CMyMenu::MenuButtonPressHold },
-	{ _mResume, (MenuFunction)&CMyMenu::MenuButtonPressResume },
-	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, (menuparam_t)&_mainMenu },
+	{ _mFuerElise, MenuFunction(&CMyMenu::MenuButtonPressFuerElise) },
+	{ _mResurrect, MenuFunction(&CMyMenu::MenuButtonPressResurrect) },
+	{ _mHold, MenuFunction(&CMyMenu::MenuButtonPressHold) },
+	{ _mResume, MenuFunction(&CMyMenu::MenuButtonPressResume) },
+	{ _mBack, &CMenuBase::MenuButtonPressMenuBack, menuparam_t(&_mainMenu) },
 	{ nullptr, nullptr }
 };
 
 ////////////////////////////////////////////////////////////
 
 const CMyMenu::SMenuDef CMyMenu::_mainMenu PROGMEM     = { _mmMain, _mainMenuItems };
-const CMyMenu::SMenuDef CMyMenu::_moveXMenu PROGMEM    = { _mmMoveX, _moveMenuItems, (menuparam_t)X_AXIS };
-const CMyMenu::SMenuDef CMyMenu::_moveYMenu PROGMEM    = { _mmMoveY, _moveMenuItems, (menuparam_t)Y_AXIS };
-const CMyMenu::SMenuDef CMyMenu::_moveZMenu PROGMEM    = { _mmMoveZ, _moveMenuItems, (menuparam_t)Z_AXIS };
-const CMyMenu::SMenuDef CMyMenu::_moveAMenu PROGMEM    = { _mmMoveA, _moveMenuItems, (menuparam_t)A_AXIS };
-const CMyMenu::SMenuDef CMyMenu::_moveBMenu PROGMEM    = { _mmMoveB, _moveMenuItems, (menuparam_t)B_AXIS };
-const CMyMenu::SMenuDef CMyMenu::_moveCMenu PROGMEM    = { _mmMoveC, _moveMenuItems, (menuparam_t)C_AXIS };
+const CMyMenu::SMenuDef CMyMenu::_moveXMenu PROGMEM    = { _mmMoveX, _moveMenuItems, menuparam_t(X_AXIS) };
+const CMyMenu::SMenuDef CMyMenu::_moveYMenu PROGMEM    = { _mmMoveY, _moveMenuItems, menuparam_t(Y_AXIS) };
+const CMyMenu::SMenuDef CMyMenu::_moveZMenu PROGMEM    = { _mmMoveZ, _moveMenuItems, menuparam_t(Z_AXIS) };
+const CMyMenu::SMenuDef CMyMenu::_moveAMenu PROGMEM    = { _mmMoveA, _moveMenuItems, menuparam_t(A_AXIS) };
+const CMyMenu::SMenuDef CMyMenu::_moveBMenu PROGMEM    = { _mmMoveB, _moveMenuItems, menuparam_t(B_AXIS) };
+const CMyMenu::SMenuDef CMyMenu::_moveCMenu PROGMEM    = { _mmMoveC, _moveMenuItems, menuparam_t(C_AXIS) };
 const CMyMenu::SMenuDef CMyMenu::_rotateMenu PROGMEM   = { _mmRotate, _rotateMenuItems };
 const CMyMenu::SMenuDef CMyMenu::_SDMenu PROGMEM       = { _mmSD, _SDMenuItems };
 const CMyMenu::SMenuDef CMyMenu::_SDSelectMenu PROGMEM = { _mmSDSelect, _SDSelectMenuItems };

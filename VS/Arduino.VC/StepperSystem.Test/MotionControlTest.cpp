@@ -49,7 +49,7 @@ namespace StepperSystemTest
 			FeedRateTest();
 		}
 
-		void FeedRateTest()
+		void FeedRateTest() const
 		{
 			CMotionControlBase mc;
 			mc.UnitTest();

@@ -46,8 +46,8 @@ public:
 
 	menupos_t GetOffset() const { return _offset; }
 
-	void    AdjustOffset(menupos_t menuEntries, menupos_t firstline, menupos_t lastline);
-	uint8_t ToPrintLine(menupos_t  firstline, menupos_t   lastline, menupos_t  i);		// return 255 if not to print
+	void    AdjustOffset(menupos_t menuEntries, menupos_t firstLine, menupos_t lastLine);
+	uint8_t ToPrintLine(menupos_t  firstLine, menupos_t   lastLine, menupos_t  i);		// return 255 if not to print
 
 	uintptr_t GetParam() const { return _param; }
 	void      SetParam(uintptr_t param) { _param = param; }

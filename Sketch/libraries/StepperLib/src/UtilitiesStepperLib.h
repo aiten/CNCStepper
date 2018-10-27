@@ -49,12 +49,12 @@ template <class T> void BitClear(T&  t, uint8_t bit) { t &= ~((T(1)) << bit); };
 
 inline unsigned int RoundMulDivUInt(unsigned int v, unsigned int m, unsigned int d)
 {
-	return (unsigned int)((uint32_t(v) * uint32_t(m) + uint32_t(d / 2)) / d);
+	return static_cast<unsigned int>((uint32_t(v) * uint32_t(m) + uint32_t(d / 2)) / d);
 }
 
 inline uint8_t RoundMulDivU8(uint8_t v, uint8_t m, uint8_t d)
 {
-	return uint8_t(((unsigned int)v * m + d / 2) / d);
+	return uint8_t((static_cast<unsigned int>(v) * m + d / 2) / d);
 }
 
 inline uint32_t RoundMulDivU32(uint32_t v, uint32_t m, uint32_t d)

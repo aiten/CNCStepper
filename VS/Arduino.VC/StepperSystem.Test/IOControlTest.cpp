@@ -266,9 +266,9 @@ namespace StepperSystemTest
 			Assert::AreEqual(int16_t(CHAR_MAX), spindle.GetCurrentIOLevel());
 
 			spindle.On(CHAR_MIN);
-			Assert::AreEqual((int16_t)CHAR_MIN, spindle.GetLevel());
-			Assert::AreEqual((int16_t)CHAR_MIN, spindle.GetIOLevel());
-			Assert::AreEqual((int16_t)CHAR_MAX, spindle.GetCurrentIOLevel());
+			Assert::AreEqual(int16_t(CHAR_MIN), spindle.GetLevel());
+			Assert::AreEqual(int16_t(CHAR_MIN), spindle.GetIOLevel());
+			Assert::AreEqual(int16_t(CHAR_MAX), spindle.GetCurrentIOLevel());
 
 			for (int16_t i = CHAR_MAX - 1; i >= CHAR_MIN; i--)
 			{

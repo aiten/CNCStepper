@@ -39,7 +39,7 @@ public:
 
 	void         MoveAngle(const mm1000_t    dest[NUM_AXIS]);
 	void         MoveAngleLog(const mm1000_t dest[NUM_AXIS]);
-	virtual void MoveAbs(const mm1000_t      to[NUM_AXIS], feedrate_t feedrate) override;
+	virtual void MoveAbs(const mm1000_t      to[NUM_AXIS], feedrate_t feedRate) override;
 
 protected:
 

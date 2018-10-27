@@ -39,11 +39,11 @@ void CGCodeExpressionParser::ReadIdent()
 	{
 		// start of GCODE variable => format #1 or #<_x>
 		_reader->GetNextChar();
-		_state._number = _gcodeparser->ParseParamNo();
+		_state._number = _gcodeParser->ParseParamNo();
 
-		if (_gcodeparser->IsError())
+		if (_gcodeParser->IsError())
 		{
-			Error(_gcodeparser->GetError());
+			Error(_gcodeParser->GetError());
 			return;
 		}
 	}
@@ -55,14 +55,14 @@ void CGCodeExpressionParser::ReadIdent()
 
 ////////////////////////////////////////////////////////////
 
-void CGCodeExpressionParser::ScannNextToken()
+void CGCodeExpressionParser::ScanNextToken()
 {
 	char ch = _reader->GetChar();
 	while (ch)
 	{
 		if (ch == ';' || ch == '(') // comment
 		{
-			ch = _gcodeparser->SkipSpacesOrComment();
+			ch = _gcodeParser->SkipSpacesOrComment();
 		}
 		else
 		{
@@ -74,7 +74,7 @@ void CGCodeExpressionParser::ScannNextToken()
 		_state._detailtoken = EndOfLineSy;
 		return;
 	}
-	super::ScannNextToken();
+	super::ScanNextToken();
 }
 
 ////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ bool CGCodeExpressionParser::EvalVariable(const char* var_name, expr_t& answer)
 	if (var_name[0] == '#')
 	{
 		// assigned in ReadIdent
-		answer = CMm1000::ConvertTo(_gcodeparser->GetParamValue(param_t(_state._number), false));
+		answer = CMm1000::ConvertTo(_gcodeParser->GetParamValue(param_t(_state._number), false));
 		return true;
 	}
 	return super::EvalVariable(var_name, answer);

@@ -39,7 +39,7 @@ namespace StepperSystemTest
 
 		bool overrideTestOK = false;
 
-		int FromMM(double mm)
+		static int FromMM(double mm)
 		{
 			return static_cast<int>(mm * 3200);
 		}
@@ -50,7 +50,7 @@ namespace StepperSystemTest
 		char TestResultOKFile[_MAX_PATH] = { 0 };
 		char TestResultFile[_MAX_PATH]   = { 0 };
 
-		char* AddFileName(char* dest, const char* start, const char* filename)
+		char* AddFileName(char* dest, const char* start, const char* filename) const
 		{
 			strcpy_s(dest, _MAX_PATH, start);
 			strcat_s(dest, _MAX_PATH, "Test_");
@@ -122,16 +122,16 @@ namespace StepperSystemTest
 			fclose(fdest);
 		}
 
-		void AssertMove(mdist_t steps, CMsvcStepper::SMovementX mv)
+		void AssertMove(mdist_t steps, CMsvcStepper::SMovementX mv) const
 		{
 			Assert::IsTrue(mv.mv.IsActiveMove());
-			Assert::AreEqual((long)steps, (long)mv.mv.GetSteps());
+			Assert::AreEqual(long(steps), long(mv.mv.GetSteps()));
 		}
 
-		void AssertWait(mdist_t steps, CMsvcStepper::SMovementX mv)
+		void AssertWait(mdist_t steps, CMsvcStepper::SMovementX mv) const
 		{
 			Assert::IsTrue(mv.mv.IsActiveWait());
-			Assert::AreEqual((long)steps, (long)mv.mv.GetSteps());
+			Assert::AreEqual(long(steps), long(mv.mv.GetSteps()));
 		}
 
 		CStepperTest()
@@ -400,10 +400,10 @@ namespace StepperSystemTest
 			Stepper.SetJerkSpeed(A_AXIS, 1000);
 			Stepper.SetJerkSpeed(B_AXIS, 1000);
 			double  r_mm = 40.0;
-			mdist_t r    = (mdist_t)FromMM(r_mm);
+			mdist_t r    = mdist_t(FromMM(r_mm));
 			mdist_t x    = r;
 			mdist_t y    = r;
-			int     n    = (int)(2.0 * r_mm * M_PI * 3 + 72); // 2 * r * 3 * 3 + 72;			// 2*r*PI*3 + 72) => r must be mm;
+			int     n    = int(2.0 * r_mm * M_PI * 3 + 72); // 2 * r * 3 * 3 + 72;			// 2*r*PI*3 + 72) => r must be mm;
 			Polygon(Stepper, x, y, r, n, 0, 10000);
 			Stepper.EndTest();
 		}
@@ -423,7 +423,7 @@ namespace StepperSystemTest
 			Stepper.CStepper::MoveRel(0, 300, 500);
 			count += 300;
 			Stepper.CStepper::MoveRel(0, 550, 5000);
-			count += 550;
+			// count += 550;
 			CreateTestFile("X.csv");
 		}
 
@@ -497,7 +497,7 @@ namespace StepperSystemTest
 			Stepper.SetMaxSpeed(1, 500);
 			Stepper.SetMaxSpeed(2, 400);
 			Stepper.MoveRelEx(0, 0, 100, 1, 90, 2, 95, -1);
-			AssertFile("SetMaxAxixSpeed.csv");
+			AssertFile("SetMaxAxisSpeed.csv");
 		}
 
 		TEST_METHOD(StepperDiffMultiplierAbs)
@@ -589,7 +589,7 @@ namespace StepperSystemTest
 			Stepper.OptimizeMovementQueue(true);			// calc ramp
 			Stepper.CStepper::PauseMove();
 
-			Assert::AreEqual((uint8_t)4, Stepper.GetMovementCount());
+			Assert::AreEqual(uint8_t(4), Stepper.GetMovementCount());
 			AssertMove(2500, Stepper.GetMovement(0));
 			AssertWait(65535, Stepper.GetMovement(1));
 			AssertMove(100, Stepper.GetMovement(2));
@@ -609,13 +609,13 @@ namespace StepperSystemTest
 			Stepper.OptimizeMovementQueue(true);			// calc ramp
 			Stepper.CStepper::PauseMove();
 
-			Assert::AreEqual((uint8_t)4, Stepper.GetMovementCount());
+			Assert::AreEqual(uint8_t(4), Stepper.GetMovementCount());
 			AssertMove(2500, Stepper.GetMovement(0));
 			AssertMove(1000, Stepper.GetMovement(1));
 			AssertWait(65535, Stepper.GetMovement(2));
 			AssertMove(1500, Stepper.GetMovement(3));
 
-			CreateTestFile("TestPausea2.csv");
+			CreateTestFile("TestPause2.csv");
 		}
 
 		TEST_METHOD(StepperPause3)
@@ -631,13 +631,13 @@ namespace StepperSystemTest
 
 			WriteStepperTestMovement();
 
-			Assert::AreEqual((uint8_t)4, Stepper.GetMovementCount());
+			Assert::AreEqual(uint8_t(4), Stepper.GetMovementCount());
 			AssertMove(10000, Stepper.GetMovement(0));
 			AssertWait(65535, Stepper.GetMovement(1));
 			AssertMove(10000, Stepper.GetMovement(2));
 			AssertMove(10000, Stepper.GetMovement(3));
 
-			CreateTestFile("TestPausea3.csv");
+			CreateTestFile("TestPause3.csv");
 		}
 
 		TEST_METHOD(StepperPause4)
@@ -651,13 +651,13 @@ namespace StepperSystemTest
 			Stepper.OptimizeMovementQueue(true);			// calc ramp
 			Stepper.CStepper::PauseMove();
 
-			Assert::AreEqual((uint8_t)4, Stepper.GetMovementCount());
+			Assert::AreEqual(uint8_t(4), Stepper.GetMovementCount());
 			AssertMove(10000, Stepper.GetMovement(0));
 			AssertMove(10000, Stepper.GetMovement(1));
 			AssertWait(65535, Stepper.GetMovement(2));
 			AssertMove(10000, Stepper.GetMovement(3));
 
-			CreateTestFile("TestPausea4.csv");
+			CreateTestFile("TestPause4.csv");
 		}
 
 		TEST_METHOD(StepperIo)
@@ -765,17 +765,17 @@ namespace StepperSystemTest
 			FILE* f;
 			fopen_s(&f, "c:\\tmp\\test.txt", "wt");
 
-			fprintf(f, "\tAssert(%i, Stepper.GetMovementCount());\n", (int)Stepper.GetMovementCount());
+			fprintf(f, "\tAssert(%i, Stepper.GetMovementCount());\n", int(Stepper.GetMovementCount()));
 			for (uint8_t i = 0; i < Stepper.GetMovementCount(); i++)
 			{
 				CMsvcStepper::SMovementX mv = Stepper.GetMovement(i);
 				if (mv.mv.IsActiveMove())
 				{
-					fprintf(f, "\tAssertMove(%i, Stepper.GetMovement(%i));\n", (int)mv.mv.GetSteps(), (int)i);
+					fprintf(f, "\tAssertMove(%i, Stepper.GetMovement(%i));\n", int(mv.mv.GetSteps()), int(i));
 				}
 				else
 				{
-					fprintf(f, "\tAssertWait(%i, Stepper.GetMovement(%i));\n", (int)mv.mv.GetSteps(), (int)i);
+					fprintf(f, "\tAssertWait(%i, Stepper.GetMovement(%i));\n", int(mv.mv.GetSteps()), int(i));
 				}
 			}
 			/*

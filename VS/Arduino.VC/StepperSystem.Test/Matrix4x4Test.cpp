@@ -33,7 +33,7 @@ namespace StepperSystemTest
 	{
 	public:
 
-		bool CompareMatrix(CMatrix4x4<float>& m, float in1[][4], float out1[][4], uint8_t size)
+		bool CompareMatrix(CMatrix4x4<float>& m, float in1[][4], float out1[][4], uint8_t size) const
 		{
 			for (uint8_t i = 0; i < size; i++)
 			{

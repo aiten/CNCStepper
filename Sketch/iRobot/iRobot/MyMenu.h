@@ -39,7 +39,7 @@ private:
 
 public:
 
-	static CMyLcd* GetLcd() { return ((CMyLcd*)CLcd::GetInstance()); }
+	static CMyLcd* GetLcd() { return reinterpret_cast<CMyLcd*>(CLcd::GetInstance()); }
 
 	CMyMenu()
 	{

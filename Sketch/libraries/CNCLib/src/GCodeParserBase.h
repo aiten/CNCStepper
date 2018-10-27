@@ -193,7 +193,7 @@ protected:
 		void Init()
 		{
 			*this = SModelessState();		// POD .. Plane Old Data Type => no Constructor => init with default value = 0
-			//			ZeroPresetIdx = _modalstate.ZeroPresetIdx;
+			//			ZeroPresetIdx = _modalState.ZeroPresetIdx;
 		}
 	};
 

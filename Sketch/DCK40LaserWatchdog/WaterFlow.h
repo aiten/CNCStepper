@@ -82,12 +82,12 @@ private:
 
 	static unsigned int ScaleCount(unsigned int count, uint32_t totaltime, uint32_t scaletotime)
 	{
-		return (uint32_t)count * scaletotime / totaltime;
+		return uint32_t(count) * scaletotime / totaltime;
 	}
 
 	static unsigned char NextIndex(unsigned char idx, unsigned char count)
 	{
-		return (unsigned char)((idx + count)) % (SAMPELCOUNT);
+		return static_cast<unsigned char>((idx + count)) % (SAMPELCOUNT);
 	}
 
 	static unsigned char PrevIndex(unsigned char idx, unsigned char count)

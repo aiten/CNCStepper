@@ -102,7 +102,7 @@ namespace StepperSystemTest
 			Assert::AreEqual(-5, rotary.GetPos());
 		}
 
-		uint8_t GetPinA(int pos)
+		static uint8_t GetPinA(int pos)
 		{
 			switch (pos % 4)
 			{
@@ -114,7 +114,7 @@ namespace StepperSystemTest
 			}
 		}
 
-		uint8_t GetPinB(int pos)
+		static uint8_t GetPinB(int pos)
 		{
 			switch (pos % 4)
 			{

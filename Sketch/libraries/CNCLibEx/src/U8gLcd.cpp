@@ -96,7 +96,7 @@ void CU8GLcd::SetRotaryPin(pin_t pin1, pin_t pin2, pin_t pinPush, uint8_t onValu
 uint8_t CU8GLcd::GetPageCount()
 {
 	uint8_t count;
-	for (count = 0; GetDrawFunction(&_pagedef[count].draw) != NULL; count++) { }
+	for (count = 0; GetDrawFunction(&_pageDef[count].draw) != NULL; count++) { }
 	return count;
 }
 
@@ -231,7 +231,7 @@ uint32_t CU8GLcd::Draw(EDrawType draw)
 		SetDefaultPage();
 	}
 
-	DrawFunction fnc = GetDrawFunction(&_pagedef[GetPage()].draw);
+	DrawFunction fnc = GetDrawFunction(&_pageDef[GetPage()].draw);
 
 	return DrawLoop(fnc);
 }
@@ -330,7 +330,7 @@ char* CU8GLcd::DrawPos(axis_t axis, mm1000_t pos, char* tmp, uint8_t precision)
 
 void CU8GLcd::ButtonPress()
 {
-	ButtonFunction fnc = GetButtonPress(&_pagedef[GetPage()].buttonpress);
+	ButtonFunction fnc = GetButtonPress(&_pageDef[GetPage()].buttonpress);
 
 	if (fnc)
 	{

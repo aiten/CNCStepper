@@ -61,7 +61,7 @@ namespace StepperSystemTest
 			buffer.Enqueue();
 
 			Assert::AreEqual(false, buffer.IsEmpty());
-			Assert::AreEqual((uint8_t)2, buffer.Count());
+			Assert::AreEqual(uint8_t(2), buffer.Count());
 		}
 
 		TEST_METHOD(RingBufferInsertHeadTest)
@@ -89,7 +89,7 @@ namespace StepperSystemTest
 			TestRingBufferInsert(128 - 10, 60, 30);	// buffer overrun
 		}
 
-		void TestRingBufferInsert(uint8_t startidx, uint8_t bufferSize, uint8_t insertOffset)
+		void TestRingBufferInsert(uint8_t startidx, uint8_t bufferSize, uint8_t insertOffset) const
 		{
 			CRingBufferQueue<SRingBuffer, 128> buffer;
 
@@ -113,7 +113,7 @@ namespace StepperSystemTest
 
 			buffer.InsertTail(insertat)->i = 2000;
 
-			Assert::AreEqual((uint8_t)(bufferSize + 1), buffer.Count());
+			Assert::AreEqual(uint8_t(bufferSize + 1), buffer.Count());
 
 			int expect = 0;
 

@@ -53,7 +53,7 @@ protected:
 	char _RightParenthesis;
 
 	void         GetNextToken();
-	virtual void ScannNextToken();
+	virtual void ScanNextToken();
 	virtual void ReadIdent();
 	virtual bool IsIdentStart(char ch) { return CStreamReader::IsAlpha(ch); }	// start of function or variable
 

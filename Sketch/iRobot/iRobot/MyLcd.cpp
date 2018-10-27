@@ -58,7 +58,7 @@ CMyLcd Lcd;
 
 ////////////////////////////////////////////////////////////
 
-PROGMEM const CU8GLcd::SPageDef CU8GLcd::_pagedef[] =
+PROGMEM const CU8GLcd::SPageDef CU8GLcd::_pageDef[] =
 {
 	{ &CU8GLcd::DrawLoopSplash, &CU8GLcd::ButtonPressShowMenu },
 	{ &CU8GLcd::DrawLoopPosAbs, &CU8GLcd::ButtonPressShowMenu },

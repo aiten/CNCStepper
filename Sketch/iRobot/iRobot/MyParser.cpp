@@ -54,7 +54,7 @@ bool CMyParser::MCommand(mcode_t mcode)
 void CMyParser::PrintInfo()
 {
 	//	PrintPosition();
-	((CMyMotionControl*)CMotionControlBase::GetInstance())->PrintInfo();
+	static_cast<CMyMotionControl*>(CMotionControlBase::GetInstance())->PrintInfo();
 }
 
 ////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ void CMyParser::M117Command()
 
 	if (GetAxisAbs(move))
 	{
-		CMyMotionControl* pMC = (CMyMotionControl*)CMotionControlBase::GetInstance();
+		auto pMC = static_cast<CMyMotionControl*>(CMotionControlBase::GetInstance());
 		pMC->MoveAngle(move.newpos);
 	}
 }

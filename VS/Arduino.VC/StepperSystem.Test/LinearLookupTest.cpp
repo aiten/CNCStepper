@@ -70,12 +70,12 @@ namespace StepperSystemTest
 		{
 			CLinearLookup<int, float> lf(linearIF, sizeof(linearIF) / sizeof(CLinearLookup<int, float>::SLookupTable));
 
-			Assert::AreEqual((float)0.1, lf.Lookup(10));
-			Assert::AreEqual((float)0.01, lf.Lookup(20));
-			Assert::AreEqual((float)0.001, lf.Lookup(30));
+			Assert::AreEqual(float(0.1), lf.Lookup(10));
+			Assert::AreEqual(float(0.01), lf.Lookup(20));
+			Assert::AreEqual(float(0.001), lf.Lookup(30));
 
-			Assert::AreEqual((float)0.1, lf.Lookup(9));		// less is lower bound
-			Assert::AreEqual((float)0.001, lf.Lookup(31));		// more is upper bound
+			Assert::AreEqual(float(0.1), lf.Lookup(9));		// less is lower bound
+			Assert::AreEqual(float(0.001), lf.Lookup(31));		// more is upper bound
 
 			Assert::AreEqual(float(0.1 - (0.09 * 1 / 10)), lf.Lookup(11));
 			Assert::AreEqual(float(0.1 - (0.09 * 5 / 10)), lf.Lookup(15));

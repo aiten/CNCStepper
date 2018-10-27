@@ -35,16 +35,16 @@ public:
 
 	CGCodeExpressionParser(CGCodeParser* parser) : super(parser->GetReader(), parser->GetOutput())
 	{
-		_gcodeparser      = parser;
+		_gcodeParser      = parser;
 		_LeftParenthesis  = '[';
 		_RightParenthesis = ']';
 	};
 
 protected:
 
-	CGCodeParser* _gcodeparser;
+	CGCodeParser* _gcodeParser;
 
-	virtual void ScannNextToken() override;
+	virtual void ScanNextToken() override;
 	virtual void ReadIdent() override;
 	virtual bool IsIdentStart(char ch) override { return ch == '#' || super::IsIdentStart(ch); } // start of function or variable
 

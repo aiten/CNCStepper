@@ -261,7 +261,7 @@ bool CGCodeParserBase::ParseLineNumber()
 		}
 
 #ifdef REDUCED_SIZE
-		_modalstate.LineNumber = GetUInt16();
+		_modalState.LineNumber = GetUInt16();
 #else
 		_modalstate.LineNumber = GetInt32();
 #endif

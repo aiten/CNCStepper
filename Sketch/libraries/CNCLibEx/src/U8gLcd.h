@@ -148,7 +148,7 @@ protected:
 		ButtonFunction buttonpress;
 	};
 
-	static const SPageDef _pagedef[];
+	static const SPageDef _pageDef[];
 
 	typedef signed int rotarypos_t;
 

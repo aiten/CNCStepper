@@ -67,13 +67,13 @@ void CExpressionParser::GetNextToken()
 		return;
 	}
 
-	ScannNextToken();
+	ScanNextToken();
 }
 
 ////////////////////////////////////////////////////////////
 // Get next token in the current string expr.
 
-void CExpressionParser::ScannNextToken()
+void CExpressionParser::ScanNextToken()
 {
 	char ch = _reader->GetChar();
 

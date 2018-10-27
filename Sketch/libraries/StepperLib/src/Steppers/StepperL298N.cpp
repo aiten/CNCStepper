@@ -52,7 +52,7 @@ pin_t CStepperL298N::_pin[NUM_AXIS][4] =
 #endif
 };
 
-pin_t CStepperL298N::_pinenable[NUM_AXIS] =
+pin_t CStepperL298N::_pinEnable[NUM_AXIS] =
 {
 	10,
 	10,
@@ -96,9 +96,9 @@ void CStepperL298N::Init()
 
 			if (IsUseEN1(i))
 			{
-				CHAL::pinModeOutput(_pinenable[i]);
-				//				CHAL::pinModeOutput(_pinenable[i][0]);
-				//				if (IsUseEN2(i)) CHAL::pinModeOutput(_pinenable[i][1]);
+				CHAL::pinModeOutput(_pinEnable[i]);
+				//				CHAL::pinModeOutput(_pinEnable[i][0]);
+				//				if (IsUseEN2(i)) CHAL::pinModeOutput(_pinEnable[i][1]);
 			}
 		}
 	}
@@ -142,9 +142,9 @@ void CStepperL298N::SetEnable(axis_t axis, uint8_t level, bool force)
 	{
 		if (IsUseEN1(axis))
 		{
-			CHAL::digitalWrite(_pinenable[axis], level != LevelOff ? HIGH : LOW);
-			//			CHAL::digitalWrite(_pinenable[axis][0], level != LevelOff ? HIGH : LOW);
-			//			if (IsUseEN2(axis)) CHAL::digitalWrite(_pinenable[axis][1], level != LevelOff ? HIGH : LOW);
+			CHAL::digitalWrite(_pinEnable[axis], level != LevelOff ? HIGH : LOW);
+			//			CHAL::digitalWrite(_pinEnable[axis][0], level != LevelOff ? HIGH : LOW);
+			//			if (IsUseEN2(axis)) CHAL::digitalWrite(_pinEnable[axis][1], level != LevelOff ? HIGH : LOW);
 		}
 		else if (Is2Pin(axis))
 		{
@@ -173,9 +173,9 @@ uint8_t CStepperL298N::GetEnable(axis_t axis)
 
 	if (IsUseEN1(axis))
 	{
-		return ConvertLevel(CHAL::digitalRead(_pinenable[axis]) != LOW);
-		//		return ConvertLevel(CHAL::digitalRead(_pinenable[axis][0]) != LOW &&
-		//			(IsUseEN2(axis) ? CHAL::digitalRead(_pinenable[axis][1]) != LOW : true));
+		return ConvertLevel(CHAL::digitalRead(_pinEnable[axis]) != LOW);
+		//		return ConvertLevel(CHAL::digitalRead(_pinEnable[axis][0]) != LOW &&
+		//			(IsUseEN2(axis) ? CHAL::digitalRead(_pinEnable[axis][1]) != LOW : true));
 	}
 
 	if (Is2Pin(axis))

@@ -167,9 +167,9 @@
 ////////////////////////////////////////////////////////
 // LCD
 
-#define RAMPSFD_LCD_ROTARY_ENC		RAMPSFD_AUX4_10		// Dreh Encoder auf Ramps FD - Press button
-#define RAMPSFD_LCD_ROTARY_EN1      RAMPSFD_AUX4_12		// Dreh Encoder auf Ramps FD
-#define RAMPSFD_LCD_ROTARY_EN2      RAMPSFD_AUX4_11		// Dreh Encoder auf Ramps FD
+#define RAMPSFD_LCD_ROTARY_ENC		RAMPSFD_AUX4_10		// Rotary Encoder auf Ramps FD - Press button
+#define RAMPSFD_LCD_ROTARY_EN1      RAMPSFD_AUX4_12		// Rotary Encoder auf Ramps FD
+#define RAMPSFD_LCD_ROTARY_EN2      RAMPSFD_AUX4_11		// Rotary Encoder auf Ramps FD
 
 #define RAMPSFD_LCD_ROTARY_ENC_ON	LOW					// Pressed
 #define RAMPSFD_LCD_ROTARY_ENC_OFF	HIGH
@@ -177,7 +177,7 @@
 #define RAMPSFD_LCD_BEEPER          RAMPSFD_AUX4_9		// Summer auf Ramps FD
 
 #ifdef RAMPSFD_DISABLE_E1
-#define RAMPSFD_LCD_KILL_PIN        RAMPSFD_AUX4_7		// Stoptaste auf Ramps FD (LCD) => shared with E1 => do not use if we have E1 in use axis
+#define RAMPSFD_LCD_KILL_PIN        RAMPSFD_AUX4_7		// Stop button Ramps FD (LCD) => shared with E1 => do not use if we have E1 in use axis
 //#define RAMPSFD_LCD_KILL_PIN        RAMPSFD_ESTOP_PIN	// hard link
 #endif
 

@@ -216,7 +216,7 @@ void CMenuBase::MenuButtonPressRotate(const SMenuItemDef* def)
 
 void CMenuBase::MenuButtonPressProbe(const SMenuItemDef* def)
 {
-	MenuButtonPressProbe(axis_t((unsigned int)def->GetParam1()));
+	MenuButtonPressProbe(axis_t(static_cast<unsigned int>(def->GetParam1())));
 }
 
 ////////////////////////////////////////////////////////////
@@ -261,7 +261,7 @@ void CMenuBase::MenuButtonPressProbe(axis_t axis)
 
 void CMenuBase::MenuButtonPressHome(const SMenuItemDef* def)
 {
-	MenuButtonPressHomeA(axis_t((unsigned int)def->GetParam1()));
+	MenuButtonPressHomeA(axis_t(static_cast<unsigned int>(def->GetParam1())));
 }
 
 void CMenuBase::MenuButtonPressHomeA(axis_t axis)
@@ -287,7 +287,7 @@ void CMenuBase::MenuButtonPressHomeA(axis_t axis)
 
 void CMenuBase::MenuButtonPressMoveG92(const SMenuItemDef*)
 {
-	auto axis = axis_t((unsigned int)GetMenuDef()->GetParam1());
+	auto axis = axis_t(static_cast<unsigned int>(GetMenuDef()->GetParam1()));
 
 	CGCodeBuilder builder;
 	InitPostCommand(EGCodeSyntaxType::GCode, builder.GetCommand());

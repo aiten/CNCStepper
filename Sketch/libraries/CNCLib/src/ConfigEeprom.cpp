@@ -163,6 +163,7 @@ bool CConfigEeprom::ParseConfig(CParser* parser)
 			parser->GetReader()->GetNextChar();
 			return true;
 		}
+		default: break;
 	}
 
 	uint8_t slot = parser->GetUInt8();

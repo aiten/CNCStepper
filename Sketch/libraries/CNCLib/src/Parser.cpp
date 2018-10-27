@@ -308,6 +308,7 @@ bool CParser::TryToken(const char* buffer, FLSTR b, bool expectdel, bool ignorec
 			c = 0;
 			break;
 		}
+		default: break;
 	}
 
 	if (c)

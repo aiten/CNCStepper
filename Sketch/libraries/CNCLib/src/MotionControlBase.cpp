@@ -227,7 +227,7 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 	{
 		float theta_per_segment = angular_travel / segments;
 
-		auto arc_correction = (signed char)(ARCCORRECTION / theta_per_segment);
+		auto arc_correction = int8_t(ARCCORRECTION / theta_per_segment);
 		if (arc_correction < 0)
 		{
 			arc_correction = -arc_correction;

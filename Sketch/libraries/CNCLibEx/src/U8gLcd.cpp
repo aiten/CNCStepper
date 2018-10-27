@@ -381,7 +381,7 @@ bool CU8GLcd::DrawLoopScreenSaver(EnumAsByte(EDrawLoopType) type, uintptr_t data
 	}
 	if (type == DrawLoopQueryTimerout)
 	{
-		*((uint32_t*)data) = 50;
+		*reinterpret_cast<uint32_t*>(data) = 50;
 		return true;
 	}
 	if (type != DrawLoopDraw)
@@ -424,7 +424,7 @@ bool CU8GLcd::DrawLoopSplash(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
 	if (type == DrawLoopQueryTimerout)
 	{
-		*((uint32_t*)data) = 200000;
+		*reinterpret_cast<uint32_t*>(data) = 200000;
 		return true;
 	}
 
@@ -573,7 +573,7 @@ bool CU8GLcd::DrawLoopRotate2D(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	}
 	if (type == DrawLoopQueryTimerout)
 	{
-		*((uint32_t*)data) = 200000;
+		*reinterpret_cast<uint32_t*>(data) = 200000;
 		return true;
 	}
 	if (type != DrawLoopDraw)
@@ -615,7 +615,7 @@ bool CU8GLcd::DrawLoopRotate3D(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	}
 	if (type == DrawLoopQueryTimerout)
 	{
-		*((uint32_t*)data) = 200000;
+		*reinterpret_cast<uint32_t*>(data) = 200000;
 		return true;
 	}
 	if (type != DrawLoopDraw)
@@ -671,7 +671,7 @@ bool CU8GLcd::DrawLoopSpeedOverride(EnumAsByte(EDrawLoopType) type, uintptr_t da
 	}
 	if (type == DrawLoopQueryTimerout && _rotaryFocus == RotarySlider)
 	{
-		*((uint32_t*)data) = 200;
+		*reinterpret_cast<uint32_t*>(data) = 200;
 		return true;
 	}
 	if (type != DrawLoopDraw)
@@ -730,7 +730,7 @@ bool CU8GLcd::DrawLoopPreset(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	}
 	if (type == DrawLoopQueryTimerout)
 	{
-		*((uint32_t*)data) = 200000;
+		*reinterpret_cast<uint32_t*>(data) = 200000;
 		return true;
 	}
 	if (type != DrawLoopDraw)
@@ -792,7 +792,7 @@ bool CU8GLcd::DrawLoopStartSD(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	}
 	if (type == DrawLoopQueryTimerout)
 	{
-		*((uint32_t*)data) = CGCode3DParser::GetExecutingFile() ? 1000 : 5000;
+		*reinterpret_cast<uint32_t*>(data) = CGCode3DParser::GetExecutingFile() ? 1000 : 5000;
 		return true;
 	}
 
@@ -829,7 +829,7 @@ bool CU8GLcd::DrawLoopError(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	}
 	if (type == DrawLoopQueryTimerout)
 	{
-		*((uint32_t*)data) = 5000;
+		*reinterpret_cast<uint32_t*>(data) = 5000;
 		return true;
 	}
 
@@ -869,7 +869,7 @@ bool CU8GLcd::DrawLoopCommandHis(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
 	if (type == DrawLoopQueryTimerout)
 	{
-		*((uint32_t*)data) = 5000;
+		*reinterpret_cast<uint32_t*>(data) = 5000;
 		return true;
 	}
 	if (type != DrawLoopDraw)

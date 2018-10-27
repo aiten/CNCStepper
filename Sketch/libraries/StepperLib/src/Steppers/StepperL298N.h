@@ -37,8 +37,8 @@ public:
 protected:
 
 	static pin_t _pin[NUM_AXIS][4];
-	static pin_t _pinenable[NUM_AXIS];
-	//	static pin_t _pinenable[NUM_AXIS][2];
+	static pin_t _pinEnable[NUM_AXIS];
+	//	static pin_t _pinEnable[NUM_AXIS][2];
 	static pin_t _pinRef[NUM_AXIS * 2];
 
 protected:
@@ -59,8 +59,8 @@ public:
 	void SetRefPin(axis_t axis, pin_t refmin, pin_t refmax)					{ _pinRef[ToReferenceId(axis, true)] = refmin;	_pinRef[ToReferenceId(axis, false)] = refmax; }
 	// @formatter:on — enable formatter after this line
 
-	void SetEnablePin(axis_t axis, pin_t en) { _pinenable[axis] = en; }
-	//	void SetEnablePin(axis_t axis, pin_t en1, pin_t en2)			{ _pinenable[axis][0] = en1;  _pinenable[axis][1] = en2; }
+	void SetEnablePin(axis_t axis, pin_t en) { _pinEnable[axis] = en; }
+	//	void SetEnablePin(axis_t axis, pin_t en1, pin_t en2)			{ _pinEnable[axis][0] = en1;  _pinEnable[axis][1] = en2; }
 
 	void SetFullStepMode(bool fullstepMode) { _fullStepMode = fullstepMode; };
 
@@ -70,9 +70,9 @@ private:
 	bool Is4Pin(axis_t   axis) { return _pin[axis][2] != 0; }
 	bool Is2Pin(axis_t   axis) { return _pin[axis][2] == 0; }
 
-	bool IsUseEN1(axis_t axis) { return _pinenable[axis] != 0; }
-	//	bool IsUseEN1(axis_t axis)										{ return _pinenable[axis][0] != 0; }
-	//	bool IsUseEN2(axis_t axis)										{ return _pinenable[axis][1] != 0; }
+	bool IsUseEN1(axis_t axis) { return _pinEnable[axis] != 0; }
+	//	bool IsUseEN1(axis_t axis)										{ return _pinEnable[axis][0] != 0; }
+	//	bool IsUseEN2(axis_t axis)										{ return _pinEnable[axis][1] != 0; }
 
 	uint8_t _stepIdx[NUM_AXIS];
 	bool    _fullStepMode;

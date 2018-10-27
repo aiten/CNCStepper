@@ -55,7 +55,7 @@ public:
 	bool     IsEnabled2D(axis_t         axis) const { return IsBitSet(_rotateEnabled2D, axis); }
 	void     ClearRotate2D() { _rotateEnabled2D = 0; }
 
-	static CMotionControl* GetInstance() { return (CMotionControl*)CMotionControlBase::GetInstance(); }
+	static CMotionControl* GetInstance() { return static_cast<CMotionControl*>(CMotionControlBase::GetInstance()); }
 
 protected:
 

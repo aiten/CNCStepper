@@ -101,14 +101,14 @@ public:
 	public:
 		CSetTemporary(const char* buffer)
 		{
-			_buffer  = (char*)buffer;
+			_buffer  = const_cast<char*>(buffer);
 			_oldch   = *_buffer;
 			*_buffer = 0;
 		}
 
 		CSetTemporary(const char* buffer, char ch)
 		{
-			_buffer  = (char*)buffer;
+			_buffer  = const_cast<char*>(buffer);
 			_oldch   = *_buffer;
 			*_buffer = ch;
 		}

@@ -174,7 +174,7 @@ bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	//	if (type==DrawLoopQueryTimerout)	{ *((uint32_t*)data) = 2000; return true; }
 	if (type == DrawLoopQueryTimerout)
 	{
-		*((uint32_t*)data) = 250;
+		*reinterpret_cast<uint32_t*>(data) = 250;
 		return true;
 	}
 	if (type != DrawLoopDraw)

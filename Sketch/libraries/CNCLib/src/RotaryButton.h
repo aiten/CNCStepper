@@ -57,7 +57,7 @@ public:
 		}
 		else
 		{
-			add = (signed char)p - (signed char)_lastPos;
+			add = int8_t(p) - int8_t(_lastPos);
 		}
 
 		_lastPos = p;

@@ -27,8 +27,8 @@ public:
 
 	void Init() // init and set default value
 	{
-		_nexttime     = 0;
-		_currentlevel = _iolevel = 0;
+		_nextTime     = 0;
+		_currentLevel = _ioLevel = 0;
 		Out(0);
 #ifndef REDUCED_SIZE
 		_level = 0;
@@ -68,7 +68,7 @@ public:
 
 	bool IsOn() const
 	{
-		return _iolevel != 0;
+		return _ioLevel != 0;
 	}
 
 #ifndef REDUCED_SIZE
@@ -85,42 +85,42 @@ public:
 
 	uint8_t GetIOLevel() const
 	{
-		return _iolevel;
+		return _ioLevel;
 	}
 
 	uint8_t GetCurrentIOLevel() const
 	{
-		return _currentlevel;
+		return _currentLevel;
 	}
 
 	void Poll()
 	{
 		uint32_t milli;
-		if (_currentlevel != _iolevel && (milli = millis()) >= _nexttime)
+		if (_currentLevel != _ioLevel && (milli = millis()) >= _nextTime)
 		{
-			_nexttime = milli + _delayMs;
-			if (_currentlevel > _iolevel)
+			_nextTime = milli + _delayMs;
+			if (_currentLevel > _ioLevel)
 			{
-				_currentlevel--;
+				_currentLevel--;
 			}
 			else
 			{
-				_currentlevel++;
+				_currentLevel++;
 			}
 
-			Out(_currentlevel);
+			Out(_currentLevel);
 		}
 	}
 
 	void PollForce()
 	{
-		_nexttime = 0;
+		_nextTime = 0;
 		Poll();
 	}
 
-	void SetDelay(uint8_t delayms)
+	void SetDelay(uint8_t delayMs)
 	{
-		_delayMs = delayms;
+		_delayMs = delayMs;
 	}
 
 private:
@@ -130,21 +130,21 @@ private:
 		CHAL::analogWrite8(PWMPIN, lvl);
 	}
 
-	uint32_t _nexttime; // time to modify level
+	uint32_t _nextTime;			// time to modify level
 #ifndef REDUCED_SIZE
-	uint8_t _level; // value if "enabled", On/Off will switch between 0..level
+	uint8_t _level;				// value if "enabled", On/Off will switch between 0..level
 #endif
 
-	uint8_t _currentlevel; // used for analogWrite
-	uint8_t _iolevel;      // current level
+	uint8_t _currentLevel;		// used for analogWrite
+	uint8_t _ioLevel;			// current level
 	uint8_t _delayMs;
 
 	void MySetLevel(uint8_t level) NEVER_INLINE_AVR
 	{
-		_iolevel = level;
+		_ioLevel = level;
 		if (_delayMs == 0)
 		{
-			_currentlevel = level;
+			_currentLevel = level;
 			Out(level);
 		}
 	}

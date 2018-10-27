@@ -88,7 +88,7 @@ void CStepper::InitMemVar()
 
 void CStepper::SetUsual(steprate_t vMax)
 {
-	// with ProxonMF70
+	// with ProxxonMF70
 	// maxSteprate ca. 28000
 	// acc & dec = 350
 	// JerkSpeed = 1000
@@ -429,9 +429,9 @@ void CStepper::SMovement::InitMove(CStepper* stepper, SMovement* mvPrev, mdist_t
 						}
 					}
 #
-					uint32_t distInit = _steps / maxMultiplier / 2;
-					uintXX_t distSum  = uintXX_t(_distance_[i]) * uintXX_t(calcFullSteps);
-					auto     s        = mdist_t(((distInit + distSum) / uintXX_t(_steps) * multiplier));
+					auto distInit = uint32_t(_steps / maxMultiplier / 2);
+					auto distSum  = uintXX_t(_distance_[i]) * uintXX_t(calcFullSteps);
+					auto s        = mdist_t(((distInit + distSum) / uintXX_t(_steps) * multiplier));
 
 					axisDiff = uint8_t(dist[i] - s); // must be in range 0..7
 				}
@@ -674,7 +674,7 @@ void CStepper::SMovement::SRamp::RampRun(SMovement* movement)
 
 	if (_upSteps > steps || steps - _upSteps < _downSteps)
 	{
-		// we cant reach vmax for this movement, cut plateau.
+		// we cant reach vMax for this movement, cut plateau.
 		// leave relation between up and down squared => constant a
 		mdist_t toMany = _downSteps + _upSteps - steps;
 		mdist_t subUp;
@@ -876,7 +876,7 @@ void CStepper::SMovement::CalcMaxJunctionSpeed(SMovement* mvPrev)
 		}
 	}
 
-	timer_t timerMaxJunction_ = _pod._move._timerMaxJunction;
+	timer_t moveTimerMaxJunction = _pod._move._timerMaxJunction;
 	/*
 		printf("H: s1=%i s2=%i\n", (int)s1, (int)s2);
 		for (int ii = 0; ii < NUM_AXIS; ii++)
@@ -921,7 +921,7 @@ void CStepper::SMovement::CalcMaxJunctionSpeed(SMovement* mvPrev)
 				if (vDiff > int32_t(_stepper->_pod._maxJerkSpeed[i]))
 				{
 					// reduce total speed by ratio maxJerk <=> current jerk
-					timerMaxJunction             = _stepper->SpeedToTimer(steprate_t(RoundMulDivUInt(_stepper->TimerToSpeed(timerMaxJunction_), _stepper->_pod._maxJerkSpeed[i], steprate_t(vDiff))));
+					timerMaxJunction             = _stepper->SpeedToTimer(steprate_t(RoundMulDivUInt(_stepper->TimerToSpeed(moveTimerMaxJunction), _stepper->_pod._maxJerkSpeed[i], steprate_t(vDiff))));
 					_pod._move._timerMaxJunction = max(_pod._move._timerMaxJunction, min(timerMaxJunction, timerMaxJunctionAcc));
 				}
 			}
@@ -939,7 +939,7 @@ void CStepper::SMovement::CalcMaxJunctionSpeed(SMovement* mvPrev)
 					if (vDiff > int32_t(_stepper->_pod._maxJerkSpeed[i]))
 					{
 						// reduce total speed by ratio maxJerk <=> current jerk
-						timerMaxJunction             = _stepper->SpeedToTimer(steprate_t(RoundMulDivUInt(_stepper->TimerToSpeed(timerMaxJunction_), _stepper->_pod._maxJerkSpeed[i], steprate_t(vDiff))));
+						timerMaxJunction             = _stepper->SpeedToTimer(steprate_t(RoundMulDivUInt(_stepper->TimerToSpeed(moveTimerMaxJunction), _stepper->_pod._maxJerkSpeed[i], steprate_t(vDiff))));
 						_pod._move._timerMaxJunction = max(_pod._move._timerMaxJunction, min(timerMaxJunction, timerMaxJunctionAcc));
 					}
 				}
@@ -1117,7 +1117,7 @@ uint32_t CStepper::GetAccelerationFromTimer(mdist_t timerV0)
 }
 
 ////////////////////////////////////////////////////////
-// reverse calc n from timervalue
+// reverse calc n from timerValue
 
 timer_t CStepper::GetTimer(mdist_t steps, timer_t timerStart)
 {

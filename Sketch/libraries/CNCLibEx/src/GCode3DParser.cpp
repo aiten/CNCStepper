@@ -173,7 +173,7 @@ void CGCode3DParser::PrintSDFileListRecurse(File& dir, uint8_t depth, uint16_t& 
 
 void CGCode3DParser::M21Command()
 {
-	((CControl3D*)CControl::GetInstance())->ReInitSD();
+	static_cast<CControl3D*>(CControl::GetInstance())->ReInitSD();
 }
 
 ////////////////////////////////////////////////////////////

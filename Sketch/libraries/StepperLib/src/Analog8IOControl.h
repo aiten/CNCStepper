@@ -54,7 +54,7 @@ public:
 
 	bool IsOn() const
 	{
-		return _iolevel != 0;
+		return _ioLevel != 0;
 	}
 
 	void SetLevel(uint8_t level)
@@ -69,7 +69,7 @@ public:
 
 	uint8_t GetIOLevel() const
 	{
-		return _iolevel;
+		return _ioLevel;
 	}
 
 	void Poll() { }
@@ -77,11 +77,11 @@ public:
 private:
 
 	uint8_t _level;
-	uint8_t _iolevel;
+	uint8_t _ioLevel;
 
 	void MySetLevel(uint8_t level)
 	{
-		_iolevel = level;
+		_ioLevel = level;
 		CHAL::analogWrite8(PIN, level);
 	}
 };

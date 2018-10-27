@@ -25,6 +25,8 @@
 
 //////////////////////////////////////////
 
+#define RINGBUFFER_NOIDX uint8_t(255)
+
 template <class T, const uint8_t maxSize> // do not use maxSize > 254 (255 is used internal)
 class CRingBufferQueue                    // maxSize should be 2^n (because of % operation)
 {
@@ -37,14 +39,14 @@ public:
 
 	void Dequeue()
 	{
-		CCriticalRegion crit;
+		CCriticalRegion criticalRegion;
 		_head  = NextIndex(_head);
 		_empty = _head == _nextTail;
 	}
 
 	void Enqueue()
 	{
-		CCriticalRegion crit;
+		CCriticalRegion criticalRegion;
 		_nextTail = NextIndex(_nextTail);
 		_empty    = false;
 	}
@@ -57,21 +59,21 @@ public:
 
 	void EnqueueCount(uint8_t cnt)
 	{
-		CCriticalRegion crit;
+		CCriticalRegion criticalRegion;
 		_nextTail = NextIndex(_nextTail, cnt);
 		_empty    = false;
 	}
 
 	void RemoveTail()
 	{
-		CCriticalRegion crit;
+		CCriticalRegion criticalRegion;
 		_nextTail = PrevIndex(_nextTail);
 		_empty    = _head == _nextTail;
 	}
 
 	void RemoveTail(uint8_t tail)
 	{
-		CCriticalRegion crit;
+		CCriticalRegion criticalRegion;
 		_nextTail = NextIndex(tail);
 		_empty    = _head == _nextTail;
 	}
@@ -89,7 +91,9 @@ public:
 	uint8_t Count() const
 	{
 		if (_empty)
+		{
 			return 0;
+		}
 
 		if (_head < _nextTail)
 		{
@@ -111,7 +115,9 @@ public:
 			{
 				Buffer[NextIndex(idx)] = Buffer[idx];
 				if (insertAt == idx)
+				{
 					break;
+				}
 			}
 		}
 		else
@@ -143,7 +149,10 @@ public:
 
 	T* GetPrev(uint8_t idx)
 	{
-		if (idx == _head) return nullptr;
+		if (idx == _head)
+		{
+			return nullptr;
+		}
 		idx = PrevIndex(idx);
 		return IsInQueue(idx) ? &Buffer[idx] : NULL;
 	}
@@ -154,30 +163,39 @@ public:
 
 	bool IsInQueue(uint8_t idx) const
 	{
-		if (_empty) return false;
-		if (_nextTail == _head) return true;
-		if (_nextTail > _head) return idx >= _head && idx < _nextTail;
+		if (_empty)
+		{
+			return false;
+		}
+		if (_nextTail == _head)
+		{
+			return true;
+		}
+		if (_nextTail > _head)
+		{
+			return idx >= _head && idx < _nextTail;
+		}
 		return idx >= _head || idx < _nextTail;
 	}
 
 	// iteration from head to tail (H2T)
-	uint8_t H2TInit() const { return _empty ? 255 : _head; }
-	bool    H2TTest(uint8_t idx) const { return idx != 255; }
+	uint8_t H2TInit() const { return _empty ? RINGBUFFER_NOIDX : _head; }
+	bool    H2TTest(uint8_t idx) const { return idx != RINGBUFFER_NOIDX; }
 
 	uint8_t H2TInc(uint8_t idx) const
 	{
 		idx = NextIndex(idx);
-		return idx == _nextTail ? 255 : idx;
+		return idx == _nextTail ? RINGBUFFER_NOIDX : idx;
 	}
 
 	// iteration from tail to head (T2H)
-	uint8_t T2HInit() const { return _empty ? 255 : GetTailPos(); }
-	bool    T2HTest(uint8_t idx) const { return idx != 255; }
-	uint8_t T2HInc(uint8_t  idx) const { return idx == _head ? 255 : PrevIndex(idx); }
+	uint8_t T2HInit() const { return _empty ? RINGBUFFER_NOIDX : GetTailPos(); }
+	bool    T2HTest(uint8_t idx) const { return idx != RINGBUFFER_NOIDX; }
+	uint8_t T2HInc(uint8_t  idx) const { return idx == _head ? RINGBUFFER_NOIDX : PrevIndex(idx); }
 
 	void Clear()
 	{
-		CCriticalRegion crit;
+		CCriticalRegion criticalRegion;
 		_head     = 0;
 		_nextTail = 0;
 		_empty    = true;

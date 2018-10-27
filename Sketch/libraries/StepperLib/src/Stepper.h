@@ -451,7 +451,7 @@ protected:
 #endif
 
 		bool        _pause;									// PauseMove is called
-		axisArray_t _lastDirectionUp;						// last paramter value of Steo()
+		axisArray_t _lastDirectionUp;						// last parameter value of Step()
 	}               _pod;
 
 	SEvent _event ALIGN_WORD;								// no POS => Constructor
@@ -469,43 +469,43 @@ protected:
 
 		enum EMovementState
 		{
-			StateReadyMove = 1,								// ready for travel (not executing)
-			StateReadyWait = 2,								// ready for none "travel" move (wait move) (not executing)
-			StateReadyIo = 3,								// ready for none "travel" move (set io) (not executing)
+			StateReadyMove = 1,							// ready for travel (not executing)
+			StateReadyWait = 2,							// ready for none "travel" move (wait move) (not executing)
+			StateReadyIo = 3,							// ready for none "travel" move (set io) (not executing)
 
-			StateUpAcc = 11,								// in start phase accelerate
-			StateUpDec = 12,								// in start phase decelerate to vmax
+			StateUpAcc = 11,							// in start phase accelerate
+			StateUpDec = 12,							// in start phase decelerate to vMax
 			StateRun = 13,								// running (no acc and dec)
-			StateDownDec = 14,								// in stop phase decelerate
-			StateDownAcc = 15,								// in stop phase accelerate
+			StateDownDec = 14,							// in stop phase decelerate
+			StateDownAcc = 15,							// in stop phase accelerate
 
 			StateWait = 21,								// executing wait (do no step)
 
 			StateDone = 0,								// finished
 		};
 
-		mdist_t _steps;										// total movement steps (=distance)
+		mdist_t _steps;									// total movement steps (=distance)
 
-		EnumAsByte(EMovementState) _state;						// enums are 16 bit in gcc => force byte
-		bool                       _backlash;									// move is backlash
+		EnumAsByte(EMovementState) _state;				// enums are 16 bit in gcc => force byte
+		bool                       _backlash;			// move is backlash
 
 		DirCount_t _dirCount;
 		DirCount_t _lastStepDirCount;
 
-		mdist_t _distance_[NUM_AXIS];						// distance adjusted with stepMultiplier => use GetDistance(axis)
+		mdist_t _distance_[NUM_AXIS];					// distance adjusted with stepMultiplier => use GetDistance(axis)
 
-		struct SRamp											// only modify in CCriticalRegion
+		struct SRamp									// only modify in CCriticalRegion
 		{
-			timer_t _timerStart;								// start ramp with speed (timerValue)
+			timer_t _timerStart;						// start ramp with speed (timerValue)
 			timer_t _timerRun;
-			timer_t _timerStop;									// stop  ramp with speed (timerValue)
+			timer_t _timerStop;							// stop  ramp with speed (timerValue)
 
-			mdist_t _upSteps;									// steps needed for accelerating from v0
-			mdist_t _downSteps;									// steps needed for decelerating to v0
-			mdist_t _downStartAt;								// index of step to start with deceleration
+			mdist_t _upSteps;							// steps needed for accelerating from v0
+			mdist_t _downSteps;							// steps needed for decelerating to v0
+			mdist_t _downStartAt;						// index of step to start with deceleration
 
-			mdist_t _nUpOffset;									// offset of n ramp calculation(acc) 
-			mdist_t _nDownOffset;								// offset of n ramp calculation(dec)
+			mdist_t _nUpOffset;							// offset of n ramp calculation(acc) 
+			mdist_t _nDownOffset;						// offset of n ramp calculation(dec)
 
 			void RampUp(SMovement*   movement, timer_t timerRun, timer_t timerJunction);
 			void RampDown(SMovement* movement, timer_t timerJunction);

@@ -67,7 +67,7 @@ typedef uint16_t param_t;
 #define PARAMSTART_DEC				6111	// Dec (X Y Z A B C U V W)
 #define PARAMSTART_JERK				6131	// Jerk (X Y Z A B C U V W)
 
-#define PARAMSTART_CONTROLLERFAN	6900	// Controllerfan if not idle (0 if disabled, 255 max)
+#define PARAMSTART_CONTROLLERFAN	6900	// ControllerFan if not idle (0 if disabled, 255 max)
 #define PARAMSTART_RAPIDMOVEFEED	6901	// RapidMove Feedrate
 
 // name, name to internal number

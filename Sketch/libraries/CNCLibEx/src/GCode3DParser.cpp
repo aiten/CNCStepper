@@ -50,7 +50,7 @@ bool CGCode3DParser::InitParse()
 	{
 		const char* linestart = _reader->GetBuffer();
 
-		// ignore linenumbers
+		// ignore lineNumbers
 		if (_reader->SkipSpacesToUpper() == 'N')
 		{
 			if (IsUInt(_reader->GetNextChar()))

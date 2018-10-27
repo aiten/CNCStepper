@@ -82,7 +82,7 @@ void CLcd::DrawRequest(EDrawType draw)
 
 ////////////////////////////////////////////////////////////
 
-uint8_t CLcd::InitPostCommand(EnumAsByte(EGCodeSyntaxType) /* syntaxtype */, char* cmd)
+uint8_t CLcd::InitPostCommand(EnumAsByte(EGCodeSyntaxType) /* syntaxType */, char* cmd)
 {
 	cmd[0] = 0;
 	return 0;
@@ -90,12 +90,12 @@ uint8_t CLcd::InitPostCommand(EnumAsByte(EGCodeSyntaxType) /* syntaxtype */, cha
 
 ////////////////////////////////////////////////////////////
 
-bool CLcd::PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, FLSTR cmd, Stream* output)
+bool CLcd::PostCommand(EnumAsByte(EGCodeSyntaxType) syntaxType, FLSTR cmd, Stream* output)
 {
 	char buffer[32];
 
 	auto    cmd1       = (const char*)cmd;
-	uint8_t idx        = InitPostCommand(syntaxtype, buffer);
+	uint8_t idx        = InitPostCommand(syntaxType, buffer);
 	uint8_t idxprogmem = 0;
 
 	for (; idx < sizeof(buffer); idx++, idxprogmem++)

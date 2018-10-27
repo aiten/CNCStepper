@@ -21,7 +21,7 @@
 
 ////////////////////////////////////////////////////////
 
-// Pushbutton with LOW is pressed
+// PushButton with LOW is pressed
 
 ////////////////////////////////////////////////////////
 
@@ -31,9 +31,9 @@ public:
 
 	CPushButtonLow() = default;
 
-	static void Init(uint8_t inputmode = INPUT_PULLUP)
+	static void Init(uint8_t inputMode = INPUT_PULLUP)
 	{
-		CHAL::pinMode(PIN, inputmode);
+		CHAL::pinMode(PIN, inputMode);
 	}
 
 	void Check()

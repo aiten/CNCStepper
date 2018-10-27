@@ -1838,7 +1838,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 					stepper->SetTimeoutAndEnable(i, 0, CStepper::LevelMax, false);
 					/*
 										pStepper->_pod._timeEnable[i] = 0;
-										CCriticalRegion crit;
+										CCriticalRegion criticalRegion;
 										if (pStepper->GetEnable(i) != CStepper::LevelMax)
 											pStepper->SetEnable(i, CStepper::LevelMax, false);
 					*/

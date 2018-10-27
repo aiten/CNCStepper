@@ -41,7 +41,7 @@ namespace StepperSystemTest
 
 		int FromMM(double mm)
 		{
-			return (int)(mm * 3200);
+			return static_cast<int>(mm * 3200);
 		}
 
 		char TestResultOKDir[_MAX_PATH] = { 0 };

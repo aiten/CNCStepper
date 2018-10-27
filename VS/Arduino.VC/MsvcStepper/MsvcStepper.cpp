@@ -252,7 +252,7 @@ void CMsvcStepper::InitTest(const char* filename)
 		_speed[x][0] = 0;
 	}
 	_totaltime = 0;
-	_lasttimer = 0;
+	_lastTimer = 0;
 
 	MSCInfo = "";
 
@@ -315,7 +315,7 @@ void CMsvcStepper::WriteTestResults(const char* filename)
 		int timer        = _TimerEvents[i].TimerValues;
 		if (timer == 0)
 		{
-			timer = _lasttimer;
+			timer = _lastTimer;
 		}
 		else
 		{
@@ -327,8 +327,8 @@ void CMsvcStepper::WriteTestResults(const char* filename)
 					break;
 				}
 			}
-			_lasttimer = timer / stepidx;
-			timer      = _lasttimer;
+			_lastTimer = timer / stepidx;
+			timer      = _lastTimer;
 		}
 
 		for (int x = 0; x < NUM_AXIS; x++)

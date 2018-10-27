@@ -110,8 +110,8 @@ const CMyMenu::SMenuItemDef CMyMenu::_mainMenuItems[] PROGMEM =
 
 const CMyMenu::SMenuItemDef CMyMenu::_moveMenuItems[] PROGMEM =
 {
-	{ _mNextAxis, (MenuFunction)&CMyMenu::MenuButtonPressMoveNextAxis, (menuparam_t)1 },
-	{ _mPrevAxis, (MenuFunction)&CMyMenu::MenuButtonPressMoveNextAxis, (menuparam_t)-1 },
+	{ _mNextAxis, (MenuFunction)&CMyMenu::MenuButtonPressMoveNextAxis, menuparam_t(1) },
+	{ _mPrevAxis, (MenuFunction)&CMyMenu::MenuButtonPressMoveNextAxis, menuparam_t(-1) },
 	{ _mP10, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveP10 },
 	{ _mP1, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveP1 },
 	{ _mP01, &CMenuBase::MenuButtonPressMove, (menuparam_t)MoveP01 },

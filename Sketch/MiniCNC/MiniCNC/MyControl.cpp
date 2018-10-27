@@ -192,8 +192,8 @@ void CMyControl::Poll()
 
 ////////////////////////////////////////////////////////////
 
-bool CMyControl::OnEvent(EnumAsByte(EStepperControlEvent) eventtype, uintptr_t addinfo)
+bool CMyControl::OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t addInfo)
 {
-	_data.OnEvent(eventtype, addinfo);
-	return super::OnEvent(eventtype, addinfo);
+	_data.OnEvent(eventType, addInfo);
+	return super::OnEvent(eventType, addInfo);
 }

@@ -223,17 +223,17 @@ void CMyControl::Poll()
 
 ////////////////////////////////////////////////////////////
 
-bool CMyControl::OnEvent(EnumAsByte(EStepperControlEvent) eventtype, uintptr_t addinfo)
+bool CMyControl::OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t addInfo)
 {
-	_data.OnEvent(eventtype, addinfo);
+	_data.OnEvent(eventType, addInfo);
 
-	switch (eventtype)
+	switch (eventType)
 	{
 		case OnStartCut:
 		{
 			if (CGCodeParserBase::IsSpindleOn())
 			{
-				const bool newIsCutMove = addinfo != 0;
+				const bool newIsCutMove = addInfo != 0;
 				if (CGCodeParserBase::IsCutMove() != newIsCutMove)
 				{
 					CStepper::GetInstance()->IoControl(CControl::SpindleCW, newIsCutMove ? CGCodeParserBase::GetSpindleSpeed() : 0);
@@ -260,5 +260,5 @@ bool CMyControl::OnEvent(EnumAsByte(EStepperControlEvent) eventtype, uintptr_t a
 			break;
 	}
 
-	return super::OnEvent(eventtype, addinfo);
+	return super::OnEvent(eventType, addInfo);
 }

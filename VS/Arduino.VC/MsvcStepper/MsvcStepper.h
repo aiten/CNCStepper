@@ -145,7 +145,7 @@ private:
 	int     _total[NUM_AXIS_MVC];
 	char    _speed[NUM_AXIS_MVC][20];
 	int64_t _totaltime;
-	int     _lasttimer;
+	int     _lastTimer;
 
 	int _refMovestart;
 

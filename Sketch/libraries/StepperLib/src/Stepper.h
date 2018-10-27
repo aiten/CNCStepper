@@ -93,7 +93,7 @@ public:
 		DumpDetails = 128									// detail of each option
 	};
 
-	typedef bool (*StepperEvent)(CStepper*     stepper, uintptr_t param, EnumAsByte(EStepperEvent) eventtype, uintptr_t addinfo);
+	typedef bool (*StepperEvent)(CStepper*     stepper, uintptr_t param, EnumAsByte(EStepperEvent) eventType, uintptr_t addInfo);
 	typedef bool (*TestContinueMove)(uintptr_t param);
 
 	struct SEvent
@@ -107,9 +107,9 @@ public:
 		StepperEvent _event;
 		uintptr_t    _eventParam;
 
-		bool Call(CStepper* stepper, EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo)
+		bool Call(CStepper* stepper, EnumAsByte(CStepper::EStepperEvent) eventType, uintptr_t addInfo)
 		{
-			if (_event) return _event(stepper, _eventParam, eventtype, addinfo);
+			if (_event) return _event(stepper, _eventParam, eventType, addInfo);
 			return true;
 		}
 	};
@@ -348,7 +348,7 @@ private:
 	void GoIdle();
 	void ContinueIdle();
 
-	void CallEvent(EnumAsByte(EStepperEvent) eventtype, uintptr_t addinfo = 0) { _event.Call(this, eventtype, addinfo); }
+	void CallEvent(EnumAsByte(EStepperEvent) eventType, uintptr_t addInfo = 0) { _event.Call(this, eventType, addInfo); }
 
 	void SubTotalSteps();
 

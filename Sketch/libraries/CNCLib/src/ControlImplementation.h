@@ -213,9 +213,9 @@ struct ControlData
 		_controllerfan.SetLevel(128);
 	}
 
-	inline void OnEvent(EnumAsByte(CControl::EStepperControlEvent) eventtype, uintptr_t /* addinfo */)
+	inline void OnEvent(EnumAsByte(CControl::EStepperControlEvent) eventType, uintptr_t /* addInfo */)
 	{
-		switch (eventtype)
+		switch (eventType)
 		{
 			case CControl::OnStartEvent:
 				_controllerfan.On();

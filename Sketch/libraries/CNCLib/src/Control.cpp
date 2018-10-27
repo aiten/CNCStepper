@@ -391,7 +391,7 @@ void CControl::ReadAndExecuteCommand(Stream* stream, Stream* output, bool filest
 				Command(_buffer, output);
 				_bufferidx = 0;
 
-				_lasttime = millis();
+				_lastTime = millis();
 
 				return;
 			}
@@ -424,7 +424,7 @@ void CControl::ReadAndExecuteCommand(Stream* stream, Stream* output, bool filest
 				_bufferidx = 0;
 			}
 		}
-		_lasttime = millis();
+		_lastTime = millis();
 	}
 }
 
@@ -452,7 +452,7 @@ void CControl::FileReadAndExecuteCommand(Stream* stream, Stream* output)
 void CControl::Run()
 {
 	_bufferidx = 0;
-	_lasttime  = _timeBlink = _timePoll = 0;
+	_lastTime  = _timeBlink = _timePoll = 0;
 
 	Init();
 	Initialized();
@@ -484,13 +484,13 @@ void CControl::Run()
 
 ////////////////////////////////////////////////////////////
 
-void CControl::CheckIdlePoll(bool isidle)
+void CControl::CheckIdlePoll(bool isIdle)
 {
 	uint32_t time = millis();
 
-	if (isidle && _lasttime + TIMEOUTCALLIDEL < time)
+	if (isIdle && _lastTime + TIMEOUTCALLIDEL < time)
 	{
-		Idle(time - _lasttime);
+		Idle(time - _lastTime);
 		Poll();
 		_timePoll = time;
 	}
@@ -590,43 +590,43 @@ void CControl::Delay(uint32_t ms)
 
 ////////////////////////////////////////////////////////////
 
-bool CControl::StaticStepperEvent(CStepper* /*stepper*/, uintptr_t param, EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo)
+bool CControl::StaticStepperEvent(CStepper* /*stepper*/, uintptr_t param, EnumAsByte(CStepper::EStepperEvent) eventType, uintptr_t addInfo)
 {
-	return ((CControl*)param)->StepperEvent(eventtype, addinfo);
+	return ((CControl*)param)->StepperEvent(eventType, addInfo);
 }
 
 ////////////////////////////////////////////////////////////
 
-bool CControl::StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo)
+bool CControl::StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventType, uintptr_t addInfo)
 {
-	if (CallOnEvent(eventtype, addinfo))
+	if (CallOnEvent(eventType, addInfo))
 	{
 		return true;
 	}
 
-	return _oldStepperEvent.Call(CStepper::GetInstance(), eventtype, addinfo);
+	return _oldStepperEvent.Call(CStepper::GetInstance(), eventType, addInfo);
 }
 
 ////////////////////////////////////////////////////////////
 
-bool CControl::CallOnEvent(uint8_t eventtype, uintptr_t param)
+bool CControl::CallOnEvent(uint8_t eventType, uintptr_t param)
 {
-	return OnEvent(EnumAsByte(EStepperControlEvent)(eventtype), param);
+	return OnEvent(EnumAsByte(EStepperControlEvent)(eventType), param);
 }
 
 ////////////////////////////////////////////////////////////
 
-bool CControl::OnEvent(EnumAsByte(EStepperControlEvent) eventtype, uintptr_t addinfo)
+bool CControl::OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t addInfo)
 {
-	switch (eventtype)
+	switch (eventType)
 	{
-		case OnWaitEvent: if (CStepper::WaitTimeCritical > CStepper::EWaitType((unsigned int)addinfo))
+		case OnWaitEvent: if (CStepper::WaitTimeCritical > CStepper::EWaitType((unsigned int)addInfo))
 			{
 				CheckIdlePoll(false);
 			}
 			break;
 
-		case OnIoEvent: IOControl(((CStepper::SIoControl*)addinfo)->_tool, ((CStepper::SIoControl*)addinfo)->_level);
+		case OnIoEvent: IOControl(((CStepper::SIoControl*)addInfo)->_tool, ((CStepper::SIoControl*)addInfo)->_level);
 			break;
 	}
 	return true;

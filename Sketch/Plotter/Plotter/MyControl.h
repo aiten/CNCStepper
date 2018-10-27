@@ -69,7 +69,7 @@ protected:
 	virtual bool IsKill() override;
 	virtual void Poll() override;
 
-	virtual bool OnEvent(EnumAsByte(EStepperControlEvent) eventtype, uintptr_t addinfo) override;
+	virtual bool OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t addInfo) override;
 
 public:
 

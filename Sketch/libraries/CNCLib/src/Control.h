@@ -164,7 +164,7 @@ protected:
 
 	bool ParseAndPrintResult(CParser* parser, Stream* output);
 
-	virtual bool OnEvent(EnumAsByte(EStepperControlEvent) eventtype, uintptr_t addinfo);
+	virtual bool OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t addInfo);
 
 	bool IsResurrectCommand(const char* buffer) { return buffer[0] == '!' && buffer[1] == '!' && buffer[2] == '!' && (buffer[3] == 0 || (buffer[3] == '\r' && buffer[4] == 0)); }
 
@@ -174,12 +174,12 @@ private:
 
 	void ReadAndExecuteCommand(Stream* stream, Stream* output, bool filestream);	// read command until "IsEndOfCommandChar" and execute command (Serial or SD.File)
 
-	void CheckIdlePoll(bool isidle);						// check idle time and call Idle every 100ms
+	void CheckIdlePoll(bool isIdle);						// check idle time and call Idle every 100ms
 
 
 	uint8_t _bufferidx;										// read Buffer index , see SERIALBUFFERSIZE
 
-	uint32_t _lasttime;								// time last char received
+	uint32_t _lastTime;								// time last char received
 	uint32_t _timeBlink;								// time to change blink state
 	uint32_t _timePoll;								// time call poll next
 
@@ -192,9 +192,9 @@ private:
 
 	static void HandleInterrupt() { GetInstance()->TimerInterrupt(); }
 
-	static bool StaticStepperEvent(CStepper* stepper, uintptr_t param, EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo);
+	static bool StaticStepperEvent(CStepper* stepper, uintptr_t param, EnumAsByte(CStepper::EStepperEvent) eventType, uintptr_t addInfo);
 
-	bool StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventtype, uintptr_t addinfo);
+	bool StepperEvent(EnumAsByte(CStepper::EStepperEvent) eventType, uintptr_t addInfo);
 
 	CStreamReader _reader;
 
@@ -202,7 +202,7 @@ private:
 
 public:
 
-	bool CallOnEvent(uint8_t eventtype, uintptr_t param);
+	bool CallOnEvent(uint8_t eventType, uintptr_t param);
 };
 
 ////////////////////////////////////////////////////////

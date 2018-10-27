@@ -42,28 +42,28 @@ namespace StepperSystemTest
 
 			// nothing changed
 			auto revent = rotary.Tick(1, 1);
-			Assert::AreEqual((int)rotary.Nothing, (int)revent);
+			Assert::AreEqual(static_cast<int>(rotary.Nothing), static_cast<int>(revent));
 			Assert::AreEqual(0, rotary.GetPos());
 
 			// CW
 			revent = rotary.Tick(0, 1);
-			Assert::AreEqual((int)rotary.RightTurn, (int)revent);
+			Assert::AreEqual(static_cast<int>(rotary.RightTurn), static_cast<int>(revent));
 			Assert::AreEqual(1, rotary.GetPos());
 
 			revent = rotary.Tick(0, 0);
-			Assert::AreEqual((int)rotary.RightTurn, (int)revent);
+			Assert::AreEqual(int(rotary.RightTurn), int(revent));
 			Assert::AreEqual(2, rotary.GetPos());
 
 			revent = rotary.Tick(1, 0);
-			Assert::AreEqual((int)rotary.RightTurn, (int)revent);
+			Assert::AreEqual(int(rotary.RightTurn), int(revent));
 			Assert::AreEqual(3, rotary.GetPos());
 
 			revent = rotary.Tick(1, 1);
-			Assert::AreEqual((int)rotary.RightTurn, (int)revent);
+			Assert::AreEqual(int(rotary.RightTurn), int(revent));
 			Assert::AreEqual(4, rotary.GetPos());
 
 			revent = rotary.Tick(0, 1);
-			Assert::AreEqual((int)rotary.RightTurn, (int)revent);
+			Assert::AreEqual(int(rotary.RightTurn), int(revent));
 			Assert::AreEqual(5, rotary.GetPos());
 		}
 
@@ -76,29 +76,29 @@ namespace StepperSystemTest
 			Assert::AreEqual(0, rotary.GetPos());
 
 			// nothing changed
-			CRotaryButton<signed int, 1>::ERotaryEvent revent = rotary.Tick(1, 1);
-			Assert::AreEqual((int)rotary.Nothing, (int)revent);
+			auto revent = rotary.Tick(1, 1);
+			Assert::AreEqual(int(rotary.Nothing), int(revent));
 			Assert::AreEqual(0, rotary.GetPos());
 
 			// CW
 			revent = rotary.Tick(1, 0);
-			Assert::AreEqual((int)rotary.LeftTurn, (int)revent);
+			Assert::AreEqual(int(rotary.LeftTurn), int(revent));
 			Assert::AreEqual(-1, rotary.GetPos());
 
 			revent = rotary.Tick(0, 0);
-			Assert::AreEqual((int)rotary.LeftTurn, (int)revent);
+			Assert::AreEqual(int(rotary.LeftTurn), int(revent));
 			Assert::AreEqual(-2, rotary.GetPos());
 
 			revent = rotary.Tick(0, 1);
-			Assert::AreEqual((int)rotary.LeftTurn, (int)revent);
+			Assert::AreEqual(int(rotary.LeftTurn), int(revent));
 			Assert::AreEqual(-3, rotary.GetPos());
 
 			revent = rotary.Tick(1, 1);
-			Assert::AreEqual((int)rotary.LeftTurn, (int)revent);
+			Assert::AreEqual(int(rotary.LeftTurn), int(revent));
 			Assert::AreEqual(-4, rotary.GetPos());
 
 			revent = rotary.Tick(1, 0);
-			Assert::AreEqual((int)rotary.LeftTurn, (int)revent);
+			Assert::AreEqual(int(rotary.LeftTurn), int(revent));
 			Assert::AreEqual(-5, rotary.GetPos());
 		}
 
@@ -164,7 +164,7 @@ namespace StepperSystemTest
 				Assert::AreEqual(i, rotary.GetFullRangePos());
 				Assert::AreEqual((i + ACCURACY / 2) / ACCURACY, rotary.GetPos());
 			}
-			Assert::AreEqual((int)rotary.Overrun, (int)rotary.Tick(GetPinA(i), GetPinB(i)));
+			Assert::AreEqual(int(rotary.Overrun), int(rotary.Tick(GetPinA(i), GetPinB(i))));
 			int pos = i - ACCURACY;
 			Assert::AreEqual(pos, rotary.GetFullRangePos());
 			Assert::AreEqual((pos + ACCURACY / 2) / ACCURACY, rotary.GetPos());

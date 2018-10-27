@@ -44,37 +44,37 @@ namespace StepperSystemTest
 			spindle.Init(0);
 
 			Assert::AreEqual(false, spindle.IsOn());
-			Assert::AreEqual((uint8_t)0, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetIOLevel());
 
 			spindle.On(0);
-			Assert::AreEqual((uint8_t)0, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetIOLevel());
 
 			spindle.OnMax();
-			Assert::AreEqual((uint8_t)255, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)255, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(255), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(255), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.On(100);
-			Assert::AreEqual((uint8_t)100, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.Off();
-			Assert::AreEqual((uint8_t)100, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetIOLevel());
 			Assert::AreEqual(false, spindle.IsOn());
 
 			spindle.On();
-			Assert::AreEqual((uint8_t)100, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.On(100);
 			spindle.SetLevel(111);
-			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
-			Assert::AreEqual((uint8_t)111, spindle.GetLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(111), spindle.GetLevel());
 		}
 
 		TEST_METHOD(AnalogIOInvertTest)
@@ -84,37 +84,37 @@ namespace StepperSystemTest
 			spindle.Init(0);
 
 			Assert::AreEqual(false, spindle.IsOn());
-			Assert::AreEqual((uint8_t)0, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetIOLevel());
 
 			spindle.On(0);
-			Assert::AreEqual((uint8_t)0, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetIOLevel());
 
 			spindle.OnMax();
-			Assert::AreEqual((uint8_t)255, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)255, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(255), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(255), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.On(100);
-			Assert::AreEqual((uint8_t)100, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.Off();
-			Assert::AreEqual((uint8_t)100, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetIOLevel());
 			Assert::AreEqual(false, spindle.IsOn());
 
 			spindle.On();
-			Assert::AreEqual((uint8_t)100, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.On(100);
 			spindle.SetLevel(111);
-			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
-			Assert::AreEqual((uint8_t)111, spindle.GetLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(111), spindle.GetLevel());
 		}
 
 		TEST_METHOD(AnalogIOSmoothTest)
@@ -125,37 +125,37 @@ namespace StepperSystemTest
 			spindle.Init(0);
 
 			Assert::AreEqual(false, spindle.IsOn());
-			Assert::AreEqual((uint8_t)0, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetIOLevel());
 
 			spindle.On(0);
-			Assert::AreEqual((uint8_t)0, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetIOLevel());
 
 			spindle.OnMax();
-			Assert::AreEqual((uint8_t)255, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)255, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(255), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(255), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.On(100);
-			Assert::AreEqual((uint8_t)100, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.Off();
-			Assert::AreEqual((uint8_t)100, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetIOLevel());
 			Assert::AreEqual(false, spindle.IsOn());
 
 			spindle.On();
-			Assert::AreEqual((uint8_t)100, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.On(100);
 			spindle.SetLevel(111);
-			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
-			Assert::AreEqual((uint8_t)111, spindle.GetLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(111), spindle.GetLevel());
 		}
 
 		TEST_METHOD(AnalogIOSmoothFadeTest)
@@ -164,34 +164,34 @@ namespace StepperSystemTest
 			spindle.SetDelay(255);
 
 			spindle.Init(100);
-			Assert::AreEqual((uint8_t)100, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
-			Assert::AreEqual((uint8_t)0, spindle.GetCurrentIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(0), spindle.GetCurrentIOLevel());
 
 			// delay is 0 => inc each call to "poll"
 
 			for (uint8_t i = 1; i < 100; i++)
 			{
 				spindle.PollForce();
-				Assert::AreEqual((uint8_t)100, spindle.GetLevel());
-				Assert::AreEqual((uint8_t)100, spindle.GetIOLevel());
+				Assert::AreEqual(uint8_t(100), spindle.GetLevel());
+				Assert::AreEqual(uint8_t(100), spindle.GetIOLevel());
 				Assert::AreEqual(i, spindle.GetCurrentIOLevel());
 			}
 			spindle.PollForce();
-			Assert::AreEqual((uint8_t)100, spindle.GetCurrentIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetCurrentIOLevel());
 			spindle.PollForce();
-			Assert::AreEqual((uint8_t)100, spindle.GetCurrentIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetCurrentIOLevel());
 
 			spindle.On(50);
-			Assert::AreEqual((uint8_t)50, spindle.GetLevel());
-			Assert::AreEqual((uint8_t)50, spindle.GetIOLevel());
-			Assert::AreEqual((uint8_t)100, spindle.GetCurrentIOLevel());
+			Assert::AreEqual(uint8_t(50), spindle.GetLevel());
+			Assert::AreEqual(uint8_t(50), spindle.GetIOLevel());
+			Assert::AreEqual(uint8_t(100), spindle.GetCurrentIOLevel());
 
 			for (uint8_t i = 99; i > 50; i--)
 			{
 				spindle.PollForce();
-				Assert::AreEqual((uint8_t)50, spindle.GetLevel());
-				Assert::AreEqual((uint8_t)50, spindle.GetIOLevel());
+				Assert::AreEqual(uint8_t(50), spindle.GetLevel());
+				Assert::AreEqual(uint8_t(50), spindle.GetIOLevel());
 				Assert::AreEqual(i, spindle.GetCurrentIOLevel());
 			}
 		}
@@ -204,42 +204,42 @@ namespace StepperSystemTest
 			spindle.Init(0);
 
 			Assert::AreEqual(false, spindle.IsOn());
-			Assert::AreEqual((int16_t)0, spindle.GetLevel());
-			Assert::AreEqual((int16_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(int16_t(0), spindle.GetLevel());
+			Assert::AreEqual(int16_t(0), spindle.GetIOLevel());
 
 			spindle.On(0);
-			Assert::AreEqual((int16_t)0, spindle.GetLevel());
-			Assert::AreEqual((int16_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(int16_t(0), spindle.GetLevel());
+			Assert::AreEqual(int16_t(0), spindle.GetIOLevel());
 
 			spindle.OnMax();
-			Assert::AreEqual((int16_t)255, spindle.GetLevel());
-			Assert::AreEqual((int16_t)255, spindle.GetIOLevel());
+			Assert::AreEqual(int16_t(255), spindle.GetLevel());
+			Assert::AreEqual(int16_t(255), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.On(-100);
-			Assert::AreEqual((int16_t)-100, spindle.GetLevel());
-			Assert::AreEqual((int16_t)-100, spindle.GetIOLevel());
+			Assert::AreEqual(int16_t(-100), spindle.GetLevel());
+			Assert::AreEqual(int16_t(-100), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.On(100);
-			Assert::AreEqual((int16_t)100, spindle.GetLevel());
-			Assert::AreEqual((int16_t)100, spindle.GetIOLevel());
+			Assert::AreEqual(int16_t(100), spindle.GetLevel());
+			Assert::AreEqual(int16_t(100), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.Off();
-			Assert::AreEqual((int16_t)100, spindle.GetLevel());
-			Assert::AreEqual((int16_t)0, spindle.GetIOLevel());
+			Assert::AreEqual(int16_t(100), spindle.GetLevel());
+			Assert::AreEqual(int16_t(0), spindle.GetIOLevel());
 			Assert::AreEqual(false, spindle.IsOn());
 
 			spindle.On();
-			Assert::AreEqual((int16_t)100, spindle.GetLevel());
-			Assert::AreEqual((int16_t)100, spindle.GetIOLevel());
+			Assert::AreEqual(int16_t(100), spindle.GetLevel());
+			Assert::AreEqual(int16_t(100), spindle.GetIOLevel());
 			Assert::AreEqual(true, spindle.IsOn());
 
 			spindle.On(100);
 			spindle.SetLevel(111);
-			Assert::AreEqual((int16_t)100, spindle.GetIOLevel());
-			Assert::AreEqual((int16_t)111, spindle.GetLevel());
+			Assert::AreEqual(int16_t(100), spindle.GetIOLevel());
+			Assert::AreEqual(int16_t(111), spindle.GetLevel());
 		}
 
 		TEST_METHOD(Analog9IOSmoothFadeTest)
@@ -248,22 +248,22 @@ namespace StepperSystemTest
 			spindle.SetDelay(255);	// never reached => we use PollForce
 
 			spindle.Init(CHAR_MAX);
-			Assert::AreEqual((int16_t)CHAR_MAX, spindle.GetLevel());
-			Assert::AreEqual((int16_t)CHAR_MAX, spindle.GetIOLevel());
-			Assert::AreEqual((int16_t)0, spindle.GetCurrentIOLevel());
+			Assert::AreEqual(int16_t(CHAR_MAX), spindle.GetLevel());
+			Assert::AreEqual(int16_t(CHAR_MAX), spindle.GetIOLevel());
+			Assert::AreEqual(int16_t(0), spindle.GetCurrentIOLevel());
 
 			for (int16_t i = 1; i <= CHAR_MAX; i++)
 			{
 				spindle.PollForce();
-				Assert::AreEqual((int16_t)CHAR_MAX, spindle.GetLevel());
-				Assert::AreEqual((int16_t)CHAR_MAX, spindle.GetIOLevel());
+				Assert::AreEqual(int16_t(CHAR_MAX), spindle.GetLevel());
+				Assert::AreEqual(int16_t(CHAR_MAX), spindle.GetIOLevel());
 				Assert::AreEqual(i, spindle.GetCurrentIOLevel());
 			}
 
 			spindle.PollForce();
-			Assert::AreEqual((int16_t)CHAR_MAX, spindle.GetCurrentIOLevel());
+			Assert::AreEqual(int16_t(CHAR_MAX), spindle.GetCurrentIOLevel());
 			spindle.PollForce();
-			Assert::AreEqual((int16_t)CHAR_MAX, spindle.GetCurrentIOLevel());
+			Assert::AreEqual(int16_t(CHAR_MAX), spindle.GetCurrentIOLevel());
 
 			spindle.On(CHAR_MIN);
 			Assert::AreEqual((int16_t)CHAR_MIN, spindle.GetLevel());
@@ -273,8 +273,8 @@ namespace StepperSystemTest
 			for (int16_t i = CHAR_MAX - 1; i >= CHAR_MIN; i--)
 			{
 				spindle.PollForce();
-				Assert::AreEqual((int16_t)CHAR_MIN, spindle.GetLevel());
-				Assert::AreEqual((int16_t)CHAR_MIN, spindle.GetIOLevel());
+				Assert::AreEqual(int16_t(CHAR_MIN), spindle.GetLevel());
+				Assert::AreEqual(int16_t(CHAR_MIN), spindle.GetIOLevel());
 				Assert::AreEqual(i, spindle.GetCurrentIOLevel());
 			}
 		}

@@ -53,17 +53,17 @@ enum EStepperBaseAxis
 
 ////////////////////////////////////////////////////////
 
-static const uint8_t sbm800halfstep0[8] PROGMEM   = { 0x3F, 0x3F, 0x1F, 0x1F, 0x1B, 0x1B, 0x3B, 0x3B };
-static const uint8_t sbm800halfstep20[8] PROGMEM  = { 0x37, 0x36, 0x1E, 0x16, 0x13, 0x12, 0x3A, 0x32 };
-static const uint8_t sbm800halfstep60[8] PROGMEM  = { 0x2F, 0x2D, 0x1D, 0x0D, 0x0B, 0x09, 0x39, 0x29 };
-static const uint8_t sbm800halfstep100[8] PROGMEM = { 0x27, 0x2D, 0x1C, 0x0D, 0x03, 0x09, 0x38, 0x29 };
+static const uint8_t sbm800HalfStep0[8] PROGMEM   = { 0x3F, 0x3F, 0x1F, 0x1F, 0x1B, 0x1B, 0x3B, 0x3B };
+static const uint8_t sbm800HalfStep20[8] PROGMEM  = { 0x37, 0x36, 0x1E, 0x16, 0x13, 0x12, 0x3A, 0x32 };
+static const uint8_t sbm800HalfStep60[8] PROGMEM  = { 0x2F, 0x2D, 0x1D, 0x0D, 0x0B, 0x09, 0x39, 0x29 };
+static const uint8_t sbm800HalfStep100[8] PROGMEM = { 0x27, 0x2D, 0x1C, 0x0D, 0x03, 0x09, 0x38, 0x29 };
 
-static const uint8_t sbm800fullstep0[4] PROGMEM   = { 0x3F, 0x3B, 0x1B, 0x1F };
-static const uint8_t sbm800fullstep20[4] PROGMEM  = { 0x36, 0x32, 0x12, 0x16 };
-static const uint8_t sbm800fullstep60[4] PROGMEM  = { 0x2D, 0x29, 0x09, 0x0D };
-static const uint8_t sbm800fullstep100[4] PROGMEM = { 0x24, 0x20, 0x00, 0x04 };
+static const uint8_t sbm800FullStep0[4] PROGMEM   = { 0x3F, 0x3B, 0x1B, 0x1F };
+static const uint8_t sbm800FullStep20[4] PROGMEM  = { 0x36, 0x32, 0x12, 0x16 };
+static const uint8_t sbm800FullStep60[4] PROGMEM  = { 0x2D, 0x29, 0x09, 0x0D };
+static const uint8_t sbm800FullStep100[4] PROGMEM = { 0x24, 0x20, 0x00, 0x04 };
 
-static const uint8_t stepperadd[SMC800_NUM_AXIS] PROGMEM = { StepperX, StepperY, StepperZ };
+static const uint8_t stepperAdd[SMC800_NUM_AXIS] PROGMEM = { StepperX, StepperY, StepperZ };
 
 ////////////////////////////////////////////////////////
 
@@ -205,7 +205,7 @@ void CStepperSMC800::SetPhase(axis_t axis)
 {
 	if (axis < SMC800_NUM_AXIS)
 	{
-		uint8_t addIO   = pgm_read_byte(&stepperadd[axis]);
+		uint8_t addIO   = pgm_read_byte(&stepperAdd[axis]);
 		uint8_t stepidx = _stepIdx[axis];
 
 		if (_fullStepMode[axis])
@@ -215,12 +215,12 @@ void CStepperSMC800::SetPhase(axis_t axis)
 			{
 				// @formatter:off — disable formatter after this line
 				default:
-				case LevelMax: OutSMC800Cmd(pgm_read_byte(&sbm800fullstep100[stepidx]) + addIO); break;
+				case LevelMax: OutSMC800Cmd(pgm_read_byte(&sbm800FullStep100[stepidx]) + addIO); break;
 #ifndef REDUCED_SIZE
-				case Level60P: OutSMC800Cmd(pgm_read_byte(&sbm800fullstep60[stepidx]) + addIO);	break;
+				case Level60P: OutSMC800Cmd(pgm_read_byte(&sbm800FullStep60[stepidx]) + addIO);	break;
 #endif
-				case Level20P: OutSMC800Cmd(pgm_read_byte(&sbm800fullstep20[stepidx]) + addIO);	break;
-				case LevelOff: OutSMC800Cmd(pgm_read_byte(&sbm800fullstep0[stepidx]) + addIO);	break;
+				case Level20P: OutSMC800Cmd(pgm_read_byte(&sbm800FullStep20[stepidx]) + addIO);	break;
+				case LevelOff: OutSMC800Cmd(pgm_read_byte(&sbm800FullStep0[stepidx]) + addIO);	break;
 					// @formatter:on — enable formatter after this line
 			}
 		}
@@ -231,12 +231,12 @@ void CStepperSMC800::SetPhase(axis_t axis)
 			{
 				// @formatter:off — disable formatter after this line
 				default:
-				case LevelMax: OutSMC800Cmd(pgm_read_byte(&sbm800halfstep100[stepidx]) + addIO); break;
+				case LevelMax: OutSMC800Cmd(pgm_read_byte(&sbm800HalfStep100[stepidx]) + addIO); break;
 #ifndef REDUCED_SIZE
-				case Level60P: OutSMC800Cmd(pgm_read_byte(&sbm800halfstep60[stepidx]) + addIO);	break;
+				case Level60P: OutSMC800Cmd(pgm_read_byte(&sbm800HalfStep60[stepidx]) + addIO);	break;
 #endif
-				case Level20P: OutSMC800Cmd(pgm_read_byte(&sbm800halfstep20[stepidx]) + addIO);	break;
-				case LevelOff: OutSMC800Cmd(pgm_read_byte(&sbm800halfstep0[stepidx]) + addIO);	break;
+				case Level20P: OutSMC800Cmd(pgm_read_byte(&sbm800HalfStep20[stepidx]) + addIO);	break;
+				case LevelOff: OutSMC800Cmd(pgm_read_byte(&sbm800HalfStep0[stepidx]) + addIO);	break;
 					// @formatter:on — enable formatter after this line
 			}
 		}

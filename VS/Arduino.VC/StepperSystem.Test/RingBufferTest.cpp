@@ -53,7 +53,7 @@ namespace StepperSystemTest
 			buffer.Enqueue();
 
 			Assert::AreEqual(false, buffer.IsEmpty());
-			Assert::AreEqual((uint8_t)1, buffer.Count());
+			Assert::AreEqual(static_cast<uint8_t>(1), buffer.Count());
 
 			buffer.NextTail().i = 4712;
 			buffer.NextTail().d = 4712.4712;

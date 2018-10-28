@@ -104,7 +104,7 @@ uint8_t CU8GLcd::GetPageCount()
 
 void CU8GLcd::SetDefaultPage()
 {
-	_currentpage = 1; // TODO: first (0 based) page is default
+	_currentPage = 1; // TODO: first (0 based) page is default
 	SetRotaryFocusMainPage();
 }
 
@@ -116,22 +116,22 @@ uint8_t CU8GLcd::GetPage()
 	{
 		auto page = uint8_t(_rotarybutton.GetPageIdx(GetPageCount()));
 
-		if (page != _currentpage)
+		if (page != _currentPage)
 		{
 			Invalidate();
-			_currentpage = page;
+			_currentPage = page;
 			GetMenu().SetMainMenu();
 		}
 	}
 
-	return _currentpage;
+	return _currentPage;
 }
 
 ////////////////////////////////////////////////////////////
 
 void CU8GLcd::SetRotaryFocusMainPage()
 {
-	_rotarybutton.SetPageIdx(rotarypos_t(_currentpage));
+	_rotarybutton.SetPageIdx(rotarypos_t(_currentPage));
 	_rotarybutton.SetMinMax(0, GetPageCount() - 1, true);
 	_rotaryFocus = RotaryMainPage;
 }
@@ -389,29 +389,29 @@ bool CU8GLcd::DrawLoopScreenSaver(EnumAsByte(EDrawLoopType) type, uintptr_t data
 		return DrawLoopDefault(type, data);
 	}
 
-	DrawString(ToCol(_screensaveX), ToRow(_screensaveY), F("*"));
+	DrawString(ToCol(_screenSaveX), ToRow(_screenSaveY), F("*"));
 
-	const int8_t textsize = 0;
+	const int8_t textSize = 0;
 
-	if (_screensaveTime > millis())
+	if (_screenSaveTime > millis())
 	{
 		return true;
 	}
 
-	_screensaveTime = millis() + 500;
+	_screenSaveTime = millis() + 500;
 
-	_screensaveX += _screensaveXDiff;
-	if (_screensaveX >= (TotalCols() - textsize) || _screensaveX < 0)
+	_screenSaveX += _screenSaveXDiff;
+	if (_screenSaveX >= (TotalCols() - textSize) || _screenSaveX < 0)
 	{
-		_screensaveX -= _screensaveXDiff * 2;
-		_screensaveXDiff = -_screensaveXDiff;
+		_screenSaveX -= _screenSaveXDiff * 2;
+		_screenSaveXDiff = -_screenSaveXDiff;
 	}
 
-	_screensaveY += _screensaveYDiff;
-	if (_screensaveY >= TotalRows() || _screensaveY < 0)
+	_screenSaveY += _screenSaveYDiff;
+	if (_screenSaveY >= TotalRows() || _screenSaveY < 0)
 	{
-		_screensaveY -= _screensaveYDiff * 2;
-		_screensaveYDiff = -_screensaveYDiff;
+		_screenSaveY -= _screenSaveYDiff * 2;
+		_screenSaveYDiff = -_screenSaveYDiff;
 	}
 
 
@@ -776,7 +776,7 @@ bool CU8GLcd::DrawLoopPreset(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 
 void CU8GLcd::ButtonPressStartSDPage()
 {
-	_currentpage = GetPageCount() - 1; // TODO: last is default menu
+	_currentPage = GetPageCount() - 1; // TODO: last is default menu
 	GetMenu().SetSDMenu();
 	SetRotaryFocusMenuPage();
 	OKBeep();

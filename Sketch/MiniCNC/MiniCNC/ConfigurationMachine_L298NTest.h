@@ -54,7 +54,7 @@
 #undef CONTROLLERFAN_PIN
 
 ////////////////////////////////////////////////////////
-// PWM Spindel Pin
+// PWM Spindle Pin
 
 #define SPINDLE_ENABLE_PIN  11
 #define SPINDLE_DIGITAL_ON  LOW

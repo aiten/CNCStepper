@@ -93,7 +93,7 @@
 
 #undef SPINDLE_ANALOGSPEED
 #define SPINDLE_MAXSPEED	255			// analog 255
-#define SPINDEL_FADETIMEDELAY  0    // 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
+#define SPINDLE_FADETIMEDELAY  0    // 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
 
 ////////////////////////////////////////////////////////
 
@@ -105,12 +105,12 @@
 #define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate)))	// steps/sec
 #define G1_DEFAULT_FEEDPRATE	  100000	// in mm1000 / min
 
-#define STEPRATERATE_REFMOVE	(CNC_MAXSPEED/2)
+#define STEPRATE_REFMOVE	(CNC_MAXSPEED/2)
 #define FEEDRATE_REFMOVE_PHASE2		200000
 
 ////////////////////////////////////////////////////////
 //#define CONTROLLERFAN_FAN_PIN	CAT(BOARDNAME,_FET2D9_PIN)
-#define CONTROLLERFAN_ONTIME	  10000			// switch off controllerfan if idle for 10 Sec
+#define CONTROLLERFAN_ONTIME	  10000			// switch off controller fan if idle for 10 Sec
 
 
 ////////////////////////////////////////////////////////

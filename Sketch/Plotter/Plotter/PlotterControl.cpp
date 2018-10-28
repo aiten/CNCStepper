@@ -162,7 +162,7 @@ bool CPlotter::MoveToPenPosition(feedrate_t feedrate, mm1000_t pos)
 
 #elif PENTYPE == PENTYPE_SERVO    // servo
 
-	CStepper::GetInstance()->IoControl(CControl::Servo2, (int16_t)pos);
+	CStepper::GetInstance()->IoControl(CControl::Servo2, int16_t(pos));
 	CStepper::GetInstance()->Wait(feedrate / 10);
 
 	return true;

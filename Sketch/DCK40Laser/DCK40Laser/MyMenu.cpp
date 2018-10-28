@@ -82,28 +82,28 @@ void CMyMenu::MenuButtonPressFuerElise(const SMenuItemDef* /* def */)
 
 const CMyMenu::SMenuItemDef CMyMenu::_mainMenuItems[] PROGMEM =
 {
-	{ _mMoveX, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_moveXMenu },
+	{ _mMoveX, &CMenuBase::MenuButtonPressSetMenu, menuparam_t(&_moveXMenu) },
 #if LCD_NUMAXIS > 1
-	{ _mMoveY, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_moveYMenu },
+	{ _mMoveY, &CMenuBase::MenuButtonPressSetMenu, menuparam_t(&_moveYMenu) },
 #if LCD_NUMAXIS > 2
-	{ _mMoveZ, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t) &_moveZMenu },
+	{ _mMoveZ, &CMenuBase::MenuButtonPressSetMenu, menuparam_t(&_moveZMenu) },
 /*
 #if LCD_NUMAXIS > 3
-	{ _mMoveA, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t) &_moveAMenu },
+	{ _mMoveA, &CMenuBase::MenuButtonPressSetMenu, menuparam_t(&_moveAMenu) },
 #if LCD_NUMAXIS > 4
-	{ _mMoveB, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t) &_moveBMenu },
+	{ _mMoveB, &CMenuBase::MenuButtonPressSetMenu, menuparam_t(&_moveBMenu) },
 #if LCD_NUMAXIS > 5
-	{ _mMoveC, &CMenuBase::MenuButtonPressSetMove, (menuparam_t) &_moveCMenu },
+	{ _mMoveC, &CMenuBase::MenuButtonPressSetMove, menuparam_t(&_moveCMenu) },
 #endif 
 #endif
 #endif
 */
 #endif
 #endif
-	{ _mRotate, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_rotateMenu },
-	{ _mSD, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_SDMenu },
-	{ _mExtra, &CMenuBase::MenuButtonPressSetMenu, (menuparam_t)&_extraMenu },
-	{ _mEnd, (MenuFunction)&CMyMenu::MenuButtonPressEnd },
+	{ _mRotate, &CMenuBase::MenuButtonPressSetMenu, menuparam_t(&_rotateMenu) },
+	{ _mSD, &CMenuBase::MenuButtonPressSetMenu, menuparam_t(&_SDMenu) },
+	{ _mExtra, &CMenuBase::MenuButtonPressSetMenu, menuparam_t(&_extraMenu) },
+	{ _mEnd, MenuFunction(&CMyMenu::MenuButtonPressEnd) },
 	{ nullptr, nullptr }
 };
 
@@ -168,8 +168,8 @@ const CMyMenu::SMenuItemDef CMyMenu::_SDMenuItems[] PROGMEM =
 const CMyMenu::SMenuItemDef CMyMenu::_extraMenuItems[] PROGMEM =
 {
 	{ _mG92Clear, &CMenuBase::MenuButtonPressSetCommand, menuparam_t(_g92) },
-	//{ _mHomeZ,   &CMenuBase::MenuButtonPressHome, (menuparam_t)Z_AXIS },
-	//{ _mProbeZ,	 &CMenuBase::MenuButtonPressProbe, (menuparam_t)Z_AXIS },
+	//{ _mHomeZ,   &CMenuBase::MenuButtonPressHome, menuparam_t(Z_AXIS) },
+	//{ _mProbeZ,	 &CMenuBase::MenuButtonPressProbe, menuparam_t(Z_AXIS) },
 	//{ _mSpindle, &CMenuBase::MenuButtonPressSpindle },
 	//{ _mCoolant, &CMenuBase::MenuButtonPressCoolant },
 	{ _mFuerElise, MenuFunction(&CMyMenu::MenuButtonPressFuerElise) },

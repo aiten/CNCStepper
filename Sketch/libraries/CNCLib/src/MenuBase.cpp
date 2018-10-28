@@ -99,8 +99,8 @@ bool CMenuBase::Select(menupos_t idx)
 
 void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef* def)
 {
-	auto newMenu = (const SMenuDef*)def->GetParam1();
-	auto posMenu = (const SMenuDef*)def->GetParam2();
+	auto newMenu = reinterpret_cast<const SMenuDef*>(def->GetParam1());
+	auto posMenu = reinterpret_cast<const SMenuDef*>(def->GetParam2());
 
 	SetMenu(newMenu);
 
@@ -110,7 +110,7 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef* def)
 		GetNavigator().SetPosition(newMenu->FindMenuIdx(uintptr_t(def), [](const SMenuItemDef* def, uintptr_t param) -> bool
 		{
 			return def->GetButtonPress() == &CMenuBase::MenuButtonPressSetMenu && // must be setMenu
-				def->GetParam1() == ((const SMenuItemDef*)param)->GetParam2();    // param1 or new menu must be param2 of "Back from"
+				def->GetParam1() == reinterpret_cast<const SMenuItemDef*>(param)->GetParam2();    // param1 or new menu must be param2 of "Back from"
 		}));
 	}
 
@@ -121,7 +121,7 @@ void CMenuBase::MenuButtonPressSetMenu(const SMenuItemDef* def)
 
 void CMenuBase::MenuButtonPressMenuBack(const SMenuItemDef* def)
 {
-	auto newMenu = (const SMenuDef*)def->GetParam1();
+	auto newMenu = reinterpret_cast<const SMenuDef*>(def->GetParam1());
 	auto oldMenu = GetMenuDef();
 
 	SetMenu(newMenu);
@@ -156,8 +156,8 @@ void CMenuBase::MenuButtonPressSetCommand(const SMenuItemDef* def)
 
 void CMenuBase::MenuButtonPressMove(const SMenuItemDef* def)
 {
-	auto axis = axis_t((unsigned int)GetMenuDef()->GetParam1());
-	auto dist = uint8_t((unsigned int)def->GetParam1());
+	auto axis = axis_t(static_cast<unsigned int>(GetMenuDef()->GetParam1()));
+	auto dist = uint8_t(static_cast<unsigned int>(def->GetParam1()));
 
 	if (dist == MoveHome)
 	{
@@ -197,7 +197,7 @@ void CMenuBase::MenuButtonPressMove(const SMenuItemDef* def)
 
 void CMenuBase::MenuButtonPressRotate(const SMenuItemDef* def)
 {
-	auto req = uint8_t((unsigned int)def->GetParam1());
+	auto req = uint8_t(static_cast<unsigned int>(def->GetParam1()));
 
 	switch (req)
 	{

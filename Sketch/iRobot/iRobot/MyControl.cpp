@@ -57,13 +57,13 @@ const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
 	GetInfo1a(), GetInfo1b(),
 	0,
-	STEPPERDIRECTION, 0, 0,SPINDEL_FADETIMEDELAY,
+	STEPPERDIRECTION, 0, 0,SPINDLE_FADETIMEDELAY,
 	SPINDLE_MAXSPEED,
 	CNC_JERKSPEED,
 	CNC_MAXSPEED,
 	CNC_ACC,
 	CNC_DEC,
-	STEPRATERATE_REFMOVE,
+	STEPRATE_REFMOVE,
 	MOVEAWAYFROMREF_MM1000,
 	X_STEPSPERMM / 1000.0,
 	{
@@ -143,7 +143,7 @@ void CMyControl::GoToReference()
 	CStepper::GetInstance()->SetPosition(Z_AXIS, INIT_PULS3);
 	CStepper::GetInstance()->SetPosition(A_AXIS, CENTER_LIMIT);
 
-	((CStepperServo*)CStepper::GetInstance())->SetServo();
+	static_cast<CStepperServo*>(CStepper::GetInstance())->SetServo();
 }
 
 ////////////////////////////////////////////////////////////

@@ -192,7 +192,7 @@ int32_t CParser::GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale
 expr_t CParser::GetDouble()
 {
 	uint8_t ch    = _reader->GetChar();
-	auto    start = (char*)_reader->GetBuffer();
+	auto    start = const_cast<char*>(_reader->GetBuffer());
 
 	while (CStreamReader::IsDigitDot(ch))
 	{

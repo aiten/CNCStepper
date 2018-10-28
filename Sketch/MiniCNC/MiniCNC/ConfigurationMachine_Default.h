@@ -65,11 +65,11 @@
 
 #define SPINDLE_ANALOGSPEED
 #define SPINDLE_MAXSPEED  10000     // analog 255
-#define SPINDEL_FADETIMEDELAY  8    // 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
-//#define SPINDEL_FADE
+#define SPINDLE_FADETIMEDELAY  8    // 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
+//#define SPINDLE_FADE
 
 ////////////////////////////////////////////////////////
 
-#define STEPRATERATE_REFMOVE    (CNC_MAXSPEED/3)
+#define STEPRATE_REFMOVE    (CNC_MAXSPEED/3)
 
 ////////////////////////////////////////////////////////

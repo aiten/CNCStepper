@@ -52,7 +52,7 @@ public:
 
 protected:
 
-	virtual void StepBegin(const SStepBuffer* stepbuffer) override;
+	virtual void StepBegin(const SStepBuffer* stepBuffer) override;
 
 	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) override;
 	virtual void StepRequest(bool   isr) override;
@@ -92,7 +92,7 @@ public:
 	virtual void SetIdleTimer() override;             // set idle Timer
 
 	virtual void OptimizeMovementQueue(bool force) override;
-	virtual bool MoveReference(axis_t       axis, uint8_t referenceId, bool toMin, steprate_t vMax, sdist_t maxdist, sdist_t distToRef, sdist_t distIfRefIsOn) override;
+	virtual bool MoveReference(axis_t       axis, uint8_t referenceId, bool toMin, steprate_t vMax, sdist_t maxDist, sdist_t distToRef, sdist_t distIfRefIsOn) override;
 
 	// Test extensions
 

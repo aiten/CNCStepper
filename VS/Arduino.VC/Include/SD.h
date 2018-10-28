@@ -90,17 +90,17 @@ public:
 		return stat(_OSfilename, &st) != -1 && (st.st_mode & _S_IFDIR) != 0;
 	}
 
-	MyDirFile() { _refcount = 0; }
+	MyDirFile() { _refCount = 0; }
 
 	virtual ~MyDirFile() = default;
 
-	int  _refcount;
-	void IncRef() { _refcount++; };
+	int  _refCount;
+	void IncRef() { _refCount++; };
 
 	void DecRef()
 	{
-		_refcount--;
-		if (_refcount == 0)
+		_refCount--;
+		if (_refCount == 0)
 		{
 			close();
 			delete this;

@@ -85,7 +85,7 @@ inline float FromMs(mm1000_t ms, axis_t /* axis */)
 
 inline mm1000_t ToMs(float angle, axis_t /* axis */)
 {
-	return (mm1000_t)(angle * MsForPI / MY_PI);
+	return mm1000_t(angle * MsForPI / MY_PI);
 }
 
 /////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ inline bool IsFloatOK(float val)
 
 inline int ToGRADRound(float a)
 {
-	return (int)(a * 180.0 / MY_PI + 0.5);
+	return int(a * 180.0 / MY_PI + 0.5);
 }
 
 /////////////////////////////////////////////////////////
@@ -259,7 +259,7 @@ void CMyMotionControl::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedrate)
 
 	if (maxdist > splitdist)
 	{
-		movecount = (uint16_t)(maxdist / splitdist);
+		movecount = uint16_t(maxdist / splitdist);
 		if ((maxdist % splitdist) != 0)
 			movecount++;
 	}

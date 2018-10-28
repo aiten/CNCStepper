@@ -30,11 +30,11 @@ private:
 
 public:
 
-	void Init(uint8_t pin, uint8_t onvalue)
+	void Init(uint8_t pin, uint8_t onValue)
 	{
 		_pin      = pin;
-		_onValue  = onvalue;
-		_offValue = onvalue == LOW ? HIGH : LOW;
+		_onValue  = onValue;
+		_offValue = onValue == LOW ? HIGH : LOW;
 
 		pinMode(_pin, OUTPUT);
 		digitalWrite(_pin, _offValue);

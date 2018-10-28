@@ -208,14 +208,14 @@ private:
 
 	EnumAsByte(ERotaryFocus) _rotaryFocus = RotaryMainPage;
 
-	uint8_t _currentpage;
+	uint8_t _currentPage;
 
-	int8_t _screensaveX     = 2;
-	int8_t _screensaveY     = 0;
-	int8_t _screensaveXDiff = 1;
-	int8_t _screensaveYDiff = 1;
+	int8_t _screenSaveX     = 2;
+	int8_t _screenSaveY     = 0;
+	int8_t _screenSaveXDiff = 1;
+	int8_t _screenSaveYDiff = 1;
 
-	uint32_t _screensaveTime = 0;
+	uint32_t _screenSaveTime = 0;
 
 	uint8_t _SDFileCount  = 255;
 	int8_t  _addMenuItems = 0;

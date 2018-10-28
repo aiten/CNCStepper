@@ -54,13 +54,13 @@ const CMyControl::SMyCNCEeprom CMyControl::_eepromFlash PROGMEM =
 		NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
 		COMMANDSYNTAX_CLEAR(GetInfo1a()) | COMMANDSYNTAX_VALUE(CConfigEeprom::HPGL), GetInfo1b(),
 		0,
-		STEPPERDIRECTION, 0, 0,SPINDEL_FADETIMEDELAY,
+		STEPPERDIRECTION, 0, 0,SPINDLE_FADETIMEDELAY,
 		SPINDLE_MAXSPEED,
 		CNC_JERKSPEED,
 		CNC_MAXSPEED,
 		CNC_ACC,
 		CNC_DEC,
-		STEPRATERATE_REFMOVE,
+		STEPRATE_REFMOVE,
 		MOVEAWAYFROMREF_MM1000,
 		X_STEPSPERMM / 1000.0,
 		{
@@ -163,8 +163,8 @@ uint16_t CMyControl::IOControl(uint8_t tool)
 #endif
 		case Probe: { return _data._probe.IsOn(); }
 
-		case Servo1: return (uint16_t)_servo1.readMicroseconds();
-		case Servo2: return (uint16_t)_servo2.readMicroseconds();
+		case Servo1: return uint16_t(_servo1.readMicroseconds());
+		case Servo2: return uint16_t(_servo2.readMicroseconds());
 	}
 
 	return super::IOControl(tool);

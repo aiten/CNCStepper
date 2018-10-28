@@ -56,7 +56,7 @@ public:
 	// @formatter:off — disable formatter after this line
 	void SetPin(axis_t axis, pin_t in1, pin_t in2, pin_t in3, pin_t in4)	{ _pin[axis][0] = in1;_pin[axis][1] = in2;_pin[axis][2] = in3;	_pin[axis][3] = in4;}
 	void SetPin(axis_t axis, pin_t in1, pin_t in2)							{ _pin[axis][0] = in1; _pin[axis][1] = in2; _pin[axis][2] = 0; _pin[axis][3] = 0; }
-	void SetRefPin(axis_t axis, pin_t refmin, pin_t refmax)					{ _pinRef[ToReferenceId(axis, true)] = refmin;	_pinRef[ToReferenceId(axis, false)] = refmax; }
+	void SetRefPin(axis_t axis, pin_t refMin, pin_t refMax)					{ _pinRef[ToReferenceId(axis, true)] = refMin;	_pinRef[ToReferenceId(axis, false)] = refMax; }
 	// @formatter:on — enable formatter after this line
 
 	void SetEnablePin(axis_t axis, pin_t en) { _pinEnable[axis] = en; }

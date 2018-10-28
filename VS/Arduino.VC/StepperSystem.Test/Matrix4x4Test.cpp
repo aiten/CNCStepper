@@ -126,7 +126,8 @@ namespace StepperSystemTest
 				T2.InitDenavitHartenberg1Rot(-float(M_PI_4));
 
 				CMatrix4x4<float> T3 = T1 * T2;
-				CMatrix4x4<float> T4 = T4.InitDenavitHartenbergNOP();
+				CMatrix4x4<float> T4;
+				T4.InitDenavitHartenbergNOP();
 
 
 				if (!T3.IsEqual(T4, 0.0000001f))
@@ -169,7 +170,8 @@ namespace StepperSystemTest
 				T2.InitDenavitHartenberg2Trans(-float(M_PI_4));
 
 				CMatrix4x4<float> T3 = T1 * T2;
-				CMatrix4x4<float> T4 = T4.InitDenavitHartenbergNOP();
+				CMatrix4x4<float> T4;
+				T4.InitDenavitHartenbergNOP();
 
 
 				if (!T3.IsEqual(T4, 0.0000001f))
@@ -212,7 +214,8 @@ namespace StepperSystemTest
 				T2.InitDenavitHartenberg3Trans(-float(M_PI_4));
 
 				CMatrix4x4<float> T3 = T1 * T2;
-				CMatrix4x4<float> T4 = T4.InitDenavitHartenbergNOP();
+				CMatrix4x4<float> T4;
+				T4.InitDenavitHartenbergNOP();
 
 
 				if (!T3.IsEqual(T4, 0.0000001f))
@@ -255,7 +258,8 @@ namespace StepperSystemTest
 				T2.InitDenavitHartenberg4Rot(-float(M_PI_4));
 
 				CMatrix4x4<float> T3 = T1 * T2;
-				CMatrix4x4<float> T4 = T4.InitDenavitHartenbergNOP();
+				CMatrix4x4<float> T4;
+				T4.InitDenavitHartenbergNOP();
 
 
 				if (!T3.IsEqual(T4, 0.0000001f))
@@ -303,7 +307,8 @@ namespace StepperSystemTest
 				T2.InitDenavitHartenbergInverse(a, alpha, theta, d);
 
 				CMatrix4x4<float> T3 = T1 * T2;
-				CMatrix4x4<float> T4 = T4.InitDenavitHartenbergNOP();
+				CMatrix4x4<float> T4;
+				T4.InitDenavitHartenbergNOP();
 
 
 				if (!T3.IsEqual(T4, 0.00001f))
@@ -336,7 +341,7 @@ namespace StepperSystemTest
 
 				if (!T5.IsEqual(T10, 0.00001f))
 				{
-					Assert::Fail(L"Error InitDenavitHartenberg sequenze\n");
+					Assert::Fail(L"Error InitDenavitHartenberg sequence\n");
 				}
 			}
 

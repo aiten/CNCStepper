@@ -626,7 +626,7 @@ bool CControl::OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t add
 			}
 			break;
 
-		case OnIoEvent: IOControl(((CStepper::SIoControl*)addInfo)->_tool, ((CStepper::SIoControl*)addInfo)->_level);
+		case OnIoEvent: IOControl(reinterpret_cast<CStepper::SIoControl*>(addInfo)->_tool, reinterpret_cast<CStepper::SIoControl*>(addInfo)->_level);
 			break;
 	}
 	return true;

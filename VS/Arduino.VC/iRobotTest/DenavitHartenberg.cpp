@@ -124,12 +124,12 @@ void CDenavitHartenberg::FromPosition(float posxyz[3], float angles[NUM_AXIS], f
 			{
 				if (SearchMinOld(posxyz, angles, j, search[j], epsilon) < epsilon)
 				{
-					printf("max:%i\n", (unsigned int)i);
+					printf("max:%i\n", static_cast<unsigned int>(i));
 					return;
 				}
 			}
 		}
-		printf("max:%i\n", (unsigned int)i);
+		printf("max:%i\n", static_cast<unsigned int>(i));
 	}
 }
 

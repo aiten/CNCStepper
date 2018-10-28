@@ -163,19 +163,19 @@ void CMsvcStepper::StepRequest(bool isr)
 
 ////////////////////////////////////////////////////////////
 
-void CMsvcStepper::StepBegin(const SStepBuffer* stepbuffer)
+void CMsvcStepper::StepBegin(const SStepBuffer* stepBuffer)
 {
-	_TimerEvents[_eventIdx].Steps = stepbuffer->_steps;
-	_TimerEvents[_eventIdx].Count = stepbuffer->_count;
-	int      multiplier           = stepbuffer->DirStepCount;
+	_TimerEvents[_eventIdx].Steps = stepBuffer->_steps;
+	_TimerEvents[_eventIdx].Count = stepBuffer->_count;
+	int      multiplier           = stepBuffer->DirStepCount;
 	for (int i                    = 0; i < NUM_AXIS; i++)
 	{
 		_TimerEvents[_eventIdx].Axis[i].MoveAxis   = 0;
-		_TimerEvents[_eventIdx].Axis[i].Distance   = stepbuffer->_distance[i];
+		_TimerEvents[_eventIdx].Axis[i].Distance   = stepBuffer->_distance[i];
 		_TimerEvents[_eventIdx].Axis[i].Multiplier = multiplier % 8;
 		multiplier                                 = multiplier / 16;
 	}
-	strcpy_s(_TimerEvents[_eventIdx].MSCInfo, stepbuffer->_spMSCInfo);
+	strcpy_s(_TimerEvents[_eventIdx].MSCInfo, stepBuffer->_spMSCInfo);
 }
 
 ////////////////////////////////////////////////////////////

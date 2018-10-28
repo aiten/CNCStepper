@@ -210,12 +210,12 @@ public:
 
 #if defined(_MSC_VER)
 
-	static void SetEepromFilename(char* filename) { _eepromFileName = filename; }
+	static void SetEepromFilename(const char* fileName) { _eepromFileName = fileName; }
 
 private:
 
-	static char*    _eepromFileName;
-	static uint32_t _eepromBuffer[2048];
+	static const char* _eepromFileName;
+	static uint32_t    _eepromBuffer[2048];
 
 #else
 

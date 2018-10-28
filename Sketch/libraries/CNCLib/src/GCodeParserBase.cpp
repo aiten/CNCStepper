@@ -110,7 +110,7 @@ void CGCodeParserBase::CleanupParse()
 void CGCodeParserBase::SkipCommentNested()
 {
 	uint8_t cnt   = 0;
-	auto    start = (char*)_reader->GetBuffer();
+	auto    start = const_cast<char*>(_reader->GetBuffer());
 
 	for (char ch = _reader->GetChar(); ch; ch = _reader->GetNextChar())
 	{

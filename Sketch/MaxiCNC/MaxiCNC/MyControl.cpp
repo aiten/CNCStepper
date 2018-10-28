@@ -51,13 +51,13 @@ const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
 	GetInfo1a(), GetInfo1b(),
 	0,
-	STEPPERDIRECTION, 0, 0,SPINDEL_FADETIMEDELAY,
+	STEPPERDIRECTION, 0, 0,SPINDLE_FADETIMEDELAY,
 	SPINDLE_MAXSPEED,
 	CNC_JERKSPEED,
 	CNC_MAXSPEED,
 	CNC_ACC,
 	CNC_DEC,
-	STEPRATERATE_REFMOVE,
+	STEPRATE_REFMOVE,
 	MOVEAWAYFROMREF_MM1000,
 	X_STEPSPERMM / 1000.0,
 	{
@@ -217,7 +217,9 @@ void CMyControl::Poll()
 bool CMyControl::GoToReference(axis_t axis, steprate_t steprate, bool toMinRef)
 {
 	if (!super::GoToReference(axis, steprate, toMinRef))
+	{
 		return false;
+	}
 
 #if FEEDRATE_REFMOVE_PHASE2 > 0
 	return super::GoToReference(axis, CMotionControlBase::GetInstance()->FeedRateToStepRate(axis, FEEDRATE_REFMOVE_PHASE2), toMinRef);

@@ -65,18 +65,18 @@ public:
 
 	TOutput LinearInterpolation(TInput input, index_t i) const
 	{
-		TInput  distinput  = input - GetInput(i);
-		TInput  diffinput  = GetInput(i + 1) - GetInput(i);
-		TOutput diffoutput = GetOutput(i + 1) - GetOutput(i);
+		TInput  distInput  = input - GetInput(i);
+		TInput  diffInput  = GetInput(i + 1) - GetInput(i);
+		TOutput diffOutput = GetOutput(i + 1) - GetOutput(i);
 
-		//return pTable[i].output + ( distinput / diffinput  ) * diffoutput; => OK if TInput is float
-		return GetOutput(i) + (distinput * diffoutput) / diffinput;
+		//return pTable[i].output + ( distInput / diffInput  ) * diffOutput; => OK if TInput is float
+		return GetOutput(i) + (distInput * diffOutput) / diffInput;
 	}
 
 	TOutput Lookup(TInput input) const
 	{
 		// table must be sorted!!!!
-		// binary serach
+		// binary search
 
 		index_t left  = 0;
 		index_t right = _tableSize - 1;

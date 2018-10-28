@@ -34,8 +34,8 @@
 
 ////////////////////////////////////////////////////////
 
-uint32_t CHAL::_eepromBuffer[2048] = { 0 };
-char*    CHAL::_eepromFileName     = nullptr;
+uint32_t    CHAL::_eepromBuffer[2048] = { 0 };
+const char* CHAL::_eepromFileName     = nullptr;
 
 ////////////////////////////////////////////////////////
 

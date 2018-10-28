@@ -67,11 +67,11 @@ namespace StepperSystemTest
 			Stepper.EndTest(GetResultFileName(filename));
 		}
 
-		void Init(char* exename)
+		void Init(char* exeName)
 		{
 			::GetTempPathA(_MAX_PATH, TestResultDir);
 
-			strcpy_s(TestResultOKDir, exename);
+			strcpy_s(TestResultOKDir, exeName);
 			*(strrchr(TestResultOKDir, '\\') + 0) = 0;
 			*(strrchr(TestResultOKDir, '\\') + 1) = 0;
 			strcat_s(TestResultOKDir, "TestResult\\");
@@ -423,7 +423,7 @@ namespace StepperSystemTest
 			Stepper.CStepper::MoveRel(0, 300, 500);
 			count += 300;
 			Stepper.CStepper::MoveRel(0, 550, 5000);
-			// count += 550;
+			count += 550;
 			CreateTestFile("X.csv");
 		}
 

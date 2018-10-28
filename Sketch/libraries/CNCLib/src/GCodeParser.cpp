@@ -163,7 +163,7 @@ void CGCodeParser::CommentMessage(char* start)
 						}
 					}
 
-					start = (char*)_reader->GetBuffer();
+					start = const_cast<char*>(_reader->GetBuffer());
 				}
 				else
 				{

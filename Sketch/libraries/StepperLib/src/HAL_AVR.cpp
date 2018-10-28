@@ -87,7 +87,7 @@ void CHAL::digitalWrite(pin_t pin, uint8_t val)
 uint8_t CHAL::digitalRead(pin_t pin)
 {
 //	uint8_t timer = digitalPinToTimer(pin);
-	uint8_t bit = digitalPinToBitMask(pin);
+	uint8_t bit  = digitalPinToBitMask(pin);
 	uint8_t port = digitalPinToPort(pin);
 
 	if (port == NOT_A_PIN)

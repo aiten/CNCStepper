@@ -119,9 +119,9 @@ public:
 		Poll();
 	}
 
-	void SetDelay(uint8_t delayms)
+	void SetDelay(uint8_t delayMs)
 	{
-		_delayMs = delayms;
+		_delayMs = delayMs;
 	}
 
 private:

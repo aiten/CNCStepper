@@ -98,7 +98,7 @@ public:
 	static uint8_t  GetZeroPresetIdx() { return _modalState.ZeroPresetIdx; }
 	static void     SetZeroPresetIdx(uint8_t idx) { _modalState.ZeroPresetIdx = idx; }
 
-	static bool IsG53Present() { return _modlessState.ZeroPresetIdx == 0; }
+	static bool IsG53Present() { return _modelessState.ZeroPresetIdx == 0; }
 
 	static mm1000_t GetAllPreset(axis_t axis) { return GetG92PosPreset(axis) + GetG54PosPreset(axis) + GetToolHeightPosPreset(axis); }
 
@@ -106,7 +106,7 @@ public:
 	{
 		super::Init();
 		_modalState.Init();
-		_modlessState.Init();
+		_modelessState.Init();
 	}
 
 	static void InitAndSetFeedRate(feedrate_t feedrateG0, feedrate_t feedrateG1, feedrate_t feedrateG1max)
@@ -200,7 +200,7 @@ protected:
 		}
 	};
 
-	static SModelessState _modlessState;
+	static SModelessState _modelessState;
 
 	////////////////////////////////////////////////////////
 	// Parser structure
@@ -316,13 +316,13 @@ protected:
 			IsMm1000
 		};
 
-		uint8_t _valuetype;
+		uint8_t _valueType;
 	public:
 		//SParamInfo(param_t paramNo, const char* text, bool allowaxisofs):_paramNo(paramNo),_text(text),_allowaxisofs(allowaxisofs) {};
 		const char* GetText() const { return (const char*)pgm_read_ptr(&this->_text); }
 		param_t     GetParamNo() const { return pgm_read_word(&this->_paramNo); }
 		bool        GetAllowAxisOfs() const { return pgm_read_byte(&this->_allowaxisofs) != 0; }
-		uint8_t     GetValueType() const { return uint8_t(pgm_read_byte(&this->_valuetype)); }
+		uint8_t     GetValueType() const { return uint8_t(pgm_read_byte(&this->_valueType)); }
 	};
 
 	void PrintAllParam();

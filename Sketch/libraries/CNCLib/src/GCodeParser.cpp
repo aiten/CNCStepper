@@ -39,7 +39,7 @@
 ////////////////////////////////////////////////////////////
 
 struct CGCodeParser::SModalState    CGCodeParser::_modalState;
-struct CGCodeParser::SModelessState CGCodeParser::_modlessState;
+struct CGCodeParser::SModelessState CGCodeParser::_modelessState;
 
 ////////////////////////////////////////////////////////////
 
@@ -54,7 +54,7 @@ bool CGCodeParser::InitParse()
 		return false;
 	}
 
-	_modlessState.Init();
+	_modelessState.Init();
 	return true;				// continue
 }
 
@@ -62,7 +62,7 @@ bool CGCodeParser::InitParse()
 
 void CGCodeParser::CleanupParse()
 {
-	_modlessState.Init();		// state for no command
+	_modelessState.Init();		// state for no command
 	super::CleanupParse();
 }
 
@@ -729,9 +729,9 @@ mm1000_t CGCodeParser::CalcAllPreset(axis_t axis)
 
 mm1000_t CGCodeParser::GetG54PosPreset(axis_t axis)
 {
-	if (_modlessState.ZeroPresetIdx > 0)
+	if (_modelessState.ZeroPresetIdx > 0)
 	{
-		return _modalState.G54Pospreset[_modlessState.ZeroPresetIdx - 1][axis];
+		return _modalState.G54Pospreset[_modelessState.ZeroPresetIdx - 1][axis];
 	}
 	// no preset
 	return 0;
@@ -1558,7 +1558,7 @@ void CGCodeParser::G69Command()
 
 void CGCodeParser::G53Command()
 {
-	_modlessState.ZeroPresetIdx = 0;
+	_modelessState.ZeroPresetIdx = 0;
 }
 
 ////////////////////////////////////////////////////////////
@@ -1578,7 +1578,7 @@ void CGCodeParser::G5xCommand(uint8_t idx)
 		return;
 	}
 
-	_modlessState.ZeroPresetIdx = _modalState.ZeroPresetIdx = idx;
+	_modelessState.ZeroPresetIdx = _modalState.ZeroPresetIdx = idx;
 	CLcd::InvalidateLcd();
 }
 

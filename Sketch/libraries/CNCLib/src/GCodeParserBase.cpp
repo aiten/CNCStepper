@@ -669,11 +669,11 @@ void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 		return;
 	}
 
-	feedrate_t minfeedrate = FEEDRATE_MIN_ALLOWED;
+	feedrate_t minFeedRate = FEEDRATE_MIN_ALLOWED;
 
-	if (feedrate < minfeedrate)
+	if (feedrate < minFeedRate)
 	{
-		feedrate = minfeedrate;
+		feedrate = minFeedRate;
 	}
 
 	if (feedrate > _modalState.G1MaxFeedRate)

@@ -389,18 +389,18 @@ feedrate_t CMotionControlBase::StepRateToFeedRate(axis_t axis, steprate_t stepra
 
 /////////////////////////////////////////////////////////
 
-feedrate_t CMotionControlBase::GetMaxFeedRate(axis_t axis, feedrate_t feedrate)
+feedrate_t CMotionControlBase::GetMaxFeedRate(axis_t axis, feedrate_t feedRate)
 {
-	steprate_t maxsteprate = CStepper::GetInstance()->GetMaxSpeed(axis);
-	feedrate_t maxfeedrate = StepRateToFeedRate(axis, maxsteprate);
+	steprate_t maxStepRate = CStepper::GetInstance()->GetMaxSpeed(axis);
+	feedrate_t maxFeedRate = StepRateToFeedRate(axis, maxStepRate);
 
-	return min(feedrate,maxfeedrate);
+	return min(feedRate,maxFeedRate);
 }
 
 ////////////////////////////////////////////////////////
 // repeat axis and d until axis not in 0 .. NUM_AXIS
 
-void CMotionControlBase::MoveAbsEx(feedrate_t feedrate, uint16_t axis, mm1000_t d, ...)
+void CMotionControlBase::MoveAbsEx(feedrate_t feedRate, uint16_t axis, mm1000_t d, ...)
 {
 	mm1000_t dest[NUM_AXIS];
 	GetPositions(dest);
@@ -423,7 +423,7 @@ void CMotionControlBase::MoveAbsEx(feedrate_t feedrate, uint16_t axis, mm1000_t 
 
 	va_end(arglist);
 
-	MoveAbs(dest, feedrate);
+	MoveAbs(dest, feedRate);
 }
 
 ////////////////////////////////////////////////////////

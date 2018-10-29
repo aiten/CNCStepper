@@ -249,7 +249,7 @@ bool CU8GLcd::IsScreenSaver() const
 
 uint32_t CU8GLcd::DrawLoop()
 {
-	uint32_t timeout = 1000;
+	uint32_t timeOut = 1000;
 
 	DrawFunction curretDraw = _curretDraw;
 
@@ -278,9 +278,9 @@ uint32_t CU8GLcd::DrawLoop()
 			while (GetU8G().nextPage());
 		}
 
-		(this->*curretDraw)(DrawLoopQueryTimerout, uintptr_t(&timeout));
+		(this->*curretDraw)(DrawLoopQueryTimerout, uintptr_t(&timeOut));
 	}
-	return timeout;
+	return timeOut;
 }
 
 ////////////////////////////////////////////////////////////

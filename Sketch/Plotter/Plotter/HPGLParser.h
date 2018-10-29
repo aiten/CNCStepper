@@ -72,10 +72,10 @@ public:
 
 		void SetFeedRates()
 		{
-			FeedRateUp   = CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, penupFeedrate));
+			FeedRateUp   = CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, PenUpFeedRate));
 			FeedRateUp   = CMotionControlBase::GetInstance()->GetMaxFeedRate(X_AXIS, FeedRateUp);
 			FeedRateUp   = -FeedRateUp;
-			FeedRateDown = CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, pendownFeedrate));
+			FeedRateDown = CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, PenDownFeedRate));
 		}
 	};
 

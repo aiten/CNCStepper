@@ -21,8 +21,8 @@
 
 ////////////////////////////////////////////////////////
 
-//#define USE_U8G2_LIB
-#include <U8glib.h>
+#define USE_U8G2_LIB
+#include <U8g2lib.h>
 
 #ifndef USE_U8G2_LIB
 #define U8G2 U8GLIB

@@ -25,7 +25,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <Arduino.h>
-#include <U8glib.h>
+#include <U8g2lib.h>
 
 #include <CNCLib.h>
 #include <CNCLibEx.h>

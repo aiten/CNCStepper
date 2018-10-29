@@ -30,7 +30,7 @@
 #include <Wire.h>  // Comes with Arduino IDE
 #include <LiquidCrystal_I2C.h>
 #elif LCD_TYPE==2
-#include <U8glib.h>
+#include <U8g2lib.h>
 #endif
 
 ////////////////////////////////////////////////////////////

@@ -180,15 +180,15 @@ bool CControl::GoToReference(axis_t axis)
 
 ////////////////////////////////////////////////////////////
 
-bool CControl::GoToReference(axis_t axis, steprate_t steprate, bool toMinRef)
+bool CControl::GoToReference(axis_t axis, steprate_t stepRate, bool toMinRef)
 {
-	if (steprate == 0)
+	if (stepRate == 0)
 	{
-		steprate = steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, refmovesteprate)));
+		stepRate = steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, refmovesteprate)));
 	}
 	// goto min/max
 	return CStepper::GetInstance()->MoveReference(
-		axis, CStepper::GetInstance()->ToReferenceId(axis, toMinRef), toMinRef, steprate, 0,
+		axis, CStepper::GetInstance()->ToReferenceId(axis, toMinRef), toMinRef, stepRate, 0,
 		CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, moveAwayFromRefernece))));
 }
 

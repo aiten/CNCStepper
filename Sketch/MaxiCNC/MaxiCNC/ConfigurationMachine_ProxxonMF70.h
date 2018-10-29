@@ -55,9 +55,9 @@
 
 ////////////////////////////////////////////////////////
 
-#define CNC_MAXSPEED ((steprate_t)28000)        // steps/sec => 8.75 rot /sec
-#define CNC_ACC  350                            // 0.257 => time to full speed
-#define CNC_DEC  400                            // 0.1975 => time to break
+#define CNC_MAXSPEED ((steprate_t)28000)			// steps/sec => 8.75 rot /sec
+#define CNC_ACC  350								// 0.257 => time to full speed
+#define CNC_DEC  400								// 0.1975 => time to break
 #define CNC_JERKSPEED 1000
 
 ////////////////////////////////////////////////////////
@@ -95,7 +95,7 @@
 
 #undef SPINDLE_ANALOGSPEED
 #define SPINDLE_MAXSPEED	255			// analog 255
-#define SPINDLE_FADETIMEDELAY  0	// 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
+#define SPINDLE_FADETIMEDELAY  0		// 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
 
 ////////////////////////////////////////////////////////
 

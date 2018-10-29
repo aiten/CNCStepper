@@ -49,8 +49,8 @@ CGCodeTools GCodeTools;
 
 CMyMotionControl MotionControl;
 CConfigEeprom    Eprom;
+HardwareSerial&  StepperSerial = Serial;
 
-HardwareSerial&                 StepperSerial                    = Serial;
 const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 {
 	EPROM_SIGNATURE,
@@ -102,12 +102,12 @@ void CMyControl::Init()
 
 	CMotionControlBase::GetInstance()->InitConversion(ConversionToMm1000, ConversionToMachine);
 
-	CStepper::GetInstance()->SetLimitMin(X_AXIS, MIN_LIMIT);  // ms
+	CStepper::GetInstance()->SetLimitMin(X_AXIS, MIN_LIMIT);
 	CStepper::GetInstance()->SetLimitMin(Y_AXIS, MIN_LIMIT);
 	CStepper::GetInstance()->SetLimitMin(Z_AXIS, MIN_LIMIT);
 	CStepper::GetInstance()->SetLimitMin(A_AXIS, MIN_LIMIT);
 
-	CStepper::GetInstance()->SetLimitMax(X_AXIS, MAX_LIMIT);  // ms
+	CStepper::GetInstance()->SetLimitMax(X_AXIS, MAX_LIMIT);
 	CStepper::GetInstance()->SetLimitMax(Y_AXIS, MAX_LIMIT);
 	CStepper::GetInstance()->SetLimitMax(Z_AXIS, MAX_LIMIT);
 	CStepper::GetInstance()->SetLimitMax(A_AXIS, MAX_LIMIT);

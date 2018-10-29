@@ -103,7 +103,7 @@
 #define SPINDLE_ANALOGSPEED
 #define SPINDLE_ISLASER
 #define SPINDLE_MAXSPEED	255			// analog 255
-#define SPINDLE_FADETIMEDELAY  0    // e.g. 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
+#define SPINDLE_FADETIMEDELAY  0		// e.g. 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
 
 ////////////////////////////////////////////////////////
 

@@ -268,8 +268,8 @@ void CMyMotionControl::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedRate)
 	{
 		for (i = 0; i < NUM_AXIS; i++)
 		{
-			mm1000_t newxtpos = RoundMulDivI32(totalDist[i], j, moveCount);
-			nextTo[i]         = to[i] - newxtpos;
+			mm1000_t nextPos = RoundMulDivI32(totalDist[i], j, moveCount);
+			nextTo[i]         = to[i] - nextPos;
 		}
 
 		super::MoveAbs(nextTo, feedRate);
@@ -372,15 +372,15 @@ mm1000_t ToMM(float mm)
 void CMyMotionControl::UnitTest()
 {
 	Test(1000, 200000, Hmm, true);		// max dist
-	Test(0, 200000, Hmm, true);		// max dist
+	Test(0, 200000, Hmm, true);			// max dist
 	Test(-1000, 200000, Hmm, true);		// max dist
 
 	Test(1000, -200000, Hmm, true);		// max dist
 	Test(0, -200000, Hmm, true);		// max dist
-	Test(-1000, -200000, Hmm, true);		// max dist
+	Test(-1000, -200000, Hmm, true);	// max dist
 
 
-	Test(mm1000_t(SEGMENT1 + SEGMENT2 + SEGMENT3), 0, Hmm, true);		// max dist
+	Test(mm1000_t(SEGMENT1 + SEGMENT2 + SEGMENT3), 0, Hmm, true);				// max dist
 	Test(mm1000_t(SEGMENT2 + SEGMENT3), 0, mm1000_t(SEGMENT1) + Hmm, true);		// max height
 
 	Test(mm1000_t(SEGMENT2 + SEGMENT3), 0, mm1000_t(SEGMENT1) + Hmm, true);		// max height

@@ -250,7 +250,9 @@ void CControl::Poll()
 #ifdef _USE_LCD
 
 	if (CLcd::GetInstance())
+	{
 		CLcd::GetInstance()->Poll();
+	}
 
 #endif
 }
@@ -375,7 +377,7 @@ bool CControl::IsEndOfCommandChar(char ch)
 
 ////////////////////////////////////////////////////////////
 
-void CControl::ReadAndExecuteCommand(Stream* stream, Stream* output, bool filestream)
+void CControl::ReadAndExecuteCommand(Stream* stream, Stream* output, bool fileStream)
 {
 	// call this method if ch is available in stream
 
@@ -415,7 +417,7 @@ void CControl::ReadAndExecuteCommand(Stream* stream, Stream* output, bool filest
 			*/
 		}
 
-		if (filestream)						// e.g. SD card => execute last line without "EndOfLine"
+		if (fileStream)						// e.g. SD card => execute last line without "EndOfLine"
 		{
 			if (_bufferidx > 0)
 			{

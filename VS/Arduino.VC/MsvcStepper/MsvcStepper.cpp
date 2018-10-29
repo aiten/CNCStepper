@@ -103,9 +103,9 @@ void CMsvcStepper::OnStart()
 
 ////////////////////////////////////////////////////////////
 
-void CMsvcStepper::OnIdle(uint32_t idletime)
+void CMsvcStepper::OnIdle(uint32_t idleTime)
 {
-	__super::OnIdle(idletime);
+	__super::OnIdle(idleTime);
 }
 
 ////////////////////////////////////////////////////////////

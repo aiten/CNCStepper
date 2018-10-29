@@ -66,7 +66,7 @@ private:
 	uint8_t _pen;
 	bool    _havePen;
 
-	bool MoveToPenPosition(feedrate_t feedrate, mm1000_t pos);
+	bool MoveToPenPosition(feedrate_t feedRate, mm1000_t pos);
 
 	bool PenToDepot();
 	bool PenFromDepot(uint8_t    pen);

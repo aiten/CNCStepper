@@ -94,7 +94,7 @@ void CMyParser::M118Command()
 
 	if (GetAxisAbs(move))
 	{
-		CMyMotionControl* pMC = static_cast<CMyMotionControl*>(CMotionControlBase::GetInstance());
+		auto pMC = static_cast<CMyMotionControl*>(CMotionControlBase::GetInstance());
 		pMC->MoveAngleLog(move.newpos);
 	}
 }

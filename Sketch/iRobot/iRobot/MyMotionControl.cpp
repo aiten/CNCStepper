@@ -236,47 +236,47 @@ bool CMyMotionControl::FromAngle(const float angle[NUM_AXIS], mm1000_t dest[NUM_
 
 /////////////////////////////////////////////////////////
 
-void CMyMotionControl::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedrate)
+void CMyMotionControl::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedRate)
 {
-	uint16_t movecount = 1;
-	mm1000_t nextto[NUM_AXIS];
-	mm1000_t totaldist[NUM_AXIS];
+	uint16_t moveCount = 1;
+	mm1000_t nextTo[NUM_AXIS];
+	mm1000_t totalDist[NUM_AXIS];
 
-	mm1000_t       maxdist   = 0;
-	const mm1000_t splitdist = SPLITMOVEDIST;
+	mm1000_t       maxDist   = 0;
+	const mm1000_t splitDist = SPLITMOVEDIST;
 
 	axis_t i;
 
 	for (i = 0; i < NUM_AXIS; i++)
 	{
 		mm1000_t dist = to[i] - _current[i];
-		totaldist[i]  = dist;
+		totalDist[i]  = dist;
 
 		if (dist < 0) dist = -dist;
-		if (dist > maxdist)
-			maxdist = dist;
+		if (dist > maxDist)
+			maxDist = dist;
 	}
 
-	if (maxdist > splitdist)
+	if (maxDist > splitDist)
 	{
-		movecount = uint16_t(maxdist / splitdist);
-		if ((maxdist % splitdist) != 0)
-			movecount++;
+		moveCount = uint16_t(maxDist / splitDist);
+		if ((maxDist % splitDist) != 0)
+			moveCount++;
 	}
 
-	for (uint16_t j = movecount - 1; j > 0; j--)
+	for (uint16_t j = moveCount - 1; j > 0; j--)
 	{
 		for (i = 0; i < NUM_AXIS; i++)
 		{
-			mm1000_t newxtpos = RoundMulDivI32(totaldist[i], j, movecount);
-			nextto[i]         = to[i] - newxtpos;
+			mm1000_t newxtpos = RoundMulDivI32(totalDist[i], j, moveCount);
+			nextTo[i]         = to[i] - newxtpos;
 		}
 
-		super::MoveAbs(nextto, feedrate);
+		super::MoveAbs(nextTo, feedRate);
 		if (IsError()) return;
 	}
 
-	super::MoveAbs(to, feedrate);
+	super::MoveAbs(to, feedRate);
 }
 
 /////////////////////////////////////////////////////////

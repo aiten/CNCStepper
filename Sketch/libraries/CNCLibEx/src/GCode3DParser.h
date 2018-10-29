@@ -60,7 +60,7 @@ public:
 protected:
 
 	virtual bool InitParse() override;
-	virtual bool MCommand(mcode_t mCode) override;
+	virtual bool MCommand(mcode_t mcode) override;
 
 private:
 

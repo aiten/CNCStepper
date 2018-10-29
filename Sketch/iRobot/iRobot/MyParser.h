@@ -39,7 +39,7 @@ public:
 
 protected:
 
-	virtual bool MCommand(mcode_t mCode) override;
+	virtual bool MCommand(mcode_t mcode) override;
 
 private:
 

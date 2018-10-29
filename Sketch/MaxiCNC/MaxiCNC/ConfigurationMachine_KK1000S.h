@@ -44,7 +44,7 @@
 
 ////////////////////////////////////////////////////////
 
-#define STEPPERDIRECTION (1<<X_AXIS) + (1<<Y_AXIS)		// set bit to invert direction of each axis
+#define STEPPERDIRECTION ((1<<X_AXIS) + (1<<Y_AXIS))	// set bit to invert direction of each axis
 
 // PIN AS Ramps 1.4 
 #define STEPSPERROTATION	200

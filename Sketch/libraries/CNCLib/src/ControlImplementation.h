@@ -55,11 +55,11 @@ struct ControlData
 	inline uint8_t                        ConvertSpindleSpeedToIO(uint16_t level) { return (uint8_t)level; }
 #elif defined(SPINDLE_FADE)
 #ifdef SPINDLE_DIR_PIN
-				CAnalog8XIOControlSmooth<SPINDLE_ENABLE_PIN, SPINDLE_DIR_PIN> _spindle;
-				inline int16_t ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
-				#undef SPINDLE_DIR_PIN
-				#define SPINDLESPEEDISINT
-				#define SPINDLESMOOTH
+	CAnalog8XIOControlSmooth<SPINDLE_ENABLE_PIN, SPINDLE_DIR_PIN> _spindle;
+	inline int16_t                                                ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
+#undef SPINDLE_DIR_PIN
+#define SPINDLESPEEDISINT
+#define SPINDLESMOOTH
 #else
 				CAnalog8IOControlSmooth<SPINDLE_ENABLE_PIN> _spindle;
 				inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
@@ -158,8 +158,10 @@ struct ControlData
 		switch (tool)
 		{
 #ifdef SPINDLESPEEDISINT
-			case CControl::SpindleCW:		_spindle.On(ConvertSpindleSpeedToIO(level));return true;
-			case CControl::SpindleCCW:		_spindle.On(-ConvertSpindleSpeedToIO(level)); return true;
+			case CControl::SpindleCW: _spindle.On(ConvertSpindleSpeedToIO(level));
+				return true;
+			case CControl::SpindleCCW: _spindle.On(-ConvertSpindleSpeedToIO(level));
+				return true;
 #else
 
 			case CControl::SpindleCW:

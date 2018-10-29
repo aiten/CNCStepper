@@ -140,14 +140,13 @@ private:
 	STimerEvent* _TimerEvents;
 	int          _oldCacheSize;
 
-	int     _sumtime[NUM_AXIS_MVC];
+	int     _sumTime[NUM_AXIS_MVC];
 	int     _count[NUM_AXIS_MVC];
 	int     _total[NUM_AXIS_MVC];
 	char    _speed[NUM_AXIS_MVC][20];
-	int64_t _totaltime;
+	int64_t _totalTime;
 	int     _lastTimer;
-
-	int _refMovestart;
+	int     _refMoveStart;
 
 	bool    _isReferenceMove;
 	uint8_t _isReferenceId;

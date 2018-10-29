@@ -202,7 +202,7 @@ public:
 
 	static void Beep(ETone freq, uint16_t duration)
 	{
-		uint32_t     endmillis = millis() + duration;
+		uint32_t     endMillis = millis() + duration;
 		unsigned int tonePause = static_cast<unsigned int>(freq);
 
 		do
@@ -215,7 +215,7 @@ public:
 				CHAL::DelayMicroseconds(tonePause);
 			}
 		}
-		while (millis() < endmillis);
+		while (millis() < endMillis);
 	}
 
 	static void PlayPGM(const SPlayTone* list)

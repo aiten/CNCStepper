@@ -82,7 +82,9 @@ void CPlotter::Resume(bool restorePenDown)
 	{
 		_isPenDownTimeout = false;
 		if (restorePenDown)
+		{
 			PenDown();
+		}
 	}
 }
 
@@ -141,9 +143,13 @@ void CPlotter::DelayPenNow()
 	{
 		_isDelayPen = false;
 		if (_isDelayPenDown)
+		{
 			PenDown();
+		}
 		else
+		{
 			PenUp();
+		}
 	}
 }
 
@@ -188,7 +194,9 @@ bool CPlotter::ToPenChangePos(uint8_t pen)
 		-1);
 
 	if (CStepper::GetInstance()->IsError())
+	{
 		return false;
+	}
 
 	return MoveToPenPosition(
 		CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, movepenchangeFeedrate)),
@@ -209,10 +217,14 @@ bool CPlotter::OffPenChangePos(uint8_t pen)
 bool CPlotter::SetPen(uint8_t pen)
 {
 	if (_pen == pen && _havePen)
+	{
 		return true;
+	}
 
 	if (!PenToDepot())
+	{
 		return false;
+	}
 
 	return PenFromDepot(pen);
 }
@@ -222,7 +234,9 @@ bool CPlotter::SetPen(uint8_t pen)
 bool CPlotter::PenToDepot()
 {
 	if (!_havePen)
+	{
 		return true;
+	}
 
 	PenUp();
 	CStepper::GetInstance()->WaitBusy();
@@ -231,7 +245,9 @@ bool CPlotter::PenToDepot()
 	// TODO: 
 
 	if (!ToPenChangePos(_pen))
+	{
 		return false;
+	}
 
 	CStepper::GetInstance()->IoControl(CControl::Servo1, CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampOpenPos)));
 	CStepper::GetInstance()->Wait(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampOpenDelay)) / 10);
@@ -253,7 +269,9 @@ bool CPlotter::PenFromDepot(uint8_t pen)
 	// TODO: 
 
 	if (!ToPenChangePos(pen))
+	{
 		return false;
+	}
 
 	CStepper::GetInstance()->IoControl(CControl::Servo1, CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampClosePos)));
 	CStepper::GetInstance()->Wait(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampClosePos)) / 10);
@@ -283,7 +301,8 @@ mm1000_t CPlotter::ConvertConfigPos(mm1000_t pos, axis_t axis)
 	if (pos >= 0x7fff000l)
 	{
 		eepromofs_t ofs = sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis;
-		pos             = CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].size) + ofs);
+
+		pos = CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].Size) + ofs);
 	}
 	return pos;
 }

@@ -26,8 +26,8 @@
 //#define STEPPERTYPE 3		// CStepperTB6560
 #define STEPPERTYPE 4		// CStepperRamps14
 
-//#define LCD_TYPE  1         // LCD_2004_LiquidCrystal_I2C
-#define LCD_TYPE  2         // LCD_12864_u8g
+//#define LCD_TYPE  1		// LCD_2004_LiquidCrystal_I2C
+#define LCD_TYPE  2			// LCD_12864_u8g
 
 #define PENTYPE_ZAXIS 0
 #define PENTYPE_SERVO 1
@@ -150,7 +150,7 @@
 #define SERVO1_CLAMPOPENDELAY	1000
 #define SERVO1_CLAMPCLOSEDELAY	1000
 
-#define PLOTTER_DEFAULT_PENUP_FEEDRATE			LONG_MAX	 // reduced to maxsteprate
+#define PLOTTER_DEFAULT_PENUP_FEEDRATE			LONG_MAX	 // reduced to maxStepRate
 #define PLOTTER_DEFAULT_PENDOWN_FEEDRATE		3600000l     // 60 mm/ sec;
 
 #if PENTYPE == PENTYPE_ZAXIS			// Z-AXIS

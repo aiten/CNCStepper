@@ -32,7 +32,7 @@ public:
 
 	void Off() { }
 
-	void On(uint8_t = 0)		// same signature as CAnalog8IOControl
+	void On(uint8_t = 0)		// same Signature as CAnalog8IOControl
 	{ }
 
 	void SetLevel(uint8_t) { }

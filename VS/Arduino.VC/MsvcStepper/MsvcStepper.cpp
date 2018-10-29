@@ -79,13 +79,15 @@ void CMsvcStepper::DoISR()
 void CMsvcStepper::HandleIdle()
 {
 	if (IsBusy())
-		DoISR();
-
-	static uint32_t lasttimerinterrupt = 0;
-
-	if (lasttimerinterrupt + 100 < millis())
 	{
-		lasttimerinterrupt = millis();
+		DoISR();
+	}
+
+	static uint32_t lastTimerInterrupt = 0;
+
+	if (lastTimerInterrupt + 100 < millis())
+	{
+		lastTimerInterrupt = millis();
 		if (CHAL::_TimerEvent0)
 		{
 			CHAL::_TimerEvent0();
@@ -97,7 +99,7 @@ void CMsvcStepper::HandleIdle()
 
 void CMsvcStepper::OnStart()
 {
-	_refMovestart = 0;
+	_refMoveStart = 0;
 	__super::OnStart();
 }
 
@@ -112,27 +114,27 @@ void CMsvcStepper::OnIdle(uint32_t idleTime)
 
 uint8_t CMsvcStepper::GetReferenceValue(uint8_t referenceId)
 {
-	uint8_t refhitvalue = _pod._referenceHitValue[referenceId];
-	uint8_t refoffvalue = _pod._referenceHitValue[referenceId] == LOW ? HIGH : LOW;
+	uint8_t refHitValue = _pod._referenceHitValue[referenceId];
+	uint8_t refOffValue = _pod._referenceHitValue[referenceId] == LOW ? HIGH : LOW;
 
 	if (!_isReferenceMove || referenceId != _isReferenceId)
 	{
-		return refoffvalue;
+		return refOffValue;
 	}
 
 	_referenceMoveSteps++;
 
-	return (_referenceMoveSteps / 16) % 2 == 0 ? refhitvalue : refoffvalue;
+	return (_referenceMoveSteps / 16) % 2 == 0 ? refHitValue : refOffValue;
 }
 
 ////////////////////////////////////////////////////////////
 
-bool CMsvcStepper::MoveReference(axis_t axis, uint8_t referenceId, bool toMin, steprate_t vMax, sdist_t maxdist, sdist_t distToRef, sdist_t distIfRefIsOn)
+bool CMsvcStepper::MoveReference(axis_t axis, uint8_t referenceId, bool toMin, steprate_t vMax, sdist_t maxDist, sdist_t distToRef, sdist_t distIfRefIsOn)
 {
 	_referenceMoveSteps = 15;
 	_isReferenceMove    = true;
 	_isReferenceId      = referenceId;
-	bool ret            = __super::MoveReference(axis, referenceId, toMin, vMax, maxdist, distToRef, distIfRefIsOn);
+	bool ret            = __super::MoveReference(axis, referenceId, toMin, vMax, maxDist, distToRef, distIfRefIsOn);
 	_isReferenceMove    = false;
 	return ret;
 }
@@ -157,7 +159,7 @@ void CMsvcStepper::SetIdleTimer()
 
 void CMsvcStepper::StepRequest(bool isr)
 {
-	_refMovestart++;
+	_refMoveStart++;
 	__super::StepRequest(isr);
 }
 
@@ -167,13 +169,16 @@ void CMsvcStepper::StepBegin(const SStepBuffer* stepBuffer)
 {
 	_TimerEvents[_eventIdx].Steps = stepBuffer->_steps;
 	_TimerEvents[_eventIdx].Count = stepBuffer->_count;
-	int      multiplier           = stepBuffer->DirStepCount;
-	for (int i                    = 0; i < NUM_AXIS; i++)
+
+	int multiplier = stepBuffer->DirStepCount;
+
+	for (int i = 0; i < NUM_AXIS; i++)
 	{
 		_TimerEvents[_eventIdx].Axis[i].MoveAxis   = 0;
 		_TimerEvents[_eventIdx].Axis[i].Distance   = stepBuffer->_distance[i];
 		_TimerEvents[_eventIdx].Axis[i].Multiplier = multiplier % 8;
-		multiplier                                 = multiplier / 16;
+
+		multiplier = multiplier / 16;
 	}
 	strcpy_s(_TimerEvents[_eventIdx].MSCInfo, stepBuffer->_spMSCInfo);
 }
@@ -210,7 +215,9 @@ void CMsvcStepper::Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, 
 void CMsvcStepper::OptimizeMovementQueue(bool force)
 {
 	if (!DelayOptimization || force || _movements._queue.IsFull())
+	{
 		__super::OptimizeMovementQueue(force);
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -245,13 +252,13 @@ void CMsvcStepper::InitTest(const char* fileName)
 			SetJerkSpeed(x, 500);
 			SetPosition(x, 0);
 		}
-		_sumtime[x]  = 0;
+		_sumTime[x]  = 0;
 		_count[x]    = 0;
-		_sumtime[x]  = 0;
+		_sumTime[x]  = 0;
 		_total[x]    = 0;
 		_speed[x][0] = 0;
 	}
-	_totaltime = 0;
+	_totalTime = 0;
 	_lastTimer = 0;
 
 	MSCInfo = "";
@@ -303,7 +310,7 @@ void CMsvcStepper::WriteTestResults(const char* fileName)
 
 	for (int i = 0; i < _eventIdx; i++)
 	{
-		int outtotaltime = int(_totaltime / 1000);
+		int outtotaltime = int(_totalTime / 1000);
 		int timer        = _TimerEvents[i].TimerValues;
 		if (timer == 0)
 		{
@@ -327,7 +334,7 @@ void CMsvcStepper::WriteTestResults(const char* fileName)
 		{
 			int outspeed = 10 * (timerconstant / timer) * _TimerEvents[i].Axis[x].Multiplier;
 			_total[x] += _TimerEvents[i].Axis[x].MoveAxis;
-			_sumtime[x] += outspeed;
+			_sumTime[x] += outspeed;
 			_count[x] += 1;
 			if (_TimerEvents[i].Axis[x].MoveAxis != 0)
 			{
@@ -340,7 +347,7 @@ void CMsvcStepper::WriteTestResults(const char* fileName)
 				}
 				sprintf(_speed[x], "%i", speed);
 				_count[x]   = 0;
-				_sumtime[x] = 0;
+				_sumTime[x] = 0;
 			}
 			else
 			{
@@ -371,7 +378,7 @@ void CMsvcStepper::WriteTestResults(const char* fileName)
 		        _total[3],
 		        _total[4],
 		        _TimerEvents[i].MSCInfo);
-		_totaltime += timer;
+		_totalTime += timer;
 	}
 	fclose(f);
 }

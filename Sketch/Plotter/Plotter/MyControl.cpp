@@ -51,7 +51,7 @@ const CMyControl::SMyCNCEeprom CMyControl::_eepromFlash PROGMEM =
 {
 	{
 		EPROM_SIGNATURE_PLOTTER,
-		NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
+		NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,Axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
 		COMMANDSYNTAX_CLEAR(GetInfo1a()) | COMMANDSYNTAX_VALUE(CConfigEeprom::HPGL), GetInfo1b(),
 		0,
 		STEPPERDIRECTION, 0, 0,SPINDLE_FADETIMEDELAY,
@@ -137,10 +137,11 @@ void CMyControl::IOControl(uint8_t tool, uint16_t level)
 {
 	switch (tool)
 	{
-		case Servo1: _servo1.write(level);
-			return;
-		case Servo2: _servo2.write(level);
-			return;
+		// @formatter:off — disable formatter after this line
+		case Servo1: _servo1.write(level);	return;
+		case Servo2: _servo2.write(level);	return;
+			// @formatter:on — enable formatter after this line
+		default: break;
 	}
 
 	if (!_data.IOControl(tool, level))
@@ -245,10 +246,10 @@ bool CMyControl::OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t a
 
 ////////////////////////////////////////////////////////////
 
-void CMyControl::Idle(unsigned int idletime)
+void CMyControl::Idle(unsigned int idleTime)
 {
-	Plotter.Idle(idletime);
-	super::Idle(idletime);
+	Plotter.Idle(idleTime);
+	super::Idle(idleTime);
 }
 
 ////////////////////////////////////////////////////////////
@@ -265,8 +266,8 @@ bool CMyControl::Parse(CStreamReader* reader, Stream* output)
 	{
 		case '$':
 		case '?':
-		case '&':
-			return super::Parse(reader, output);
+		case '&': return super::Parse(reader, output);
+		default: break;
 	}
 
 	CHPGLParser hpgl(reader, output);

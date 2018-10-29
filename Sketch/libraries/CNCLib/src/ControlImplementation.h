@@ -56,18 +56,18 @@ struct ControlData
 #elif defined(SPINDLE_FADE)
 #ifdef SPINDLE_DIR_PIN
 	CAnalog8XIOControlSmooth<SPINDLE_ENABLE_PIN, SPINDLE_DIR_PIN> _spindle;
-	inline int16_t                                                ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
+	inline int16_t                                                ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, MaxSpindleSpeed)), level); }
 #undef SPINDLE_DIR_PIN
 #define SPINDLESPEEDISINT
 #define SPINDLESMOOTH
 #else
 				CAnalog8IOControlSmooth<SPINDLE_ENABLE_PIN> _spindle;
-				inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
+				inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, MaxSpindleSpeed)), level); }
 			#define SPINDLESMOOTH
 #endif
 #else
 			CAnalog8IOControl<SPINDLE_ENABLE_PIN> _spindle;
-			inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, maxspindlespeed)), level); }
+			inline uint8_t ConvertSpindleSpeedToIO(uint16_t level) { return CControl::ConvertSpindleSpeedToIO8(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, MaxSpindleSpeed)), level); }
 #endif
 #else
 	COnOffIOControl<SPINDLE_ENABLE_PIN, SPINDLE_DIGITAL_ON, SPINDLE_DIGITAL_OFF> _spindle;
@@ -142,7 +142,7 @@ struct ControlData
 
 		_spindle.Init();
 #ifdef SPINDLESMOOTH
-		_spindle.SetDelay(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, spindlefadetime)));
+		_spindle.SetDelay(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, SpindleFadeTime)));
 #endif
 		_probe.Init(PROBE_INPUTPINMODE);
 		_kill.Init(KILL_INPUTPINMODE);

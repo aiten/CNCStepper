@@ -41,7 +41,6 @@ int _tmain(int /* argc */, _TCHAR* /* argv */[])
 
 // Copy From INO
 
-
 void setup()
 {
 	Serial.begin(57600);

@@ -76,7 +76,7 @@ void CControl::Initialized()
 
 void CControl::InitFromEeprom()
 {
-	CStepper::GetInstance()->SetDirection(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, stepperdirections)));
+	CStepper::GetInstance()->SetDirection(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, StepperDirections)));
 
 #ifdef REDUCED_SIZE
 
@@ -88,47 +88,47 @@ void CControl::InitFromEeprom()
 
 #endif
 
-	uint16_t jerkspeed = CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, jerkspeed));
+	uint16_t jerkspeed = CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, JerkSpeed));
 	if (jerkspeed == 0)
 	{
 		jerkspeed = 1024;
 	}
 
 	CStepper::GetInstance()->SetDefaultMaxSpeed(
-		steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate))),
-		steprate_t(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, acc))),
-		steprate_t(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, dec))),
+		steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate))),
+		steprate_t(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, Acc))),
+		steprate_t(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, Dec))),
 		jerkspeed);
 
 	for (uint8_t axis = 0; axis < NUM_AXIS; axis++)
 	{
 		eepromofs_t ofs = sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis;
-		CStepper::GetInstance()->SetReferenceHitValue(CStepper::GetInstance()->ToReferenceId(axis, true), CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].referenceValue_min) + ofs));
-		CStepper::GetInstance()->SetReferenceHitValue(CStepper::GetInstance()->ToReferenceId(axis, false), CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].referenceValue_max) + ofs));
+		CStepper::GetInstance()->SetReferenceHitValue(CStepper::GetInstance()->ToReferenceId(axis, true), CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].ReferenceValueMin) + ofs));
+		CStepper::GetInstance()->SetReferenceHitValue(CStepper::GetInstance()->ToReferenceId(axis, false), CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].ReferenceValueMax) + ofs));
 
-		CStepper::GetInstance()->SetLimitMax(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].size) + ofs)));
+		CStepper::GetInstance()->SetLimitMax(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].Size) + ofs)));
 
 #ifndef REDUCED_SIZE
 
-		steprate_t steprate = CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].maxsteprate) + ofs);
+		steprate_t steprate = CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].MaxStepRate) + ofs);
 		if (steprate != 0)
 		{
 			CStepper::GetInstance()->SetMaxSpeed(axis, steprate);
 		}
 
-		steprate = CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, axis[0].acc) + ofs);
+		steprate = CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].Acc) + ofs);
 		if (steprate != 0)
 		{
 			CStepper::GetInstance()->SetAcc(axis, steprate);
 		}
 
-		steprate = CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, axis[0].dec) + ofs);
+		steprate = CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].Dec) + ofs);
 		if (steprate != 0)
 		{
 			CStepper::GetInstance()->SetDec(axis, steprate);
 		}
 
-		float stepsperMM1000 = CConfigEeprom::GetConfigFloat(offsetof(CConfigEeprom::SCNCEeprom, axis[0].StepsPerMm1000) + ofs);
+		float stepsperMM1000 = CConfigEeprom::GetConfigFloat(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].StepsPerMm1000) + ofs);
 		if (stepsperMM1000 != 0.0)
 		{
 			CMotionControlBase::GetInstance()->SetConversionStepsPerEx();
@@ -156,7 +156,7 @@ void CControl::GoToReference()
 {
 	for (axis_t i = 0; i < NUM_AXIS; i++)
 	{
-		axis_t axis = CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].refmoveSequence) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * i);
+		axis_t axis = CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].RefmoveSequence) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * i);
 		if (axis < NUM_AXIS)
 		{
 			GoToReference(axis);
@@ -168,7 +168,7 @@ void CControl::GoToReference()
 
 bool CControl::GoToReference(axis_t axis)
 {
-	EnumAsByte(EReverenceType) referenceType = EReverenceType(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, axis[0].referenceType) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis));
+	EnumAsByte(EReverenceType) referenceType = EReverenceType(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].ReferenceType) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis));
 	if (referenceType == EReverenceType::NoReference)
 	{
 		return false;
@@ -184,12 +184,12 @@ bool CControl::GoToReference(axis_t axis, steprate_t stepRate, bool toMinRef)
 {
 	if (stepRate == 0)
 	{
-		stepRate = steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, refmovesteprate)));
+		stepRate = steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, RefMoveStepRate)));
 	}
 	// goto min/max
 	return CStepper::GetInstance()->MoveReference(
 		axis, CStepper::GetInstance()->ToReferenceId(axis, toMinRef), toMinRef, stepRate, 0,
-		CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, moveAwayFromRefernece))));
+		CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MoveAwayFromReference))));
 }
 
 ////////////////////////////////////////////////////////////

@@ -32,21 +32,21 @@ template <> CConfigEeprom* CSingleton<CConfigEeprom>::_instance = nullptr;
 
 ////////////////////////////////////////////////////////////
 
-void CConfigEeprom::Init(uint16_t eepromsizesize, const void* defaulteeprom, uint32_t eepromID)
+void CConfigEeprom::Init(uint16_t eepromSize, const void* defaultEeprom, uint32_t eepromID)
 {
 	CHAL::InitEeprom();
 
-	_eepromsizesize = eepromsizesize;
-	_defaulteeprom  = defaulteeprom;
+	_eepromSize = eepromSize;
+	_defaultEeprom  = defaultEeprom;
 
 	if (CHAL::HaveEeprom())
 	{
-		_eepromvalid = true;
-		_eepromvalid = GetConfigU32(offsetof(SCNCEeprom, signature)) == eepromID;
+		_eepromValid = true;
+		_eepromValid = GetConfigU32(offsetof(SCNCEeprom, Signature)) == eepromID;
 	}
 	else
 	{
-		_eepromvalid = false;;
+		_eepromValid = false;;
 	}
 }
 
@@ -85,11 +85,11 @@ inline const void* AddAdr(const void* adr, eepromofs_t ofs)
 
 uint32_t CConfigEeprom::GetConfig32(eepromofs_t ofs) const
 {
-	if (_eepromvalid)
+	if (_eepromValid)
 	{
 		return CHAL::eeprom_read_dword((uint32_t*)AddAdr(CHAL::GetEepromBaseAdr(), ofs));
 	}
-	return pgm_read_dword((uint32_t*)AddAdr(_defaulteeprom, ofs));
+	return pgm_read_dword((uint32_t*)AddAdr(_defaultEeprom, ofs));
 }
 
 ////////////////////////////////////////////////////////////
@@ -103,18 +103,18 @@ void CConfigEeprom::SetConfig32(eepromofs_t ofs, uint32_t value)
 
 void CConfigEeprom::FlushConfig()
 {
-	for (eepromofs_t ofs = 0; ofs < _eepromsizesize; ofs += sizeof(uint32_t))
+	for (eepromofs_t ofs = 0; ofs < _eepromSize; ofs += sizeof(uint32_t))
 	{
 		SetConfig32(ofs, GetConfig32(ofs));
 	}
-	_eepromvalid = true;
+	_eepromValid = true;
 }
 
 ////////////////////////////////////////////////////////////
 
 void CConfigEeprom::PrintConfig()
 {
-	for (eepromofs_t ofs = 0; ofs < _eepromsizesize; ofs += sizeof(uint32_t))
+	for (eepromofs_t ofs = 0; ofs < _eepromSize; ofs += sizeof(uint32_t))
 	{
 		uint32_t val = GetConfig32(ofs);
 		StepperSerial.print('$');
@@ -148,17 +148,17 @@ bool CConfigEeprom::ParseConfig(CParser* parser)
 			{
 				return false;
 			}
-			_eepromcanwrite = true;
+			_eepromCanWrite = true;
 			parser->GetReader()->GetNextChar();
 			return true;
 		}
 		case 'w':
 		{
-			if (!CHAL::HaveEeprom() || !CHAL::NeedFlushEeprom() || !_eepromcanwrite)
+			if (!CHAL::HaveEeprom() || !CHAL::NeedFlushEeprom() || !_eepromCanWrite)
 			{
 				return false;
 			}
-			_eepromcanwrite = false;
+			_eepromCanWrite = false;
 			Flush();
 			parser->GetReader()->GetNextChar();
 			return true;
@@ -175,12 +175,12 @@ bool CConfigEeprom::ParseConfig(CParser* parser)
 	parser->GetReader()->GetNextChar();
 	uint32_t varvalue = parser->GetUInt32();
 
-	if (parser->IsError() || slot >= _eepromsizesize / sizeof(uint32_t) || !_eepromcanwrite)
+	if (parser->IsError() || slot >= _eepromSize / sizeof(uint32_t) || !_eepromCanWrite)
 	{
 		return false;
 	}
 
-	if (!_eepromvalid)
+	if (!_eepromValid)
 	{
 		FlushConfig();
 	}

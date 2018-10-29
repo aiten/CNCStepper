@@ -64,7 +64,7 @@ protected:
 
 	virtual void TimerInterrupt() override;
 	virtual bool Parse(CStreamReader* reader, Stream* output) override;
-	virtual void Idle(unsigned int    idletime) override;
+	virtual void Idle(unsigned int    idleTime) override;
 
 	virtual bool IsKill() override;
 	virtual void Poll() override;

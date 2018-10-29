@@ -65,7 +65,9 @@ void CHPGLParser::ReadAndSkipSemicolon()
 {
 	char ch = _reader->SkipSpaces();
 	if (ch == ';')
+	{
 		_reader->GetNextChar();
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -142,20 +144,17 @@ void CHPGLParser::IgnoreCommand()
 
 void CHPGLParser::InitCommand()
 {
-	// Init HPGL Parser
-
 	Init();
-
 	ReadAndSkipSemicolon();
 }
 
 ////////////////////////////////////////////////////////////
 
-void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
+void CHPGLParser::PenMoveCommand(uint8_t cmdIdx)
 {
-	Plotter.Resume(cmdidx != PU);
+	Plotter.Resume(cmdIdx != PU);
 
-	switch (cmdidx)
+	switch (cmdIdx)
 	{
 		case PU: Plotter.DelayPenUp();
 			_state.FeedRate = _state.FeedRateUp;
@@ -235,7 +234,9 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 			}
 		}
 		if (_reader->SkipSpaces() != ',')
+		{
 			break;
+		}
 
 		_reader->GetNextCharSkipScaces();
 	}
@@ -246,9 +247,11 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 
 void CHPGLParser::SelectPenCommand()
 {
-	uint8_t newpen = GetUInt8();
-	if (!Plotter.SetPen(newpen))
+	uint8_t newPen = GetUInt8();
+	if (!Plotter.SetPen(newPen))
+	{
 		Error(F("Select Pen failed"));
+	}
 
 	ReadAndSkipSemicolon();
 }
@@ -267,7 +270,10 @@ void CHPGLParser::PenVelocityCommand()
 {
 	int32_t velocityCmPerSec = GetInt32Scale(10, 1000000, 3, 255);
 
-	if (IsError()) return;
+	if (IsError())
+	{
+		return;
+	}
 
 	// feedrate is => mm_1000 / min
 	_state.FeedRateDown = CMotionControlBase::GetInstance()->GetMaxFeedRate(X_AXIS, velocityCmPerSec * 60l * 10l);

@@ -84,7 +84,7 @@ namespace StepperSystemTest
 
 		TEST_METHOD(LinearLookupLongToLongTest)
 		{
-			// test max size (255)
+			// test max Size (255)
 
 			CLinearLookup<long, long> ll(linearLL, sizeof(linearLL) / sizeof(CLinearLookup<long, long>::SLookupTable));
 

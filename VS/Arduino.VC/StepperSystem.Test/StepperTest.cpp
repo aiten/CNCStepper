@@ -50,21 +50,21 @@ namespace StepperSystemTest
 		char TestResultOKFile[_MAX_PATH] = { 0 };
 		char TestResultFile[_MAX_PATH]   = { 0 };
 
-		char* AddFileName(char* dest, const char* start, const char* filename) const
+		char* AddFileName(char* dest, const char* start, const char* fileName) const
 		{
 			strcpy_s(dest, _MAX_PATH, start);
 			strcat_s(dest, _MAX_PATH, "Test_");
-			strcat_s(dest, _MAX_PATH, filename);
+			strcat_s(dest, _MAX_PATH, fileName);
 
 			return dest;
 		}
 
-		char* GetResultFileName(const char*   filename) { return AddFileName(TestResultFile, TestResultDir, filename); }
-		char* GetResultOkFileName(const char* filename) { return AddFileName(TestResultOKFile, TestResultOKDir, filename); };
+		char* GetResultFileName(const char*   fileName) { return AddFileName(TestResultFile, TestResultDir, fileName); }
+		char* GetResultOkFileName(const char* fileName) { return AddFileName(TestResultOKFile, TestResultOKDir, fileName); };
 
-		void CreateTestFile(const char* filename)
+		void CreateTestFile(const char* fileName)
 		{
-			Stepper.EndTest(GetResultFileName(filename));
+			Stepper.EndTest(GetResultFileName(fileName));
 		}
 
 		void Init(char* exeName)
@@ -77,10 +77,10 @@ namespace StepperSystemTest
 			strcat_s(TestResultOKDir, "TestResult\\");
 		}
 
-		void AssertFile(const char* filename)
+		void AssertFile(const char* fileName)
 		{
-			const char* pathname_src  = GetResultFileName(filename);
-			const char* pathname_dest = GetResultOkFileName(filename);
+			const char* pathname_src  = GetResultFileName(fileName);
+			const char* pathname_dest = GetResultOkFileName(fileName);
 
 			if (overrideTestOK)		// create Test result file as OK
 			{
@@ -185,7 +185,7 @@ namespace StepperSystemTest
 						TestJerkSameDifferentDirection();
 						TestLongSlow();
 						TestVeryFast();
-						TestSetMaxAxixSpeed();
+						TestSetMaxAxisSpeed();
 						TestWait();
 						TestVerySlow();
 						TestStopMove();
@@ -461,10 +461,10 @@ namespace StepperSystemTest
 			Stepper.SetJerkSpeed(2, 300);
 
 			Stepper.MoveRel3(1000, 100, 0, 2000);	// max speed
-			Stepper.MoveRel3(1000, -50, 0, 2000);	// -vdiff => OK
+			Stepper.MoveRel3(1000, -50, 0, 2000);	// -vDiff => OK
 			Stepper.MoveRel3(1000, 100, 0, 2000);	// other direction OK TO
 
-			Stepper.MoveRel3(1000, -150, 0, 2000);	// -vdiff => fail
+			Stepper.MoveRel3(1000, -150, 0, 2000);	// -vDiff => fail
 			Stepper.MoveRel3(1000, 100, 0, 2000);	// other direction OK TO
 
 

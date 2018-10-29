@@ -36,12 +36,12 @@ public:
 
 	bool nextPage() const
 	{
-		char filename[_MAX_PATH];
-		::GetTempPathA(_MAX_PATH, filename);
-		strcat_s(filename, "\\CNCLib_LCD.txt");
+		char fileName[_MAX_PATH];
+		::GetTempPathA(_MAX_PATH, fileName);
+		strcat_s(fileName, "\\CNCLib_LCD.txt");
 
 		FILE* fout;
-		fopen_s(&fout, filename, "wt");
+		fopen_s(&fout, fileName, "wt");
 		if (fout)
 		{
 			fwrite(_buffer, strlen(_buffer), 1, fout);

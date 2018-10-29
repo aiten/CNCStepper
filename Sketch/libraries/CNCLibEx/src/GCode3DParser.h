@@ -45,11 +45,11 @@ public:
 	static uint32_t    GetExecutingFilePosition() { return _state._printFilePos; }
 	static uint32_t    GetExecutingFileLine() { return _state._printFileLine; }
 	static uint32_t    GetExecutingFileSize() { return _state._printFileSize; }
-	static const char* GetExecutingFileName() { return _state._printfilename; }
+	static const char* GetExecutingFileName() { return _state._printFileName; }
 
 	static void SetExecutingFilePosition(uint32_t pos) { _state._printFilePos   = pos; }
 	static void SetExecutingFileLine(uint32_t     line) { _state._printFileLine = line; }
-	static void SetExecutingFileName(char*        filename) { strcpy(_state._printfilename, filename); }
+	static void SetExecutingFileName(char*        fileName) { strcpy(_state._printFileName, fileName); }
 
 	static void Init()
 	{
@@ -59,10 +59,8 @@ public:
 
 protected:
 
-	// overrides to exend parser
-
-	virtual bool InitParse() override; // begin parsing of a command (override for prechecks)
-	virtual bool MCommand(mcode_t mcode) override;
+	virtual bool InitParse() override;
+	virtual bool MCommand(mcode_t mCode) override;
 
 private:
 
@@ -77,7 +75,7 @@ private:
 		File     _file;
 
 		bool _isM28; // SD write mode
-		char _printfilename[MAXFILEEXTNAME + 1];
+		char _printFileName[MAXFILEEXTNAME + 1];
 
 		void Init()
 		{
@@ -85,7 +83,7 @@ private:
 			_printFilePos     = 0;
 			_printFileLine    = 0;
 			_isM28            = false;
-			_printfilename[0] = 0;
+			_printFileName[0] = 0;
 		}
 	};
 
@@ -106,14 +104,14 @@ private:
 	void M30Command(); // Delete file on SD
 
 	bool GetPathName(char*  buffer);
-	bool GetFileName(char*& buffer, uint8_t& pathlength);
+	bool GetFileName(char*& buffer, uint8_t& pathLength);
 
-	bool AddPathChar(char ch, char*& buffer, uint8_t& pathlength);
+	bool AddPathChar(char ch, char*& buffer, uint8_t& pathLength);
 
 	bool CheckSD();
-	bool DeleteSDFile(char* filename, bool errorifnotexists);
+	bool DeleteSDFile(char* fileName, bool errorIfNotExists);
 
-	static void PrintSDFileListRecurse(class File& dir, uint8_t depth, uint16_t& count, char* filenamebuffer, char seperatorchar);
+	static void PrintSDFileListRecurse(class File& dir, uint8_t depth, uint16_t& count, char* fileNameBuffer, char seperatorChar);
 
 protected:
 

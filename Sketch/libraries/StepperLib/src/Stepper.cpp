@@ -330,7 +330,7 @@ void CStepper::SMovement::InitMove(CStepper* stepper, SMovement* mvPrev, mdist_t
 {
 	axis_t i;
 
-	// memset(this, 0, sizeof(SMovement)); => set al memvars!!!
+	// memset(this, 0, sizeof(SMovement)); => set all mem-vars!!!
 
 	_stepper             = stepper;
 	_pod._move._timerMax = timerMax;
@@ -541,7 +541,7 @@ void CStepper::SMovement::InitStop(SMovement* mvPrev, timer_t timer, timer_t dec
 
 void CStepper::SMovement::InitWait(CStepper* stepper, mdist_t steps, timer_t timer, bool checkWaitConditional)
 {
-	//this is no POD because of methode's => *this = SMovement();		
+	//this is no POD because of methods => *this = SMovement();		
 	memset(this, 0, sizeof(SMovement)); // init with 0
 
 	_stepper                         = stepper;
@@ -554,7 +554,7 @@ void CStepper::SMovement::InitWait(CStepper* stepper, mdist_t steps, timer_t tim
 
 void CStepper::SMovement::InitIoControl(CStepper* stepper, uint8_t tool, uint16_t level)
 {
-	//this is no POD because of methode's => *this = SMovement();		
+	//this is no POD because of methods => *this = SMovement();		
 	memset(this, 0, sizeof(SMovement)); // init with 0
 
 	_stepper        = stepper;
@@ -885,7 +885,7 @@ void CStepper::SMovement::CalcMaxJunctionSpeed(SMovement* mvPrev)
 		}
 		printf("");
 
-		if (mainaxis >= NUM_AXIS)
+		if (mainAxis >= NUM_AXIS)
 		{
 		//_pod._move._timerMaxJunction = (int32_t(mvPrev->_timerMax) + int32_t(_timerMax)) / 2;
 		//return;
@@ -1612,7 +1612,7 @@ void CStepper::FillStepBuffer()
 				/*
 								if (_pod._timeEnable[i] == 0 && GetEnable(i) != _pod._idleLevel)
 								{
-									CCriticalRegion crit;
+									CCriticalRegion criticalRegion;
 									SetEnable(i, _pod._idleLevel, true);
 								}
 				*/
@@ -1767,7 +1767,7 @@ bool CStepper::SMovementState::CalcTimerDec(timer_t minTimer, mdist_t n, uint8_t
 	// use for float: Cn = Cn-1 + 2*Cn-1 / (4*N - 1)
 	// use for INTEGER:
 	// In = ((2*In-1)+Rn-1) / (4*N - 1)		=> quot
-	// Rn = ((2*In-1)+Rn-1) % (4*N - 1)		=> remainer of division
+	// Rn = ((2*In-1)+Rn-1) % (4*N - 1)		=> remainder of division
 	// Cn = Cn-1 - In
 
 	if (minTimer > _timer)

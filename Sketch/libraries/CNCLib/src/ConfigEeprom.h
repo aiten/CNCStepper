@@ -75,7 +75,7 @@ public:
 
 	static uint8_t GetConfigU8(eepromofs_t ofs)
 	{
-		// must be dword alligned
+		// must be dword aligned
 		eepromofs_t diff = ofs % 4;
 		uint32_t    val  = GetConfigU32(ofs - diff);
 		return (val >> (diff * 8)) & 0xff;
@@ -83,7 +83,7 @@ public:
 
 	static uint16_t GetConfigU16(eepromofs_t ofs)
 	{
-		// must be dword alligned
+		// must be dword aligned
 		// must be in this 32bit value (diff can only be 0,1,2 and not 3)
 		eepromofs_t diff = ofs % 4;
 		uint32_t    val  = GetConfigU32(ofs - diff);

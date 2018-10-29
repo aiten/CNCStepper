@@ -54,18 +54,18 @@ uint8_t digitalRead(int16_t pin)
 uint8_t digitalReadFromFile(int16_t pin)
 {
 	char tmpname[_MAX_PATH];
-	char filename[_MAX_PATH];
+	char fileName[_MAX_PATH];
 	::GetTempPathA(_MAX_PATH, tmpname);
-	sprintf_s(filename, "%s\\CNCLib_digitalReadFor_%i.txt", tmpname, int(pin));
+	sprintf_s(fileName, "%s\\CNCLib_digitalReadFor_%i.txt", tmpname, int(pin));
 
 	FILE* fin;
-	fopen_s(&fin, filename, "rt");
+	fopen_s(&fin, fileName, "rt");
 	if (fin)
 	{
 		char buffer[512];
 		fgets(buffer, sizeof(buffer), fin);
 		fclose(fin);
-		remove(filename);
+		remove(fileName);
 		return atoi(buffer) == 0 ? LOW : HIGH;
 	}
 	return DIGITALREADNOVALUE;

@@ -53,7 +53,7 @@ void CPlotter::Initialized()
 
 ////////////////////////////////////////////////////////////
 
-void CPlotter::Idle(unsigned int /* idletime */)
+void CPlotter::Idle(unsigned int /* idleTime */)
 {
 	if (!CStepper::GetInstance()->IsBusy() && (millis() - CStepper::GetInstance()->IdleTime()) > PLOTTER_PENUP_TIMEOUT)
 	{
@@ -108,7 +108,7 @@ void CPlotter::PenUpNow()
 		ConvertConfigPos(CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, penuppos)), Z_AXIS));
 
 #ifdef MYUSE_LCD
-	// Lcd.DrawRequest(true,CLcd::DrawAll); => delay off movementbuffer
+	// Lcd.DrawRequest(true,CLcd::DrawAll); => delay off movementBuffer
 #endif
 }
 
@@ -127,7 +127,7 @@ void CPlotter::PenDown()
 
 		CStepper::GetInstance()->Wait(1);
 #ifdef MYUSE_LCD
-		// Lcd.DrawRequest(true,CLcd::DrawAll); => delay off movementbuffer
+		// Lcd.DrawRequest(true,CLcd::DrawAll); => delay off movementBuffer
 		Lcd.DrawRequest(CLcd::DrawForceAll);
 #endif
 	}
@@ -149,12 +149,12 @@ void CPlotter::DelayPenNow()
 
 ////////////////////////////////////////////////////////////
 
-bool CPlotter::MoveToPenPosition(feedrate_t feedrate, mm1000_t pos)
+bool CPlotter::MoveToPenPosition(feedrate_t feedRate, mm1000_t pos)
 {
 #if PENTYPE == PENTYPE_ZAXIS      // Z-AXIS
 
   CMotionControlBase::GetInstance()->MoveAbsEx(
-    feedrate,
+    feedRate,
     Z_AXIS, pos,
     -1);
 
@@ -163,7 +163,7 @@ bool CPlotter::MoveToPenPosition(feedrate_t feedrate, mm1000_t pos)
 #elif PENTYPE == PENTYPE_SERVO    // servo
 
 	CStepper::GetInstance()->IoControl(CControl::Servo2, int16_t(pos));
-	CStepper::GetInstance()->Wait(feedrate / 10);
+	CStepper::GetInstance()->Wait(feedRate / 10);
 
 	return true;
 
@@ -236,9 +236,6 @@ bool CPlotter::PenToDepot()
 	CStepper::GetInstance()->IoControl(CControl::Servo1, CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampOpenPos)));
 	CStepper::GetInstance()->Wait(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampOpenDelay)) / 10);
 
-	//_servo1.write(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampOpenPos)));
-	//delay(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampOpenDelay)));
-
 	OffPenChangePos(_pen);
 
 	////////////////////////////////////
@@ -260,9 +257,6 @@ bool CPlotter::PenFromDepot(uint8_t pen)
 
 	CStepper::GetInstance()->IoControl(CControl::Servo1, CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampClosePos)));
 	CStepper::GetInstance()->Wait(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampClosePos)) / 10);
-
-	//	_servo1.write(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampClosePos)));
-	//	delay(CConfigEeprom::GetConfigU16(offsetof(CMyControl::SMyCNCEeprom, penchangeServoClampCloseDelay)));
 
 	OffPenChangePos(pen);
 

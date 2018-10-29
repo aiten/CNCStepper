@@ -30,10 +30,6 @@
 
 int _tmain(int /* argc */, _TCHAR* /* argv */[])
 {
-
-
-
-
 	//////////////////////////////////////////
 
 	{
@@ -51,7 +47,7 @@ int _tmain(int /* argc */, _TCHAR* /* argv */[])
 
 		if (!T4.IsEqual(T3, 0.00001))
 		{
-			printf("Error InitDenavitHartenberg Combi\n");
+			printf("Error InitDenavitHartenberg\n");
 		}
 		*/
 	}

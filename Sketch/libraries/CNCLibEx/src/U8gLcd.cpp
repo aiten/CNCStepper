@@ -360,7 +360,7 @@ bool CU8GLcd::DrawLoopDefault(EnumAsByte(EDrawLoopType) type, uintptr_t /* data 
 			return true;
 		}
 			/*		=> default is 1000
-					case DrawLoopQueryTimerout: 
+					case DrawLoopQueryTimeOut: 
 					{
 						*((uint32_t*)data) = 1000;
 						return true;

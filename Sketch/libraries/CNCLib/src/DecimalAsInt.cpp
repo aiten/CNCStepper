@@ -33,8 +33,8 @@
 
 char* CMm1000::ToString(mm1000_t pos, char* tmp, uint8_t precision, uint8_t scale)
 {
-	// right alligned with precision and scale  (+round to scale)
-	// call the base class only here to avoid multiple inlines of a big function
+	// right aligned with precision and scale  (+round to scale)
+	// call the base class only here to avoid multiple "inline" of a big function
 
 	return super::ToString(pos, tmp, precision, scale);
 }

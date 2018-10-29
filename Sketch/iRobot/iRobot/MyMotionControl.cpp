@@ -39,7 +39,7 @@
 
 #define A SEGMENT2
 #define B SEGMENT1
-#define H 105000.0f	//  105.0   // height start first segement
+#define H 105000.0f	//  105.0   // height start first segment
 #define E SEGMENT3
 
 #define Amm mm1000_t(A)
@@ -47,22 +47,22 @@
 #define Hmm mm1000_t(H)
 #define Emm mm1000_t(E)
 
-// c		=> tryangle A/B/C
-// s		=> diagonale x/y 
+// c		=> triangle A/B/C
+// s		=> diagonal x/y 
 // alpha	=> angle of triangle
 // alpha1	=> angle horizontal and c
 
-// segment 2 moves paralell to surface if angle 1 is chaged 
+// segment 2 moves parallel to surface if angle 1 is changed 
 
 #define SEGMENT2PARALLEL
 
 // pos 1.300ms => 55 Grad (from xy pane)
 #define DEFAULTANGLE float(CENTER_LIMIT / MsForPI * MY_PI)
-#define ANGLE1OFFSET float(DEFAULTANGLE - (55*M_PI/180))
+#define ANGLE1OFFSET float(DEFAULTANGLE - (55.0*M_PI/180.0))
 
 // pos 1.300ms => 80 Grad (between A and B)
-#define ANGLE1TOANGLE2 float(M_PI/2)
-#define ANGLE2OFFSET float((DEFAULTANGLE - ((80-55+20)*M_PI/180)) - ANGLE1TOANGLE2)
+#define ANGLE1TOANGLE2 float(M_PI/2.0)
+#define ANGLE2OFFSET float((DEFAULTANGLE - ((80.0-55.0+20.0)*M_PI/180.0)) - ANGLE1TOANGLE2)
 
 #define ANGLE3OFFSET DEFAULTANGLE
 

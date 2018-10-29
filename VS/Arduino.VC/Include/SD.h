@@ -40,31 +40,31 @@ public:
 
 	bool begin(uint8_t) { return true; };
 
-	class File open(const char* filename, uint8_t mode = FILE_READ);
+	class File open(const char* fileName, uint8_t mode = FILE_READ);
 
-	bool remove(const char* filename)
+	bool remove(const char* fileName)
 	{
-		return ::remove(GetFilename(filename)) == 0;
+		return ::remove(GetFilename(fileName)) == 0;
 	}
 
-	bool exists(const char* filename)
+	bool exists(const char* fileName)
 	{
-		return _access(GetFilename(filename), 0) != -1;
+		return _access(GetFilename(fileName), 0) != -1;
 	}
 
-	bool mkdir(const char* /*filename*/)
+	bool mkdir(const char* /*fileName*/)
 	{
 		return true;
 	}
 
 private:
 
-	char _fullfilename[512];
+	char _fullfileName[512];
 
-	char* GetFilename(const char* filename)
+	char* GetFilename(const char* fileName)
 	{
-		sprintf_s<512>(_fullfilename, SDPATH"\\%s", filename);
-		return _fullfilename;
+		sprintf_s<512>(_fullfileName, SDPATH"\\%s", fileName);
+		return _fullfileName;
 	}
 };
 
@@ -80,14 +80,14 @@ public:
 	virtual void open(int mode) =0;
 	virtual bool isopen() =0;
 
-	char _OSfilename[_MAX_PATH];
+	char _OSfileName[_MAX_PATH];
 	char _pathname[_MAX_PATH];
 	char _name[_MAX_PATH];
 
 	bool isDirectory() const
 	{
 		struct stat st;
-		return stat(_OSfilename, &st) != -1 && (st.st_mode & _S_IFDIR) != 0;
+		return stat(_OSfileName, &st) != -1 && (st.st_mode & _S_IFDIR) != 0;
 	}
 
 	MyDirFile() { _refCount = 0; }
@@ -133,14 +133,14 @@ public:
 	virtual void open(int mode) override
 	{
 		if (mode == FILE_READ)
-			fopen_s(&_f, _OSfilename, "rb");
+			fopen_s(&_f, _OSfileName, "rb");
 		else
 		{
-			fopen_s(&_f, _OSfilename, "wb");
+			fopen_s(&_f, _OSfileName, "wb");
 			if (_f != nullptr)
 			{
 				fclose(_f);
-				fopen_s(&_f, _OSfilename, "r+");
+				fopen_s(&_f, _OSfileName, "r+");
 			}
 		}
 	}
@@ -177,7 +177,7 @@ public:
 	{
 		close();
 		if (!isDirectory()) return;
-		strcpy_s(_dirfindmask, _OSfilename);
+		strcpy_s(_dirfindmask, _OSfileName);
 		strcat_s(_dirfindmask, "\\*");
 
 		_dir = FindFirstFileA(_dirfindmask, &ffd);
@@ -240,9 +240,9 @@ public:
 		}
 	}
 
-	void open(const char* name, const char* osfilename, const char* pathname, int mode)
+	void open(const char* name, const char* osfileName, const char* pathname, int mode)
 	{
-		if (isDirectory(osfilename))
+		if (isDirectory(osfileName))
 		{
 			_dirfile = new MyDir();
 		}
@@ -253,7 +253,7 @@ public:
 		_dirfile->IncRef();
 
 		strcpy_s(_dirfile->_name, name);
-		strcpy_s(_dirfile->_OSfilename, osfilename);
+		strcpy_s(_dirfile->_OSfileName, osfileName);
 		strcpy_s(_dirfile->_pathname, pathname);
 
 		_dirfile->open(mode);
@@ -267,7 +267,7 @@ public:
 	uint32_t size() const
 	{
 		struct stat st;
-		stat(_dirfile->_OSfilename, &st);
+		stat(_dirfile->_OSfileName, &st);
 		return st.st_size;
 	}
 
@@ -281,7 +281,7 @@ public:
 
 	bool isDirectory()
 	{
-		return isDirectory(_dirfile->_OSfilename);
+		return isDirectory(_dirfile->_OSfileName);
 	}
 
 	File openNextFile() const
@@ -340,7 +340,7 @@ inline File MyDir::openNextFile()
 	else if (!_dirEof)
 	{
 		if (!isDirectory()) return ret;
-		strcpy_s(_dirfindmask, _OSfilename);
+		strcpy_s(_dirfindmask, _OSfileName);
 		strcat_s(_dirfindmask, "\\*");
 
 		_dir = FindFirstFileA(_dirfindmask, &ffd);
@@ -354,38 +354,38 @@ inline File MyDir::openNextFile()
 }
 
 
-inline File SDClass::open(const char* filename, uint8_t mode)
+inline File SDClass::open(const char* fileName, uint8_t mode)
 {
-	char osfilename[256];
+	char osfileName[256];
 	char pathname[256];
 	char name[256];
 
 	File file;
 
-	if (filename[0] == 0)
+	if (fileName[0] == 0)
 	{
 		return file;
 	}
 
 	//	file._mode = mode;
 
-	if (filename[0] == '/')
+	if (fileName[0] == '/')
 	{
-		if (filename[1] == 0)
+		if (fileName[1] == 0)
 		{
-			sprintf_s<256>(osfilename, SDPATH);
+			sprintf_s<256>(osfileName, SDPATH);
 		}
 		else
 		{
-			sprintf_s<256>(osfilename, SDPATH"%s", filename);
+			sprintf_s<256>(osfileName, SDPATH"%s", fileName);
 		}
 	}
 	else
 	{
-		sprintf_s<256>(osfilename, SDPATH"\\%s", filename);
+		sprintf_s<256>(osfileName, SDPATH"\\%s", fileName);
 	}
 
-	for (char* t = osfilename; *t; t++)
+	for (char* t = osfileName; *t; t++)
 	{
 		if (*t == '/')
 		{
@@ -393,7 +393,7 @@ inline File SDClass::open(const char* filename, uint8_t mode)
 		}
 	}
 
-	strcpy_s(pathname, filename);
+	strcpy_s(pathname, fileName);
 	char* dirend = strrchr(pathname, '/');
 	if (dirend)
 	{
@@ -401,10 +401,10 @@ inline File SDClass::open(const char* filename, uint8_t mode)
 	}
 	else
 	{
-		strcpy_s(name, filename);
+		strcpy_s(name, fileName);
 	}
 
-	file.open(name, osfilename, pathname, mode);
+	file.open(name, osfileName, pathname, mode);
 
 	return file;
 }

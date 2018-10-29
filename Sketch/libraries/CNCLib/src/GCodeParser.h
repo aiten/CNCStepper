@@ -33,7 +33,7 @@ typedef uint16_t param_t;
 
 #if defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(_MSC_VER)
 
-#define NUM_PARAMETER	16		// slotcount, map from uint8_t to < NUM_PARAMETER
+#define NUM_PARAMETER	16		// slotCount, map from uint8_t to < NUM_PARAMETER
 #define G54ARRAYSIZE	6
 
 #else
@@ -56,7 +56,7 @@ typedef uint16_t param_t;
 #define PARAMSTART_PROBEOK		5070		// Parameter 5070 is set to 1 if the probe succeeded and 0 if the probe failed
 
 // extent
-#define PARAMSTART_CURRENTABSPOS	6010	// Current Absolut machine position in current program units (X Y Z A B C U V W)
+#define PARAMSTART_CURRENTABSPOS	6010	// Current absolute machine position in current program units (X Y Z A B C U V W)
 #define PARAMSTART_BACKLASH			6031	// Backlash in current units(e.g. mm) (X Y Z A B C U V W)
 #define PARAMSTART_BACKLASH_FEEDRATE 6049	// Feedrate for backlash (0 if disabled)
 
@@ -94,7 +94,7 @@ public:
 
 	static mm1000_t GetG54PosPreset(axis_t        axis);
 	static mm1000_t GetToolHeightPosPreset(axis_t axis) { return axis == super::_modalState.Plane_axis_2 ? _modalState.ToolHeigtCompensation : 0; }
-	static void     SetG54PosPreset(axis_t        axis, mm1000_t pos) { _modalState.G54Pospreset[0][axis] = pos; }
+	static void     SetG54PosPreset(axis_t        axis, mm1000_t pos) { _modalState.G54PosPreset[0][axis] = pos; }
 	static uint8_t  GetZeroPresetIdx() { return _modalState.ZeroPresetIdx; }
 	static void     SetZeroPresetIdx(uint8_t idx) { _modalState.ZeroPresetIdx = idx; }
 
@@ -116,8 +116,6 @@ public:
 	}
 
 protected:
-
-	// overrides to exend parser
 
 	virtual bool InitParse() override;
 	virtual void CleanupParse() override;
@@ -153,7 +151,7 @@ protected:
 		uint8_t ZeroPresetIdx;				// 0:g53-, 1:G54-
 		bool    IsG98;						// G98 or G99	( Return To R or return to init Z) 
 
-		uint8_t _debuglevel;
+		uint8_t _debugLevel;
 		bool    IsProbeOK;
 
 		toolnr_t ToolSelected;
@@ -163,7 +161,7 @@ protected:
 		mm1000_t G8xR;
 		mm1000_t G8xP;
 
-		mm1000_t G54Pospreset[G54ARRAYSIZE][NUM_AXIS];	// 54-59
+		mm1000_t G54PosPreset[G54ARRAYSIZE][NUM_AXIS];	// 54-59
 		mm1000_t G38ProbePos[NUM_AXIS];
 		mm1000_t ToolHeigtCompensation;
 
@@ -178,10 +176,10 @@ protected:
 			CutterRadiusCompensation = CutterRadiusOff;
 			ToolSelected             = 1;
 			IsG98                    = true;
-			//POD		_debuglevel = 0;
-			//POD		for (uint8_t i = 0; i < NUM_AXIS; i++) G54Pospreset[i] = 0;
+			//POD		_debugLevel = 0;
+			//POD		for (uint8_t i = 0; i < NUM_AXIS; i++) G54PosPreset[i] = 0;
 			//POD		for (uint8_t i = 0; i < NUM_PARAMETER; i++) Parameter[i] = 0;
-			//POD		ToolHeigtCompensation = 0;
+			//POD		ToolHeightCompensation = 0;
 		}
 	};
 
@@ -195,7 +193,7 @@ protected:
 		uint8_t ZeroPresetIdx;				// 0:g53-, 1:G54-
 		void    Init()
 		{
-			//			*this = SModelessState();		// POD .. Plane Old Data Type => no Constructor => init with default value = 0
+			// *this = SModelessState();		// POD .. Plane Old Data Type => no Constructor => init with default value = 0
 			ZeroPresetIdx = _modalState.ZeroPresetIdx;
 		}
 	};
@@ -306,7 +304,7 @@ protected:
 	struct SParamInfo
 	{
 	public:
-		param_t     _paramNo;		// base param adress
+		param_t     _paramNo;		// base param address
 		const char* _text;
 		bool        _allowaxisofs;
 
@@ -318,7 +316,7 @@ protected:
 
 		uint8_t _valueType;
 	public:
-		//SParamInfo(param_t paramNo, const char* text, bool allowaxisofs):_paramNo(paramNo),_text(text),_allowaxisofs(allowaxisofs) {};
+
 		const char* GetText() const { return (const char*)pgm_read_ptr(&this->_text); }
 		param_t     GetParamNo() const { return pgm_read_word(&this->_paramNo); }
 		bool        GetAllowAxisOfs() const { return pgm_read_byte(&this->_allowaxisofs) != 0; }

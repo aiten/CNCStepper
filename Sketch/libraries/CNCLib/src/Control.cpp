@@ -223,11 +223,11 @@ void CControl::Resurrect()
 
 ////////////////////////////////////////////////////////////
 
-void CControl::StopProgram(bool /*checkconditional*/) {}
+void CControl::StopProgram(bool /*checkConditional*/) {}
 
 ////////////////////////////////////////////////////////////
 
-void CControl::Idle(unsigned int /*idletime*/) {}
+void CControl::Idle(unsigned int /*idleTime*/) {}
 
 ////////////////////////////////////////////////////////////
 
@@ -340,7 +340,7 @@ bool CControl::Command(char* buffer, Stream* output)
 		return false;
 	}
 
-	// if one Parse failes, return false
+	// if one Parse fails, return false
 
 	bool ret = true;
 
@@ -377,7 +377,7 @@ bool CControl::IsEndOfCommandChar(char ch)
 
 void CControl::ReadAndExecuteCommand(Stream* stream, Stream* output, bool filestream)
 {
-	// call this methode if ch is available in stream
+	// call this method if ch is available in stream
 
 	if (stream->available() > 0)
 	{
@@ -410,7 +410,7 @@ void CControl::ReadAndExecuteCommand(Stream* stream, Stream* output, bool filest
 						if (ch == '\x18')
 						{
 							StepperSerial.println(MESSAGE_CTRLX);
-							_bufferidx = 0;
+							_bufferIdx = 0;
 						}
 			*/
 		}
@@ -488,7 +488,7 @@ void CControl::CheckIdlePoll(bool isIdle)
 {
 	uint32_t time = millis();
 
-	if (isIdle && _lastTime + TIMEOUTCALLIDEL < time)
+	if (isIdle && _lastTime + TIMEOUTCALLIDLE < time)
 	{
 		Idle(time - _lastTime);
 		Poll();

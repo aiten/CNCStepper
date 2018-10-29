@@ -200,7 +200,7 @@ void CMsvcStepper::Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, 
 	if (_eventIdx < CacheSize) { }
 	else
 	{
-		WriteTestResults(_filename);
+		WriteTestResults(_fileName);
 		InitCache();
 	}
 }
@@ -215,7 +215,7 @@ void CMsvcStepper::OptimizeMovementQueue(bool force)
 
 ////////////////////////////////////////////////////////////
 
-void CMsvcStepper::InitTest(const char* filename)
+void CMsvcStepper::InitTest(const char* fileName)
 {
 	if (_oldCacheSize != CacheSize)
 	{
@@ -228,7 +228,7 @@ void CMsvcStepper::InitTest(const char* filename)
 		_oldCacheSize = CacheSize;
 	}
 	_flushcount = 0;
-	_filename   = filename;
+	_fileName   = fileName;
 
 	Init();
 
@@ -263,33 +263,25 @@ void CMsvcStepper::InitTest(const char* filename)
 
 ////////////////////////////////////////////////////////////
 
-void CMsvcStepper::EndTest(const char* filename)
+void CMsvcStepper::EndTest(const char* fileName)
 {
-	_filename = filename ? filename : _filename;
+	_fileName = fileName ? fileName : _fileName;
 
 	OptimizeMovementQueue(true);
 	WaitBusy();
 
-	WriteTestResults(_filename);
+	WriteTestResults(_fileName);
 }
 
 ////////////////////////////////////////////////////////////
 
-void CMsvcStepper::WriteTestResults(const char* filename)
+void CMsvcStepper::WriteTestResults(const char* fileName)
 {
 	bool append           = (_flushcount++) != 0;
 	char fname[_MAX_PATH] = { 0 };
 	fname[0]              = 0;
 
-	/*
-		if(false)
-		{
-			char tempPath[_MAX_PATH];
-			::GetTempPathA(_MAX_PATH, tempPath); 
-			strcat(fname,tempPath);
-		}
-	*/
-	strcat(fname, filename);
+	strcat(fname, fileName);
 
 	if (append)
 	{

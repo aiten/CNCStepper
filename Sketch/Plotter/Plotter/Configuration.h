@@ -66,7 +66,7 @@
 #define STEPSPERROTATION	200
 #define MICROSTEPPING		16
 
-// 3200steps/rot, T2.5 belt pully with 12teeth
+// 3200steps/rot, T2.5 belt pulley with 12teeth
 
 #define TOOTH 12
 #define TOOTHSIZE 2.5

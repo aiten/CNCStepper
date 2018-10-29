@@ -52,10 +52,10 @@ bool CGCodeParserBase::_exit = false;
 #define COORD_MIN_INCH		(-9999999l)
 #define COORD_MAX_INCH		9999999l
 
-#define COORD_MAXSCALE		255			// dont care about max scale => always round and skip
+#define COORD_MAXSCALE		255			// don't care about max scale => always round and skip
 
 #define FEEDRATE_SCALE		3
-#define FEEDRATE_MAXSCALE	255			// dont care about max scale => always round and skip
+#define FEEDRATE_MAXSCALE	255			// don't care about max scale => always round and skip
 #define FEEDRATE_MIN		5l
 #define FEEDRATE_MAX		99999999l
 
@@ -200,7 +200,6 @@ mm1000_t CGCodeParserBase::ParseCoordinate(bool convertUnits)
 		// mm are is CDecimalAsInt with scale 3
 		// inch is scale 5
 
-		//	return MulDivI32(GetInt32Scale(COORD_MIN_INCH, COORD_MAX_INCH, COORD_SCALE_INCH, COORD_MAXSCALE), 254, 1000);
 		return MulDivI32(GetInt32Scale(COORD_MIN_INCH, COORD_MAX_INCH, COORD_SCALE_INCH, COORD_MAXSCALE), 127, 500);
 	}
 
@@ -238,7 +237,7 @@ uint32_t CGCodeParserBase::GetUint32OrParam(uint32_t max)
 
 uint8_t CGCodeParserBase::GetSubCode()
 {
-	// subcode must follow immediately
+	// subCode must follow immediately
 
 	if (_reader->GetChar() != '.' || !IsUInt(_reader->GetNextChar()))
 	{
@@ -531,7 +530,7 @@ axis_t CGCodeParserBase::CharToAxis(char axis)
 		case 'U': return U_AXIS;
 		case 'V': return V_AXIS;
 		case 'W': return W_AXIS;
-		case 'E': return B_AXIS;		// for 3dprinter
+		case 'E': return B_AXIS;		// for 3d-printer
 		default: return 255;
 	}
 }
@@ -725,7 +724,7 @@ void CGCodeParserBase::G0001Command(bool isG00)
 	// g0				no cut move
 	// g1 / g2 /g3		cut move (see MoveStart()) 
 
-	// Extention to standard:
+	// Extension to standard:
 	// g0 x10 F  => g0 with feedrate (not CutMove)
 	// g0 x10 F1 => error
 
@@ -831,7 +830,7 @@ void CGCodeParserBase::G0203Command(bool isG02)
 
 	if (move.bitfield.bit.R)
 	{
-		// Calculate the change in position aint32_t each selected axis
+		// Calculate the change in position int32_t each selected axis
 		auto x = float(move.newpos[_modalState.Plane_axis_0] - CMotionControlBase::GetInstance()->GetPosition(_modalState.Plane_axis_0));
 		auto y = float(move.newpos[_modalState.Plane_axis_1] - CMotionControlBase::GetInstance()->GetPosition(_modalState.Plane_axis_1));
 		auto r = float(radius);

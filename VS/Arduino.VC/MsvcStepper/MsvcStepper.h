@@ -69,11 +69,11 @@ public:
 		SMovement mv;
 	};
 
-	SMovementX GetMovement(uint8_t idxfromhead)
+	SMovementX GetMovement(uint8_t idxFromHead)
 	{
 		SMovementX mv;
-		idxfromhead = _movements._queue.NextIndex(_movements._queue.GetHeadPos(), idxfromhead);
-		mv.mv       = _movements._queue.Buffer[idxfromhead];
+		idxFromHead = _movements._queue.NextIndex(_movements._queue.GetHeadPos(), idxFromHead);
+		mv.mv       = _movements._queue.Buffer[idxFromHead];
 		return mv;
 	}
 
@@ -96,8 +96,8 @@ public:
 
 	// Test extensions
 
-	void InitTest(const char* filename = nullptr);
-	void EndTest(const char*  filename = nullptr);
+	void InitTest(const char* fileName = nullptr);
+	void EndTest(const char*  fileName = nullptr);
 
 	bool DelayOptimization;
 	bool SplitFile;
@@ -106,9 +106,9 @@ public:
 
 private:
 
-	void WriteTestResults(const char* filename);
+	void WriteTestResults(const char* fileName);
 
-	const char* _filename;
+	const char* _fileName;
 	int         _flushcount;
 
 	struct STimerEvent

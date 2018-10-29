@@ -182,7 +182,7 @@ param_t CGCodeParser::ParseParamNo()
 {
 	if (_reader->SkipSpacesToUpper() == '<')		// named parameter
 	{
-		// format: <_varname : axis >
+		// format: <_varName : axis >
 		// e.g.    <_home:x>
 		_reader->GetNextChar();
 		char        ch    = _reader->SkipSpacesToUpper();
@@ -356,7 +356,7 @@ mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertToInch)
 				auto idx = uint8_t((param->GetParamNo() - PARAMSTART_G54OFFSET) / PARAMSTART_G54FF_OFFSET);
 				if (idx < G54ARRAYSIZE)
 				{
-					return GetParamAsMm1000(_modalState.G54Pospreset[idx][axis], axis);
+					return GetParamAsMm1000(_modalState.G54PosPreset[idx][axis], axis);
 				}
 				break;
 			}
@@ -483,7 +483,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 					auto idx = uint8_t((param->GetParamNo() - PARAMSTART_G54OFFSET) / PARAMSTART_G54FF_OFFSET);
 					if (idx < G54ARRAYSIZE)
 					{
-						_modalState.G54Pospreset[idx][axis] = mm1000;
+						_modalState.G54PosPreset[idx][axis] = mm1000;
 					}
 					break;
 				}
@@ -539,9 +539,9 @@ const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfoByParamNo(param_t par
 {
 	return FindParamInfo(uintptr_t(paramNo), [](const SParamInfo* p, uintptr_t x) -> bool
 	{
-		auto findparamNo = param_t(x);
-		return p->GetParamNo() == findparamNo ||	// exact same paramno
-			(p->GetAllowAxisOfs() && p->GetParamNo() <= findparamNo && p->GetParamNo() + NUM_AXIS > findparamNo);	// diff with axis
+		auto findParamNo = param_t(x);
+		return p->GetParamNo() == findParamNo ||	// exact same paramNo
+			(p->GetAllowAxisOfs() && p->GetParamNo() <= findParamNo && p->GetParamNo() + NUM_AXIS > findParamNo);	// diff with axis
 	});
 }
 
@@ -731,7 +731,7 @@ mm1000_t CGCodeParser::GetG54PosPreset(axis_t axis)
 {
 	if (_modelessState.ZeroPresetIdx > 0)
 	{
-		return _modalState.G54Pospreset[_modelessState.ZeroPresetIdx - 1][axis];
+		return _modalState.G54PosPreset[_modelessState.ZeroPresetIdx - 1][axis];
 	}
 	// no preset
 	return 0;
@@ -1068,11 +1068,11 @@ void CGCodeParser::G10Command()
 				{
 					if (g90or91 == 90)
 					{
-						_modalState.G54Pospreset[p - 1][axis] = move.newpos[axis];
+						_modalState.G54PosPreset[p - 1][axis] = move.newpos[axis];
 					}
 					else
 					{
-						_modalState.G54Pospreset[p - 1][axis] += CMotionControlBase::GetInstance()->GetPosition(axis) - CalcAllPreset(axis) - move.newpos[axis];
+						_modalState.G54PosPreset[p - 1][axis] += CMotionControlBase::GetInstance()->GetPosition(axis) - CalcAllPreset(axis) - move.newpos[axis];
 					}
 				}
 			}
@@ -1342,7 +1342,7 @@ void CGCodeParser::G68CommandDefault()
 		{
 			if (IsBitSet(move.axes, axis))
 			{
-				offset[axis] = move.newpos[axis];
+				offset[axis] = move.newPos[axis];
 			}
 		}
 	*/
@@ -1565,7 +1565,7 @@ void CGCodeParser::G53Command()
 
 void CGCodeParser::G5xCommand(uint8_t idx)
 {
-	// G54 => idx = 1 => arraysize==1
+	// G54 => idx = 1 => arraySize==1
 
 	if (CutterRadiosIsOn())
 	{
@@ -1852,14 +1852,14 @@ void CGCodeParser::M11Command()
 
 void CGCodeParser::M110Command()
 {
-	// set linenumber
+	// set lineNumber
 
-	uint32_t linenumber = 0;
+	uint32_t lineNumber = 0;
 
 	if (_reader->SkipSpacesToUpper() == 'N')
 	{
 		_reader->GetNextChar();
-		linenumber = GetUInt32();
+		lineNumber = GetUInt32();
 	}
 
 	if (!ExpectEndOfCommand())
@@ -1867,7 +1867,7 @@ void CGCodeParser::M110Command()
 		return;
 	}
 
-	super::_modalState.LineNumber = linenumber;
+	super::_modalState.LineNumber = lineNumber;
 }
 ////////////////////////////////////////////////////////////
 
@@ -1878,7 +1878,7 @@ void CGCodeParser::M111Command()
 	if (_reader->SkipSpacesToUpper() == 'S')
 	{
 		_reader->GetNextChar();
-		_modalState._debuglevel = GetUInt8();
+		_modalState._debugLevel = GetUInt8();
 	}
 
 	if (!ExpectEndOfCommand())

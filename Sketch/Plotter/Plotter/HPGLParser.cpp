@@ -198,7 +198,7 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 
 		if (IsInt(_reader->SkipSpaces()))
 		{
-			// only blank as seperator
+			// only blank as separator
 		}
 		else if (_reader->GetChar() == ',' && IsInt(_reader->GetNextCharSkipScaces()))
 		{

@@ -42,7 +42,7 @@ typedef sdist_t (* ToMachine_t)(axis_t axis, mm1000_t val);
 ////////////////////////////////////////////////////////
 
 // machine-pos									=> physical steps off stepper		(of CStepper class)
-// machine-mm1000, standardized-machinepos 		=> mm100_t off stepper				(CStepper pso converted in mm1000)
+// machine-mm1000, standardized-machine-pos 	=> mm100_t off stepper				(CStepper pso converted in mm1000)
 // logical-pos			 						=> rotated or transformed position	(CMotionControlBase same as above)
 
 ////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ public:
 
 	////////////////////////////////////////////////////////////////////////////////////////////
 	// 
-	// 200 / 2-Stepper (halfstep) => 400 / rotation
+	// 200 / 2-Stepper (halfStep) => 400 / rotation
 
 	// functions: 1 rotation(400Steps) = 1mm
 

@@ -117,7 +117,7 @@ void CMyControl::IOControl(uint8_t tool, uint16_t level)
 
 			if (level != 0)
 			{
-				_laserPWM.On((uint8_t)level);
+				_laserPWM.On(uint8_t(level));
 				_laserOnOff.On();
 			}
 			else

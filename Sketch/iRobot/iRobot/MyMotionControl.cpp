@@ -269,7 +269,7 @@ void CMyMotionControl::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedRate)
 		for (i = 0; i < NUM_AXIS; i++)
 		{
 			mm1000_t nextPos = RoundMulDivI32(totalDist[i], j, moveCount);
-			nextTo[i]         = to[i] - nextPos;
+			nextTo[i]        = to[i] - nextPos;
 		}
 
 		super::MoveAbs(nextTo, feedRate);

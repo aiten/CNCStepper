@@ -36,8 +36,8 @@ void CConfigEeprom::Init(uint16_t eepromSize, const void* defaultEeprom, uint32_
 {
 	CHAL::InitEeprom();
 
-	_eepromSize = eepromSize;
-	_defaultEeprom  = defaultEeprom;
+	_eepromSize    = eepromSize;
+	_defaultEeprom = defaultEeprom;
 
 	if (CHAL::HaveEeprom())
 	{

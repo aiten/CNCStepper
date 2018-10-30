@@ -54,18 +54,18 @@ public:
 	virtual void Init() override;
 	virtual void TimerInterrupt() override;
 
-	virtual void Beep(const SPlayTone*, bool)	 override { };
+	virtual void Beep(const SPlayTone*, bool) override { };
 
 protected:
 
 	virtual unsigned long Draw(EDrawType draw) override;
 	virtual unsigned long Splash() override;
-	void FirstDraw();
+	void                  FirstDraw();
 
 private:
 
 	void DrawPos(uint8_t col, uint8_t row, mm1000_t pos);
-	void DrawES(uint8_t col, uint8_t row, bool es);
+	void DrawES(uint8_t  col, uint8_t row, bool     es);
 
 	void DrawPen(uint8_t col, uint8_t row);
 };

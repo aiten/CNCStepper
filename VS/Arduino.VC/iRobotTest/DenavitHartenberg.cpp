@@ -197,7 +197,7 @@ float CDenavitHartenberg::SearchStep(float pos[3], float inout[NUM_AXIS], uint8_
 float CDenavitHartenberg::SearchMinOld(float pos[3], float inout[NUM_AXIS], uint8_t idx, SSearchDef& def, float epsilon)
 {
 	float inPos = inout[idx];
-	float dist   = def.dist;
+	float dist  = def.dist;
 
 	float    olDiff = CalcDist(pos, inout);
 	float    diff   = olDiff;

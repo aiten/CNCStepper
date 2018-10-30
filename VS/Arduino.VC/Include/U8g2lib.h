@@ -24,8 +24,8 @@
 class U8G2 : public U8GLIBCommon
 {
 public:
-	void setCursor(int x, int y) 
-	{ 
+	void setCursor(int x, int y)
+	{
 		setPrintPos(x, y);
 	};
 };

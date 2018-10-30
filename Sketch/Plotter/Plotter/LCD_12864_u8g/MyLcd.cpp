@@ -60,16 +60,16 @@ PROGMEM const CU8GLcd::SPageDef CU8GLcd::_pageDef[] =
 {
 	{ &CU8GLcd::DrawLoopSplash, &CU8GLcd::ButtonPressShowMenu },
 	{ &CU8GLcd::DrawLoopPosAbs, &CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopPos,	&CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopRotate2D,	&CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopRotate3D,	&CU8GLcd::ButtonPressShowMenu },
-	{ (DrawFunction) &CMyLcd::DrawLoopDebugPlotter,  &CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopSpeedOverride,  &CU8GLcd::ButtonPressSpeedOverride },
-//	{ &CU8GLcd::DrawLoopPreset, &CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopStartSD,&CU8GLcd::ButtonPressStartSDPage },
-	{ &CU8GLcd::DrawLoopError,	&CU8GLcd::ButtonPressShowMenu },
+	{ &CU8GLcd::DrawLoopPos, &CU8GLcd::ButtonPressShowMenu },
+	{ &CU8GLcd::DrawLoopRotate2D, &CU8GLcd::ButtonPressShowMenu },
+	{ &CU8GLcd::DrawLoopRotate3D, &CU8GLcd::ButtonPressShowMenu },
+	{ (DrawFunction)&CMyLcd::DrawLoopDebugPlotter, &CU8GLcd::ButtonPressShowMenu },
+	{ &CU8GLcd::DrawLoopSpeedOverride, &CU8GLcd::ButtonPressSpeedOverride },
+	//	{ &CU8GLcd::DrawLoopPreset, &CU8GLcd::ButtonPressShowMenu },
+	{ &CU8GLcd::DrawLoopStartSD, &CU8GLcd::ButtonPressStartSDPage },
+	{ &CU8GLcd::DrawLoopError, &CU8GLcd::ButtonPressShowMenu },
 	{ &CU8GLcd::DrawLoopCommandHis, &CU8GLcd::ButtonPressShowMenu },
-	{ &CU8GLcd::DrawLoopMenu,	&CU8GLcd::ButtonPressMenuPage },
+	{ &CU8GLcd::DrawLoopMenu, &CU8GLcd::ButtonPressMenuPage },
 	{ NULL, NULL }
 };
 
@@ -77,11 +77,11 @@ PROGMEM const CU8GLcd::SPageDef CU8GLcd::_pageDef[] =
 
 uint8_t CMyLcd::InitPostCommand(EnumAsByte(EGCodeSyntaxType) syntaxType, char* cmd)
 {
-	uint8_t idx = super::InitPostCommand(syntaxType,cmd);
+	uint8_t idx = super::InitPostCommand(syntaxType, cmd);
 	if (idx != 7)
 	{
 		cmd[idx++] = 27;		// escape
-		cmd[idx] = 0;
+		cmd[idx]   = 0;
 	}
 	return idx;
 }
@@ -93,7 +93,7 @@ void CMyLcd::Init()
 	_lcd_numaxis = LCD_NUMAXIS;
 
 	CBeep<(CAT(BOARDNAME, _LCD_BEEPER))>::Init();
-	
+
 	super::Init();
 
 	SetRotaryPin(ROTARY_EN1,ROTARY_EN2, ROTARY_ENC, ROTARY_ENC_ON);
@@ -101,7 +101,7 @@ void CMyLcd::Init()
 
 ////////////////////////////////////////////////////////////
 
-void CMyLcd::Beep(const SPlayTone* play,bool fromProgMem)
+void CMyLcd::Beep(const SPlayTone* play, bool fromProgMem)
 {
 	if (fromProgMem)
 	{
@@ -115,9 +115,9 @@ void CMyLcd::Beep(const SPlayTone* play,bool fromProgMem)
 
 ////////////////////////////////////////////////////////////
 
-bool CMyLcd::DrawLoopDefault(EnumAsByte(EDrawLoopType) type,uintptr_t data)
+bool CMyLcd::DrawLoopDefault(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 {
-	if (type==DrawLoopHeader)
+	if (type == DrawLoopHeader)
 	{
 #if defined(__SAM3X8E__)
 		DrawString(ToCol(4), ToRow(0), F("Plotter Due"));
@@ -127,7 +127,7 @@ bool CMyLcd::DrawLoopDefault(EnumAsByte(EDrawLoopType) type,uintptr_t data)
 		return true;
 	}
 
-	return super::DrawLoopDefault(type,data);
+	return super::DrawLoopDefault(type, data);
 }
 
 ////////////////////////////////////////////////////////////
@@ -151,4 +151,3 @@ bool CMyLcd::DrawLoopDebugPlotter(EnumAsByte(EDrawLoopType) type, uintptr_t data
 }
 
 ////////////////////////////////////////////////////////////
-

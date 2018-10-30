@@ -201,7 +201,7 @@ int _tmain(int /* argc */, _TCHAR* /* argv */[])
 		for (STest* v = values; v->posxyz[0] != -1234; v++)
 		{
 			bool print      = false;
-			bool printprint = false;
+			bool printPrint = false;
 
 			float out[3] = { 0, 0, 0 };
 			dh.FromPosition(v->posxyz, out, float(0.001));
@@ -215,7 +215,7 @@ int _tmain(int /* argc */, _TCHAR* /* argv */[])
 
 					printf("%f=>%f(%f)\t", out[n], v->angles[n], out[n] - v->angles[n]);
 					print      = true;
-					printprint = true;
+					printPrint = true;
 				}
 			}
 
@@ -236,14 +236,14 @@ int _tmain(int /* argc */, _TCHAR* /* argv */[])
 
 					printf("%f=>%f(%f)\t", posxyz[n], v->posxyz[n], posxyz[n] - v->posxyz[n]);
 					print      = true;
-					printprint = true;
+					printPrint = true;
 				}
 			}
 
 			if (print)
 				printf("\n");
 
-			if (printprint)
+			if (printPrint)
 				printf("\n");
 		}
 	}

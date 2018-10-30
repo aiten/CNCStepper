@@ -109,12 +109,12 @@ unsigned long CMyLcd::Splash()
 
 unsigned long CMyLcd::Draw(EDrawType /* draw */)
 {
-	static bool firstdraw = true;
+	static bool firstDraw = true;
 
-	if (firstdraw)
+	if (firstDraw)
 	{
 		FirstDraw();
-		firstdraw = false;
+		firstDraw = false;
 	}
 	DrawPos(2, 0, CMotionControlBase::GetInstance()->GetPosition(X_AXIS));
 	DrawPos(2, 1, CMotionControlBase::GetInstance()->GetPosition(Y_AXIS));

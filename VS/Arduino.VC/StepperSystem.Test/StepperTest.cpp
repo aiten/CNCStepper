@@ -141,10 +141,10 @@ namespace StepperSystemTest
 
 		void InitializeTestObject()
 		{
-			char modulefile[_MAX_PATH];
+			char moduleFile[_MAX_PATH];
 			auto hInst = GetModuleHandle(L"StepperSystem.Test.dll");
-			GetModuleFileNameA(hInst, modulefile, sizeof(modulefile));
-			Init(modulefile);
+			GetModuleFileNameA(hInst, moduleFile, sizeof(moduleFile));
+			Init(moduleFile);
 
 			Serial.println("StepperTest is starting ...");
 

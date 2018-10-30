@@ -41,7 +41,7 @@ public:
 	virtual void Init() override;
 	virtual void Beep(const SPlayTone*, bool) override;
 
-	virtual uint8_t InitPostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, char* cmd) override;
+	virtual uint8_t InitPostCommand(EnumAsByte(EGCodeSyntaxType) syntaxType, char* cmd) override;
 
 protected:
 

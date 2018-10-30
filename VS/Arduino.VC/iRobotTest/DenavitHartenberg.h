@@ -23,7 +23,7 @@ private:
 		float min;
 		float max;
 		float dist;
-		float changetoprev;
+		float changeToPrev;
 	};
 
 	void TestConvert(CMatrix4x4<float>& m, float inout[4], bool out = false);
@@ -37,5 +37,5 @@ private:
 
 #define MAXSIZE 4
 
-	bool Jacobi(double a[][MAXSIZE], double b[], int n, int maxiter, double tol, double x[]);
+	bool Jacobi(double a[][MAXSIZE], double b[], int n, int maxIter, double tol, double x[]);
 };

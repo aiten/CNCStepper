@@ -48,7 +48,7 @@ public:
 
 	struct SState
 	{
-		bool _HPGLIsAbsolut;
+		bool _HPGLIsAbsolute;
 		bool dummy;
 
 		int _HPOffsetX;
@@ -62,7 +62,7 @@ public:
 
 		void Init()
 		{
-			_HPGLIsAbsolut = true;
+			_HPGLIsAbsolute = true;
 
 			_HPOffsetX = 0;
 			_HPOffsetY = 0;

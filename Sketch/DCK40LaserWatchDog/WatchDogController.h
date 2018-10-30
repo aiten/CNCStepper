@@ -68,7 +68,7 @@ public:
 
 private:
 
-	uint32_t     _redrawtime = 0;
+	uint32_t     _redrawTime = 0;
 	unsigned int _secActive  = 0;
 
 	uint32_t _lastBlink      = 0;

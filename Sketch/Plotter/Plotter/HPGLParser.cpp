@@ -162,9 +162,9 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdIdx)
 		case PD: Plotter.PenDown();
 			_state.FeedRate = _state.FeedRateDown;
 			break;
-		case PA: _state._HPGLIsAbsolut = true;
+		case PA: _state._HPGLIsAbsolute = true;
 			break;
-		case PR: _state._HPGLIsAbsolut = false;
+		case PR: _state._HPGLIsAbsolute = false;
 			break;
 	}
 
@@ -217,7 +217,7 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdIdx)
 		mm1000_t x = HPGLToMM1000X(xIn);
 		mm1000_t y = HPGLToMM1000Y(yIn);
 
-		if (_state._HPGLIsAbsolut)
+		if (_state._HPGLIsAbsolute)
 		{
 			if (x != CMotionControlBase::GetInstance()->GetPosition(X_AXIS) || y != CMotionControlBase::GetInstance()->GetPosition(Y_AXIS))
 			{

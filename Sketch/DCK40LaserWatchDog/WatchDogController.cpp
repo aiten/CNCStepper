@@ -91,7 +91,7 @@ void WatchDogController::Setup()
 	_watchDog.Init(WATCHDOG_PIN, WATCHDOG_ON);
 
 
-	_redrawtime = millis();
+	_redrawTime = millis();
 }
 
 ////////////////////////////////////////////////////////////
@@ -109,11 +109,11 @@ void WatchDogController::Loop()
 	}
 
 
-	if (millis() > _redrawtime)
+	if (millis() > _redrawTime)
 	{
 		_secActive++;
 		_drawLCDRequest = true;
-		_redrawtime += 1000;
+		_redrawTime += 1000;
 	}
 
 	if (millis() > _lastBlink)

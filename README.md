@@ -43,3 +43,14 @@ see folder: *Sketch*
 
 -   HPGL Interpreter sample
 
+
+### Installation procedure
+
+-    clone repository
+-    use Arduino IDE >= 1.8.7
+-    set "Sketchbook location" to <basedir>/Sketch (Arduino IDE Menu: File->Preferences) - this is necessary to find the libraries
+-    open sketch - MiniCNC, MaxiCNC, ...
+-    configure machine (see: configuration.h)
+-    select Arduino (Uno, Due, ...) and USB port
+-    download sketch
+-    configure machine (EEprom) using CNCLib (https://github.com/aiten/CNCLib)

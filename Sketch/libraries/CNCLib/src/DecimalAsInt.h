@@ -21,7 +21,7 @@
 
 //////////////////////////////////////////
 
-template <typename T, uint8_t SCALE, uint32_t SCALEMASK> class CDecimaAsInt
+template <typename T, uint8_t SCALE, uint32_t SCALEMASK> class CDecimalAsInt
 {
 protected:
 
@@ -29,8 +29,8 @@ protected:
 
 public:
 
-	CDecimaAsInt() { _value    = 0; }
-	CDecimaAsInt(T v) { _value = v; }
+	CDecimalAsInt() { _value    = 0; }
+	CDecimalAsInt(T v) { _value = v; }
 
 protected:
 
@@ -38,9 +38,9 @@ protected:
 
 	static char* ToString(int32_t pos, char* tmp, uint8_t precision, uint8_t scale)
 	{
-		const bool isNegativ = pos < 0;
+		const bool isNegative = pos < 0;
 
-		pos += AddForRound(scale, isNegativ);
+		pos += AddForRound(scale, isNegative);
 
 		uint8_t x = ToPrecisionS10(pos);
 
@@ -49,7 +49,7 @@ protected:
 			x = (SCALE + 1); // 0..999 => 0.000
 		}
 
-		if (isNegativ)
+		if (isNegative)
 		{
 			x++;
 		}
@@ -80,7 +80,7 @@ protected:
 			{
 				tmp[precision - scale - 1] = '.';
 			}
-			if (isNegativ)
+			if (isNegative)
 			{
 				tmp[0] = '-';
 			}
@@ -129,7 +129,7 @@ protected:
 			}
 			while (ud.quot != 0);
 
-			if (isNegativ)
+			if (isNegative)
 			{
 				tmp[precision--] = '-';
 			}
@@ -191,11 +191,11 @@ public:
 
 //////////////////////////////////////////
 
-class CMm1000 : public CDecimaAsInt<mm1000_t,SCALE_MM, 1000>
+class CMm1000 : public CDecimalAsInt<mm1000_t,SCALE_MM, 1000>
 {
 private:
 
-	typedef CDecimaAsInt super;
+	typedef CDecimalAsInt super;
 
 public:
 
@@ -208,11 +208,11 @@ public:
 
 //////////////////////////////////////////
 
-class CInch100000 : public CDecimaAsInt<inch100000_t,SCALE_INCH, 100000>
+class CInch100000 : public CDecimalAsInt<inch100000_t,SCALE_INCH, 100000>
 {
 private:
 
-	typedef CDecimaAsInt super;
+	typedef CDecimalAsInt super;
 
 public:
 
@@ -225,11 +225,11 @@ public:
 
 //////////////////////////////////////////
 
-class CFeedrate1000 : public CDecimaAsInt<mm1000_t, SCALE_FEEDRATE, 1000>
+class CFeedrate1000 : public CDecimalAsInt<mm1000_t, SCALE_FEEDRATE, 1000>
 {
 private:
 
-	typedef CDecimaAsInt super;
+	typedef CDecimalAsInt super;
 };
 
 ////////////////////////////////////////////////////////

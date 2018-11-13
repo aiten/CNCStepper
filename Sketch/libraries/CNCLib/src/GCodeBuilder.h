@@ -51,12 +51,12 @@ public:
 
 	char* GetCommand()
 	{
-		return _commandstring;
+		return _commandString;
 	}
 
 private:
 
-	char _commandstring[GCODEBUILDER_MAXCOMANDLENGHT];
+	char _commandString[GCODEBUILDER_MAXCOMANDLENGHT];
 };
 
 ////////////////////////////////////////////////////////

@@ -32,7 +32,7 @@
 
 CGCodeBuilder& CGCodeBuilder::Add(FLSTR cmd)
 {
-	strcat_P(_commandstring, (const char*) cmd);
+	strcat_P(_commandString, (const char*) cmd);
 	return *this;
 }
 
@@ -40,7 +40,7 @@ CGCodeBuilder& CGCodeBuilder::Add(FLSTR cmd)
 
 CGCodeBuilder& CGCodeBuilder::Add(char* cmd)
 {
-	strcat(_commandstring, cmd);
+	strcat(_commandString, cmd);
 	return *this;
 }
 
@@ -57,9 +57,9 @@ CGCodeBuilder& CGCodeBuilder::Add(mm1000_t mm1000)
 
 CGCodeBuilder& CGCodeBuilder::AddAxisName(axis_t axis)
 {
-	auto len                = uint8_t(strlen(_commandstring));
-	_commandstring[len]     = AxisToChar(axis);
-	_commandstring[len + 1] = 0;
+	auto len                = uint8_t(strlen(_commandString));
+	_commandString[len]     = AxisToChar(axis);
+	_commandString[len + 1] = 0;
 	return *this;
 }
 
@@ -74,6 +74,6 @@ char CGCodeBuilder::AxisToChar(axis_t axis)
 
 CGCodeBuilder& CGCodeBuilder::InitCommand()
 {
-	_commandstring[0] = 0;
+	_commandString[0] = 0;
 	return *this;
 }

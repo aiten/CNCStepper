@@ -234,7 +234,7 @@ void CMsvcStepper::InitTest(const char* fileName)
 		_TimerEvents  = new STimerEvent[CacheSize];
 		_oldCacheSize = CacheSize;
 	}
-	_flushcount = 0;
+	_flushCount = 0;
 	_fileName   = fileName;
 
 	Init();
@@ -284,7 +284,7 @@ void CMsvcStepper::EndTest(const char* fileName)
 
 void CMsvcStepper::WriteTestResults(const char* fileName)
 {
-	bool append           = (_flushcount++) != 0;
+	bool append           = (_flushCount++) != 0;
 	char fname[_MAX_PATH] = { 0 };
 	fname[0]              = 0;
 
@@ -298,7 +298,7 @@ void CMsvcStepper::WriteTestResults(const char* fileName)
 			char  ext[16];
 			strcpy(ext, dot);
 			*(dot++) = '#';
-			_itoa(_flushcount, dot, 10);
+			_itoa(_flushCount, dot, 10);
 			strcat(dot, ext);
 			append = false;
 		}

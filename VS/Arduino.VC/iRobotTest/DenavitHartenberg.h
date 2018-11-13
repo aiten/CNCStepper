@@ -37,5 +37,5 @@ private:
 
 #define MAXSIZE 4
 
-	bool Jacobi(double a[][MAXSIZE], double b[], int n, int maxIter, double tol, double x[]);
+	bool Jacobi(double a[][MAXSIZE], double b[], int n, int maxIterations, double tolerance, double x[]);
 };

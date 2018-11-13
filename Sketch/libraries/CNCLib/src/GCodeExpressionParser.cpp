@@ -71,7 +71,7 @@ void CGCodeExpressionParser::ScanNextToken()
 	}
 	if (ch == '\0')
 	{
-		_state._detailtoken = EndOfLineSy;
+		_state._detailToken = EndOfLineSy;
 		return;
 	}
 	super::ScanNextToken();

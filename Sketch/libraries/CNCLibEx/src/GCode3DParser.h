@@ -111,7 +111,7 @@ private:
 	bool CheckSD();
 	bool DeleteSDFile(char* fileName, bool errorIfNotExists);
 
-	static void PrintSDFileListRecurse(class File& dir, uint8_t depth, uint16_t& count, char* fileNameBuffer, char seperatorChar);
+	static void PrintSDFileListRecurse(class File& dir, uint8_t depth, uint16_t& count, char* fileNameBuffer, char separatorChar);
 
 protected:
 

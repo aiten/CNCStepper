@@ -131,7 +131,7 @@ public:
 
 	void StartPrintFromSD() { _printFromSDFile = true; }
 	void ClearPrintFromSD() { _printFromSDFile = false; }
-	bool PrintFromSDRunnding() const { return _printFromSDFile; }
+	bool PrintFromSDRunning() const { return _printFromSDFile; }
 
 	//////////////////////////////////////////
 
@@ -141,7 +141,7 @@ public:
 	//////////////////////////////////////////
 
 	const char*  GetBuffer() const { return _buffer; }
-	uint8_t      GetBufferCount() const { return _bufferidx; }
+	uint8_t      GetBufferCount() const { return _bufferIdx; }
 	virtual bool IsEndOfCommandChar(char ch);					// override default End of command char, default \n
 
 protected:
@@ -177,7 +177,7 @@ private:
 	void CheckIdlePoll(bool isIdle);						// check idle time and call Idle every 100ms
 
 
-	uint8_t _bufferidx;										// read Buffer index , see SERIALBUFFERSIZE
+	uint8_t _bufferIdx;										// read Buffer index , see SERIALBUFFERSIZE
 
 	uint32_t _lastTime;										// time last char received
 	uint32_t _timeBlink;									// time to change blink state

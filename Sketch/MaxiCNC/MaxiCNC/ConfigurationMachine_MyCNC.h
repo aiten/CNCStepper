@@ -47,8 +47,8 @@
 ////////////////////////////////////////////////////////
 
 //#define STEPPERDIRECTION 0
-//#define STEPPERDIRECTION (1<<X_AXIS) + (1<<Y_AXIS)		// set bit to invert direction of each axis
-#define STEPPERDIRECTION (1<<Y_AXIS)                  // set bit to invert direction of each axis
+//#define STEPPERDIRECTION (1<<X_AXIS) + (1<<Y_AXIS)	// set bit to invert direction of each axis
+#define STEPPERDIRECTION (1<<Y_AXIS)					// set bit to invert direction of each axis
 
 #define STEPSPERROTATION  200
 #define MICROSTEPPING     32
@@ -56,9 +56,9 @@
 
 ////////////////////////////////////////////////////////
 
-#define CNC_MAXSPEED ((steprate_t)50000)        // steps/sec => 50000 => 7.8 rot /sec
-#define CNC_ACC  496                            // 0.257 => time to full speed
-#define CNC_DEC  565                            // 0.1975 => time to break
+#define CNC_MAXSPEED ((steprate_t)50000)			// steps/sec => 50000 => 7.8 rot /sec
+#define CNC_ACC  496								// 0.257 => time to full speed
+#define CNC_DEC  565								// 0.1975 => time to break
 #define CNC_JERKSPEED 2240
 
 ////////////////////////////////////////////////////////
@@ -107,8 +107,8 @@
 
 ////////////////////////////////////////////////////////
 
-#define GO_DEFAULT_STEPRATE		  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate)))	// steps/sec
-#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate)))	// steps/sec
+#define GO_DEFAULT_STEPRATE		  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
 #define G1_DEFAULT_FEEDPRATE	  100000	// in mm1000 / min
 
 #define STEPRATE_REFMOVE	  (CNC_MAXSPEED/3)
@@ -165,8 +165,8 @@
 
 #if defined(__SAM3X8E__)
 #define MESSAGE_MYCONTROL_Starting			F("My-CNC(HA) Ramps FD due is starting ... (" __DATE__ ", " __TIME__ ")")
-#define MESSAGE_LCD_HEADLINE						F("My-CNC RampsFD-D")
+#define MESSAGE_LCD_HEADLINE				F("My-CNC RampsFD-D")
 #else
 #define MESSAGE_MYCONTROL_Starting			F("My-CNC(HA) Ramps FD is starting ... (" __DATE__ ", " __TIME__ ")")
-#define MESSAGE_LCD_HEADLINE						F("My-CNC RampsFD-M")
+#define MESSAGE_LCD_HEADLINE				F("My-CNC RampsFD-M")
 #endif

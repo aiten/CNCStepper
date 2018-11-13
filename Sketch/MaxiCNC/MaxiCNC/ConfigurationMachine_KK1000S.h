@@ -44,7 +44,7 @@
 
 ////////////////////////////////////////////////////////
 
-#define STEPPERDIRECTION (1<<X_AXIS) + (1<<Y_AXIS)		// set bit to invert direction of each axis
+#define STEPPERDIRECTION ((1<<X_AXIS) + (1<<Y_AXIS))	// set bit to invert direction of each axis
 
 // PIN AS Ramps 1.4 
 #define STEPSPERROTATION	200
@@ -93,7 +93,7 @@
 
 #undef SPINDLE_ANALOGSPEED
 #define SPINDLE_MAXSPEED	255			// analog 255
-#define SPINDLE_FADETIMEDELAY  0    // 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
+#define SPINDLE_FADETIMEDELAY  0		// 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
 
 ////////////////////////////////////////////////////////
 
@@ -101,8 +101,8 @@
 
 ////////////////////////////////////////////////////////
 
-#define GO_DEFAULT_STEPRATE		  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate)))	// steps/sec
-#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate)))	// steps/sec
+#define GO_DEFAULT_STEPRATE		((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
 #define G1_DEFAULT_FEEDPRATE	  100000	// in mm1000 / min
 
 #define STEPRATE_REFMOVE	(CNC_MAXSPEED/2)

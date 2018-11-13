@@ -48,7 +48,7 @@ public:
 
 	struct SState
 	{
-		bool _HPGLIsAbsolut;
+		bool _HPGLIsAbsolute;
 		bool dummy;
 
 		int _HPOffsetX;
@@ -62,7 +62,7 @@ public:
 
 		void Init()
 		{
-			_HPGLIsAbsolut = true;
+			_HPGLIsAbsolute = true;
 
 			_HPOffsetX = 0;
 			_HPOffsetY = 0;
@@ -72,10 +72,10 @@ public:
 
 		void SetFeedRates()
 		{
-			FeedRateUp   = CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, penupFeedrate));
+			FeedRateUp   = CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, PenUpFeedRate));
 			FeedRateUp   = CMotionControlBase::GetInstance()->GetMaxFeedRate(X_AXIS, FeedRateUp);
 			FeedRateUp   = -FeedRateUp;
-			FeedRateDown = CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, pendownFeedrate));
+			FeedRateDown = CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, PenDownFeedRate));
 		}
 	};
 
@@ -91,7 +91,7 @@ private:
 
 	void IgnoreCommand();
 	void InitCommand();
-	void PenMoveCommand(uint8_t cmdidx);
+	void PenMoveCommand(uint8_t cmdIdx);
 };
 
 ////////////////////////////////////////////////////////

@@ -47,7 +47,7 @@ HardwareSerial& StepperSerial = Serial;
 const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 {
 	EPROM_SIGNATURE,
-	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
+	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,Axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
 	GetInfo1a() | CConfigEeprom::IS_LASER | CConfigEeprom::HAVE_SPINDLE | CConfigEeprom::HAVE_SPINDLE_ANALOG, GetInfo1b(),
 	0,
 	STEPPERDIRECTION, 0, 0,SPINDLE_FADETIMEDELAY,
@@ -117,7 +117,7 @@ void CMyControl::IOControl(uint8_t tool, uint16_t level)
 
 			if (level != 0)
 			{
-				_laserPWM.On((uint8_t)level);
+				_laserPWM.On(uint8_t(level));
 				_laserOnOff.On();
 			}
 			else

@@ -46,16 +46,16 @@ public:
 	CControl();
 
 	virtual void Run();				// run Controller => do not return
-	virtual void Kill();			// stop everyting => Emergency Stop
+	virtual void Kill();			// stop everything => Emergency Stop
 	virtual void Resurrect();		// Call after Kill to restart again
 
 	bool IsKilled() { return CStepper::GetInstance()->IsEmergencyStop(); }
 
-	void StopProgram(bool checkconditional);		// see m00 / m01
+	void StopProgram(bool checkConditional);		// see m00 / m01
 
-	void Delay(uint32_t ms);	// delay with idle processing
+	void Delay(uint32_t ms);		// delay with idle processing
 
-	void Hold();					// stop executing programm (with down-ramp), must not be called in timerinterrupt
+	void Hold();					// stop executing program (with down-ramp), must not be called in timer interrupt
 	void Resume();					// continue executing (start queue from stepper)
 	bool IsHold() { return CStepper::GetInstance()->IsPauseMove(); }
 
@@ -82,7 +82,7 @@ public:
 		User4,
 
 		// input
-		Probe,				// Probe for tool lenght
+		Probe,				// Probe for tool length
 		ProgramStop			// see M01
 	};
 
@@ -117,8 +117,8 @@ public:
 	};
 	//////////////////////////////////////////
 
-	virtual void GoToReference();								// Goto Reference during Initialisation
-	virtual bool GoToReference(axis_t axis, steprate_t steprate, bool toMinRef);
+	virtual void GoToReference();								// Goto Reference during init
+	virtual bool GoToReference(axis_t axis, steprate_t stepRate, bool toMinRef);
 
 	bool GoToReference(axis_t axis);
 
@@ -146,15 +146,15 @@ public:
 
 protected:
 
-	bool SerialReadAndExecuteCommand();							// read from serial an execut command, return true if command pending (buffer not empty)
+	bool SerialReadAndExecuteCommand();							// read from serial an execute command, return true if command pending (buffer not empty)
 	void FileReadAndExecuteCommand(Stream* stream, Stream* output);// read command until "IsEndOfCommandChar" and execute command (NOT Serial)
 
 	virtual void Init();
 	virtual void Initialized();									// called if Init() is done
 
 	virtual bool Parse(CStreamReader* reader, Stream* output);	// specify Parser, default parser
-	virtual bool Command(char*        buffer, Stream* output);		    // execute Command (call parser)
-	virtual void Idle(unsigned int    idletime);					// called after TIMEOUTCALLIDEL in idle state
+	virtual bool Command(char*        buffer, Stream* output);	// execute Command (call parser)
+	virtual void Idle(unsigned int    idleTime);				// called after TIMEOUTCALLIDLE in idle state
 	virtual void Poll();										// call in Idle and at least e.g. 100ms (not in interrupt), see CheckIdlePoll
 	virtual void ReadAndExecuteCommand();						// read and execute commands from other source e.g. SD.File
 
@@ -172,23 +172,23 @@ protected:
 
 private:
 
-	void ReadAndExecuteCommand(Stream* stream, Stream* output, bool filestream);	// read command until "IsEndOfCommandChar" and execute command (Serial or SD.File)
+	void ReadAndExecuteCommand(Stream* stream, Stream* output, bool fileStream);	// read command until "IsEndOfCommandChar" and execute command (Serial or SD.File)
 
 	void CheckIdlePoll(bool isIdle);						// check idle time and call Idle every 100ms
 
 
 	uint8_t _bufferidx;										// read Buffer index , see SERIALBUFFERSIZE
 
-	uint32_t _lastTime;								// time last char received
-	uint32_t _timeBlink;								// time to change blink state
-	uint32_t _timePoll;								// time call poll next
+	uint32_t _lastTime;										// time last char received
+	uint32_t _timeBlink;									// time to change blink state
+	uint32_t _timePoll;										// time call poll next
 
 	CStepper::SEvent _oldStepperEvent;
 
 	bool _dummy;
 	bool _printFromSDFile;
 
-	char _buffer[SERIALBUFFERSIZE];					// serial input buffer
+	char _buffer[SERIALBUFFERSIZE];							// serial input buffer
 
 	static void HandleInterrupt() { GetInstance()->TimerInterrupt(); }
 

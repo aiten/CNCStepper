@@ -65,7 +65,9 @@ void CHPGLParser::ReadAndSkipSemicolon()
 {
 	char ch = _reader->SkipSpaces();
 	if (ch == ';')
+	{
 		_reader->GetNextChar();
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -142,20 +144,17 @@ void CHPGLParser::IgnoreCommand()
 
 void CHPGLParser::InitCommand()
 {
-	// Init HPGL Parser
-
 	Init();
-
 	ReadAndSkipSemicolon();
 }
 
 ////////////////////////////////////////////////////////////
 
-void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
+void CHPGLParser::PenMoveCommand(uint8_t cmdIdx)
 {
-	Plotter.Resume(cmdidx != PU);
+	Plotter.Resume(cmdIdx != PU);
 
-	switch (cmdidx)
+	switch (cmdIdx)
 	{
 		case PU: Plotter.DelayPenUp();
 			_state.FeedRate = _state.FeedRateUp;
@@ -163,9 +162,9 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 		case PD: Plotter.PenDown();
 			_state.FeedRate = _state.FeedRateDown;
 			break;
-		case PA: _state._HPGLIsAbsolut = true;
+		case PA: _state._HPGLIsAbsolute = true;
 			break;
-		case PR: _state._HPGLIsAbsolut = false;
+		case PR: _state._HPGLIsAbsolute = false;
 			break;
 	}
 
@@ -198,7 +197,7 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 
 		if (IsInt(_reader->SkipSpaces()))
 		{
-			// only blank as seperator
+			// only blank as separator
 		}
 		else if (_reader->GetChar() == ',' && IsInt(_reader->GetNextCharSkipScaces()))
 		{
@@ -218,7 +217,7 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 		mm1000_t x = HPGLToMM1000X(xIn);
 		mm1000_t y = HPGLToMM1000Y(yIn);
 
-		if (_state._HPGLIsAbsolut)
+		if (_state._HPGLIsAbsolute)
 		{
 			if (x != CMotionControlBase::GetInstance()->GetPosition(X_AXIS) || y != CMotionControlBase::GetInstance()->GetPosition(Y_AXIS))
 			{
@@ -235,7 +234,9 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 			}
 		}
 		if (_reader->SkipSpaces() != ',')
+		{
 			break;
+		}
 
 		_reader->GetNextCharSkipScaces();
 	}
@@ -246,9 +247,11 @@ void CHPGLParser::PenMoveCommand(uint8_t cmdidx)
 
 void CHPGLParser::SelectPenCommand()
 {
-	uint8_t newpen = GetUInt8();
-	if (!Plotter.SetPen(newpen))
+	uint8_t newPen = GetUInt8();
+	if (!Plotter.SetPen(newPen))
+	{
 		Error(F("Select Pen failed"));
+	}
 
 	ReadAndSkipSemicolon();
 }
@@ -267,7 +270,10 @@ void CHPGLParser::PenVelocityCommand()
 {
 	int32_t velocityCmPerSec = GetInt32Scale(10, 1000000, 3, 255);
 
-	if (IsError()) return;
+	if (IsError())
+	{
+		return;
+	}
 
 	// feedrate is => mm_1000 / min
 	_state.FeedRateDown = CMotionControlBase::GetInstance()->GetMaxFeedRate(X_AXIS, velocityCmPerSec * 60l * 10l);

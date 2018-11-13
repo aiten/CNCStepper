@@ -19,10 +19,10 @@
 
 #pragma once
 
-#define HARDWARETYPE_PROXXONMF70	  1	// proxxon mf70, ramps 1.4, micro-steps 16
+#define HARDWARETYPE_PROXXONMF70	1	// proxxon mf70, ramps 1.4, micro-steps 16
 #define HARDWARETYPE_MYCNC	        2	// My-CNC, rampsfd, micro-steps 32
-#define HARDWARETYPE_KK1000S        4 // KK1000S, due 
-#define HARDWARETYPE_CUSTOM			    99 // custom
+#define HARDWARETYPE_KK1000S        4	// KK1000S, due 
+#define HARDWARETYPE_CUSTOM			99	// custom
 
 #define HARDWARETYPE HARDWARETYPE_PROXXONMF70
 //#define HARDWARETYPE HARDWARETYPE_MYCNC

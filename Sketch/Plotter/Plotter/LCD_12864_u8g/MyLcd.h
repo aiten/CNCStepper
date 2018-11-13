@@ -41,14 +41,14 @@ public:
 	virtual void Init() override;
 	virtual void Beep(const SPlayTone*, bool) override;
 
-	virtual uint8_t InitPostCommand(EnumAsByte(EGCodeSyntaxType) syntaxtype, char* cmd) override;
+	virtual uint8_t InitPostCommand(EnumAsByte(EGCodeSyntaxType) syntaxType, char* cmd) override;
 
 protected:
 
-	virtual class U8G2& GetU8G() override;
-	virtual class CMenu3D& GetMenu() override	{ return _menu; }
+	virtual class U8G2&    GetU8G() override;
+	virtual class CMenu3D& GetMenu() override { return _menu; }
 
-	virtual bool DrawLoopDefault(EnumAsByte(EDrawLoopType) type,uintptr_t data) override;
+	virtual bool DrawLoopDefault(EnumAsByte(EDrawLoopType) type, uintptr_t data) override;
 
 public:
 
@@ -57,7 +57,6 @@ public:
 private:
 
 	CMyMenu _menu;
-
 };
 
 ////////////////////////////////////////////////////////

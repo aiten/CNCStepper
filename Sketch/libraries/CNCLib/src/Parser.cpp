@@ -98,10 +98,10 @@ sdist_t CParser::GetSDist() { return GetInt<sdist_t>(); }
 
 ////////////////////////////////////////////////////////////
 
-int32_t CParser::GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale, uint8_t maxscale)
+int32_t CParser::GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale, uint8_t maxScale)
 {
-	// ignore digits between scale and maxscale (first digit after scale is used for round)
-	// 1.2345 with scale=3 and maxscale=5 is ok => return 1235 (calculated with scale - round)
+	// ignore digits between scale and maxScale (first digit after scale is used for round)
+	// 1.2345 with scale=3 and maxScale=5 is ok => return 1235 (calculated with scale - round)
 
 	bool    negativ;
 	int32_t value     = 0;
@@ -157,7 +157,7 @@ int32_t CParser::GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale
 		}
 	}
 
-	if (thisscale > maxscale)
+	if (thisscale > maxScale)
 	{
 		Error(MESSAGE( MESSAGE_PARSER_NotANumber_MaxScaleExceeded));
 		return 0;
@@ -215,17 +215,17 @@ expr_t CParser::GetDouble()
 		}
 	}
 
-	// temporary terminat buffer with '\00'
+	// temporary terminate buffer with '\00'
 	CStreamReader::CSetTemporary terminate(_reader->GetBuffer());
 	return expr_t(strtod(start, nullptr));
 }
 
 ////////////////////////////////////////////////////////////
 
-bool CParser::IsToken(FLSTR b, bool expectdel, bool ignorecase)
+bool CParser::IsToken(FLSTR b, bool expectDel, bool ignoreCase)
 {
 	const char* tmp;
-	if (!TryToken(_reader->GetBuffer(), b, expectdel, ignorecase, tmp))
+	if (!TryToken(_reader->GetBuffer(), b, expectDel, ignoreCase, tmp))
 	{
 		return false;
 	}
@@ -238,22 +238,22 @@ bool CParser::IsToken(FLSTR b, bool expectdel, bool ignorecase)
 
 ////////////////////////////////////////////////////////////
 
-bool CParser::TryToken(const char* buffer, FLSTR b, bool expectdel, bool ignorecase)
+bool CParser::TryToken(const char* buffer, FLSTR b, bool expectDel, bool ignoreCase)
 {
 	const char* dummy;
-	return TryToken(buffer, b, expectdel, ignorecase, dummy);
+	return TryToken(buffer, b, expectDel, ignoreCase, dummy);
 }
 
 ////////////////////////////////////////////////////////////
 
-bool CParser::TryToken(const char* buffer, FLSTR b, bool ignorecase)
+bool CParser::TryToken(const char* buffer, FLSTR b, bool ignoreCase)
 {
 	auto p = (const char*)b;
 
 	//const char* tmp = _reader->GetBuffer();
 	char c = pgm_read_byte(p);
 
-	while (c && ConvertChar(*buffer, ignorecase) == ConvertChar(c, ignorecase))
+	while (c && ConvertChar(*buffer, ignoreCase) == ConvertChar(c, ignoreCase))
 	{
 		p++;
 		buffer++;
@@ -265,14 +265,14 @@ bool CParser::TryToken(const char* buffer, FLSTR b, bool ignorecase)
 
 ////////////////////////////////////////////////////////////
 
-bool CParser::TryToken(const char* buffer, FLSTR b, bool expectdel, bool ignorecase, const char*& nextchar)
+bool CParser::TryToken(const char* buffer, FLSTR b, bool expectDel, bool ignoreCase, const char*& nextchar)
 {
 	auto p = (const char*)b;
 
 	//const char* tmp = _reader->GetBuffer();
 	char c = pgm_read_byte(p);
 
-	while (c && ConvertChar(*buffer, ignorecase) == ConvertChar(c, ignorecase))
+	while (c && ConvertChar(*buffer, ignoreCase) == ConvertChar(c, ignoreCase))
 	{
 		p++;
 		buffer++;
@@ -316,9 +316,9 @@ bool CParser::TryToken(const char* buffer, FLSTR b, bool expectdel, bool ignorec
 		return false;
 	}
 
-	// check if lineend or blank
+	// check if line-end or blank
 
-	if (expectdel)
+	if (expectDel)
 	{
 		if (!CStreamReader::IsSpaceOrEnd(*buffer) && !CStreamReader::IsEOC(*buffer))
 		{

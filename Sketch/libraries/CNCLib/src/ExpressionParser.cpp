@@ -44,7 +44,7 @@ void CExpressionParser::Parse()
 	if (IsError()) return;
 
 	// check for garbage at the end of the expression
-	// an expression ends with a character '\0' and GetMainTokenType() = delimeter
+	// an expression ends with a character '\0' and GetMainTokenType() = delimiter
 	if (GetTokenType() != EndOfLineSy)
 	{
 		ErrorAdd(MESSAGE_EXPR_FORMAT);
@@ -125,11 +125,11 @@ void CExpressionParser::ScanNextToken()
 		auto end = const_cast<char*>(_reader->GetBuffer());
 		ch       = _reader->SkipSpaces();
 
-		// temporary terminat buffer with '\00'
+		// temporary terminate buffer with '\00'
 		CStreamReader::CSetTemporary terminate(end);
 
 		// check if this is a variable or a function.
-		// a function has a parentesis '(' open after the name
+		// a function has a parenthesis '(' open after the name
 
 		if (ch == _LeftParenthesis)
 		{
@@ -223,7 +223,7 @@ expr_t CExpressionParser::ParseLevel1()
 }
 
 ////////////////////////////////////////////////////////////
-// conditional operators and bitshift
+// conditional operators and bit shift
 
 expr_t CExpressionParser::ParseLevel2()
 {
@@ -408,7 +408,7 @@ expr_t CExpressionParser::ParseNumber()
 }
 
 ////////////////////////////////////////////////////////////
-// evaluate an operator for given valuess
+// evaluate an operator for given values
 
 expr_t CExpressionParser::EvalOperator(EnumAsByte(ETokenType) operatorSy, const expr_t& lhs, const expr_t& rhs)
 {

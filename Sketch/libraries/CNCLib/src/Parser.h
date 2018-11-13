@@ -64,7 +64,7 @@ protected:
 	////////////////////////////////////////////////////////
 
 	virtual void Parse() = 0;
-	virtual bool InitParse() { return true; }; // begin parsing of a command (override for prechecks), return true to continue
+	virtual bool InitParse() { return true; }; // begin parsing of a command (override for pre checks), return true to continue
 	virtual void CleanupParse() { }; // called after call to Parse()
 
 	bool         CheckError();
@@ -112,7 +112,7 @@ protected:
 
 public:
 
-	int32_t GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale, uint8_t maxscale); // get "float" e.g. 1.234 => 1234 or 12 => 12000, limit with scale
+	int32_t GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale, uint8_t maxScale); // get "float" e.g. 1.234 => 1234 or 12 => 12000, limit with scale
 	expr_t  GetDouble();
 
 	uint8_t  GetUInt8();
@@ -129,26 +129,26 @@ public:
 protected:
 
 	//////////////////////////////////////////////////////
-	// Textsearch  (=Tokens)
+	// TextSearch  (=Tokens)
 
 	// Content of "b": 
 	//	  \001	=> any digit (last command char)
-	//	  \002	=> space or end or not digit (last comand char), e.g. g0\002 will find g0 and not g01
+	//	  \002	=> space or end or not digit (last command char), e.g. g0\002 will find g0 and not g01
 	//	  \003	=> \000 (end of line)
 
-	bool IsToken(FLSTR  b, bool expectdel, bool ignorecase);
-	bool TryToken(FLSTR b, bool expectdel, bool ignorecase) { return TryToken(_reader->GetBuffer(), b, expectdel, ignorecase); }
+	bool IsToken(FLSTR  b, bool expectDel, bool ignoreCase);
+	bool TryToken(FLSTR b, bool expectDel, bool ignoreCase) { return TryToken(_reader->GetBuffer(), b, expectDel, ignoreCase); }
 
-	bool TryToken(const char* buffer, FLSTR b, bool expectdel, bool ignorecase); // scan from different location, but do not remove it
-	bool TryToken(const char* buffer, FLSTR b, bool ignorecase); // same as stricmp (with Progmem)	
+	bool TryToken(const char* buffer, FLSTR b, bool expectDel, bool ignoreCase); // scan from different location, but do not remove it
+	bool TryToken(const char* buffer, FLSTR b, bool ignoreCase); // same as stricmp (with PROGMEM)	
 
 	//////////////////////////////////////////////////////
 
 private:
 
-	static char unsigned ConvertChar(const char ch, bool ignorecase) { return ignorecase ? CStreamReader::Toupper(ch) : ch; }
+	static char unsigned ConvertChar(const char ch, bool ignoreCase) { return ignoreCase ? CStreamReader::Toupper(ch) : ch; }
 
-	bool TryToken(const char* buffer, FLSTR b, bool expectdel, bool ignorecase, const char*& nextchar); // scan, but do not remove it
+	bool TryToken(const char* buffer, FLSTR b, bool expectDel, bool ignoreCase, const char*& nextchar); // scan, but do not remove it
 
 	////////////////////////////////////////////////////////
 

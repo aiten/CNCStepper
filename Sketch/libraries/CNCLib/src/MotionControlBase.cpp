@@ -87,7 +87,7 @@ bool CMotionControlBase::TransformPosition(const mm1000_t /* src */[NUM_AXIS], m
 
 void CMotionControlBase::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedrate)
 {
-	// the ONLY methode to move!!!!!
+	// the ONLY method to move!!!!!
 	// do not call Stepper direct
 
 #ifdef _MSC_VER
@@ -211,7 +211,7 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 		return;
 	}
 
-	// difference to Grbl => use dynamic calculation of segements => suitable for small r
+	// difference to Grbl => use dynamic calculation of segments => suitable for small r
 	//
 	// segments for full circle => (CONST_K * r * M_PI * b + CONST_D)		(r in mm, b ...2?)
 
@@ -327,7 +327,7 @@ steprate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate
 				sumOverRun += (dist / AvoidOverrun) * (dist / AvoidOverrun);
 			}
 		}
-		if (axiscount > 1) //  && maxdist > 0)
+		if (axiscount > 1) //  && maxDist > 0)
 		{
 			if (useOverrun)
 			{
@@ -341,7 +341,7 @@ steprate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate
 
 			if (maxdist != sum && sum != 0)
 			{
-				// avoid overrun: feedrate * maxdist
+				// avoid overrun: feedrate * maxDist
 				if (ToPrecisionU2(uint32_t(feedrate)) + ToPrecisionU2(uint32_t(maxdist)) > 30)
 				{
 					// use float to avoid overruns
@@ -389,18 +389,18 @@ feedrate_t CMotionControlBase::StepRateToFeedRate(axis_t axis, steprate_t stepra
 
 /////////////////////////////////////////////////////////
 
-feedrate_t CMotionControlBase::GetMaxFeedRate(axis_t axis, feedrate_t feedrate)
+feedrate_t CMotionControlBase::GetMaxFeedRate(axis_t axis, feedrate_t feedRate)
 {
-	steprate_t maxsteprate = CStepper::GetInstance()->GetMaxSpeed(axis);
-	feedrate_t maxfeedrate = StepRateToFeedRate(axis, maxsteprate);
+	steprate_t maxStepRate = CStepper::GetInstance()->GetMaxSpeed(axis);
+	feedrate_t maxFeedRate = StepRateToFeedRate(axis, maxStepRate);
 
-	return min(feedrate,maxfeedrate);
+	return min(feedRate,maxFeedRate);
 }
 
 ////////////////////////////////////////////////////////
 // repeat axis and d until axis not in 0 .. NUM_AXIS
 
-void CMotionControlBase::MoveAbsEx(feedrate_t feedrate, uint16_t axis, mm1000_t d, ...)
+void CMotionControlBase::MoveAbsEx(feedrate_t feedRate, uint16_t axis, mm1000_t d, ...)
 {
 	mm1000_t dest[NUM_AXIS];
 	GetPositions(dest);
@@ -423,7 +423,7 @@ void CMotionControlBase::MoveAbsEx(feedrate_t feedrate, uint16_t axis, mm1000_t 
 
 	va_end(arglist);
 
-	MoveAbs(dest, feedrate);
+	MoveAbs(dest, feedRate);
 }
 
 ////////////////////////////////////////////////////////
@@ -439,7 +439,7 @@ void CMotionControlBase::MoveRelEx(feedrate_t feedrate, uint16_t axis, mm1000_t 
 
 	while (axis < NUM_AXIS)
 	{
-		dest[axis] += d; // add to current postition
+		dest[axis] += d; // add to current position
 
 #ifdef _MSC_VER
 		axis = va_arg(arglist, uint16_t);

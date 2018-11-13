@@ -39,7 +39,7 @@
 
 #define A SEGMENT2
 #define B SEGMENT1
-#define H 105000.0f	//  105.0   // height start first segement
+#define H 105000.0f	//  105.0   // height start first segment
 #define E SEGMENT3
 
 #define Amm mm1000_t(A)
@@ -47,22 +47,22 @@
 #define Hmm mm1000_t(H)
 #define Emm mm1000_t(E)
 
-// c		=> tryangle A/B/C
-// s		=> diagonale x/y 
+// c		=> triangle A/B/C
+// s		=> diagonal x/y 
 // alpha	=> angle of triangle
 // alpha1	=> angle horizontal and c
 
-// segment 2 moves paralell to surface if angle 1 is chaged 
+// segment 2 moves parallel to surface if angle 1 is changed 
 
 #define SEGMENT2PARALLEL
 
 // pos 1.300ms => 55 Grad (from xy pane)
 #define DEFAULTANGLE float(CENTER_LIMIT / MsForPI * MY_PI)
-#define ANGLE1OFFSET float(DEFAULTANGLE - (55*M_PI/180))
+#define ANGLE1OFFSET float(DEFAULTANGLE - (55.0*M_PI/180.0))
 
 // pos 1.300ms => 80 Grad (between A and B)
-#define ANGLE1TOANGLE2 float(M_PI/2)
-#define ANGLE2OFFSET float((DEFAULTANGLE - ((80-55+20)*M_PI/180)) - ANGLE1TOANGLE2)
+#define ANGLE1TOANGLE2 float(M_PI/2.0)
+#define ANGLE2OFFSET float((DEFAULTANGLE - ((80.0-55.0+20.0)*M_PI/180.0)) - ANGLE1TOANGLE2)
 
 #define ANGLE3OFFSET DEFAULTANGLE
 
@@ -236,47 +236,47 @@ bool CMyMotionControl::FromAngle(const float angle[NUM_AXIS], mm1000_t dest[NUM_
 
 /////////////////////////////////////////////////////////
 
-void CMyMotionControl::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedrate)
+void CMyMotionControl::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedRate)
 {
-	uint16_t movecount = 1;
-	mm1000_t nextto[NUM_AXIS];
-	mm1000_t totaldist[NUM_AXIS];
+	uint16_t moveCount = 1;
+	mm1000_t nextTo[NUM_AXIS];
+	mm1000_t totalDist[NUM_AXIS];
 
-	mm1000_t       maxdist   = 0;
-	const mm1000_t splitdist = SPLITMOVEDIST;
+	mm1000_t       maxDist   = 0;
+	const mm1000_t splitDist = SPLITMOVEDIST;
 
 	axis_t i;
 
 	for (i = 0; i < NUM_AXIS; i++)
 	{
 		mm1000_t dist = to[i] - _current[i];
-		totaldist[i]  = dist;
+		totalDist[i]  = dist;
 
 		if (dist < 0) dist = -dist;
-		if (dist > maxdist)
-			maxdist = dist;
+		if (dist > maxDist)
+			maxDist = dist;
 	}
 
-	if (maxdist > splitdist)
+	if (maxDist > splitDist)
 	{
-		movecount = uint16_t(maxdist / splitdist);
-		if ((maxdist % splitdist) != 0)
-			movecount++;
+		moveCount = uint16_t(maxDist / splitDist);
+		if ((maxDist % splitDist) != 0)
+			moveCount++;
 	}
 
-	for (uint16_t j = movecount - 1; j > 0; j--)
+	for (uint16_t j = moveCount - 1; j > 0; j--)
 	{
 		for (i = 0; i < NUM_AXIS; i++)
 		{
-			mm1000_t newxtpos = RoundMulDivI32(totaldist[i], j, movecount);
-			nextto[i]         = to[i] - newxtpos;
+			mm1000_t nextPos = RoundMulDivI32(totalDist[i], j, moveCount);
+			nextTo[i]        = to[i] - nextPos;
 		}
 
-		super::MoveAbs(nextto, feedrate);
+		super::MoveAbs(nextTo, feedRate);
 		if (IsError()) return;
 	}
 
-	super::MoveAbs(to, feedrate);
+	super::MoveAbs(to, feedRate);
 }
 
 /////////////////////////////////////////////////////////
@@ -372,15 +372,15 @@ mm1000_t ToMM(float mm)
 void CMyMotionControl::UnitTest()
 {
 	Test(1000, 200000, Hmm, true);		// max dist
-	Test(0, 200000, Hmm, true);		// max dist
+	Test(0, 200000, Hmm, true);			// max dist
 	Test(-1000, 200000, Hmm, true);		// max dist
 
 	Test(1000, -200000, Hmm, true);		// max dist
 	Test(0, -200000, Hmm, true);		// max dist
-	Test(-1000, -200000, Hmm, true);		// max dist
+	Test(-1000, -200000, Hmm, true);	// max dist
 
 
-	Test(mm1000_t(SEGMENT1 + SEGMENT2 + SEGMENT3), 0, Hmm, true);		// max dist
+	Test(mm1000_t(SEGMENT1 + SEGMENT2 + SEGMENT3), 0, Hmm, true);				// max dist
 	Test(mm1000_t(SEGMENT2 + SEGMENT3), 0, mm1000_t(SEGMENT1) + Hmm, true);		// max height
 
 	Test(mm1000_t(SEGMENT2 + SEGMENT3), 0, mm1000_t(SEGMENT1) + Hmm, true);		// max height

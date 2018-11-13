@@ -180,7 +180,7 @@ private:
 
 public:
 
-	static T Cast(expr_t v) { return T(v); } // do not use lrint => convert to double first
+	static T Cast(expr_t v) { return T(v); }				// do not use lrint => convert to double first
 
 	static float DegreeToRAD(T v) { return float(v / (SCALEMASK * 180.0 / M_PI)); }
 	static T     FromRAD(float v) { return Cast(float(v * SCALEMASK * 180 / M_PI)); }

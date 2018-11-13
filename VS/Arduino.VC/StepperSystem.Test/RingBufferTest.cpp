@@ -89,13 +89,13 @@ namespace StepperSystemTest
 			TestRingBufferInsert(128 - 10, 60, 30);	// buffer overrun
 		}
 
-		void TestRingBufferInsert(uint8_t startidx, uint8_t bufferSize, uint8_t insertOffset) const
+		void TestRingBufferInsert(uint8_t startIdx, uint8_t bufferSize, uint8_t insertOffset) const
 		{
 			CRingBufferQueue<SRingBuffer, 128> buffer;
 
 			uint8_t i;
 
-			for (i = 0; i < startidx; i++)
+			for (i = 0; i < startIdx; i++)
 			{
 				buffer.Enqueue();
 				buffer.Dequeue();
@@ -109,9 +109,9 @@ namespace StepperSystemTest
 
 			Assert::AreEqual(bufferSize, buffer.Count());
 
-			uint8_t insertat = buffer.NextIndex(buffer.GetHeadPos(), insertOffset);
+			uint8_t insertAt = buffer.NextIndex(buffer.GetHeadPos(), insertOffset);
 
-			buffer.InsertTail(insertat)->i = 2000;
+			buffer.InsertTail(insertAt)->i = 2000;
 
 			Assert::AreEqual(uint8_t(bufferSize + 1), buffer.Count());
 
@@ -119,7 +119,7 @@ namespace StepperSystemTest
 
 			for (uint8_t idx = buffer.H2TInit(); buffer.H2TTest(idx); idx = buffer.H2TInc(idx))
 			{
-				if (idx != insertat)
+				if (idx != insertAt)
 					Assert::AreEqual(expect++, buffer.Buffer[idx].i);
 				else
 					Assert::AreEqual(2000, buffer.Buffer[idx].i);

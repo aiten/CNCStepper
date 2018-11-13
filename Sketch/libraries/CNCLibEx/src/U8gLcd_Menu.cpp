@@ -25,7 +25,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <Arduino.h>
-#include <U8glib.h>
+#include <U8g2lib.h>
 
 #include <CNCLib.h>
 #include <CNCLibEx.h>
@@ -171,7 +171,7 @@ bool CU8GLcd::DrawLoopMenu(EnumAsByte(EDrawLoopType) type, uintptr_t data)
 	{
 		return true;
 	}
-	//	if (type==DrawLoopQueryTimerout)	{ *((uint32_t*)data) = 2000; return true; }
+	//	if (type==DrawLoopQueryTimeOut)	{ *((uint32_t*)data) = 2000; return true; }
 	if (type == DrawLoopQueryTimerout)
 	{
 		*reinterpret_cast<uint32_t*>(data) = 250;

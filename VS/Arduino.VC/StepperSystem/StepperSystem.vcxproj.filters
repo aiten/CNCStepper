@@ -267,6 +267,9 @@
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\src\Lcd.h">
       <Filter>CNCLib</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\U8glibcommon.h">
+      <Filter>MsvcExt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\MsvcStepper\MsvcStepper.cpp">

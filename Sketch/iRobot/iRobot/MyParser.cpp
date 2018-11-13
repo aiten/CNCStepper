@@ -34,16 +34,18 @@
 bool CMyParser::MCommand(mcode_t mcode)
 {
 	if (super::MCommand(mcode))
+	{
 		return true;
+	}
 
 	switch (mcode)
 	{
-		case 116: _OkMessage = PrintInfo;
-			return true;
-		case 117: M117Command();
-			return true;
-		case 118: M118Command();
-			return true;
+		// @formatter:off — disable formatter after this line
+		case 116: _OkMessage = PrintInfo;	return true;
+		case 117: M117Command();			return true;
+		case 118: M118Command();			return true;
+			// @formatter:on — enable formatter after this line
+		default: break;
 	}
 
 	return false;
@@ -53,7 +55,6 @@ bool CMyParser::MCommand(mcode_t mcode)
 
 void CMyParser::PrintInfo()
 {
-	//	PrintPosition();
 	static_cast<CMyMotionControl*>(CMotionControlBase::GetInstance())->PrintInfo();
 }
 
@@ -64,10 +65,19 @@ bool CMyParser::GetAxisAbs(SAxisMove& move)
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS) GetAxis(axis, move, AbsolutWithZeroShiftPosition);
-		else break;
+		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		{
+			GetAxis(axis, move, AbsolutWithZeroShiftPosition);
+		}
+		else
+		{
+			break;
+		}
 
-		if (CheckError()) { return false; }
+		if (CheckError())
+		{
+			return false;
+		}
 	}
 
 	return move.axes != 0;
@@ -94,7 +104,7 @@ void CMyParser::M118Command()
 
 	if (GetAxisAbs(move))
 	{
-		CMyMotionControl* pMC = static_cast<CMyMotionControl*>(CMotionControlBase::GetInstance());
+		auto pMC = static_cast<CMyMotionControl*>(CMotionControlBase::GetInstance());
 		pMC->MoveAngleLog(move.newpos);
 	}
 }

@@ -31,15 +31,6 @@
     <ClInclude Include="..\Include\arduino.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyLcd.h">
-      <Filter>Plotter\LCD_12864_u8g</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyMenu.h">
-      <Filter>Plotter\LCD_12864_u8g</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\Plotter\LCD_2004_LiquidCrystal_I2C\MyLcd.h">
-      <Filter>Plotter\LCD_2004_LiquidCrystal_I2C</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\Configuration.h">
       <Filter>Plotter</Filter>
     </ClInclude>
@@ -58,6 +49,15 @@
     <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\PlotterControl.h">
       <Filter>Plotter</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\LCD_2004_LiquidCrystal_I2C\MyLcd.h">
+      <Filter>Plotter\LCD_2004_LiquidCrystal_I2C</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\LCD_12864_u8g\MyLcd.h">
+      <Filter>Plotter\LCD_12864_u8g</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\Plotter\Plotter\LCD_12864_u8g\MyMenu.h">
+      <Filter>Plotter\LCD_12864_u8g</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -68,15 +68,6 @@
     </ClCompile>
     <ClCompile Include="Plotter.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyLcd.cpp">
-      <Filter>Plotter\LCD_12864_u8g</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\Plotter\LCD_12864_u8g\MyMenu.cpp">
-      <Filter>Plotter\LCD_12864_u8g</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Sketch\Plotter\LCD_2004_LiquidCrystal_I2C\MyLcd.cpp">
-      <Filter>Plotter\LCD_2004_LiquidCrystal_I2C</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\Plotter\Plotter\HPGLParser.cpp">
       <Filter>Plotter</Filter>
@@ -94,6 +85,15 @@
   <ItemGroup>
     <None Include="..\..\..\Sketch\Plotter\Plotter\Plotter.ino">
       <Filter>Plotter</Filter>
+    </None>
+    <None Include="..\..\..\Sketch\Plotter\Plotter\LCD_2004_LiquidCrystal_I2C\MyLcd.cpp">
+      <Filter>Plotter\LCD_2004_LiquidCrystal_I2C</Filter>
+    </None>
+    <None Include="..\..\..\Sketch\Plotter\Plotter\LCD_12864_u8g\MyLcd.cpp">
+      <Filter>Plotter\LCD_12864_u8g</Filter>
+    </None>
+    <None Include="..\..\..\Sketch\Plotter\Plotter\LCD_12864_u8g\MyMenu.cpp">
+      <Filter>Plotter\LCD_12864_u8g</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -50,7 +50,7 @@
 ////////////////////////////////////////////////////////////
 
 //LiquidCrystal_I2C	lcd(I2C_ADDR, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin);
-LiquidCrystal_I2C  lcd(I2C_ADDR, MYLCD_COLS, MYLCD_ROWS);
+LiquidCrystal_I2C lcd(I2C_ADDR, MYLCD_COLS, MYLCD_ROWS);
 
 ////////////////////////////////////////////////////////////
 
@@ -82,9 +82,12 @@ void CMyLcd::TimerInterrupt()
 void CMyLcd::FirstDraw()
 {
 	lcd.clear();
-	lcd.setCursor(0, 0); lcd.print(F("X:xxx.xx"));
-	lcd.setCursor(0, 1); lcd.print(F("Y:xxx.xx"));
-	lcd.setCursor(0, 2); lcd.print(F("Pen:x"));
+	lcd.setCursor(0, 0);
+	lcd.print(F("X:xxx.xx"));
+	lcd.setCursor(0, 1);
+	lcd.print(F("Y:xxx.xx"));
+	lcd.setCursor(0, 2);
+	lcd.print(F("Pen:x"));
 }
 
 ////////////////////////////////////////////////////////////
@@ -109,12 +112,12 @@ unsigned long CMyLcd::Splash()
 
 unsigned long CMyLcd::Draw(EDrawType /* draw */)
 {
-	static bool firstdraw = true;
+	static bool firstDraw = true;
 
-	if (firstdraw)
+	if (firstDraw)
 	{
 		FirstDraw();
-		firstdraw = false;
+		firstDraw = false;
 	}
 	DrawPos(2, 0, CMotionControlBase::GetInstance()->GetPosition(X_AXIS));
 	DrawPos(2, 1, CMotionControlBase::GetInstance()->GetPosition(Y_AXIS));

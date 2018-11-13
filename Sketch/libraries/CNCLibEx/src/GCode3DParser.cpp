@@ -109,17 +109,17 @@ bool CGCode3DParser::MCommand(mcode_t mcode)
 
 void CGCode3DParser::M20Command()
 {
-	char filenamebuffer[MAXPATHNAME];
-	strcpy(filenamebuffer, "/");
+	char fileNameBuffer[MAXPATHNAME];
+	strcpy(fileNameBuffer, "/");
 
-	File     root  = SD.open(filenamebuffer);
+	File     root  = SD.open(fileNameBuffer);
 	uint16_t count = 0;
 
 	if (root)
 	{
 		root.rewindDirectory();
 		StepperSerial.println(MESSAGE_PARSER3D_BEGIN_FILE_LIST);
-		PrintSDFileListRecurse(root, 0, count, filenamebuffer, '\n');
+		PrintSDFileListRecurse(root, 0, count, fileNameBuffer, '\n');
 		if (count > 0)
 		{
 			StepperSerial.println();
@@ -131,7 +131,7 @@ void CGCode3DParser::M20Command()
 
 ////////////////////////////////////////////////////////////
 
-void CGCode3DParser::PrintSDFileListRecurse(File& dir, uint8_t depth, uint16_t& count, char* filenamebuffer, char seperatorchar)
+void CGCode3DParser::PrintSDFileListRecurse(File& dir, uint8_t depth, uint16_t& count, char* fileNameBuffer, char seperatorChar)
 {
 #ifdef _MSC_VER
 #pragma warning (suppress: 4127)
@@ -146,11 +146,11 @@ void CGCode3DParser::PrintSDFileListRecurse(File& dir, uint8_t depth, uint16_t& 
 
 		if (entry.isDirectory())
 		{
-			unsigned int lastidx = strlen(filenamebuffer);
-			strcat(filenamebuffer, entry.name());
-			strcat_P(filenamebuffer, MESSAGE_PARSER3D_SLASH);
-			PrintSDFileListRecurse(entry, depth + 1, count, filenamebuffer, seperatorchar);
-			filenamebuffer[lastidx] = 0;
+			unsigned int lastidx = strlen(fileNameBuffer);
+			strcat(fileNameBuffer, entry.name());
+			strcat_P(fileNameBuffer, MESSAGE_PARSER3D_SLASH);
+			PrintSDFileListRecurse(entry, depth + 1, count, fileNameBuffer, seperatorChar);
+			fileNameBuffer[lastidx] = 0;
 		}
 		else
 		{
@@ -158,9 +158,9 @@ void CGCode3DParser::PrintSDFileListRecurse(File& dir, uint8_t depth, uint16_t& 
 			{
 				if (count != 0)
 				{
-					StepperSerial.print(seperatorchar);
+					StepperSerial.print(seperatorChar);
 				}
-				StepperSerial.print(filenamebuffer);
+				StepperSerial.print(fileNameBuffer);
 				StepperSerial.print(entry.name());
 				count++;
 			}
@@ -184,26 +184,26 @@ void CGCode3DParser::M22Command() {}
 
 void CGCode3DParser::M23Command()
 {
-	char filename[MAXPATHNAME];
-	if (!CheckSD() || !GetPathName(filename))
+	char fileName[MAXPATHNAME];
+	if (!CheckSD() || !GetPathName(fileName))
 	{
 		return;
 	}
 
-	GetExecutingFile() = SD.open(filename, FILE_READ);
+	GetExecutingFile() = SD.open(fileName, FILE_READ);
 	if (!GetExecutingFile())
 	{
 		Error(MESSAGE_PARSER3D_ERROR_READING_FILE);
 		return;
 	}
 
-	strcpy(_state._printfilename, filename); //8.3
+	strcpy(_state._printFileName, fileName); //8.3
 	_state._printFilePos  = 0;
 	_state._printFileLine = 1;
 	_state._printFileSize = GetExecutingFile().size();
 
 	StepperSerial.print(MESSAGE_PARSER3D_FILE_OPENED);
-	StepperSerial.print(filename);
+	StepperSerial.print(fileName);
 	StepperSerial.print(MESSAGE_PARSER3D_SIZE);
 	StepperSerial.println(_state._printFileSize);
 
@@ -312,21 +312,21 @@ void CGCode3DParser::M28Command()
 {
 	if (!_state._isM28)
 	{
-		char filename[MAXPATHNAME];
-		if (!CheckSD() || !GetPathName(filename))
+		char fileName[MAXPATHNAME];
+		if (!CheckSD() || !GetPathName(fileName))
 		{
 			return;
 		}
 
 		// create folders
-		char* lastslash = strrchr(filename, '/');
+		char* lastslash = strrchr(fileName, '/');
 
-		if (lastslash != nullptr && lastslash != filename)
+		if (lastslash != nullptr && lastslash != fileName)
 		{
 			*lastslash = 0;
-			if (!SD.exists(filename))
+			if (!SD.exists(fileName))
 			{
-				if (!SD.mkdir(filename))
+				if (!SD.mkdir(fileName))
 				{
 					Error(MESSAGE_PARSER3D_ERROR_CREATING_FILE);
 					return;
@@ -335,12 +335,12 @@ void CGCode3DParser::M28Command()
 			*lastslash = '/';
 		}
 
-		if (!DeleteSDFile(filename, false))
+		if (!DeleteSDFile(fileName, false))
 		{
 			return;
 		}
 
-		_state._file = SD.open(filename, FILE_WRITE);
+		_state._file = SD.open(fileName, FILE_WRITE);
 		if (!GetExecutingFile())
 		{
 			Error(MESSAGE_PARSER3D_ERROR_CREATING_FILE);
@@ -348,7 +348,7 @@ void CGCode3DParser::M28Command()
 		}
 
 		StepperSerial.print(MESSAGE_PARSER3D_WRITING_TO_FILE);
-		StepperSerial.println(filename);
+		StepperSerial.println(fileName);
 
 		_state._isM28 = true;
 	}
@@ -374,16 +374,16 @@ void CGCode3DParser::M29Command()
 
 void CGCode3DParser::M30Command()
 {
-	char filename[MAXPATHNAME];
-	if (!CheckSD() || !GetPathName(filename))
+	char fileName[MAXPATHNAME];
+	if (!CheckSD() || !GetPathName(fileName))
 	{
 		return;
 	}
 
-	if (DeleteSDFile(filename, true))
+	if (DeleteSDFile(fileName, true))
 	{
 		StepperSerial.print(MESSAGE_PARSER3D_FILE_DELETED);
-		StepperSerial.println(filename);
+		StepperSerial.println(fileName);
 	}
 }
 
@@ -401,9 +401,9 @@ bool CGCode3DParser::CheckSD()
 
 ////////////////////////////////////////////////////////////
 
-bool CGCode3DParser::DeleteSDFile(char* filename, bool errorifnotexists)
+bool CGCode3DParser::DeleteSDFile(char* fileName, bool errorIfNotExists)
 {
-	GetExecutingFile() = SD.open(filename);
+	GetExecutingFile() = SD.open(fileName);
 	if (GetExecutingFile())
 	{
 		if (GetExecutingFile().isDirectory())
@@ -413,14 +413,14 @@ bool CGCode3DParser::DeleteSDFile(char* filename, bool errorifnotexists)
 			return false;
 		}
 		GetExecutingFile().close();
-		if (!SD.remove(filename))
+		if (!SD.remove(fileName))
 		{
 			Error(MESSAGE_PARSER3D_CANNOT_DELETE_FILE);
 			return false;
 		}
 		return true;
 	}
-	else if (errorifnotexists)
+	else if (errorIfNotExists)
 	{
 		Error(MESSAGE_PARSER3D_FILE_NOT_EXIST);
 		return false;
@@ -431,10 +431,10 @@ bool CGCode3DParser::DeleteSDFile(char* filename, bool errorifnotexists)
 
 ////////////////////////////////////////////////////////////
 
-bool CGCode3DParser::AddPathChar(char ch, char*& buffer, uint8_t& pathlength)
+bool CGCode3DParser::AddPathChar(char ch, char*& buffer, uint8_t& pathLength)
 {
-	pathlength++;
-	if (pathlength >= MAXPATHNAME)
+	pathLength++;
+	if (pathLength >= MAXPATHNAME)
 	{
 		Error(MESSAGE_PARSER3D_ILLEGAL_FILENAME);
 		return false;
@@ -447,13 +447,13 @@ bool CGCode3DParser::GetPathName(char* buffer)
 {
 	char    ch         = _reader->SkipSpaces();
 	bool    first      = true;
-	uint8_t pathlength = 0;
+	uint8_t pathLength = 0;
 
 	while (!CStreamReader::IsSpaceOrEnd(ch) && !IsCommentStart(ch))
 	{
 		if (ch == '/')
 		{
-			if (!AddPathChar(ch, buffer, pathlength))
+			if (!AddPathChar(ch, buffer, pathLength))
 			{
 				return false;
 			}
@@ -477,7 +477,7 @@ bool CGCode3DParser::GetPathName(char* buffer)
 		}
 		first = false;
 
-		if (!GetFileName(buffer, pathlength))
+		if (!GetFileName(buffer, pathLength))
 		{
 			return false;
 		}
@@ -485,12 +485,12 @@ bool CGCode3DParser::GetPathName(char* buffer)
 		ch = _reader->GetChar();
 	}
 
-	return AddPathChar(0, buffer, pathlength);
+	return AddPathChar(0, buffer, pathLength);
 }
 
 ////////////////////////////////////////////////////////////
 
-bool CGCode3DParser::GetFileName(char*& buffer, uint8_t& pathlength)
+bool CGCode3DParser::GetFileName(char*& buffer, uint8_t& pathLength)
 {
 	uint8_t dotidx = 0;
 	uint8_t length = 0;
@@ -508,14 +508,14 @@ bool CGCode3DParser::GetFileName(char*& buffer, uint8_t& pathlength)
 				Error(MESSAGE_PARSER3D_ILLEGAL_FILENAME);
 				return false;
 			}
-			if (!AddPathChar(ch, buffer, pathlength))
+			if (!AddPathChar(ch, buffer, pathLength))
 			{
 				return false;
 			}
 		}
 		else if (CStreamReader::IsDigit(ch) || CStreamReader::IsAlpha(ch) || ch == '_' || ch == '~')
 		{
-			if (!AddPathChar(ch, buffer, pathlength))
+			if (!AddPathChar(ch, buffer, pathLength))
 			{
 				return false;
 			}

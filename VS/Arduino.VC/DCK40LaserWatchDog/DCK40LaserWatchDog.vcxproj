@@ -93,8 +93,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Sketch\DCK40LaserWatchdog\WatchDogController.cpp" />
-    <ClCompile Include="..\..\..\Sketch\DCK40LaserWatchdog\WaterFlow.cpp" />
+    <ClCompile Include="..\..\..\Sketch\DCK40LaserWatchDog\WatchDogController.cpp" />
+    <ClCompile Include="..\..\..\Sketch\DCK40LaserWatchDog\WaterFlow.cpp" />
     <ClCompile Include="DCK40LaserWatchDog.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -102,7 +102,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Sketch\DCK40LaserWatchdog\DCK40LaserWatchdog.ino" />
+    <None Include="..\..\..\Sketch\DCK40LaserWatchDog\DCK40LaserWatchDog.ino" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

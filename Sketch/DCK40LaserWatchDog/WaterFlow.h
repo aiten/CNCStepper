@@ -51,7 +51,7 @@ public:
 	{
 		{
 			uint8_t s = SREG;
-			cli();					//  DisableInterrups();
+			cli();					//  DisableInterrupts();
 			TestSampleTime();
 			SREG = s;
 		}

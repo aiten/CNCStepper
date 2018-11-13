@@ -241,7 +241,7 @@ void CMenuBase::MenuButtonPressProbe(axis_t axis)
 
 		builder.Add(F("g92 "))
 		       .AddAxisName(axis)
-		       .Add(- mm1000_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, axis[0].probesize) + ofs)));
+		       .Add(- mm1000_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].ProbeSize) + ofs)));
 
 		PostCommand(builder.GetCommand());
 

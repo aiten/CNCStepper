@@ -39,17 +39,21 @@ private:
 
 public:
 
-	static CMyLcd* GetLcd()												{ return ((CMyLcd*) CLcd::GetInstance()); }
+	static CMyLcd* GetLcd() { return ((CMyLcd*)CLcd::GetInstance()); }
 
-	CMyMenu()															{ _main = &_mainMenu; _SDMenuDef = &_SDMenu; }
+	CMyMenu()
+	{
+		_main      = &_mainMenu;
+		_SDMenuDef = &_SDMenu;
+	}
 
 protected:
 
 	virtual void Changed() override;
 
-	void MenuButtonPressEnd(const SMenuItemDef*);
+	void MenuButtonPressEnd(const SMenuItemDef*         );
 	void MenuButtonPressMoveNextAxis(const SMenuItemDef*);
-	void MenuButtonPressFuerElise(const SMenuItemDef*);
+	void MenuButtonPressFuerElise(const SMenuItemDef*   );
 
 	static const SMenuDef _mainMenu PROGMEM;
 	static const SMenuDef _moveXMenu PROGMEM;
@@ -69,6 +73,4 @@ protected:
 	static const SMenuItemDef _SDMenuItems[] PROGMEM;
 	static const SMenuItemDef _SDSelectMenuItems[] PROGMEM;
 	static const SMenuItemDef _extraMenuItems[] PROGMEM;
-
 };
-

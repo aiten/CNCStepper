@@ -52,8 +52,8 @@ typedef int32_t inch100000_t; // 1/100000 inch
 
 #define SERIALBUFFERSIZE	128			// even size 
 
-#define TIMEOUTCALLIDEL		333			// time in ms after move completet to call Idle
-#define TIMEOUTCALLPOLL		500			// time in ms to call Poll() next if not idle => ASSERT( TIMEOUTCALLPOLL > TIMEOUTCALLIDEL)
+#define TIMEOUTCALLIDLE		333			// time in ms after move completed to call Idle
+#define TIMEOUTCALLPOLL		500			// time in ms to call Poll() next if not idle => ASSERT( TIMEOUTCALLPOLL > TIMEOUTCALLIDLE)
 
 #define IDLETIMER0VALUE     TIMER0VALUE(500)	// AVR don't care ... Timer 0 shared with millis, other ?Hz
 

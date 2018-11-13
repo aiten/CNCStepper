@@ -41,12 +41,12 @@ void CMenu3D::MenuButtonPressSDStart(const CMenuBase::SMenuItemDef*)
 	{
 		PostCommand(EGCodeSyntaxType::GCode, F("m21")); // Init SD
 
-		char printfilename[MAXFILEEXTNAME + 1 + 10];
-		InitPostCommand(EGCodeSyntaxType::GCode, printfilename);
-		strcat_P(printfilename, PSTR("m23 "));
-		strcat(printfilename, CGCode3DParser::GetExecutingFileName());
+		char printfileName[MAXFILEEXTNAME + 1 + 10];
+		InitPostCommand(EGCodeSyntaxType::GCode, printfileName);
+		strcat_P(printfileName, PSTR("m23 "));
+		strcat(printfileName, CGCode3DParser::GetExecutingFileName());
 
-		if (PostCommand(printfilename))
+		if (PostCommand(printfileName))
 		{
 			PostCommand(EGCodeSyntaxType::GCode, F("m24"));
 			OKBeep();

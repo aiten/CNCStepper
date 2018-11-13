@@ -92,6 +92,7 @@
     <ClInclude Include="..\Include\SPI.h" />
     <ClInclude Include="..\Include\u8g2lib.h" />
     <ClInclude Include="..\Include\u8glib.h" />
+    <ClInclude Include="..\Include\U8glibcommon.h" />
     <ClInclude Include="..\MsvcStepper\MsvcStepper.h" />
   </ItemGroup>
   <ItemGroup>

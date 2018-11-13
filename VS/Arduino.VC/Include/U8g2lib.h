@@ -19,20 +19,15 @@
 
 #pragma once
 
-class U8G2 // : public Stream
+#include "U8glibcommon.h"
+
+class U8G2 : public U8GLIBCommon
 {
 public:
-	void begin() {};
-	void firstPage() {};
-	bool nextPage() { return false; }
-	void drawStr(int           , int, const char*) {}
-	void setFont(const uint8_t*) { };
-	void setCursor(int         , int) { };
-
-	void print(const char) { };
-
-	void print(const char*  ) { };
-	void println(const char*) { };
+	void setCursor(int x, int y)
+	{
+		setPrintPos(x, y);
+	};
 };
 
 class U8G2_ST7920_128X64_1_SW_SPI : public U8G2

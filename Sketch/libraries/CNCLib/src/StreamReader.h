@@ -21,7 +21,7 @@
 
 ////////////////////////////////////////////////////////
 // 
-// class for scanning an commandstream
+// class for scanning an CommandStream
 //
 
 class CStreamReader

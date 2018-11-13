@@ -18,7 +18,7 @@
 #include <StepperLib.h>
 #include <CNCLib.h>
 #include <CNCLibEx.h>
-#include <U8glib.h>
+#include <U8g2lib.h>
 
 #include <SPI.h>
 #include <SD.h>

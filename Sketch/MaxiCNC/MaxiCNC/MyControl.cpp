@@ -48,7 +48,7 @@ HardwareSerial& StepperSerial = Serial;
 const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 {
 	EPROM_SIGNATURE,
-	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
+	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,Axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
 	GetInfo1a(), GetInfo1b(),
 	0,
 	STEPPERDIRECTION, 0, 0,SPINDLE_FADETIMEDELAY,

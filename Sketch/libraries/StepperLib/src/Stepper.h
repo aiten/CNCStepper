@@ -182,7 +182,7 @@ public:
 	}
 
 	void                       SetSpeedOverride(EnumAsByte(ESpeedOverride) speed) { _pod._speedOverride = speed; }
-	EnumAsByte(ESpeedOverride) GetSpeedOverride() const { return _pod._speedOverride; } 
+	EnumAsByte(ESpeedOverride) GetSpeedOverride() const { return _pod._speedOverride; }
 
 	static uint8_t                    SpeedOverrideToP(EnumAsByte(ESpeedOverride) speed) { return RoundMulDivU8(uint8_t(speed), 100, SpeedOverride100P); }
 	static EnumAsByte(ESpeedOverride) PToSpeedOverride(uint8_t                    speedP) { return EnumAsByte(ESpeedOverride)(RoundMulDivU8(speedP, SpeedOverride100P, 100)); }

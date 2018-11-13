@@ -59,7 +59,7 @@
 
 // see: http://cnclibangular2.azurewebsites.net/eepromconfig
 #define CNC_MAXSPEED 24000          // steps/sec, 75 rot/sec
-#define CNC_ACC  520                // 0.1 To acc
+#define CNC_ACC  520                // 0.1 To Acc
 #define CNC_DEC  548                // 0.09 to break                
 #define CNC_JERKSPEED 960
 
@@ -114,8 +114,8 @@
 
 ////////////////////////////////////////////////////////
 
-#define GO_DEFAULT_STEPRATE		((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate)))	// steps/sec
-#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, maxsteprate)))	// steps/sec
+#define GO_DEFAULT_STEPRATE		((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
 #define G1_DEFAULT_FEEDPRATE	100000	// in mm1000 / min
 
 #define STEPRATE_REFMOVE	(CNC_MAXSPEED/4)

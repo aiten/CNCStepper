@@ -91,29 +91,29 @@ void WatchDogController::Setup()
 	_watchDog.Init(WATCHDOG_PIN, WATCHDOG_ON);
 
 
-	_redrawtime = millis();
+	_redrawTime = millis();
 }
 
 ////////////////////////////////////////////////////////////
 
 void WatchDogController::Loop()
 {
-	bool ison;
-	if (_watchDog.OnOff((ison = IsWatchDogOn())))
+	bool isOn;
+	if (_watchDog.OnOff((isOn = IsWatchDogOn())))
 	{
 		_drawLCDRequest = true;
-		if (ison)
+		if (isOn)
 			Serial.println(F("Watchdog ON"));
 		else
 			Serial.println(F("Watchdog OFF"));
 	}
 
 
-	if (millis() > _redrawtime)
+	if (millis() > _redrawTime)
 	{
 		_secActive++;
 		_drawLCDRequest = true;
-		_redrawtime += 1000;
+		_redrawTime += 1000;
 	}
 
 	if (millis() > _lastBlink)
@@ -151,13 +151,13 @@ void WatchDogController::Loop()
 
 float WatchDogController::ReadTemp()
 {
-	const unsigned char maxcount = WATERTEMP_OVERSAMPLING;
-	int                 wtemp    = 0;
-	for (int            i        = 0; i < maxcount; i++)
-		wtemp += analogRead(WATERTEMP_PIN);
+	const unsigned char maxCount = WATERTEMP_OVERSAMPLING;
+	int                 wTemp    = 0;
+	for (int            i        = 0; i < maxCount; i++)
+		wTemp += analogRead(WATERTEMP_PIN);
 
-	//	return temp10k.Lookup((float)wtemp / maxcount);
-	return temp10k.Lookup((uint16_t)wtemp);
+	//	return temp10k.Lookup((float)wTemp / maxCount);
+	return temp10k.Lookup((uint16_t)wTemp);
 }
 
 ////////////////////////////////////////////////////////////
@@ -172,13 +172,13 @@ bool WatchDogController::IsWatchDogWaterFlowOn()
 
 bool WatchDogController::IsWatchDogTempOn()
 {
-	float       wtemp  = _currentTemp = ReadTemp();
+	float       wTemp  = _currentTemp = ReadTemp();
 	static bool tempOn = false;
 
 	if (tempOn)
-		tempOn = wtemp > WATCHDOG_MINTEMPON && wtemp < WATCHDOG_MAXTEMPON;
+		tempOn = wTemp > WATCHDOG_MINTEMPON && wTemp < WATCHDOG_MAXTEMPON;
 	else
-		tempOn = wtemp > WATCHDOG_MINTEMPOFF && wtemp < WATCHDOG_MAXTEMPOFF;
+		tempOn = wTemp > WATCHDOG_MINTEMPOFF && wTemp < WATCHDOG_MAXTEMPOFF;
 
 	return tempOn;
 }

@@ -65,13 +65,13 @@
 #define LASERWATER_PIN	RAMPSFD_SERVO3_PIN
 #define LASERWATER_PIN_ON  LOW
 #define LASERWATER_PIN_OFF HIGH
-#define LASERWATER_ONTIME	120000 // 120000			// switch off if idle for 12000 => 2 min Sec
-//#define LASERWATER_ONTIME  1000 // 1200000     // switch off if idle for 1200 => 20 min Sec
+#define LASERWATER_ONTIME	120000 // 120000		// switch off if idle for 12000 => 2 min Sec
+//#define LASERWATER_ONTIME  1000 // 1200000		// switch off if idle for 1200 => 20 min Sec
 
 #define LASERVACUUM_PIN	RAMPSFD_SERVO4_PIN
 #define LASERVACUUM_PIN_ON  LOW
 #define LASERVACUUM_PIN_OFF HIGH
-#define LASERVACUUM_ONTIME	60000			// switch off if idle for ?? Sec
+#define LASERVACUUM_ONTIME	60000					// switch off if idle for ?? Sec
 
 ////////////////////////////////////////////////////////
 

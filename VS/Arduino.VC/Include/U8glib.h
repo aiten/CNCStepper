@@ -19,72 +19,9 @@
 
 #pragma once
 
-typedef uint8_t u8g_fntpgm_uint8_t;
+#include "U8glibcommon.h"
 
-#define clrscr() system("cls")
-
-class U8GLIB // : public Stream
-{
-	char _buffer[4048];
-	char _tmp[1024];
-
-public:
-	U8GLIB() = default;
-
-	void begin() {};
-	void firstPage() { _buffer[0] = 0; };
-
-	bool nextPage() const
-	{
-		char filename[_MAX_PATH];
-		::GetTempPathA(_MAX_PATH, filename);
-		strcat_s(filename, "\\CNCLib_LCD.txt");
-
-		FILE* fout;
-		fopen_s(&fout, filename, "wt");
-		if (fout)
-		{
-			fwrite(_buffer, strlen(_buffer), 1, fout);
-			fclose(fout);
-		}
-
-		return false;
-	}
-
-	void drawStr(int x, int y, const char* text)
-	{
-		setPrintPos(x, y);
-		print(text);
-	}
-
-	void setFont(const u8g_fntpgm_uint8_t*) { };
-
-	void setPrintPos(int x, int y)
-	{
-		sprintf_s(_tmp, "SP:%i:%i\n", x, y);
-		strcat_s(_buffer, _tmp);
-	};
-
-	void print(const char ch)
-	{
-		sprintf_s(_tmp, "P:%c\n", ch);
-		strcat_s(_buffer, _tmp);
-	};
-
-	void print(const char* text)
-	{
-		sprintf_s(_tmp, "P:%s\n", text);
-		strcat_s(_buffer, _tmp);
-	};
-
-	void println(const char* text)
-	{
-		sprintf_s(_tmp, "PL:%s\n", text);
-		strcat_s(_buffer, _tmp);
-	};
-};
-
-class U8GLIB_ST7920_128X64_1X : public U8GLIB
+class U8GLIB_ST7920_128X64_1X : public U8GLIBCommon
 {
 public:
 	U8GLIB_ST7920_128X64_1X(int, int, int) {};

@@ -36,7 +36,7 @@ void CLcd::Init()
 	_nextdrawtime = Splash() + millis();
 	_splash       = true;
 
-	DrawRequest(CLcd::DrawForceAll);		//first draw doesnt return fast! call at init time
+	DrawRequest(CLcd::DrawForceAll);		//first draw doesn't return fast! call at init time
 }
 
 ////////////////////////////////////////////////////////////

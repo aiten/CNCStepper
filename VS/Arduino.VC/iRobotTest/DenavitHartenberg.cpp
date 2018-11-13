@@ -140,49 +140,49 @@ void CDenavitHartenberg::FromPosition(float posxyz[3], float angles[NUM_AXIS], f
 
 float CDenavitHartenberg::SearchStep(float pos[3], float inout[NUM_AXIS], uint8_t idx, float diff, SSearchDef& def)
 {
-	float oldiff = diff;
+	float oldDiff = diff;
 
-	float oldpos = inout[idx];
-	float newpos = oldpos + def.dist;
+	float oldPos = inout[idx];
+	float newPos = oldPos + def.dist;
 
-	if (newpos > def.max)
+	if (newPos > def.max)
 	{
-		newpos = def.max;
+		newPos = def.max;
 	}
-	else if (newpos < def.min)
+	else if (newPos < def.min)
 	{
-		newpos = def.min;
+		newPos = def.min;
 	}
-	else if (oldpos == newpos)
+	else if (oldPos == newPos)
 	{
-		return oldiff;
+		return oldDiff;
 	}
 
-	inout[idx] = newpos;
+	inout[idx] = newPos;
 
 	diff = CalcDist(pos, inout);
 
-	if (diff > oldiff)
+	if (diff > oldDiff)
 	{
-		inout[idx] = oldpos;
+		inout[idx] = oldPos;
 		if (fabs(def.dist) < 0.01)
 			def.dist = def.dist / -1.01f;
 		else
 			def.dist = def.dist / -2;
-		return oldiff;
+		return oldDiff;
 	}
-	else if (diff == oldiff)
+	else if (diff == oldDiff)
 	{
-		if (oldpos == newpos)
+		if (oldPos == newPos)
 			def.dist = def.dist / -2.0f;
 		return diff;
 	}
-	else if (newpos >= def.max)
+	else if (newPos >= def.max)
 	{
 		def.dist = def.dist / -2.0f;
 		return diff;
 	}
-	else if (newpos <= def.min)
+	else if (newPos <= def.min)
 	{
 		def.dist = def.dist / -2.0f;
 		return diff;
@@ -196,57 +196,57 @@ float CDenavitHartenberg::SearchStep(float pos[3], float inout[NUM_AXIS], uint8_
 
 float CDenavitHartenberg::SearchMinOld(float pos[3], float inout[NUM_AXIS], uint8_t idx, SSearchDef& def, float epsilon)
 {
-	float opdpos = inout[idx];
-	float dist   = def.dist;
+	float inPos = inout[idx];
+	float dist  = def.dist;
 
-	float    oldiff = CalcDist(pos, inout);
-	float    diff   = oldiff;
+	float    olDiff = CalcDist(pos, inout);
+	float    diff   = olDiff;
 	uint16_t count  = 0;
 
 	while (true)
 	{
-		float oldpos = inout[idx];
-		float newpos = oldpos + dist;
+		float oldPos = inout[idx];
+		float newPos = oldPos + dist;
 
-		if (oldpos == newpos || count > 25)		// dist < FLT_EPSILON
+		if (oldPos == newPos || count > 25)		// dist < FLT_EPSILON
 			break;
 
-		if (newpos > def.max)
+		if (newPos > def.max)
 		{
-			newpos = def.max;
+			newPos = def.max;
 		}
-		else if (newpos < def.min)
+		else if (newPos < def.min)
 		{
-			newpos = def.min;
+			newPos = def.min;
 		}
 
-		inout[idx] = newpos;
+		inout[idx] = newPos;
 
 		diff = CalcDist(pos, inout);
 
 		if (diff < epsilon)
 			break;
 
-		if (diff > oldiff)
+		if (diff > olDiff)
 		{
-			inout[idx] = oldpos;
+			inout[idx] = oldPos;
 			dist       = -dist / 2;
 			count++;
 		}
-		else if (newpos == def.max)
+		else if (newPos == def.max)
 		{
 			dist = -dist / 2;
 			count++;
 		}
-		else if (newpos == def.min)
+		else if (newPos == def.min)
 		{
 			dist = -dist / 2;
 			count++;
 		}
-		oldiff = diff;
+		olDiff = diff;
 	}
 
-	def.changetoprev = opdpos - inout[idx];
+	def.changeToPrev = inPos - inout[idx];
 	return diff;
 }
 

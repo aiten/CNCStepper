@@ -99,13 +99,11 @@ public:
 
 protected:
 
-	// overrides to exend parser
-
 	virtual void Parse() override;
 	virtual bool InitParse() override;
 	virtual void CleanupParse() override;
 
-	virtual bool GCommand(gcode_t gcode);		// check for GCode extension => return true if command is parsed, false to do default
+	virtual bool GCommand(gcode_t gcode);
 	virtual bool MCommand(mcode_t mcode);
 	virtual bool Command(char     ch);
 
@@ -164,7 +162,7 @@ protected:
 		void Init()
 		{
 			*this = SModalState();		// POD .. Plane Old Data Type => no Constructor => init with default value = 0
-			//POD		Linenumber = 0;
+			//POD		LineNumber = 0;
 			//POD		LastCommand = NULL;
 			UnitisMm         = true;
 			FeedRatePerUnit  = true;
@@ -178,7 +176,7 @@ protected:
 			Plane_axis_1     = Y_AXIS;
 			Plane_axis_2     = Z_AXIS;
 			UnitConvert      = 1 + 2 + 4 + 64 + 128;				// inch to mm 
-			//POD		for (uint8_t i = 0; i < NUM_AXIS; i++) G92Pospreset[i] = 0;
+			//POD		for (uint8_t i = 0; i < NUM_AXIS; i++) G92PosPreset[i] = 0;
 		}
 	};
 

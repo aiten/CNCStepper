@@ -29,7 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <Arduino.h>
-#include <U8glib.h>
+#include <U8g2lib.h>
 
 #include <CNCLib.h>
 #include <CNCLibEx.h>
@@ -249,7 +249,7 @@ bool CU8GLcd::IsScreenSaver() const
 
 uint32_t CU8GLcd::DrawLoop()
 {
-	uint32_t timeout = 1000;
+	uint32_t timeOut = 1000;
 
 	DrawFunction curretDraw = _curretDraw;
 
@@ -278,9 +278,9 @@ uint32_t CU8GLcd::DrawLoop()
 			while (GetU8G().nextPage());
 		}
 
-		(this->*curretDraw)(DrawLoopQueryTimerout, uintptr_t(&timeout));
+		(this->*curretDraw)(DrawLoopQueryTimerout, uintptr_t(&timeOut));
 	}
-	return timeout;
+	return timeOut;
 }
 
 ////////////////////////////////////////////////////////////
@@ -360,7 +360,7 @@ bool CU8GLcd::DrawLoopDefault(EnumAsByte(EDrawLoopType) type, uintptr_t /* data 
 			return true;
 		}
 			/*		=> default is 1000
-					case DrawLoopQueryTimerout: 
+					case DrawLoopQueryTimeOut: 
 					{
 						*((uint32_t*)data) = 1000;
 						return true;

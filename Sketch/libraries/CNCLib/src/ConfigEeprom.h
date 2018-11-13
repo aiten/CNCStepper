@@ -46,22 +46,22 @@ class CConfigEeprom : public CSingleton<CConfigEeprom>
 {
 private:
 
-	uint16_t    _eepromsizesize;
-	const void* _defaulteeprom;
+	uint16_t    _eepromSize;
+	const void* _defaultEeprom;
 
-	bool _eepromvalid    = false;
-	bool _eepromcanwrite = false;
+	bool _eepromValid    = false;
+	bool _eepromCanWrite = false;
 
 public:
 
 	CConfigEeprom() { };
 
-	CConfigEeprom(uint16_t eepromsizesize, const void* defaulteeprom, uint32_t eepromID)
+	CConfigEeprom(uint16_t eepromSize, const void* defaultEeprom, uint32_t eepromID)
 	{
-		Init(eepromsizesize, defaulteeprom, eepromID);
+		Init(eepromSize, defaultEeprom, eepromID);
 	}
 
-	void Init(uint16_t eepromsizesize, const void* defaulteeprom, uint32_t eepromID);
+	void Init(uint16_t eepromSize, const void* defaultEeprom, uint32_t eepromID);
 	void Flush();
 
 	static uint32_t GetConfigU32(eepromofs_t);
@@ -75,7 +75,7 @@ public:
 
 	static uint8_t GetConfigU8(eepromofs_t ofs)
 	{
-		// must be dword alligned
+		// must be dword aligned
 		eepromofs_t diff = ofs % 4;
 		uint32_t    val  = GetConfigU32(ofs - diff);
 		return (val >> (diff * 8)) & 0xff;
@@ -83,7 +83,7 @@ public:
 
 	static uint16_t GetConfigU16(eepromofs_t ofs)
 	{
-		// must be dword alligned
+		// must be dword aligned
 		// must be in this 32bit value (diff can only be 0,1,2 and not 3)
 		eepromofs_t diff = ofs % 4;
 		uint32_t    val  = GetConfigU32(ofs - diff);
@@ -158,55 +158,55 @@ public:
 
 	struct SCNCEeprom
 	{
-		uint32_t signature;
+		uint32_t Signature;
 
-		uint8_t num_axis;
-		uint8_t used_axis;
-		uint8_t offsetAxis;
-		uint8_t sizeofAxis;
+		uint8_t NumAxis;
+		uint8_t UsedAxis;
+		uint8_t OffsetAxis;
+		uint8_t SizeOfAxis;
 
-		uint16_t info1a;
-		uint16_t info1b;
-		uint32_t info2;
+		uint16_t Info1a;
+		uint16_t Info1b;
+		uint32_t Info2;
 
-		uint8_t stepperdirections; // bits for each axis, see CStepper::SetDirection
-		uint8_t dummy2;
-		uint8_t dummy3;
-		uint8_t spindlefadetime;
+		uint8_t StepperDirections; // bits for each axis, see CStepper::SetDirection
+		uint8_t Dummy2;
+		uint8_t Dummy3;
+		uint8_t SpindleFadeTime;
 
-		uint16_t maxspindlespeed;
-		uint16_t jerkspeed;
+		uint16_t MaxSpindleSpeed;
+		uint16_t JerkSpeed;
 
-		uint32_t maxsteprate;
-		uint16_t acc;
-		uint16_t dec;
-		uint32_t refmovesteprate;
-		uint32_t moveAwayFromRefernece;
+		uint32_t MaxStepRate;
+		uint16_t Acc;
+		uint16_t Dec;
+		uint32_t RefMoveStepRate;
+		uint32_t MoveAwayFromReference;
 
 		float StepsPerMm1000;
 
 		struct SAxisDefinitions
 		{
-			mm1000_t size;
+			mm1000_t Size;
 
-			uint8_t referenceType; // EReverenceType
-			uint8_t refmoveSequence;
+			uint8_t ReferenceType; // EReverenceType
+			uint8_t RefmoveSequence;
 
-			uint8_t referenceValue_min;
-			uint8_t referenceValue_max;
+			uint8_t ReferenceValueMin;
+			uint8_t ReferenceValueMax;
 
 #ifndef REDUCED_SIZE
 
-			uint32_t maxsteprate;
-			uint16_t acc;
-			uint16_t dec;
-			uint32_t refmovesteprate;
+			uint32_t MaxStepRate;
+			uint16_t Acc;
+			uint16_t Dec;
+			uint32_t RefMoveStepRate;
 
 			float StepsPerMm1000;
 
-			mm1000_t probesize;
+			mm1000_t ProbeSize;
 #endif
-		} axis[NUM_AXIS];
+		} Axis[NUM_AXIS];
 	};
 };
 

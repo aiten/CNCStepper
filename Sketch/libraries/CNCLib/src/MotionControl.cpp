@@ -405,22 +405,22 @@ bool CMotionControl::Test2D(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM
 
 bool CMotionControl::Test(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_AXIS], mm1000_t dest[NUM_AXIS], bool printOK, const std::function<void()> print)
 {
-	udist_t  to_m[NUM_AXIS];
-	mm1000_t toorig[NUM_AXIS];
+	udist_t  toM[NUM_AXIS];
+	mm1000_t toOrig[NUM_AXIS];
 
-	memcpy(dest, src, sizeof(toorig));
+	memcpy(dest, src, sizeof(toOrig));
 
 	bool isError = false;
 
 	if (TransformPosition(src, dest))
 	{
-		ToMachine(dest, to_m);
+		ToMachine(dest, toM);
 
-		TransformFromMachinePosition(to_m, toorig);
+		TransformFromMachinePosition(toM, toOrig);
 
 		for (uint8_t i = 0; i < NUM_AXIS && !isError; i++)
 		{
-			isError = CompareMaxDiff(src[i], toorig[i]);
+			isError = CompareMaxDiff(src[i], toOrig[i]);
 		}
 	}
 	else
@@ -434,7 +434,7 @@ bool CMotionControl::Test(const mm1000_t src[NUM_AXIS], const mm1000_t ofs[NUM_A
 		DumpArray<mm1000_t, NUM_AXIS>(F("Ofs"), ofs, false);
 		print();
 		DumpArray<mm1000_t, NUM_AXIS>(F(" =>"), dest, false);
-		DumpArray<mm1000_t, NUM_AXIS>(F("Back"), toorig, false);
+		DumpArray<mm1000_t, NUM_AXIS>(F("Back"), toOrig, false);
 
 		if (isError)
 		{

@@ -33,7 +33,7 @@
 // change some pin definition here:
 
 // see http://forum.arduino.cc/index.php?topic=358245.0
-// DIR and STEP are swaped for each axis
+// DIR and STEP are swapped for each axis
 
 #undef CNCSHIELD_X_STEP_PIN
 #undef CNCSHIELD_X_DIR_PIN

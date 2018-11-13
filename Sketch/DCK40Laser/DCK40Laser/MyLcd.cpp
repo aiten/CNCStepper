@@ -15,7 +15,6 @@
   GNU General Public License for more details.
   http://www.gnu.org/licenses/
 */
-
 ////////////////////////////////////////////////////////
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -37,7 +36,7 @@
 #include "RotaryButton.h"
 #include "GCodeParser.h"
 #include "GCode3DParser.h"
-#include <U8glib.h>
+#include <U8g2lib.h>
 
 ////////////////////////////////////////////////////////////
 //

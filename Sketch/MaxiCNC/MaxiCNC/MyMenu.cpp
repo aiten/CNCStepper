@@ -55,8 +55,8 @@ void CMyMenu::MenuButtonPressMoveNextAxis(const SMenuItemDef* def)
 {
 	uint8_t old = GetNavigator().GetItemIdx();
 
-	axis_t axis = axis_t(static_cast<unsigned int>(GetMenuDef()->GetParam1()));
-	axis        = (axis + int(def->GetParam1()) + LCD_NUMAXIS) % LCD_NUMAXIS;
+	auto axis = axis_t(static_cast<unsigned int>(GetMenuDef()->GetParam1()));
+	axis      = (axis + int(def->GetParam1()) + LCD_NUMAXIS) % LCD_NUMAXIS;
 
 	auto nextMenu = reinterpret_cast<const SMenuDef*>(_mainMenuItems[axis].GetParam1());
 
@@ -113,7 +113,7 @@ const CMyMenu::SMenuItemDef CMyMenu::_moveMenuItems[] PROGMEM =
 	{ _mNextAxis, MenuFunction(&CMyMenu::MenuButtonPressMoveNextAxis), menuparam_t(1) },
 	{ _mPrevAxis, MenuFunction(&CMyMenu::MenuButtonPressMoveNextAxis), menuparam_t(-1) },
 #if defined(LCD_MENU_MOVE100)
-	{ _mP100, 	&CMenuBase::MenuButtonPressMove, menuparam_t(MoveP10)0 },
+	{ _mP100, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveP10) },
 #endif
 	{ _mP10, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveP10) },
 	{ _mP1, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveP1) },
@@ -124,7 +124,7 @@ const CMyMenu::SMenuItemDef CMyMenu::_moveMenuItems[] PROGMEM =
 	{ _mM1, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveM1) },
 	{ _mM10, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveM10) },
 #if defined(LCD_MENU_MOVE100)
-	{ _mM100, 	&CMenuBase::MenuButtonPressMove, menuparam_t(MoveM100) },
+	{ _mM100, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveM100) },
 #endif
 	{ _mHome, &CMenuBase::MenuButtonPressMove, menuparam_t(MoveHome) },
 	{ _mG92, &CMenuBase::MenuButtonPressMoveG92 },

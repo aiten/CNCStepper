@@ -36,9 +36,6 @@
     <ClInclude Include="..\Include\SPI.h">
       <Filter>MsvcExt</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\u8glib.h">
-      <Filter>MsvcExt</Filter>
-    </ClInclude>
     <ClInclude Include="..\MsvcStepper\MsvcStepper.h">
       <Filter>MsvcStepper</Filter>
     </ClInclude>
@@ -222,9 +219,6 @@
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\ReadAnalogIOControl.h">
       <Filter>StepperLib</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\u8g2lib.h">
-      <Filter>MsvcExt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\DummyIOControl.h">
       <Filter>CNCLib</Filter>
     </ClInclude>
@@ -268,6 +262,12 @@
       <Filter>CNCLib</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\U8glibcommon.h">
+      <Filter>MsvcExt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\U8g2lib.h">
+      <Filter>MsvcExt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\U8glib.h">
       <Filter>MsvcExt</Filter>
     </ClInclude>
   </ItemGroup>

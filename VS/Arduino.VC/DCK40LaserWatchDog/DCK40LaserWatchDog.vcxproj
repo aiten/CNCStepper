@@ -85,10 +85,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Sketch\DCK40LaserWatchdog\LinearLookUp.h" />
-    <ClInclude Include="..\..\..\Sketch\DCK40LaserWatchdog\Watchdog.h" />
-    <ClInclude Include="..\..\..\Sketch\DCK40LaserWatchdog\WatchDogController.h" />
-    <ClInclude Include="..\..\..\Sketch\DCK40LaserWatchdog\WaterFlow.h" />
+    <ClInclude Include="..\..\..\Sketch\DCK40LaserWatchDog\LinearLookUp.h" />
+    <ClInclude Include="..\..\..\Sketch\DCK40LaserWatchDog\WatchDog.h" />
+    <ClInclude Include="..\..\..\Sketch\DCK40LaserWatchDog\WatchDogController.h" />
+    <ClInclude Include="..\..\..\Sketch\DCK40LaserWatchDog\WaterFlow.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

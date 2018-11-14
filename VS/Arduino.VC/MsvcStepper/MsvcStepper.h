@@ -109,7 +109,7 @@ private:
 	void WriteTestResults(const char* fileName);
 
 	const char* _fileName;
-	int         _flushcount;
+	int         _flushCount;
 
 	struct STimerEvent
 	{

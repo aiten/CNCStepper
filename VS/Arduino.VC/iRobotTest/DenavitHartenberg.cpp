@@ -295,9 +295,9 @@ x[n] - solution vector
 
 */
 
-bool CDenavitHartenberg::Jacobi(double a[][MAXSIZE], double b[], int n, int maxiter, double tol, double x[])
+bool CDenavitHartenberg::Jacobi(double a[][MAXSIZE], double b[], int n, int maxIterations, double tol, double x[])
 {
-	int    numiter     = 0;
+	int    iteration     = 0;
 	bool   tolexceeded = true;
 	int    i, j;
 	double xold[MAXSIZE];
@@ -306,7 +306,7 @@ bool CDenavitHartenberg::Jacobi(double a[][MAXSIZE], double b[], int n, int maxi
 	for (i   = 0; i < n; i++)
 		x[i] = b[i] / a[i][i];
 
-	while (tolexceeded && numiter < maxiter)
+	while (tolexceeded && iteration < maxIterations)
 	{
 		for (i      = 0; i < n; ++i)
 			xold[i] = x[i];
@@ -324,7 +324,7 @@ bool CDenavitHartenberg::Jacobi(double a[][MAXSIZE], double b[], int n, int maxi
 		for (i      = 0; i < n; i++)
 			if (fabs(x[i] - xold[i]) > fabs(xold[i] * tol))
 				tolexceeded = true;
-		++numiter;
+		++iteration;
 	}
 	return tolexceeded;
 }

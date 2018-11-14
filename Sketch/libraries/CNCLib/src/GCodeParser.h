@@ -328,7 +328,7 @@ protected:
 	void PrintParamValue(const SParamInfo* item, axis_t ofs);
 	void PrintParamValue(param_t           paramNo);
 
-	static const struct SParamInfo _paramdef[] PROGMEM;
+	static const struct SParamInfo _paramDef[] PROGMEM;
 
 	static const SParamInfo* FindParamInfo(uintptr_t         param, bool (*check)(const SParamInfo*, uintptr_t));
 	static const SParamInfo* FindParamInfoByText(const char* text);

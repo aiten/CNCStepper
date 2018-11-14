@@ -37,11 +37,17 @@ public:
 #if defined(__AVR_ARCH__)
 
 		if (TInput(1) / 2 != 0)
+		{
 			return (TInput)pgm_read_float(&_table[i].input);
+		}
 		if (sizeof(TInput) == 4)
+		{
 			return (TInput)pgm_read_dword(&_table[i].input);
+		}
 		if (sizeof(TInput) == 2)
+		{
 			return (TInput)pgm_read_word(&_table[i].input);
+		}
 		return (TInput)pgm_read_byte(&_table[i].input);
 #else
 		return _table[i].input;
@@ -52,11 +58,17 @@ public:
 	{
 #if defined(__AVR_ARCH__)
 		if (TOutput(1) / 2 != 0)
+		{
 			return (TOutput)pgm_read_float(&_table[i].output);
+		}
 		if (sizeof(TOutput) == 4)
+		{
 			return (TOutput)pgm_read_dword(&_table[i].output);
+		}
 		if (sizeof(TOutput) == 2)
+		{
 			return (TOutput)pgm_read_word(&_table[i].output);
+		}
 		return (TOutput)pgm_read_byte(&_table[i].output);
 #else
 		return _table[i].output;

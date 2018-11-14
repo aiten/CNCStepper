@@ -56,14 +56,14 @@ void CExpressionParser::Parse()
 
 void CExpressionParser::GetNextToken()
 {
-	_state._detailtoken = NothingSy;
+	_state._detailToken = NothingSy;
 	if (IsError()) return;
 
 	char ch = _reader->SkipSpaces();
 
 	if (ch == '\0')
 	{
-		_state._detailtoken = EndOfLineSy;
+		_state._detailToken = EndOfLineSy;
 		return;
 	}
 
@@ -78,31 +78,31 @@ void CExpressionParser::ScanNextToken()
 	char ch = _reader->GetChar();
 
 	// @formatter:off — disable formatter after this line
-	if (IsToken(F("||"), false, false))	{ _state._detailtoken = XOrSy;			 return; }
-	if (IsToken(F("<<"), false, false))	{ _state._detailtoken = BitShiftLeftSy;  return; }
-	if (IsToken(F(">>"), false, false))	{ _state._detailtoken = BitShiftRightSy; return; }
-	if (IsToken(F("=="), false, false))	{ _state._detailtoken = EqualSy;		 return; }
-	if (IsToken(F("!="), false, false))	{ _state._detailtoken = UnEqualSy;		 return; }
-	if (IsToken(F(">="), false, false))	{ _state._detailtoken = GreaterEqualSy;  return; }
-	if (IsToken(F("<="), false, false))	{ _state._detailtoken = LessEqualSy;	 return; }
+	if (IsToken(F("||"), false, false))	{ _state._detailToken = XOrSy;			 return; }
+	if (IsToken(F("<<"), false, false))	{ _state._detailToken = BitShiftLeftSy;  return; }
+	if (IsToken(F(">>"), false, false))	{ _state._detailToken = BitShiftRightSy; return; }
+	if (IsToken(F("=="), false, false))	{ _state._detailToken = EqualSy;		 return; }
+	if (IsToken(F("!="), false, false))	{ _state._detailToken = UnEqualSy;		 return; }
+	if (IsToken(F(">="), false, false))	{ _state._detailToken = GreaterEqualSy;  return; }
+	if (IsToken(F("<="), false, false))	{ _state._detailToken = LessEqualSy;	 return; }
 
-	if (ch == _LeftParenthesis)			{ _state._detailtoken = LeftParenthesisSy;	 _reader->GetNextChar(); return; }
-	if (ch == _RightParenthesis)		{ _state._detailtoken = RightParenthesisSy;	 _reader->GetNextChar(); return; }
+	if (ch == _LeftParenthesis)			{ _state._detailToken = LeftParenthesisSy;	 _reader->GetNextChar(); return; }
+	if (ch == _RightParenthesis)		{ _state._detailToken = RightParenthesisSy;	 _reader->GetNextChar(); return; }
 
 	switch (ch)
 	{
-		case '>': _state._detailtoken = GreaterSy;		_reader->GetNextChar(); return;
-		case '<': _state._detailtoken = LessSy;			_reader->GetNextChar(); return;
-		case '&': _state._detailtoken = AndSy;			_reader->GetNextChar(); return;
-		case '|': _state._detailtoken = OrSy;			_reader->GetNextChar(); return;
-		case '-': _state._detailtoken = MinusSy;		_reader->GetNextChar(); return;
-		case '+': _state._detailtoken = PlusSy;			_reader->GetNextChar(); return;
-		case '*': _state._detailtoken = MultiplySy;		_reader->GetNextChar(); return;
-		case '/': _state._detailtoken = DivideSy;		_reader->GetNextChar(); return;
-		case '%': _state._detailtoken = ModuloSy;		_reader->GetNextChar(); return;
-		case '^': _state._detailtoken = PowSy;			_reader->GetNextChar(); return;
-		case '!': _state._detailtoken = FactorialSy;	_reader->GetNextChar(); return;
-		case '=': _state._detailtoken = AssignSy;		_reader->GetNextChar(); return;
+		case '>': _state._detailToken = GreaterSy;		_reader->GetNextChar(); return;
+		case '<': _state._detailToken = LessSy;			_reader->GetNextChar(); return;
+		case '&': _state._detailToken = AndSy;			_reader->GetNextChar(); return;
+		case '|': _state._detailToken = OrSy;			_reader->GetNextChar(); return;
+		case '-': _state._detailToken = MinusSy;		_reader->GetNextChar(); return;
+		case '+': _state._detailToken = PlusSy;			_reader->GetNextChar(); return;
+		case '*': _state._detailToken = MultiplySy;		_reader->GetNextChar(); return;
+		case '/': _state._detailToken = DivideSy;		_reader->GetNextChar(); return;
+		case '%': _state._detailToken = ModuloSy;		_reader->GetNextChar(); return;
+		case '^': _state._detailToken = PowSy;			_reader->GetNextChar(); return;
+		case '!': _state._detailToken = FactorialSy;	_reader->GetNextChar(); return;
+		case '=': _state._detailToken = AssignSy;		_reader->GetNextChar(); return;
 		default: break;
 	}
 	// @formatter:on — enable formatter after this line
@@ -110,7 +110,7 @@ void CExpressionParser::ScanNextToken()
 	// check for a value
 	if (CStreamReader::IsDigitDot(ch))
 	{
-		_state._detailtoken = FloatSy;
+		_state._detailToken = FloatSy;
 		_state._number      = GetDouble();
 		return;
 	}
@@ -134,23 +134,23 @@ void CExpressionParser::ScanNextToken()
 		if (ch == _LeftParenthesis)
 		{
 			// @formatter:off — disable formatter after this line
-			if (TryToken(start, F("ABS"), true))		{ _state._detailtoken = AbsSy; return; }
-			if (TryToken(start, F("EXP"), true))		{ _state._detailtoken = ExpSy; return; }
-			if (TryToken(start, F("SIGN"), true))		{ _state._detailtoken = SignSy; return; }
-			if (TryToken(start, F("SQRT"), true))		{ _state._detailtoken = SqrtSy; return; }
-			if (TryToken(start, F("LOG"), true))		{ _state._detailtoken = LogSy; return; }
-			if (TryToken(start, F("LOG10"), true))		{ _state._detailtoken = Log10Sy; return; }
-			if (TryToken(start, F("SIN"), true))		{ _state._detailtoken = SinSy; return; }
-			if (TryToken(start, F("COS"), true))		{ _state._detailtoken = CosSy; return; }
-			if (TryToken(start, F("TAN"), true))		{ _state._detailtoken = TanSy; return; }
-			if (TryToken(start, F("ASIN"), true))		{ _state._detailtoken = AsinSy; return; }
-			if (TryToken(start, F("ACOS"), true))		{ _state._detailtoken = AcosSy; return; }
-			if (TryToken(start, F("ATAN"), true))		{ _state._detailtoken = AtanSy; return; }
-			if (TryToken(start, F("FACTORIAL"), true))	{ _state._detailtoken = FactorialFncSy; return; }
+			if (TryToken(start, F("ABS"), true))		{ _state._detailToken = AbsSy; return; }
+			if (TryToken(start, F("EXP"), true))		{ _state._detailToken = ExpSy; return; }
+			if (TryToken(start, F("SIGN"), true))		{ _state._detailToken = SignSy; return; }
+			if (TryToken(start, F("SQRT"), true))		{ _state._detailToken = SqrtSy; return; }
+			if (TryToken(start, F("LOG"), true))		{ _state._detailToken = LogSy; return; }
+			if (TryToken(start, F("LOG10"), true))		{ _state._detailToken = Log10Sy; return; }
+			if (TryToken(start, F("SIN"), true))		{ _state._detailToken = SinSy; return; }
+			if (TryToken(start, F("COS"), true))		{ _state._detailToken = CosSy; return; }
+			if (TryToken(start, F("TAN"), true))		{ _state._detailToken = TanSy; return; }
+			if (TryToken(start, F("ASIN"), true))		{ _state._detailToken = AsinSy; return; }
+			if (TryToken(start, F("ACOS"), true))		{ _state._detailToken = AcosSy; return; }
+			if (TryToken(start, F("ATAN"), true))		{ _state._detailToken = AtanSy; return; }
+			if (TryToken(start, F("FACTORIAL"), true))	{ _state._detailToken = FactorialFncSy; return; }
 
-			if (TryToken(start, F("FIX"), true))		{ _state._detailtoken = FixSy; return; }
-			if (TryToken(start, F("FUP"), true))		{ _state._detailtoken = FupSy; return; }
-			if (TryToken(start, F("ROUND"), true))		{ _state._detailtoken = RoundSy; return; }
+			if (TryToken(start, F("FIX"), true))		{ _state._detailToken = FixSy; return; }
+			if (TryToken(start, F("FUP"), true))		{ _state._detailToken = FupSy; return; }
+			if (TryToken(start, F("ROUND"), true))		{ _state._detailToken = RoundSy; return; }
 			// @formatter:on — enable formatter after this line
 
 			Error(MESSAGE_EXPR_UNKNOWN_FUNCTION);
@@ -158,14 +158,14 @@ void CExpressionParser::ScanNextToken()
 		}
 		else
 		{
-			_state._detailtoken = VariableSy;
+			_state._detailToken = VariableSy;
 			_state._variableOK  = EvalVariable(start, _state._number);
 		}
 		return;
 	}
 
 	// something unknown is found, wrong characters -> a syntax error
-	_state._detailtoken = UnknownSy;
+	_state._detailToken = UnknownSy;
 	Error(MESSAGE_EXPR_SYNTAX_ERROR);
 	return;
 }

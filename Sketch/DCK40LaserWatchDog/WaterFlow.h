@@ -59,30 +59,30 @@ public:
 		// no disable interrupts => cache
 
 		unsigned char countIdx = _countIdx;
-		uint32_t      sumtime  = 0;
-		unsigned int  sumcount = 0;
+		uint32_t      sumTime  = 0;
+		unsigned int  sumCount = 0;
 
-		for (unsigned char diff = 1; diff < SAMPLECOUNT && sumtime < timeDiff; diff++)
+		for (unsigned char diff = 1; diff < SAMPLECOUNT && sumTime < timeDiff; diff++)
 		{
 			unsigned char idx = PrevIndex(countIdx, diff);
 
-			sumtime += _countTime[idx];
-			sumcount += _count[idx];
+			sumTime += _countTime[idx];
+			sumCount += _count[idx];
 		}
 
-		if (sumtime <= SAMPLETIME)
+		if (sumTime <= SAMPLETIME)
 			return 0;
 
-		return ScaleCount(sumcount, sumtime, timeDiff);
+		return ScaleCount(sumCount, sumTime, timeDiff);
 	}
 
 private:
 
 	static WaterFlow* _ISRInstance;
 
-	static unsigned int ScaleCount(unsigned int count, uint32_t totaltime, uint32_t scaletotime)
+	static unsigned int ScaleCount(unsigned int count, uint32_t totalTime, uint32_t scaleToTime)
 	{
-		return uint32_t(count) * scaletotime / totaltime;
+		return uint32_t(count) * scaleToTime / totalTime;
 	}
 
 	static unsigned char NextIndex(unsigned char idx, unsigned char count)
@@ -118,11 +118,11 @@ private:
 		_countTime[_countIdx] = millis() - _countTime[_countIdx];
 
 		// set next (no cli => cache)
-		uint8_t idxnext     = (_countIdx + 1) % SAMPLECOUNT;
-		_count[idxnext]     = 0;
-		_countTime[idxnext] = millis();
-		_countUntil         = _countTime[idxnext] + SAMPLETIME;
-		_countIdx           = idxnext;
+		uint8_t idxNext     = (_countIdx + 1) % SAMPLECOUNT;
+		_count[idxNext]     = 0;
+		_countTime[idxNext] = millis();
+		_countUntil         = _countTime[idxNext] + SAMPLETIME;
+		_countIdx           = idxNext;
 	}
 
 	uint32_t               _countUntil;

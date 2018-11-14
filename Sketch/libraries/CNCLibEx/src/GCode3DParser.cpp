@@ -48,7 +48,7 @@ bool CGCode3DParser::InitParse()
 
 	if (_state._isM28)
 	{
-		const char* linestart = _reader->GetBuffer();
+		const char* lineStart = _reader->GetBuffer();
 
 		// ignore lineNumbers
 		if (_reader->SkipSpacesToUpper() == 'N')
@@ -64,11 +64,11 @@ bool CGCode3DParser::InitParse()
 		// m29 ends the writing => we have to check first
 		if (!TryToken(F("M29"), false, true))
 		{
-			GetExecutingFile().println(linestart);
+			GetExecutingFile().println(lineStart);
 			_reader->MoveToEnd();
 			return false;
 		}
-		_reader->ResetBuffer(linestart);
+		_reader->ResetBuffer(lineStart);
 	}
 
 	return true;
@@ -131,7 +131,7 @@ void CGCode3DParser::M20Command()
 
 ////////////////////////////////////////////////////////////
 
-void CGCode3DParser::PrintSDFileListRecurse(File& dir, uint8_t depth, uint16_t& count, char* fileNameBuffer, char seperatorChar)
+void CGCode3DParser::PrintSDFileListRecurse(File& dir, uint8_t depth, uint16_t& count, char* fileNameBuffer, char separatorChar)
 {
 #ifdef _MSC_VER
 #pragma warning (suppress: 4127)
@@ -146,11 +146,11 @@ void CGCode3DParser::PrintSDFileListRecurse(File& dir, uint8_t depth, uint16_t& 
 
 		if (entry.isDirectory())
 		{
-			unsigned int lastidx = strlen(fileNameBuffer);
+			unsigned int lastIdx = strlen(fileNameBuffer);
 			strcat(fileNameBuffer, entry.name());
 			strcat_P(fileNameBuffer, MESSAGE_PARSER3D_SLASH);
-			PrintSDFileListRecurse(entry, depth + 1, count, fileNameBuffer, seperatorChar);
-			fileNameBuffer[lastidx] = 0;
+			PrintSDFileListRecurse(entry, depth + 1, count, fileNameBuffer, separatorChar);
+			fileNameBuffer[lastIdx] = 0;
 		}
 		else
 		{
@@ -158,7 +158,7 @@ void CGCode3DParser::PrintSDFileListRecurse(File& dir, uint8_t depth, uint16_t& 
 			{
 				if (count != 0)
 				{
-					StepperSerial.print(seperatorChar);
+					StepperSerial.print(separatorChar);
 				}
 				StepperSerial.print(fileNameBuffer);
 				StepperSerial.print(entry.name());
@@ -230,7 +230,7 @@ void CGCode3DParser::M26Command()
 {
 	// set sd pos
 
-	if (!GetExecutingFile() || CControl::GetInstance()->PrintFromSDRunnding())
+	if (!GetExecutingFile() || CControl::GetInstance()->PrintFromSDRunning())
 	{
 		Error(MESSAGE_PARSER3D_NO_FILE_SELECTED);
 		return;
@@ -319,11 +319,11 @@ void CGCode3DParser::M28Command()
 		}
 
 		// create folders
-		char* lastslash = strrchr(fileName, '/');
+		char* lastSlash = strrchr(fileName, '/');
 
-		if (lastslash != nullptr && lastslash != fileName)
+		if (lastSlash != nullptr && lastSlash != fileName)
 		{
-			*lastslash = 0;
+			*lastSlash = 0;
 			if (!SD.exists(fileName))
 			{
 				if (!SD.mkdir(fileName))
@@ -332,7 +332,7 @@ void CGCode3DParser::M28Command()
 					return;
 				}
 			}
-			*lastslash = '/';
+			*lastSlash = '/';
 		}
 
 		if (!DeleteSDFile(fileName, false))
@@ -492,7 +492,7 @@ bool CGCode3DParser::GetPathName(char* buffer)
 
 bool CGCode3DParser::GetFileName(char*& buffer, uint8_t& pathLength)
 {
-	uint8_t dotidx = 0;
+	uint8_t dotIdx = 0;
 	uint8_t length = 0;
 
 	char ch = _reader->GetChar();
@@ -501,8 +501,8 @@ bool CGCode3DParser::GetFileName(char*& buffer, uint8_t& pathLength)
 		if (ch == '.')
 		{
 			length = 0;
-			dotidx++;
-			if (dotidx > 1)
+			dotIdx++;
+			if (dotIdx > 1)
 			{
 				// only one dot is allowed
 				Error(MESSAGE_PARSER3D_ILLEGAL_FILENAME);
@@ -522,8 +522,8 @@ bool CGCode3DParser::GetFileName(char*& buffer, uint8_t& pathLength)
 
 			length++;
 
-			if ((dotidx == 0 && length > MAXFILENAME) ||
-				(dotidx == 1 && length > MAXEXTNAME))
+			if ((dotIdx == 0 && length > MAXFILENAME) ||
+				(dotIdx == 1 && length > MAXEXTNAME))
 			{
 				Error(MESSAGE_PARSER3D_ILLEGAL_FILENAME);
 				return false;

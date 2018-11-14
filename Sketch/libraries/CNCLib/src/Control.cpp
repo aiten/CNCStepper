@@ -35,7 +35,7 @@ template <> CControl* CSingleton<CControl>::_instance = nullptr;
 
 CControl::CControl()
 {
-	_bufferidx = 0;
+	_bufferIdx = 0;
 }
 
 ////////////////////////////////////////////////////////////
@@ -128,11 +128,11 @@ void CControl::InitFromEeprom()
 			CStepper::GetInstance()->SetDec(axis, steprate);
 		}
 
-		float stepsperMM1000 = CConfigEeprom::GetConfigFloat(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].StepsPerMm1000) + ofs);
-		if (stepsperMM1000 != 0.0)
+		float stepsPerMM1000 = CConfigEeprom::GetConfigFloat(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].StepsPerMm1000) + ofs);
+		if (stepsPerMM1000 != 0.0)
 		{
 			CMotionControlBase::GetInstance()->SetConversionStepsPerEx();
-			CMotionControlBase::GetInstance()->SetConversionStepsPerEx(axis, stepsperMM1000);
+			CMotionControlBase::GetInstance()->SetConversionStepsPerEx(axis, stepsPerMM1000);
 		}
 
 #endif
@@ -217,7 +217,7 @@ void CControl::Resurrect()
 
 #endif
 
-	_bufferidx = 0;
+	_bufferIdx = 0;
 	StepperSerial.println(MESSAGE_OK_RESURRECT);
 }
 
@@ -385,28 +385,28 @@ void CControl::ReadAndExecuteCommand(Stream* stream, Stream* output, bool fileSt
 	{
 		while (stream->available() > 0)
 		{
-			char ch = _buffer[_bufferidx] = stream->read();
+			char ch = _buffer[_bufferIdx] = stream->read();
 
 			if (IsEndOfCommandChar(ch))
 			{
-				_buffer[_bufferidx] = 0;			// remove from buffer 
+				_buffer[_bufferIdx] = 0;			// remove from buffer 
 				Command(_buffer, output);
-				_bufferidx = 0;
+				_bufferIdx = 0;
 
 				_lastTime = millis();
 
 				return;
 			}
 
-			_bufferidx++;
-			if (_bufferidx >= sizeof(_buffer))
+			_bufferIdx++;
+			if (_bufferIdx >= sizeof(_buffer))
 			{
 				if (output)
 				{
 					PrintError(output);
 					output->println(MESSAGE_CONTROL_FLUSHBUFFER);
 				}
-				_bufferidx = 0;
+				_bufferIdx = 0;
 			}
 			/*
 						if (ch == '\x18')
@@ -419,11 +419,11 @@ void CControl::ReadAndExecuteCommand(Stream* stream, Stream* output, bool fileSt
 
 		if (fileStream)						// e.g. SD card => execute last line without "EndOfLine"
 		{
-			if (_bufferidx > 0)
+			if (_bufferIdx > 0)
 			{
-				_buffer[_bufferidx + 1] = 0;
+				_buffer[_bufferIdx + 1] = 0;
 				Command(_buffer, output);
-				_bufferidx = 0;
+				_bufferIdx = 0;
 			}
 		}
 		_lastTime = millis();
@@ -439,7 +439,7 @@ bool CControl::SerialReadAndExecuteCommand()
 		ReadAndExecuteCommand(&StepperSerial, &StepperSerial, false);
 	}
 
-	return _bufferidx > 0;		// command pending, buffer not empty
+	return _bufferIdx > 0;		// command pending, buffer not empty
 }
 
 ////////////////////////////////////////////////////////
@@ -453,7 +453,7 @@ void CControl::FileReadAndExecuteCommand(Stream* stream, Stream* output)
 
 void CControl::Run()
 {
-	_bufferidx = 0;
+	_bufferIdx = 0;
 	_lastTime  = _timeBlink = _timePoll = 0;
 
 	Init();
@@ -523,16 +523,16 @@ bool CControl::PostCommand(FLSTR cmd, Stream* output)
 	// use _buffer to execute command
 
 	auto    cmd1       = (const char*)(cmd);
-	uint8_t idx        = _bufferidx;
-	uint8_t idxprogmem = 0;
+	uint8_t idx        = _bufferIdx;
+	uint8_t idxProgMem = 0;
 
-	for (; idx < sizeof(_buffer); idx++, idxprogmem++)
+	for (; idx < sizeof(_buffer); idx++, idxProgMem++)
 	{
-		_buffer[idx] = pgm_read_byte(&cmd1[idxprogmem]);
+		_buffer[idx] = pgm_read_byte(&cmd1[idxProgMem]);
 
 		if (_buffer[idx] == 0)
 		{
-			return Command(&_buffer[_bufferidx], output);
+			return Command(&_buffer[_bufferIdx], output);
 		}
 	}
 	

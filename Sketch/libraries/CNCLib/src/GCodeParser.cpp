@@ -97,15 +97,15 @@ bool CGCodeParser::GetParamOrExpression(mm1000_t* value, bool convertToInch)
 					CStreamReader::CSetTemporary terminate(_reader->GetBuffer());
 					_reader->ResetBuffer(start);
 
-					CGCodeExpressionParser exprpars(this);
-					exprpars.Parse();
-					if (exprpars.IsError())
+					CGCodeExpressionParser expressionParser(this);
+					expressionParser.Parse();
+					if (expressionParser.IsError())
 					{
-						Error(exprpars.GetError());
+						Error(expressionParser.GetError());
 					}
 					else
 					{
-						*value = CMm1000::ConvertFrom(exprpars.Answer);
+						*value = CMm1000::ConvertFrom(expressionParser.Answer);
 					}
 					return true;
 				}
@@ -233,7 +233,7 @@ param_t CGCodeParser::ParseParamNo()
 			}
 		}
 
-		CStreamReader::CSetTemporary terminatecolon(colon ? colon : end);
+		CStreamReader::CSetTemporary terminateColon(colon ? colon : end);
 
 		const SParamInfo* param = FindParamInfoByText(start);
 
@@ -375,18 +375,18 @@ mm1000_t CGCodeParser::GetParamValue(param_t paramNo, bool convertToInch)
 
 void CGCodeParser::SetParamValue(param_t paramNo)
 {
-	CGCodeExpressionParser exprpars(this);
-	exprpars.Parse();
+	CGCodeExpressionParser expressionParser(this);
+	expressionParser.Parse();
 
-	if (exprpars.IsError())
+	if (expressionParser.IsError())
 	{
-		Error(exprpars.GetError());
+		Error(expressionParser.GetError());
 	}
 	else
 	{
-		mm1000_t mm1000   = CMm1000::ConvertFrom(exprpars.Answer);
-		uint32_t intvalue = exprpars.Answer;
-		auto     param    = FindParamInfoByParamNo(paramNo);
+		mm1000_t mm1000      = CMm1000::ConvertFrom(expressionParser.Answer);
+		uint32_t answerAsInt = expressionParser.Answer;
+		auto     param       = FindParamInfoByParamNo(paramNo);
 
 		if (IsModifyParam(paramNo))
 		{
@@ -394,7 +394,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 
 			if (paramIdx == 255)
 			{
-				if (exprpars.Answer != 0.0)
+				if (expressionParser.Answer != 0.0)
 				{
 					uint8_t idx;
 					for (idx = 0; idx < NUM_PARAMETER; idx++)
@@ -402,7 +402,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 						if (_modalState.ParamNoToIdx[idx] == 0)
 						{
 							_modalState.ParamNoToIdx[idx] = uint8_t(paramNo);
-							_modalState.Parameter[idx]    = exprpars.Answer;
+							_modalState.Parameter[idx]    = expressionParser.Answer;
 							break;
 						}
 					}
@@ -412,14 +412,14 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 					}
 				}
 			}
-			else if (exprpars.Answer == 0.0)
+			else if (expressionParser.Answer == 0.0)
 			{
 				// free slot
 				_modalState.ParamNoToIdx[paramIdx] = 0;
 			}
 			else
 			{
-				_modalState.Parameter[paramIdx] = exprpars.Answer;
+				_modalState.Parameter[paramIdx] = expressionParser.Answer;
 			}
 		}
 		else if (param != nullptr)
@@ -439,12 +439,12 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 				}
 				case PARAMSTART_CONTROLLERFAN:
 				{
-					CControl::GetInstance()->IOControl(CControl::ControllerFan, uint16_t(intvalue));
+					CControl::GetInstance()->IOControl(CControl::ControllerFan, uint16_t(answerAsInt));
 					break;
 				}
 				case PARAMSTART_RAPIDMOVEFEED:
 				{
-					SetG0FeedRate(-CFeedrate1000::ConvertFrom(exprpars.Answer));
+					SetG0FeedRate(-CFeedrate1000::ConvertFrom(expressionParser.Answer));
 					break;
 				}
 				case PARAMSTART_MAX:
@@ -459,17 +459,17 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 				}
 				case PARAMSTART_ACC:
 				{
-					CStepper::GetInstance()->SetAcc(axis, steprate_t(intvalue));
+					CStepper::GetInstance()->SetAcc(axis, steprate_t(answerAsInt));
 					break;
 				}
 				case PARAMSTART_DEC:
 				{
-					CStepper::GetInstance()->SetDec(axis, steprate_t(intvalue));
+					CStepper::GetInstance()->SetDec(axis, steprate_t(answerAsInt));
 					break;
 				}
 				case PARAMSTART_JERK:
 				{
-					CStepper::GetInstance()->SetJerkSpeed(axis, steprate_t(intvalue));
+					CStepper::GetInstance()->SetJerkSpeed(axis, steprate_t(answerAsInt));
 					break;
 				}
 
@@ -509,7 +509,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 
 const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfo(uintptr_t param, bool (*check)(const SParamInfo*, uintptr_t))
 {
-	auto item = &_paramdef[0];
+	auto item = &_paramDef[0];
 	while (item->GetParamNo() != 0)
 	{
 		if (check(item, param))
@@ -576,7 +576,7 @@ static const char _aPos[] PROGMEM          = "_a";
 static const char _bPos[] PROGMEM          = "_b";
 static const char _cPos[] PROGMEM          = "_c";
 
-const CGCodeParser::SParamInfo CGCodeParser::_paramdef[] PROGMEM =
+const CGCodeParser::SParamInfo CGCodeParser::_paramDef[] PROGMEM =
 {
 	{ PARAMSTART_G28HOME, _g28home, true, CGCodeParser::SParamInfo::IsMm1000 },
 	{ PARAMSTART_G92OFFSET, _g92home, true, CGCodeParser::SParamInfo::IsMm1000 },
@@ -631,12 +631,12 @@ const CGCodeParser::SParamInfo CGCodeParser::_paramdef[] PROGMEM =
 
 void CGCodeParser::PrintParam(const CGCodeParser::SParamInfo* item, axis_t axis)
 {
-	const char* paramname = item->GetText();
+	const char* paramName = item->GetText();
 	StepperSerial.print('#');
-	if (paramname != nullptr)
+	if (paramName != nullptr)
 	{
 		StepperSerial.print('<');
-		StepperSerial.print(paramname);
+		StepperSerial.print(paramName);
 		axis_t ofs = 0;
 		if (axis != 255)
 		{
@@ -657,17 +657,17 @@ void CGCodeParser::PrintParam(const CGCodeParser::SParamInfo* item, axis_t axis)
 
 void CGCodeParser::PrintParamValue(const CGCodeParser::SParamInfo* item, axis_t ofs)
 {
-	mm1000_t paramvalue = GetParamValue(item->GetParamNo() + ofs, false);
+	mm1000_t paramValue = GetParamValue(item->GetParamNo() + ofs, false);
 	switch (item->GetValueType())
 	{
 		default:
 		case SParamInfo::EValueType::IsInt:
-			StepperSerial.print(paramvalue);
+			StepperSerial.print(paramValue);
 			break;
 		case SParamInfo::EValueType::IsMm1000:
 		{
 			char tmp[16];
-			StepperSerial.print(CMm1000::ToString(paramvalue, tmp, 3));
+			StepperSerial.print(CMm1000::ToString(paramValue, tmp, 3));
 			break;
 		}
 	}
@@ -680,9 +680,9 @@ void CGCodeParser::PrintParamValue(param_t paramNo)
 	if (IsModifyParam(paramNo))
 	{
 		uint8_t  paramIdx   = ParamNoToParamIdx(paramNo);
-		mm1000_t paramvalue = paramIdx != 255 ? GetParamValue(_modalState.ParamNoToIdx[paramIdx], false) : 0;
+		mm1000_t paramValue = paramIdx != 255 ? GetParamValue(_modalState.ParamNoToIdx[paramIdx], false) : 0;
 		char     tmp[16];
-		StepperSerial.println(CMm1000::ToString(paramvalue, tmp, 3));
+		StepperSerial.println(CMm1000::ToString(paramValue, tmp, 3));
 	}
 }
 	
@@ -700,7 +700,7 @@ void CGCodeParser::PrintAllParam()
 			PrintParamValue(paramNo);
 		}
 	}
-	const SParamInfo* item = &_paramdef[0];
+	const SParamInfo* item = &_paramDef[0];
 	while (item->GetParamNo() != 0)
 	{
 		if (item->GetAllowAxisOfs())
@@ -855,8 +855,8 @@ void CGCodeParser::ParameterCommand()
 	char ch = _reader->SkipSpaces();
 	if (ch == '?' || ch == '!')
 	{
-		char chnext = _reader->GetNextCharSkipScaces();
-		if (chnext == 0)
+		char nextCh = _reader->GetNextCharSkipScaces();
+		if (nextCh == 0)
 		{
 			if (ch == '?')
 			{
@@ -1110,7 +1110,7 @@ void CGCodeParser::G38Command()
 
 ////////////////////////////////////////////////////////////
 
-void CGCodeParser::G38CenterProbe(bool probevalue)
+void CGCodeParser::G38CenterProbe(bool probeValue)
 {
 	// probe
 	SAxisMove move(false);
@@ -1143,7 +1143,7 @@ void CGCodeParser::G38CenterProbe(bool probevalue)
 	{
 		if (IsBitSet(move.axes, axis))
 		{
-			if (!CenterProbeCommand(move, probevalue, axis))
+			if (!CenterProbeCommand(move, probeValue, axis))
 			{
 				return;
 			}
@@ -1153,24 +1153,24 @@ void CGCodeParser::G38CenterProbe(bool probevalue)
 
 ////////////////////////////////////////////////////////////
 
-bool CGCodeParser::CenterProbeCommand(SAxisMove& move, bool probevalue, axis_t axis)
+bool CGCodeParser::CenterProbeCommand(SAxisMove& move, bool probeValue, axis_t axis)
 {
-	SAxisMove movenew(true);
-	movenew.axes = move.axes;
-	movenew.newpos[axis] += move.newpos[axis];
+	SAxisMove moveNew(true);
+	moveNew.axes = move.axes;
+	moveNew.newpos[axis] += move.newpos[axis];
 
-	_modalState.IsProbeOK = ProbeCommand(movenew, probevalue);
+	_modalState.IsProbeOK = ProbeCommand(moveNew, probeValue);
 	if (!_modalState.IsProbeOK)
 	{
 		return false;
 	}
 
 	mm1000_t pos = CMotionControlBase::GetInstance()->GetPosition(axis);
-	movenew.newpos[axis] -= move.newpos[axis];
-	CMotionControlBase::GetInstance()->MoveAbs(movenew.newpos, super::_modalState.G0FeedRate);
-	movenew.newpos[axis] -= move.newpos[axis];
+	moveNew.newpos[axis] -= move.newpos[axis];
+	CMotionControlBase::GetInstance()->MoveAbs(moveNew.newpos, super::_modalState.G0FeedRate);
+	moveNew.newpos[axis] -= move.newpos[axis];
 
-	_modalState.IsProbeOK = ProbeCommand(movenew, probevalue);
+	_modalState.IsProbeOK = ProbeCommand(moveNew, probeValue);
 	if (!_modalState.IsProbeOK)
 	{
 		return false;
@@ -1268,9 +1268,9 @@ void CGCodeParser::GetAngleR(SAxisMove& move, mm1000_t& angle)
 
 void CGCodeParser::G68Command()
 {
-	uint8_t subcode = GetSubCode();
+	uint8_t subCode = GetSubCode();
 
-	switch (subcode)
+	switch (subCode)
 	{
 		case 10: G68Ext10Command();
 			break;
@@ -1459,7 +1459,7 @@ void CGCodeParser::G68Ext12Command()
 
 ////////////////////////////////////////////////////////////
 
-void CGCodeParser::G68ExtXXCommand(axis_t rotaxis)
+void CGCodeParser::G68ExtXXCommand(axis_t rotAxis)
 {
 	// calculate angle(X)
 
@@ -1475,7 +1475,7 @@ void CGCodeParser::G68ExtXXCommand(axis_t rotaxis)
 		}
 		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)
 		{
-			if (rotaxis == axis)
+			if (rotAxis == axis)
 			{
 				Error(MESSAGE_GCODE_SPECIFIED);
 			}
@@ -1495,14 +1495,14 @@ void CGCodeParser::G68ExtXXCommand(axis_t rotaxis)
 		}
 	}
 
-	float pos1 = float(move.newpos[rotaxis] - CMotionControl::GetInstance()->GetOffset2D(rotaxis));
+	float pos1 = float(move.newpos[rotAxis] - CMotionControl::GetInstance()->GetOffset2D(rotAxis));
 	float pos2;
 	float angle;
 
 	axis_t axis2;
 	axis_t axis3;
 
-	switch (rotaxis)
+	switch (rotAxis)
 	{
 		case X_AXIS:
 		{
@@ -1891,15 +1891,15 @@ void CGCodeParser::M111Command()
 
 void CGCodeParser::M114Command()
 {
-	uint8_t postype = 0;
+	uint8_t posType = 0;
 
 	if (_reader->SkipSpacesToUpper() == 'S')
 	{
 		_reader->GetNextChar();
-		postype = GetUInt8();
+		posType = GetUInt8();
 	}
 
-	_OkMessage = postype == 1 ? PrintRelPosition : PrintAbsPosition;
+	_OkMessage = posType == 1 ? PrintRelPosition : PrintAbsPosition;
 
 	if (!ExpectEndOfCommand())
 	{
@@ -1938,8 +1938,8 @@ void CGCodeParser::M220Command()
 void CGCodeParser::M300Command()
 {
 	SPlayTone        tone[2];
-	const SPlayTone* mytone      = tone;
-	bool             fromprogmem = false;
+	const SPlayTone* myTone      = tone;
+	bool             fromProgMem = false;
 
 	tone[0].Tone     = ToneA4;
 	tone[0].Duration = MilliSecToDuration(500);
@@ -1960,26 +1960,26 @@ void CGCodeParser::M300Command()
 		{
 			case 1:
 			{
-				mytone      = SPlayTone::PlayOK;
-				fromprogmem = true;
+				myTone      = SPlayTone::PlayOK;
+				fromProgMem = true;
 				break;
 			}
 			case 2:
 			{
-				mytone      = SPlayTone::PlayError;
-				fromprogmem = true;
+				myTone      = SPlayTone::PlayError;
+				fromProgMem = true;
 				break;
 			}
 			case 3:
 			{
-				mytone      = SPlayTone::PlayInfo;
-				fromprogmem = true;
+				myTone      = SPlayTone::PlayInfo;
+				fromProgMem = true;
 				break;
 			}
 			default: break;
 		}
 	}
-	if (!fromprogmem && _reader->SkipSpacesToUpper() == 'P')
+	if (!fromProgMem && _reader->SkipSpacesToUpper() == 'P')
 	{
 		_reader->GetNextChar();
 		tone[0].Duration = MilliSecToDuration(GetUInt16());
@@ -1996,7 +1996,7 @@ void CGCodeParser::M300Command()
 
 	if (CLcd::GetInstance())
 	{
-		CLcd::GetInstance()->Beep(mytone, fromprogmem);
+		CLcd::GetInstance()->Beep(myTone, fromProgMem);
 	}
 }
 

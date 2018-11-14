@@ -110,7 +110,7 @@ void CControl3D::ReadAndExecuteCommand()
 	super::ReadAndExecuteCommand();
 
 	File file = CGCode3DParser::GetExecutingFile();
-	if (PrintFromSDRunnding() && file)
+	if (PrintFromSDRunning() && file)
 	{
 		if (IsKilled())
 		{

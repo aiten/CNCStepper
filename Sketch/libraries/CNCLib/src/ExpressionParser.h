@@ -129,12 +129,12 @@ protected:
 		const char* _varName;
 		bool        _variableOK;				// _number = variable with content
 
-		EnumAsByte(ETokenType) _detailtoken;
+		EnumAsByte(ETokenType) _detailToken;
 	};
 
 	SParserState _state;
 
-	EnumAsByte(ETokenType) GetTokenType() const { return _state._detailtoken; }
+	EnumAsByte(ETokenType) GetTokenType() const { return _state._detailToken; }
 
 	expr_t ParseLevel1();
 	expr_t ParseLevel2();

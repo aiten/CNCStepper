@@ -56,8 +56,8 @@ LiquidCrystal_I2C lcd(I2C_ADDR, MYLCD_COLS, MYLCD_ROWS);
 
 void CMyLcd::Init()
 {
-	lcd.init();                      // initialize the lcd 
-	lcd.backlight();			// finish with backlight on  
+	lcd.begin(MYLCD_COLS, MYLCD_ROWS);      // initialize the lcd 
+	lcd.backlight();						// finish with backlight on  
 
 	super::Init();
 }

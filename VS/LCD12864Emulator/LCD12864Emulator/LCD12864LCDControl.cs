@@ -55,8 +55,8 @@ namespace LCD12864Emulator
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LCD12864LCDControl), new FrameworkPropertyMetadata(typeof(LCD12864LCDControl)));
         }
 
-        int _chsizeX=10;
-        int _chsizeY=6;
+        int _chSizeX=10;
+        int _chSizeY=6;
 
         int _sizeX = 128;
         int _sizeY = 64;
@@ -64,20 +64,20 @@ namespace LCD12864Emulator
         double ScaleX => ActualWidth / _sizeX;
         double ScaleY => ActualHeight / _sizeY;
 
-        double ChScaleSizeX => ScaleX * _chsizeX;
-        double ChScaleSizeY => ScaleY * _chsizeY;
+        double ChScaleSizeX => ScaleX * _chSizeX;
+        double ChScaleSizeY => ScaleY * _chSizeY;
 
         Typeface _tf = new Typeface("Courier New");
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            string[] printinfo = ReadLCDFile();
+            string[] printInfo = ReadLCDFile();
 
             double x=0;
             double y =0;
             string text=null;
 
-            foreach (string s in printinfo)
+            foreach (string s in printInfo)
             {
                 if (s.StartsWith("SP:"))
                 {
@@ -120,7 +120,7 @@ namespace LCD12864Emulator
                 CultureInfo.GetCultureInfo("en-us"),
                 FlowDirection.LeftToRight,
                 _tf,
-                ActualHeight / (_chsizeY + 1),
+                ActualHeight / (_chSizeY + 1),
                 Brushes.Black);
             drawingContext.DrawText(formattedText, new Point(x * ScaleX, y * ScaleY - ChScaleSizeY));
         }

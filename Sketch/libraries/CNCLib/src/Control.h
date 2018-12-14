@@ -120,7 +120,7 @@ public:
 	virtual void GoToReference();								// Goto Reference during init
 	virtual bool GoToReference(axis_t axis, steprate_t stepRate, bool toMinRef);
 
-	bool GoToReference(axis_t axis);
+	bool GoToReference(axis_t axis, udist_t posIfNoRefMove);
 
 	//////////////////////////////////////////
 

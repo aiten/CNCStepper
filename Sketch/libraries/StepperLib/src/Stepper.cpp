@@ -2273,12 +2273,12 @@ bool CStepper::MoveReference(axis_t axis, uint8_t referenceId, bool toMin, stepr
 #ifdef use16bit
 	if (maxDist == 0)
 	{
-		maxDist = min(GetLimitMax(axis) - GetLimitMin(axis), 0xfffel * MOVEMENTBUFFERSIZE);	// do not queue
+		maxDist = min(GetLimitSize(axis), 0xfffel * MOVEMENTBUFFERSIZE);	// do not queue
 	}
 #else
 	if (maxDist == 0)
 	{
-		maxDist = ((GetLimitMax(axis) - GetLimitMin(axis)) * 11) / 10; // add 10%
+		maxDist = (GetLimitSize(axis) * 11) / 10; // add 10%
 	}
 #endif
 

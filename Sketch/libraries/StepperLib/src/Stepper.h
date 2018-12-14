@@ -289,6 +289,7 @@ public:
 #else
 	udist_t GetLimitMin(axis_t axis) const { return _pod._limitMin[axis]; }
 #endif
+	udist_t GetLimitSize(axis_t axis) const { return GetLimitMax(axis)- GetLimitMin(axis); }
 
 	mdist_t     GetBacklash(axis_t axis) const { return _pod._backlash[axis]; }
 	axisArray_t GetLastDirection() const { return _pod._lastDirection; }		// check for backlash

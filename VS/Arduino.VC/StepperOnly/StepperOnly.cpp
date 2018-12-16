@@ -58,9 +58,9 @@ void setup()
 	Stepper.SetLimitMax(1, 4000);
 	Stepper.SetLimitMax(2, 100);
 
-	//    int dist2 = Stepper.GetLimitMax(2)-Stepper.GetLimitMin(2);
-	//    int dist0 = Stepper.GetLimitMax(0)-Stepper.GetLimitMin(0);
-	//    int dist1 = Stepper.GetLimitMax(1)-Stepper.GetLimitMin(1);
+	//    int dist2 = Stepper.GetLimitSize(2);
+	//    int dist0 = Stepper.GetLimitSize(0);
+	//    int dist1 = Stepper.GetLimitSize(1);
 	//    Stepper.MoveReference(2,-min(dist2,10000),10);
 	//    Stepper.MoveReference(0,-min(dist0,10000),10);
 	//    Stepper.MoveReference(1,-min(dist1,10000),10);

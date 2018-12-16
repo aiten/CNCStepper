@@ -21,8 +21,9 @@ void setup()
 {
   Serial.begin(250000);
   Serial.println(F("Clear Eeprom"));
-  
-  eeprom_write_dword(0, 0);
+
+  for (int i =0;i<512/4;i++)
+    eeprom_write_dword(i, 1);
 
   Serial.println(F("done"));
 }

@@ -117,8 +117,8 @@ public:
 	};
 	//////////////////////////////////////////
 
-	virtual void GoToReference();								// Goto Reference during init
-	virtual bool GoToReference(axis_t axis, steprate_t stepRate, bool toMinRef);
+	REDUCED_SIZE_virtual void GoToReference();								// Goto Reference during init
+	REDUCED_SIZE_virtual bool GoToReference(axis_t axis, steprate_t stepRate, bool toMinRef);
 
 	bool GoToReference(axis_t axis);
 
@@ -142,7 +142,8 @@ public:
 
 	const char*  GetBuffer() const { return _buffer; }
 	uint8_t      GetBufferCount() const { return _bufferIdx; }
-	virtual bool IsEndOfCommandChar(char ch);					// override default End of command char, default \n
+	
+	REDUCED_SIZE_virtual bool IsEndOfCommandChar(char ch);					// override default End of command char, default \n
 
 protected:
 
@@ -152,11 +153,13 @@ protected:
 	virtual void Init();
 	virtual void Initialized();									// called if Init() is done
 
-	virtual bool Parse(CStreamReader* reader, Stream* output);	// specify Parser, default parser
-	virtual bool Command(char*        buffer, Stream* output);	// execute Command (call parser)
+	REDUCED_SIZE_virtual bool Parse(CStreamReader* reader, Stream* output);	// specify Parser, default parser
+	REDUCED_SIZE_virtual bool Command(char*        buffer, Stream* output);	// execute Command (call parser)
+	
 	virtual void Idle(unsigned int    idleTime);				// called after TIMEOUTCALLIDLE in idle state
 	virtual void Poll();										// call in Idle and at least e.g. 100ms (not in interrupt), see CheckIdlePoll
-	virtual void ReadAndExecuteCommand();						// read and execute commands from other source e.g. SD.File
+	
+	REDUCED_SIZE_virtual void ReadAndExecuteCommand();			// read and execute commands from other source e.g. SD.File
 
 	virtual void TimerInterrupt();								// called from timer (timer0 on AVR) 
 

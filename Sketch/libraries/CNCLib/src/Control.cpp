@@ -106,8 +106,6 @@ void CControl::InitFromEeprom()
 		CStepper::GetInstance()->SetReferenceHitValue(CStepper::GetInstance()->ToReferenceId(axis, true), CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].ReferenceValueMin) + ofs));
 		CStepper::GetInstance()->SetReferenceHitValue(CStepper::GetInstance()->ToReferenceId(axis, false), CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].ReferenceValueMax) + ofs));
 
-		CStepper::GetInstance()->SetLimitMax(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].Size) + ofs)));
-
 #ifndef REDUCED_SIZE
 
 		steprate_t steprate = CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].MaxStepRate) + ofs);
@@ -136,6 +134,9 @@ void CControl::InitFromEeprom()
 		}
 
 #endif
+		CStepper::GetInstance()->SetLimitMax(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].Size) + ofs)));
+
+		CStepper::GetInstance()->SetPosition(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].InitPosition) + ofs)));
 	}
 }
 
@@ -169,12 +170,16 @@ void CControl::GoToReference()
 bool CControl::GoToReference(axis_t axis)
 {
 	EnumAsByte(EReverenceType) referenceType = EReverenceType(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].ReferenceType) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis));
+
 	if (referenceType == EReverenceType::NoReference)
 	{
 		return false;
 	}
 
-	GoToReference(axis, 0, referenceType == EReverenceType::ReferenceToMin);
+	GoToReference(
+		axis,
+		steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, RefMoveStepRate))),
+		referenceType == EReverenceType::ReferenceToMin);
 	return true;
 }
 
@@ -182,13 +187,13 @@ bool CControl::GoToReference(axis_t axis)
 
 bool CControl::GoToReference(axis_t axis, steprate_t stepRate, bool toMinRef)
 {
-	if (stepRate == 0)
-	{
-		stepRate = steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, RefMoveStepRate)));
-	}
 	// goto min/max
 	return CStepper::GetInstance()->MoveReference(
-		axis, CStepper::GetInstance()->ToReferenceId(axis, toMinRef), toMinRef, stepRate, 0,
+		axis,
+		CStepper::GetInstance()->ToReferenceId(axis, toMinRef),
+		toMinRef,
+		stepRate,
+		0,
 		CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MoveAwayFromReference))));
 }
 

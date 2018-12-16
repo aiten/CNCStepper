@@ -197,7 +197,7 @@ public:
 			uint8_t ReferenceValueMin;
 			uint8_t ReferenceValueMax;
 
-			uint32_t PosNoRefMove;
+			uint32_t InitPosition;
 
 #ifndef REDUCED_SIZE
 

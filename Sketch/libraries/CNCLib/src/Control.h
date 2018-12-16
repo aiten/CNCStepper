@@ -120,7 +120,7 @@ public:
 	REDUCED_SIZE_virtual void GoToReference();								// Goto Reference during init
 	REDUCED_SIZE_virtual bool GoToReference(axis_t axis, steprate_t stepRate, bool toMinRef);
 
-	bool GoToReference(axis_t axis, udist_t posIfNoRefMove);
+	bool GoToReference(axis_t axis);
 
 	//////////////////////////////////////////
 

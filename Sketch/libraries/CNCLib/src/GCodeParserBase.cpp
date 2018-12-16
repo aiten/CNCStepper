@@ -964,7 +964,10 @@ void CGCodeParserBase::G28Command()
 		{
 			if (IsBitSet(move.axes, axis))
 			{
-				CControl::GetInstance()->GoToReference(axis, CMotionControlBase::GetInstance()->ToMachine(axis, move.newpos[axis]));
+				if (!CControl::GetInstance()->GoToReference(axis))
+				{
+					CStepper::GetInstance()->SetPosition(axis, CMotionControlBase::GetInstance()->ToMachine(axis, move.newpos[axis]));
+				}
 			}
 		}
 	}

@@ -106,8 +106,6 @@ void CControl::InitFromEeprom()
 		CStepper::GetInstance()->SetReferenceHitValue(CStepper::GetInstance()->ToReferenceId(axis, true), CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].ReferenceValueMin) + ofs));
 		CStepper::GetInstance()->SetReferenceHitValue(CStepper::GetInstance()->ToReferenceId(axis, false), CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].ReferenceValueMax) + ofs));
 
-		CStepper::GetInstance()->SetLimitMax(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].Size) + ofs)));
-
 #ifndef REDUCED_SIZE
 
 		steprate_t steprate = CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].MaxStepRate) + ofs);
@@ -136,6 +134,9 @@ void CControl::InitFromEeprom()
 		}
 
 #endif
+		CStepper::GetInstance()->SetLimitMax(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].Size) + ofs)));
+
+		CStepper::GetInstance()->SetPosition(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].InitPosition) + ofs)));
 	}
 }
 
@@ -159,21 +160,19 @@ void CControl::GoToReference()
 		axis_t axis = CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].RefmoveSequence) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * i);
 		if (axis < NUM_AXIS)
 		{
-			eepromofs_t ofs = sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis;
-			GoToReference(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].PosNoRefMove) + ofs)));
+			GoToReference(axis);
 		}
 	}
 }
 
 ////////////////////////////////////////////////////////////
 
-bool CControl::GoToReference(axis_t axis, udist_t posIfNoRefMove)
+bool CControl::GoToReference(axis_t axis)
 {
 	EnumAsByte(EReverenceType) referenceType = EReverenceType(CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].ReferenceType) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis));
 
 	if (referenceType == EReverenceType::NoReference)
 	{
-		CStepper::GetInstance()->SetPosition(axis, posIfNoRefMove);
 		return false;
 	}
 

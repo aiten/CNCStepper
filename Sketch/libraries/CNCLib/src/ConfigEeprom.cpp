@@ -41,7 +41,7 @@ void CConfigEeprom::Init(uint16_t eepromSize, const void* defaultEeprom, uint32_
 
 	if (CHAL::HaveEeprom())
 	{
-		_eepromValid = true;
+		_eepromValid = true;		// force read from eeprom
 		_eepromValid = GetConfigU32(offsetof(SCNCEeprom, Signature)) == eepromID;
 	}
 	else

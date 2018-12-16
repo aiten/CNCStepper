@@ -28,10 +28,12 @@
 #ifdef REDUCED_SIZE
 
 typedef uint8_t eepromofs_t;
+#define AXISPARAMETER(a,b,c,d,e,f,g,h,i,j,k,l) a,b,c,d,e,f
 
 #else
 
 typedef uint16_t eepromofs_t;
+#define AXISPARAMETER(a,b,c,d,e,f,g,h,i,j,k,l) a,b,c,d,e,f,g,h,i,j,k,l
 
 #endif
 
@@ -154,7 +156,7 @@ public:
 #define COMMANDSYNTAX_VALUE(a)	(((a)*(1<<COMMANDSYNTAX_BIT))&COMMANDSYNTAX_MASK)
 #define COMMANDSYNTAX_CLEAR(a)	((a)&~COMMANDSYNTAX_MASK)
 
-#define EPROM_SIGNATURE		0x21436501
+#define EPROM_SIGNATURE		0x21436502
 
 	struct SCNCEeprom
 	{
@@ -194,6 +196,8 @@ public:
 
 			uint8_t ReferenceValueMin;
 			uint8_t ReferenceValueMax;
+
+			uint32_t PosNoRefMove;
 
 #ifndef REDUCED_SIZE
 

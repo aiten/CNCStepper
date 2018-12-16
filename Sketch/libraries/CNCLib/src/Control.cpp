@@ -159,7 +159,8 @@ void CControl::GoToReference()
 		axis_t axis = CConfigEeprom::GetConfigU8(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].RefmoveSequence) + sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * i);
 		if (axis < NUM_AXIS)
 		{
-			GoToReference(axis, CStepper::GetInstance()->GetLimitSize(axis) / 2 + CStepper::GetInstance()->GetLimitMin(axis));
+			eepromofs_t ofs = sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions) * axis;
+			GoToReference(axis, CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, Axis[0].PosNoRefMove) + ofs)));
 		}
 	}
 }
@@ -177,8 +178,8 @@ bool CControl::GoToReference(axis_t axis, udist_t posIfNoRefMove)
 	}
 
 	GoToReference(
-		axis, 
-		steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, RefMoveStepRate))), 
+		axis,
+		steprate_t(CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, RefMoveStepRate))),
 		referenceType == EReverenceType::ReferenceToMin);
 	return true;
 }
@@ -189,8 +190,11 @@ bool CControl::GoToReference(axis_t axis, steprate_t stepRate, bool toMinRef)
 {
 	// goto min/max
 	return CStepper::GetInstance()->MoveReference(
-		axis, 
-		CStepper::GetInstance()->ToReferenceId(axis, toMinRef), toMinRef, stepRate, 0,
+		axis,
+		CStepper::GetInstance()->ToReferenceId(axis, toMinRef),
+		toMinRef,
+		stepRate,
+		0,
 		CMotionControlBase::GetInstance()->ToMachine(axis, CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MoveAwayFromReference))));
 }
 

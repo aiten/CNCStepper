@@ -73,6 +73,8 @@ typedef FLSTR error_t;
 
 ////////////////////////////////////////////////////////
 
+#define REDUCED_SIZE_virtual virtual				// only virtual for "full" version
+
 #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 
 // usual with Ramps1.4
@@ -102,6 +104,9 @@ typedef FLSTR error_t;
 #define REDUCED_SIZE
 #define _NO_LONG_MESSAGE
 #define _NO_DUMP
+
+#undef REDUCED_SIZE_virtual
+#define REDUCED_SIZE_virtual	// no "virtual" for reduced_size 
 
 ////////////////////////////////////////////////////////
 

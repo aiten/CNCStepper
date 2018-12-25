@@ -392,6 +392,12 @@ void CGCodeParserBase::Parse()
 				}
 				break;
 			}
+			case '@':
+			{
+				_reader->GetNextChar();
+				CControl::GetInstance()->PrintVersion();
+				break;
+			}
 
 			default:
 			{

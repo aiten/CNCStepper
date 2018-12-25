@@ -133,4 +133,4 @@
 
 #include <MessageCNCLib.h>
 
-#define MESSAGE_MYCONTROL_Starting					F("iRobotCNC:" __DATE__ )
+#define MESSAGE_MYCONTROL_VERSION	F(" ,iRobotCNC")

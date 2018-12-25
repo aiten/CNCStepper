@@ -111,8 +111,6 @@ void CMyControl::Init()
 	DisableBlinkLed();
 #endif
 
-	StepperSerial.println(MESSAGE_MYCONTROL_Starting);
-
 	super::Init();
 
 	InitFromEeprom();
@@ -133,14 +131,22 @@ void CMyControl::Init()
 
 ////////////////////////////////////////////////////////////
 
+void CMyControl::PrintVersion()
+{
+  super::PrintVersion();
+  StepperSerial.println(MESSAGE_MYCONTROL_VERSION);
+}
+
+////////////////////////////////////////////////////////////
+
 void CMyControl::IOControl(uint8_t tool, uint16_t level)
 {
 	switch (tool)
 	{
-		// @formatter:off — disable formatter after this line
+		// @formatter:off ï¿½ disable formatter after this line
 		case Servo1: _servo1.write(level);	return;
 		case Servo2: _servo2.write(level);	return;
-			// @formatter:on — enable formatter after this line
+			// @formatter:on ï¿½ enable formatter after this line
 		default: break;
 	}
 

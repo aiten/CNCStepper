@@ -164,9 +164,9 @@
 #include <MessageCNCLibEx.h>
 
 #if defined(__SAM3X8E__)
-#define MESSAGE_MYCONTROL_Starting			F("My-CNC(HA) Ramps FD due is starting ... (" __DATE__ ", " __TIME__ ")")
+#define MESSAGE_MYCONTROL_VERSION			F(", My-CNC, due, Ramps FD")
 #define MESSAGE_LCD_HEADLINE				F("My-CNC RampsFD-D")
 #else
-#define MESSAGE_MYCONTROL_Starting			F("My-CNC(HA) Ramps FD is starting ... (" __DATE__ ", " __TIME__ ")")
+#define MESSAGE_MYCONTROL_VERSION			F(", My-CNC, mega2560, Ramps FD")
 #define MESSAGE_LCD_HEADLINE				F("My-CNC RampsFD-M")
 #endif

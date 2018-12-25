@@ -84,7 +84,7 @@ void CMyControl::Init()
 	DisableBlinkLed();
 #endif
 
-	StepperSerial.println(MESSAGE_MYCONTROL_Starting);
+	StepperSerial.println(MESSAGE_MYCONTROL_VERSION);
 
 	super::Init();
 

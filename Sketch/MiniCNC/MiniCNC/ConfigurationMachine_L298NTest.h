@@ -72,4 +72,4 @@
 
 ////////////////////////////////////////////////////////
 
-#define MESSAGE_MYCONTROL_Starting          F("L298N:" __DATE__ )
+#define MESSAGE_MYCONTROL_VERSION          F(", L298N")

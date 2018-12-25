@@ -145,6 +145,8 @@ public:
 	
 	REDUCED_SIZE_virtual bool IsEndOfCommandChar(char ch);					// override default End of command char, default \n
 
+	virtual void PrintVersion();
+
 protected:
 
 	bool SerialReadAndExecuteCommand();							// read from serial an execute command, return true if command pending (buffer not empty)

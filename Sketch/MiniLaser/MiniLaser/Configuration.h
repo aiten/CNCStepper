@@ -122,4 +122,4 @@
 
 ////////////////////////////////////////////////////////
 
-#define MESSAGE_MYCONTROL_Starting					F("MiniL:" __DATE__ )
+#define MESSAGE_MYCONTROL_VERSION					F(", MiniL")

@@ -84,8 +84,6 @@ void CMyControl::Init()
 	DisableBlinkLed();
 #endif
 
-	StepperSerial.println(MESSAGE_MYCONTROL_Starting);
-
 	super::Init();
 
 	InitFromEeprom();
@@ -97,6 +95,14 @@ void CMyControl::Init()
 #ifdef MYUSE_LCD
 	InitSD(SD_ENABLE_PIN);
 #endif
+}
+
+////////////////////////////////////////////////////////////
+
+void CMyControl::PrintVersion()
+{
+	super::PrintVersion();
+	StepperSerial.println(MESSAGE_MYCONTROL_VERSION);
 }
 
 ////////////////////////////////////////////////////////////

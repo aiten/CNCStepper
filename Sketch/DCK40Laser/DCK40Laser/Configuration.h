@@ -123,4 +123,4 @@
 
 ////////////////////////////////////////////////////////
 
-#define MESSAGE_MYCONTROL_Starting					F("DC-K40 Laser: (" __DATE__ ", " __TIME__ ")")
+#define MESSAGE_MYCONTROL_VERSION					F(", DC-K40 Laser")

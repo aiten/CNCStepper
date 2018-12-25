@@ -624,7 +624,7 @@ const CGCodeParser::SParamInfo CGCodeParser::_paramDef[] PROGMEM =
 #endif
 
 	{ PARAMSTART_FEEDRATE, _feedrate, false, CGCodeParser::SParamInfo::IsMm1000 },
-	{ 0, nullptr, false }
+	{ 0, nullptr, false , 0 }
 };
 
 ////////////////////////////////////////////////////////////

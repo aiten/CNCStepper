@@ -26,6 +26,7 @@
 
 #include "GCodeParser.h"
 #include "ConfigEeprom.h"
+#include "CNCLib.h"
 
 ////////////////////////////////////////////////////////////
 
@@ -67,9 +68,15 @@ void CControl::Init()
 
 void CControl::Initialized()
 {
-	StepperSerial.println(MESSAGE_OK_INITIALIZED);
 	GoToReference();
 	CMotionControlBase::GetInstance()->SetPositionFromMachine();
+}
+
+////////////////////////////////////////////////////////////
+
+void CControl::PrintVersion()
+{
+	StepperSerial.print(CNCLib_VersionMessage);
 }
 
 ////////////////////////////////////////////////////////////
@@ -461,7 +468,9 @@ void CControl::Run()
 	_bufferIdx = 0;
 	_lastTime  = _timeBlink = _timePoll = 0;
 
+	PrintVersion();
 	Init();
+	StepperSerial.println(MESSAGE_OK_INITIALIZED);
 	Initialized();
 
 #ifdef _MSC_VER

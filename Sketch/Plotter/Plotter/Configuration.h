@@ -194,4 +194,4 @@ error;
 
 ////////////////////////////////////////////////////////
 
-#define MESSAGE_MYCONTROL_Starting F("Plotter(HA) is starting ... (" __DATE__ ", " __TIME__ ")")
+#define MESSAGE_MYCONTROL_VERSION F(", Plotter")

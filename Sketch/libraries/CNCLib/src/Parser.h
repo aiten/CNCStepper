@@ -51,8 +51,9 @@ public:
 	bool    IsError() const { return _error != nullptr; };
 	error_t GetError() const { return _error; }
 
-	typedef void (*PrintOKMessage)();
-	PrintOKMessage GetOkMessage() const { return _OkMessage; }
+	typedef void (*PrintMessage)();
+
+	PrintMessage GetOkMessage() const { return _OkMessage; }
 
 	CStreamReader* GetReader() const { return _reader; }
 	Stream*        GetOutput() const { return _output; }
@@ -108,7 +109,7 @@ protected:
 	Stream*        _output;
 	CStreamReader* _reader;
 	error_t        _error;
-	PrintOKMessage _OkMessage;
+	PrintMessage   _OkMessage;
 
 public:
 

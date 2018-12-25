@@ -86,8 +86,6 @@ void CMyControl::Init()
 	DisableBlinkLed();
 #endif
 
-	StepperSerial.println(MESSAGE_MYCONTROL_Starting);
-
 	super::Init();
 
 	InitFromEeprom();
@@ -118,6 +116,14 @@ void CMyControl::Init()
 	CStepper::GetInstance()->SetCheckForReference(false);
 
 #endif
+}
+
+////////////////////////////////////////////////////////////
+
+void CMyControl::PrintVersion()
+{
+	super::PrintVersion();
+	StepperSerial.println(MESSAGE_MYCONTROL_VERSION);
 }
 
 ////////////////////////////////////////////////////////////

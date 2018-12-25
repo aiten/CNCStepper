@@ -167,9 +167,9 @@
 #include <MessageCNCLibEx.h>
 
 #if defined(__SAM3X8E__)
-#define MESSAGE_MYCONTROL_Starting					F("KK1000S(HA) due is starting ... (" __DATE__ ", " __TIME__ ")")
+#define MESSAGE_MYCONTROL_VERSION	F(", KK1000S, due, Mash6500S")
 #define MESSAGE_LCD_HEADLINE F("KK1000S Due")
 #else
-#define MESSAGE_MYCONTROL_Starting					F("KK1000S(HA) Mega is starting ... (" __DATE__ ", " __TIME__ ")")
-#define MESSAGE_LCD_HEADLINE F("Proxxon MF70 Ramps14M")
+#define MESSAGE_MYCONTROL_VERSION	F(", KK1000S, Mega , Mash6500S")
+#define MESSAGE_LCD_HEADLINE F("KK1000S Mega")
 #endif

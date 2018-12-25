@@ -162,9 +162,9 @@
 #include <MessageCNCLibEx.h>
 
 #if defined(__SAM3X8E__)
-#define MESSAGE_MYCONTROL_Starting			F("Proxxon MF 70(HA) Ramps 1.4 due is starting ... (" __DATE__ ", " __TIME__ ")")
+#define MESSAGE_MYCONTROL_VERSION			F(", Proxxon MF 70, due, Ramps 1.4")
 #define MESSAGE_LCD_HEADLINE				F("Proxxon MF70 Ramps14D")
 #else
-#define MESSAGE_MYCONTROL_Starting			F("Proxxon MF 70(HA) Ramps 1.4 is starting ... (" __DATE__ ", " __TIME__ ")")
+#define MESSAGE_MYCONTROL_VERSION			F(", Proxxon MF 70, Mega2560, Ramps 1.4")
 #define MESSAGE_LCD_HEADLINE				F("Proxxon MF70 Ramps14M")
 #endif

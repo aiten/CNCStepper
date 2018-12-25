@@ -126,4 +126,4 @@
 
 ////////////////////////////////////////////////////////
 
-#define MESSAGE_MYCONTROL_Starting					F("Laser:" __DATE__ )
+#define MESSAGE_MYCONTROL_VERSION					F(", Laser")

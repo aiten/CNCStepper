@@ -78,4 +78,4 @@
 
 ////////////////////////////////////////////////////////
 
-#define MESSAGE_MYCONTROL_Starting          F("TB6560:" __DATE__ )
+#define MESSAGE_MYCONTROL_VERSION          F(", TB6560")

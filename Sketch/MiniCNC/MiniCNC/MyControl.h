@@ -45,7 +45,9 @@ private:
 
 public:
 
-	CMyControl() { }
+	CMyControl()
+	{
+	}
 
 	virtual void Kill() override;
 
@@ -63,6 +65,8 @@ protected:
 	virtual void Poll() override;
 
 	virtual bool OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t addInfo) override;
+
+  virtual void PrintVersion() override;
 
 private:
 

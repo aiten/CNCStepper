@@ -73,4 +73,4 @@
 
 ////////////////////////////////////////////////////////
 
-#define MESSAGE_MYCONTROL_Starting          F("SMC800:" __DATE__ )
+#define MESSAGE_MYCONTROL_VERSION          F(", SMC800")

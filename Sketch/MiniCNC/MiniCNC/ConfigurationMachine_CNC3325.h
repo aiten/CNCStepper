@@ -114,4 +114,4 @@
 
 ////////////////////////////////////////////////////////
 
-#define MESSAGE_MYCONTROL_Starting          F("CNC-3325:" __DATE__ )
+#define MESSAGE_MYCONTROL_VERSION          F(", CNC-3325")

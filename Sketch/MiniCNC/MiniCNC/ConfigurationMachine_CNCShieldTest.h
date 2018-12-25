@@ -57,4 +57,4 @@
 
 ////////////////////////////////////////////////////////
 
-#define MESSAGE_MYCONTROL_Starting          F("CNCShield:" __DATE__ )
+#define MESSAGE_MYCONTROL_VERSION          F(", CNCShield")

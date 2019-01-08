@@ -5,7 +5,7 @@
     <OutputType>WinExe</OutputType>
     <StartupObject>LCD12864Emulator.App</StartupObject>
     <ApplicationIcon />
-    <Copyright>Copyright (c) 2013-2018 Herbert Aitenbichler</Copyright>
+    <Copyright>Copyright (c) 2013-2019 Herbert Aitenbichler</Copyright>
   </PropertyGroup>
   <ItemGroup>
     <!-- App.xaml -->

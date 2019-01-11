@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("CreateThermistorLookupBeta")]
-[assembly: AssemblyCopyright("Copyright ©  2013-2017")]
+[assembly: AssemblyCopyright("Copyright ©  2013-2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,18 +1,17 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2019 Herbert Aitenbichler
+  Copyright (c) Herbert Aitenbichler
 
-  CNCLib is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
+  to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+  and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-  CNCLib is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-  http://www.gnu.org/licenses/
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 */
 ////////////////////////////////////////////////////////
 
@@ -181,12 +180,12 @@ public:
 		float cosalpha = cos(alpha);
 		float sinalpha = sin(alpha);
 		
-		// @formatter:off — disable formatter after this line
+		// @formatter:off â€” disable formatter after this line
 		dest[0][0] = costheta;	dest[0][1] = -sintheta*cosalpha; dest[0][2] = sintheta*sinalpha;   dest[0][3] = a*costheta;
 		dest[1][0] = sintheta;	dest[1][1] = costheta*cosalpha;  dest[1][2] = -costheta*sinalpha;  dest[1][3] = a*sintheta;
 		dest[2][0] = 0;			dest[2][1] = sinalpha;			 dest[2][2] = cosalpha;			   dest[2][3] = d;
 		dest[3][0] = 0;			dest[3][1] = 0;					 dest[3][2] = 0;				   dest[3][3] = 1.0;
-		// @formatter:on — enable formatter after this line
+		// @formatter:on â€” enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenberg(float a, float alpha, float d, float theta)
@@ -202,12 +201,12 @@ public:
 		float cosalpha = cos(alpha);
 		float sinalpha = sin(alpha);
 
-		// @formatter:off — disable formatter after this line
+		// @formatter:off â€” disable formatter after this line
 		dest[0][0] = costheta;				dest[0][1] = sintheta;			 dest[0][2] = 0;		dest[0][3] = -a;
 		dest[1][0] = -sintheta*cosalpha;	dest[1][1] = costheta*cosalpha;  dest[1][2] = sinalpha; dest[1][3] = -d*sinalpha;
 		dest[2][0] = sintheta*sinalpha;		dest[2][1] = -costheta*sinalpha; dest[2][2] = cosalpha;	dest[2][3] = -d*cosalpha;
 		dest[3][0] = 0;						dest[3][1] = 0;					 dest[3][2] = 0;		dest[3][3] = 1.0;
-		// @formatter:on — enable formatter after this line
+		// @formatter:on â€” enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenbergInverse(float a, float alpha, float d, float theta)
@@ -223,12 +222,12 @@ public:
 		float costheta = cos(theta);
 		float sintheta = sin(theta);
 
-		// @formatter:off — disable formatter after this line
+		// @formatter:off â€” disable formatter after this line
 		dest[0][0] = costheta;	dest[0][1] = -sintheta;			dest[0][2] = 0;		dest[0][3] = 0;
 		dest[1][0] = sintheta;	dest[1][1] = costheta;			dest[1][2] = 0;		dest[1][3] = 0;
 		dest[2][0] = 0;			dest[2][1] = 0;					dest[2][2] = 1;		dest[2][3] = 0;
 		dest[3][0] = 0;			dest[3][1] = 0;					dest[3][2] = 0;		dest[3][3] = 1;
-		// @formatter:on — enable formatter after this line
+		// @formatter:on â€” enable formatter after this line
 	}
 
 
@@ -243,12 +242,12 @@ public:
 		float costheta = cos(theta);
 		float sintheta = sin(theta);
 
-		// @formatter:off — disable formatter after this line
+		// @formatter:off â€” disable formatter after this line
 		dest[0][0] = costheta;	dest[0][1] = -sintheta;			dest[0][2] = 0;		dest[0][3] = a*costheta;
 		dest[1][0] = sintheta;	dest[1][1] = costheta;			dest[1][2] = 0;		dest[1][3] = a*sintheta;
 		dest[2][0] = 0;			dest[2][1] = 0;					dest[2][2] = 1;		dest[2][3] = 0;
 		dest[3][0] = 0;			dest[3][1] = 0;					dest[3][2] = 0;		dest[3][3] = 1;
-		// @formatter:on — enable formatter after this line
+		// @formatter:on â€” enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenberg1Rot3Trans(float a, float theta)
@@ -261,12 +260,12 @@ public:
 
 	static void InitDenavitHartenberg2Trans(T dest[4][4], float d)
 	{
-		// @formatter:off — disable formatter after this line
+		// @formatter:off â€” disable formatter after this line
 		dest[0][0] = 1;			dest[0][1] = 0;				dest[0][2] = 0;		dest[0][3] = 0;
 		dest[1][0] = 0;			dest[1][1] = 1;				dest[1][2] = 0;		dest[1][3] = 0;
 		dest[2][0] = 0;			dest[2][1] = 0;				dest[2][2] = 1;		dest[2][3] = d;
 		dest[3][0] = 0;			dest[3][1] = 0;				dest[3][2] = 0;		dest[3][3] = 1;
-		// @formatter:on — enable formatter after this line
+		// @formatter:on â€” enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenberg2Trans(float d)
@@ -275,16 +274,16 @@ public:
 		return *this;
 	}
 
-	// einer Translation a_n(Armelementlänge) entlang der x_n - Achse, um die Ursprünge der Koordinatensysteme in Deckung zu bringen
+	// einer Translation a_n(ArmelementlÃ¤nge) entlang der x_n - Achse, um die UrsprÃ¼nge der Koordinatensysteme in Deckung zu bringen
 
 	static void InitDenavitHartenberg3Trans(T dest[4][4], float a)
 	{
-		// @formatter:off — disable formatter after this line
+		// @formatter:off â€” disable formatter after this line
 		dest[0][0] = 1;			dest[0][1] = 0;				dest[0][2] = 0;		dest[0][3] = a;
 		dest[1][0] = 0;			dest[1][1] = 1;				dest[1][2] = 0;		dest[1][3] = 0;
 		dest[2][0] = 0;			dest[2][1] = 0;				dest[2][2] = 1;		dest[2][3] = 0;
 		dest[3][0] = 0;			dest[3][1] = 0;				dest[3][2] = 0;		dest[3][3] = 1;
-		// @formatter:on — enable formatter after this line
+		// @formatter:on â€” enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenberg3Trans(float a)
@@ -293,19 +292,19 @@ public:
 		return *this;
 	}
 
-	// einer Rotation \alpha_n(Verwindung) um die x_n - Achse, um die z_{ n - 1 }-Achse in die z_n - Achse zu überführen
+	// einer Rotation \alpha_n(Verwindung) um die x_n - Achse, um die z_{ n - 1 }-Achse in die z_n - Achse zu Ã¼berfÃ¼hren
 
 	static void InitDenavitHartenberg4Rot(T dest[4][4], float alpha)
 	{
 		float cosalpha = cos(alpha);
 		float sinalpha = sin(alpha);
 
-		// @formatter:off — disable formatter after this line
+		// @formatter:off â€” disable formatter after this line
 		dest[0][0] = 1;			dest[0][1] = 0;				dest[0][2] = 0;				dest[0][3] = 0;
 		dest[1][0] = 0;			dest[1][1] = cosalpha;		dest[1][2] = -sinalpha;		dest[1][3] = 0;
 		dest[2][0] = 0;			dest[2][1] = sinalpha;		dest[2][2] = cosalpha;		dest[2][3] = 0;
 		dest[3][0] = 0;			dest[3][1] = 0;				dest[3][2] = 0;				dest[3][3] = 1;
-		// @formatter:on — enable formatter after this line
+		// @formatter:on â€” enable formatter after this line
 	}
 
 	CMatrix4x4<T>& InitDenavitHartenberg4Rot(float a)

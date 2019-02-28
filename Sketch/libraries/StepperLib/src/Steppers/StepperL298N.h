@@ -1,18 +1,17 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2019 Herbert Aitenbichler
+  Copyright (c) Herbert Aitenbichler
 
-  CNCLib is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
+  to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+  and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-  CNCLib is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-  http://www.gnu.org/licenses/
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 */
 ////////////////////////////////////////////////////////
 
@@ -52,11 +51,11 @@ public:
 	virtual uint8_t GetReferenceValue(uint8_t referenceId) override;
 
 	// Set before Init()
-	// @formatter:off — disable formatter after this line
+	// @formatter:off â€” disable formatter after this line
 	void SetPin(axis_t axis, pin_t in1, pin_t in2, pin_t in3, pin_t in4)	{ _pin[axis][0] = in1;_pin[axis][1] = in2;_pin[axis][2] = in3;	_pin[axis][3] = in4;}
 	void SetPin(axis_t axis, pin_t in1, pin_t in2)							{ _pin[axis][0] = in1; _pin[axis][1] = in2; _pin[axis][2] = 0; _pin[axis][3] = 0; }
 	void SetRefPin(axis_t axis, pin_t refMin, pin_t refMax)					{ _pinRef[ToReferenceId(axis, true)] = refMin;	_pinRef[ToReferenceId(axis, false)] = refMax; }
-	// @formatter:on — enable formatter after this line
+	// @formatter:on â€” enable formatter after this line
 
 	void SetEnablePin(axis_t axis, pin_t en) { _pinEnable[axis] = en; }
 	//	void SetEnablePin(axis_t axis, pin_t en1, pin_t en2)			{ _pinEnable[axis][0] = en1;  _pinEnable[axis][1] = en2; }

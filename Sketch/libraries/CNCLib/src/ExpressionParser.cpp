@@ -1,17 +1,17 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2019 Herbert Aitenbichler
+  Copyright (c) Herbert Aitenbichler
 
-  CNCLib is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
+  to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+  and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-  CNCLib is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 */
 ////////////////////////////////////////////////////////
 
@@ -76,7 +76,7 @@ void CExpressionParser::ScanNextToken()
 {
 	char ch = _reader->GetChar();
 
-	// @formatter:off — disable formatter after this line
+	// @formatter:off â€” disable formatter after this line
 	if (IsToken(F("||"), false, false))	{ _state._detailToken = XOrSy;			 return; }
 	if (IsToken(F("<<"), false, false))	{ _state._detailToken = BitShiftLeftSy;  return; }
 	if (IsToken(F(">>"), false, false))	{ _state._detailToken = BitShiftRightSy; return; }
@@ -104,7 +104,7 @@ void CExpressionParser::ScanNextToken()
 		case '=': _state._detailToken = AssignSy;		_reader->GetNextChar(); return;
 		default: break;
 	}
-	// @formatter:on — enable formatter after this line
+	// @formatter:on â€” enable formatter after this line
 
 	// check for a value
 	if (CStreamReader::IsDigitDot(ch))
@@ -132,7 +132,7 @@ void CExpressionParser::ScanNextToken()
 
 		if (ch == _LeftParenthesis)
 		{
-			// @formatter:off — disable formatter after this line
+			// @formatter:off â€” disable formatter after this line
 			if (TryToken(start, F("ABS"), true))		{ _state._detailToken = AbsSy; return; }
 			if (TryToken(start, F("EXP"), true))		{ _state._detailToken = ExpSy; return; }
 			if (TryToken(start, F("SIGN"), true))		{ _state._detailToken = SignSy; return; }
@@ -150,7 +150,7 @@ void CExpressionParser::ScanNextToken()
 			if (TryToken(start, F("FIX"), true))		{ _state._detailToken = FixSy; return; }
 			if (TryToken(start, F("FUP"), true))		{ _state._detailToken = FupSy; return; }
 			if (TryToken(start, F("ROUND"), true))		{ _state._detailToken = RoundSy; return; }
-			// @formatter:on — enable formatter after this line
+			// @formatter:on â€” enable formatter after this line
 
 			Error(MESSAGE_EXPR_UNKNOWN_FUNCTION);
 			return;
@@ -411,7 +411,7 @@ expr_t CExpressionParser::ParseNumber()
 
 expr_t CExpressionParser::EvalOperator(EnumAsByte(ETokenType) operatorSy, const expr_t& lhs, const expr_t& rhs)
 {
-	// @formatter:off — disable formatter after this line
+	// @formatter:off â€” disable formatter after this line
 	switch (operatorSy)
 	{
 		// level 2
@@ -446,7 +446,7 @@ expr_t CExpressionParser::EvalOperator(EnumAsByte(ETokenType) operatorSy, const 
 
 		default: break;
 	}
-	// @formatter:on — enable formatter after this line
+	// @formatter:on â€” enable formatter after this line
 
 	ErrorAdd(MESSAGE_EXPR_ILLEGAL_OPERATOR);
 	return 0;
@@ -457,7 +457,7 @@ expr_t CExpressionParser::EvalOperator(EnumAsByte(ETokenType) operatorSy, const 
 
 expr_t CExpressionParser::EvalFunction(EnumAsByte(ETokenType) operatorSy, const expr_t& value)
 {
-	// @formatter:off — disable formatter after this line
+	// @formatter:off â€” disable formatter after this line
 	switch (operatorSy)
 	{
 			// arithmetic
@@ -486,7 +486,7 @@ expr_t CExpressionParser::EvalFunction(EnumAsByte(ETokenType) operatorSy, const 
 	
 		default: break;
 	}
-	// @formatter:on — enable formatter after this line
+	// @formatter:on â€” enable formatter after this line
 
 	ErrorAdd(MESSAGE_EXPR_ILLEGAL_FUNCTION);
 	return 0;
@@ -499,10 +499,10 @@ bool CExpressionParser::EvalVariable(const char* var_name, expr_t& answer)
 	_state._varName = var_name;
 
 	// check for built-in variables
-	// @formatter:off — disable formatter after this line
+	// @formatter:off â€” disable formatter after this line
 	if (TryToken(var_name, F("E"), true))  { answer = expr_t(2.7182818284590452353602874713527); return true; }
 	if (TryToken(var_name, F("PI"), true)) { answer = expr_t(3.1415926535897932384626433832795); return true; }
-	// @formatter:on — enable formatter after this line
+	// @formatter:on â€” enable formatter after this line
 
 	return false;
 }

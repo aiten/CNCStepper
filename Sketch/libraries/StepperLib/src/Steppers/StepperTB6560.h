@@ -1,18 +1,17 @@
 /*
   This file is part of CNCLib - A library for stepper motors.
 
-  Copyright (c) 2013-2019 Herbert Aitenbichler
+  Copyright (c) Herbert Aitenbichler
 
-  CNCLib is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
+  to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+  and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-  CNCLib is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-  http://www.gnu.org/licenses/
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 */
 ////////////////////////////////////////////////////////
 
@@ -92,14 +91,14 @@ protected:
 #define SETLEVEL(pin) if (level != LevelOff)	HALFastdigitalWrite(pin,TB6560_PIN_ENABLE_ON);	else	HALFastdigitalWrite(pin,TB6560_PIN_ENABLE_OFF);
 		switch (axis)
 		{
-			// @formatter:off — disable formatter after this line
+			// @formatter:off â€” disable formatter after this line
 			case X_AXIS: SETLEVEL(TB6560_X_ENABLE_PIN);	break;
 			case Y_AXIS: SETLEVEL(TB6560_Y_ENABLE_PIN);	break;
 			case Z_AXIS: SETLEVEL(TB6560_Z_ENABLE_PIN);	break;
 				//		case A_AXIS: SETLEVEL(TB6560_A_ENABLE_PIN); break;
 				//		case B_AXIS: SETLEVEL(TB6560_B_ENABLE_PIN); break;
 			default: break;
-				// @formatter:on — enable formatter after this line
+				// @formatter:on â€” enable formatter after this line
 		}
 #undef SETLEVEL
 	}
@@ -136,7 +135,7 @@ protected:
 
 		for (uint8_t cnt = 0;; cnt++)
 		{
-			// @formatter:off — disable formatter after this line
+			// @formatter:off â€” disable formatter after this line
 
 			bool have = false;
 			if (steps[X_AXIS] > cnt) {	HALFastdigitalWriteNC(TB6560_X_STEP_PIN, TB6560_PIN_STEP_ON);	have = true; }
@@ -153,7 +152,7 @@ protected:
 			//		if (steps[A_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_A_STEP_PIN,TB6560_PIN_STEP_OFF); }
 			//		if (steps[B_AXIS] > cnt) { HALFastdigitalWriteNC(TB6560_B_STEP_PIN,TB6560_PIN_STEP_OFF); }
 
-			// @formatter:on — enable formatter after this line
+			// @formatter:on â€” enable formatter after this line
 
 			if (!have) break;
 

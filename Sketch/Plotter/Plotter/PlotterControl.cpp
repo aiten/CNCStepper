@@ -203,7 +203,7 @@ bool CPlotter::ToPenChangePos(uint8_t pen)
 
 ////////////////////////////////////////////////////////////
 
-bool CPlotter::OffPenChangePos(uint8_t pen)
+bool CPlotter::OffPenChangePos(uint8_t /* pen */)
 {
 	return MoveToPenPosition(
 		CConfigEeprom::GetConfigU32(offsetof(CMyControl::SMyCNCEeprom, MovePenChangeFeedRate)),

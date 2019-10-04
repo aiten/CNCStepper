@@ -41,6 +41,48 @@
 #define CNC_DEC  400
 #define CNC_JERKSPEED	500
 
+#define X_MAXSPEED 0
+#define Y_MAXSPEED 0
+#define Z_MAXSPEED 0
+#define A_MAXSPEED 0
+#define B_MAXSPEED 0
+#define C_MAXSPEED 0
+
+#define X_ACC 0
+#define Y_ACC 0
+#define Z_ACC 0
+#define A_ACC 0
+#define B_ACC 0
+#define C_ACC 0
+
+#define X_DEC 0
+#define Y_DEC 0
+#define Z_DEC 0
+#define A_DEC 0
+#define B_DEC 0
+#define C_DEC 0
+
+#define X_STEPRATE_REFMOVE 0
+#define Y_STEPRATE_REFMOVE 0
+#define Z_STEPRATE_REFMOVE 0
+#define A_STEPRATE_REFMOVE 0
+#define B_STEPRATE_REFMOVE 0
+#define C_STEPRATE_REFMOVE 0
+
+#define X_STEPSPERMM 0.0
+#define Y_STEPSPERMM 0.0
+#define Z_STEPSPERMM 0.0
+#define A_STEPSPERMM 0.0
+#define B_STEPSPERMM 0.0
+#define C_STEPSPERMM 0.0
+
+#define X_PROBESIZE 25000
+#define Y_PROBESIZE 25000
+#define Z_PROBESIZE 25000
+#define A_PROBESIZE 25000
+#define B_PROBESIZE 25000
+#define C_PROBESIZE 25000
+
 ////////////////////////////////////////////////////////
 
 #include "ConfigurationStepper_TB6560.h"

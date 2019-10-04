@@ -28,6 +28,8 @@ bin
 /Sketch/libraries/LiquidCrystal_I2C
 /Sketch/libraries/LiquidCrystal
 /Sketch/libraries/U8glib
+/Sketch/libraries/NmraDcc
+/Sketch/libraries/SoftwareServo
 /Sketch/libraries/SD
 /Sketch/libraries/DallasTemperature
 /Sketch/libraries/U8g2

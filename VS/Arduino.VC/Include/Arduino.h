@@ -101,7 +101,7 @@ inline uint8_t digitalPinToInterrupt(uint8_t p) { return ((p) == 2 ? 0 : ((p) ==
 typedef unsigned char uint8_t;
 typedef signed char   int8_t;
 
-
+inline int random(int, int) { return 0;  }
 inline void analogWrite(int16_t, int) {};
 inline int  analogRead(int16_t ) { return 0; };
 
@@ -127,6 +127,8 @@ extern uint8_t digitalReadFromFile(int16_t pin);
 #define PIN_A7   (21)
 
 static uint8_t A0 = PIN_A0;
+static uint8_t A1 = PIN_A1;
+static uint8_t A2 = PIN_A2;
 
 static uint8_t  PORTA;
 static uint8_t  PORTB;
@@ -278,6 +280,8 @@ public:
 	//	void println(int32_t          l) { printf("%li\n", l); };
 	//	void println(uint32_t ul) { printf("%lu\n", ul); };
 
+	#define DEC 10
+	
 	void println(uint32_t ul, uint8_t base)
 	{
 		print(ul, base);
@@ -331,6 +335,11 @@ public:
 
 		_putch(ch);
 		return ch;
+	}
+
+	size_t readBytesUntil(char /* character */, char* /* buffer */, int /* length */)
+	{
+		return 0;
 	}
 
 private:

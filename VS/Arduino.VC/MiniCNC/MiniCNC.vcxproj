@@ -87,12 +87,14 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\Configuration.h" />
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_CNC3325.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_CNCShieldTest.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_CNCShield3x.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_Custom.h" />
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_Default.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_L298NTest.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_SMC800Test.h" />
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_TB6560Test.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_L298N.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_SMC800.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_TB6560.h" />
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_CNCShield.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_CNCShield3x.h" />
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_L298N.h" />
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_SMC800.h" />
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_TB6560.h" />

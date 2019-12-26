@@ -37,3 +37,4 @@ bin
 /Sketch/hardware/espressif
 /VS/Arduino.VC/Lib
 /Doc
+/Sketch/libraries/Servo

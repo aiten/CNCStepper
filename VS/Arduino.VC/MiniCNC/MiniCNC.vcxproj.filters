@@ -22,19 +22,7 @@
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_CNC3325.h">
       <Filter>MiniCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_CNCShieldTest.h">
-      <Filter>MiniCNC</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_Default.h">
-      <Filter>MiniCNC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_L298NTest.h">
-      <Filter>MiniCNC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_SMC800Test.h">
-      <Filter>MiniCNC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_TB6560Test.h">
       <Filter>MiniCNC</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_CNCShield.h">
@@ -50,6 +38,24 @@
       <Filter>MiniCNC</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\MyControl.h">
+      <Filter>MiniCNC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_CNCShield3x.h">
+      <Filter>MiniCNC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_Custom.h">
+      <Filter>MiniCNC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_L298N.h">
+      <Filter>MiniCNC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_SMC800.h">
+      <Filter>MiniCNC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_TB6560.h">
+      <Filter>MiniCNC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_CNCShield3x.h">
       <Filter>MiniCNC</Filter>
     </ClInclude>
   </ItemGroup>

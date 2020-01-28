@@ -34,7 +34,13 @@ bin
 /Sketch/libraries/DallasTemperature
 /Sketch/libraries/U8g2
 /Sketch/libraries/OneWire
-/Sketch/hardware/espressif
-/VS/Arduino.VC/Lib
-/Doc
 /Sketch/libraries/Servo
+/Sketch/libraries/Adafruit_TiCoServo
+/Sketch/libraries/Adafruit_Circuit_Playground
+/Sketch/libraries/Adafruit_TiCoServo
+/Sketch/libraries/SpacebrewYun
+
+/Sketch/hardware/espressif
+
+/Doc
+/VS/Arduino.VC/Lib

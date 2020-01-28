@@ -31,6 +31,13 @@ template <> CConfigEeprom* CSingleton<CConfigEeprom>::_instance = nullptr;
 
 ////////////////////////////////////////////////////////////
 
+inline const void* AddAdr(const void* adr, eepromofs_t ofs)
+{
+	return ((uint8_t*)adr) + ofs;
+}
+
+////////////////////////////////////////////////////////////
+
 void CConfigEeprom::Init(uint16_t eepromSize, const void* defaultEeprom, uint32_t eepromID)
 {
 	CHAL::InitEeprom();
@@ -40,8 +47,7 @@ void CConfigEeprom::Init(uint16_t eepromSize, const void* defaultEeprom, uint32_
 
 	if (CHAL::HaveEeprom())
 	{
-		_eepromValid = true;		// force read from eeprom
-		_eepromValid = GetConfigU32(offsetof(SCNCEeprom, Signature)) == eepromID;
+		_eepromValid = CHAL::eeprom_read_dword((uint32_t*)AddAdr(CHAL::GetEepromBaseAdr(), offsetof(SCNCEeprom, Signature))) == eepromID;
 	}
 	else
 	{
@@ -77,14 +83,11 @@ uint32_t CConfigEeprom::GetConfigU32(eepromofs_t ofs)
 
 ////////////////////////////////////////////////////////////
 
-inline const void* AddAdr(const void* adr, eepromofs_t ofs)
-{
-	return ((uint8_t*)adr) + ofs;
-}
-
 uint32_t CConfigEeprom::GetConfig32(eepromofs_t ofs) const
 {
-	if (_eepromValid)
+	// read info1 & info2 from FLASH, never from EEPROM
+	
+	if (_eepromValid && ofs >= offsetof(SCNCEeprom, StepperDirections))
 	{
 		return CHAL::eeprom_read_dword((uint32_t*)AddAdr(CHAL::GetEepromBaseAdr(), ofs));
 	}

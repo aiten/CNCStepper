@@ -147,18 +147,31 @@ public:
 		EEPROM_NEED_EEPROM_FLUSH = (1 << 0),
 		EEPROM_NEED_DTR = (1 << 1),			// deprecated, replaced by EEPROM_DTRISRESET
 		EEPROM_DTRISRESET = (1 << 2),
+
+		WORKOFFSETCOUNTBIT0 = (1 << 3),
+		WORKOFFSETCOUNTBIT1 = (1 << 4),
+		WORKOFFSETCOUNTBIT2 = (1 << 5),
+		WORKOFFSETCOUNTBIT3 = (1 << 6),
 	};
 
 #define COMMANDSYNTAX_BIT	6
-#define COMMANDSYNTAX_LEN	2
+#define COMMANDSYNTAX_LEN	3
 #define COMMANDSYNTAX_MASK  (CConfigEeprom::COMMANDSYNTAXBIT0+CConfigEeprom::COMMANDSYNTAXBIT1+CConfigEeprom::COMMANDSYNTAXBIT2)
 #define COMMANDSYNTAX_VALUE(a)	(((a)*(1<<COMMANDSYNTAX_BIT))&COMMANDSYNTAX_MASK)
 #define COMMANDSYNTAX_CLEAR(a)	((a)&~COMMANDSYNTAX_MASK)
+
+#define WORKOFFSETCOUNT_BIT	3
+#define WORKOFFSETCOUNT_LEN	4
+#define WORKOFFSETCOUNT_MASK  (CConfigEeprom::WORKOFFSETCOUNTBIT0+CConfigEeprom::WORKOFFSETCOUNTBIT1+CConfigEeprom::WORKOFFSETCOUNTBIT2+CConfigEeprom::WORKOFFSETCOUNTBIT3)
+#define WORKOFFSETCOUNT_VALUE(a)	(((a)*(1<<WORKOFFSETCOUNT_BIT))&WORKOFFSETCOUNT_MASK)
+#define WORKOFFSETCOUNT_CLEAR(a)	((a)&~WORKOFFSETCOUNT_MASK)
 
 #define EPROM_SIGNATURE		0x21436502
 
 	struct SCNCEeprom
 	{
+		// must not be changed: start, ignore eeprom
+		
 		uint32_t Signature;
 
 		uint8_t NumAxis;
@@ -169,6 +182,8 @@ public:
 		uint16_t Info1a;
 		uint16_t Info1b;
 		uint32_t Info2;
+
+		// must not be changed: end, see CConfigEeprom::GetConfig32(eepromofs_t ofs) const
 
 		uint8_t StepperDirections; // bits for each axis, see CStepper::SetDirection
 		uint8_t Dummy2;

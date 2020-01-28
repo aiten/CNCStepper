@@ -297,5 +297,8 @@ constexpr uint16_t GetInfo1b()
 #else
 		CConfigEeprom::EEPROM_DTRISRESET |
 #endif
-		CConfigEeprom::NONE1b;
+#ifndef REDUCED_SIZE
+		WORKOFFSETCOUNT_VALUE(G54ARRAYSIZE) |
+#endif
+	CConfigEeprom::NONE1b;
 }

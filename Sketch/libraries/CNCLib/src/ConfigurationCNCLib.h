@@ -46,6 +46,24 @@ typedef int32_t inch100000_t; // 1/100000 inch
 #define SCALE_INCH		5
 
 ////////////////////////////////////////////////////////
+// GCode Parser
+
+#define NUM_MAXPARAMNAMELENGTH 16
+#define NUM_PARAMETERRANGE	255
+
+#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(_MSC_VER)
+
+#define NUM_PARAMETER	16		// slotCount, map from uint8_t to < NUM_PARAMETER
+#define G54ARRAYSIZE	6
+
+#else
+
+#define NUM_PARAMETER	8
+#define G54ARRAYSIZE	2
+
+#endif
+
+////////////////////////////////////////////////////////
 //
 // Control
 

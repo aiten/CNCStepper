@@ -132,7 +132,7 @@ void CMyControl::Init()
 void CMyControl::PrintVersion()
 {
   super::PrintVersion();
-  StepperSerial.println(MESSAGE_MYCONTROL_VERSION);
+  StepperSerial.print(MESSAGE_MYCONTROL_VERSION);
 }
 
 ////////////////////////////////////////////////////////////

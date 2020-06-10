@@ -36,7 +36,7 @@ int _tmain(int /* argc */, _TCHAR* /* argv */[])
 	{
 		switch (pin)
 		{
-			case KILL_PIN: return KILL_PIN_ON;
+		    case KILL_PIN: return KILL_PIN_ON ? LOW : HIGH;
 			case HOLD_PIN: return HIGH;
 		}
 		return DIGITALREADNOVALUE;

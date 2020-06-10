@@ -468,6 +468,7 @@ void CControl::Run()
 	_lastTime  = _timeBlink = _timePoll = 0;
 
 	PrintVersion();
+	StepperSerial.println();
 	Init();
 	StepperSerial.println(MESSAGE_OK_INITIALIZED);
 	Initialized();

@@ -17,7 +17,7 @@
 
 #pragma once
 
-#define CNCLib_Version "1.1.0"
+#define CNCLib_Version "1.1.1"
 #define CNCLib_VersionMessage F("CNCLib: " CNCLib_Version " (" __DATE__ ")")
 
 #include <StepperLib.h>

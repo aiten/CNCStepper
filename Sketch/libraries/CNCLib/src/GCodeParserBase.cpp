@@ -395,6 +395,7 @@ void CGCodeParserBase::Parse()
 			{
 				_reader->GetNextChar();
 				CControl::GetInstance()->PrintVersion();
+				StepperSerial.println();
 				break;
 			}
 

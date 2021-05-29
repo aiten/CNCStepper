@@ -1,21 +1,14 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.68">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
+    <TargetFramework>$(TargetFrameworkForWpf)</TargetFramework>
     <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
     <StartupObject>LCD12864Emulator.App</StartupObject>
-    <ApplicationIcon />
-    <Copyright>Copyright (c) 2013-2019 Herbert Aitenbichler</Copyright>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
-    <ExtrasEnableWpfProjectSetup>true</ExtrasEnableWpfProjectSetup>
+
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
+    <Compile Update="App.xaml.cs" DependentUpon="App.xaml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+
 </Project>

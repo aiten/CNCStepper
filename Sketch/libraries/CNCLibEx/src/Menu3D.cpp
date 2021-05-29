@@ -25,9 +25,8 @@
 #include <stdlib.h>
 #include <Arduino.h>
 
-#include "Control3D.h"
-#include "GCode3DParser.h"
 #include "Menu3D.h"
+#include "GCode3DParser.h"
 #include "SDDirReader.h"
 
 ///////////////////////////////////////////////////////////

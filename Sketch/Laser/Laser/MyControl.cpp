@@ -13,9 +13,9 @@
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 */
-////////////////////////////////////////////////////////
 
-#include <stdio.h>
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -92,6 +92,12 @@ void CMyControl::Init()
 
 #ifdef MYUSE_LCD
 	InitSD(SD_ENABLE_PIN);
+#endif
+
+#ifdef DISABLE_ISANYREFERENCE
+
+	CStepper::GetInstance()->SetCheckForReference(false);
+
 #endif
 }
 

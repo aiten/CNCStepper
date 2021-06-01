@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Plotter", "Plotter\Plotter.vcxproj", "{AB8D0B94-F0C2-4593-8509-E31E8132D1E1}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -59,6 +59,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MaxiCNC", "MaxiCNC\MaxiCNC.
 	ProjectSection(ProjectDependencies) = postProject
 		{65F3EA50-71B8-4573-8D35-786D97FDFA91} = {65F3EA50-71B8-4573-8D35-786D97FDFA91}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ISS", "ISS\ISS.vcxproj", "{CAE3CE99-ECDE-449E-B943-48FFC51C1990}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -142,8 +144,17 @@ Global
 		{B06146B7-2323-4233-B586-FCEB370C8F02}.Release|Win32.ActiveCfg = Release|Win32
 		{B06146B7-2323-4233-B586-FCEB370C8F02}.Release|Win32.Build.0 = Release|Win32
 		{B06146B7-2323-4233-B586-FCEB370C8F02}.Release|x64.ActiveCfg = Release|Win32
+		{CAE3CE99-ECDE-449E-B943-48FFC51C1990}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CAE3CE99-ECDE-449E-B943-48FFC51C1990}.Debug|Win32.Build.0 = Debug|Win32
+		{CAE3CE99-ECDE-449E-B943-48FFC51C1990}.Debug|x64.ActiveCfg = Debug|Win32
+		{CAE3CE99-ECDE-449E-B943-48FFC51C1990}.Release|Win32.ActiveCfg = Release|Win32
+		{CAE3CE99-ECDE-449E-B943-48FFC51C1990}.Release|Win32.Build.0 = Release|Win32
+		{CAE3CE99-ECDE-449E-B943-48FFC51C1990}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AD1EAF63-E8FE-4B81-B254-986D9C004820}
 	EndGlobalSection
 EndGlobal

@@ -13,9 +13,9 @@
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 */
-////////////////////////////////////////////////////////
 
-#include <stdio.h>
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -44,7 +44,7 @@ HardwareSerial&       StepperSerial = Serial;
 const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 {
 	EPROM_SIGNATURE,
-	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom, Axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
+	NUM_AXIS, MYNUM_AXIS, offsetof(CConfigEeprom::SCNCEeprom,Axis), sizeof(CConfigEeprom::SCNCEeprom::SAxisDefinitions),
 	GetInfo1a(), GetInfo1b(),
 	0,
 	STEPPERDIRECTION, 0, 0,SPINDLE_FADETIMEDELAY,
@@ -93,6 +93,12 @@ void CMyControl::Init()
 #ifdef MYUSE_LCD
 	InitSD(SD_ENABLE_PIN);
 #endif
+
+#ifdef DISABLE_ISANYREFERENCE
+
+	CStepper::GetInstance()->SetCheckForReference(false);
+
+#endif
 }
 
 ////////////////////////////////////////////////////////////
@@ -126,6 +132,7 @@ uint16_t CMyControl::IOControl(uint8_t tool)
 		case ControllerFan: { return _data._controllerfan.GetLevel(); }
 #endif
 		case Probe: { return _data._probe.IsOn(); }
+		default: break;
 	}
 
 	return super::IOControl(tool);

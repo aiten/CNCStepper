@@ -25,9 +25,6 @@
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_Default.h">
       <Filter>MiniCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_CNCShield.h">
-      <Filter>MiniCNC</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationStepper_L298N.h">
       <Filter>MiniCNC</Filter>
     </ClInclude>

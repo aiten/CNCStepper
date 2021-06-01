@@ -13,7 +13,6 @@
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 */
-////////////////////////////////////////////////////////
 
 #pragma once
 
@@ -73,14 +72,14 @@ extern SDClass SD;
 class MyDirFile
 {
 public:
-	virtual bool IsFile() =0;
-	virtual void close() =0;
-	virtual void open(int mode) =0;
-	virtual bool isopen() =0;
+	virtual bool IsFile() = 0;
+	virtual void close() = 0;
+	virtual void open(int mode) = 0;
+	virtual bool isopen() = 0;
 
-	char _OSfileName[_MAX_PATH];
-	char _pathname[_MAX_PATH];
-	char _name[_MAX_PATH];
+	char _OSfileName[_MAX_PATH] = { 0 };
+	char _pathname[_MAX_PATH] = { 0 };
+	char _name[_MAX_PATH] = { 0 };
 
 	bool isDirectory() const
 	{

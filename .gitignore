@@ -21,6 +21,8 @@ bin
 *.opendb
 *.db
 
+.pio
+
 /VS/Sign/Call-Invoke-SignCNCLib.ps1
 /VS/Arduino.VC/StepperTest/TestResult
 

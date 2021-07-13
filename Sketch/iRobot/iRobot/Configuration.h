@@ -144,7 +144,9 @@
 
 #define GO_DEFAULT_STEPRATE		((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
 #define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
-#define G1_DEFAULT_FEEDPRATE	100000	// in mm1000 / min
+#define G1_DEFAULT_FEEDPRATE	  100000000	// in mm1000 / min
+#define G0_DEFAULT_FEEDPRATE    100000000 // in mm1000 / min
+#define G1_DEFAULT_MAXFEEDPRATE 100000000 // in mm1000 / min
 
 #define STEPRATE_REFMOVE	(CNC_MAXSPEED/4)
 
@@ -167,4 +169,4 @@
 
 #include <MessageCNCLib.h>
 
-#define MESSAGE_MYCONTROL_VERSION	F(" ,iRobotCNC")
+#define MESSAGE_MYCONTROL_VERSION	F(", iRobotCNC")

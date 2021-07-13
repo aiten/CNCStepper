@@ -100,7 +100,9 @@ void CMotionControlBase::MoveAbs(const mm1000_t to[NUM_AXIS], feedrate_t feedrat
 	{
 		ToMachine(to_proj, to_m);
 
-		CStepper::GetInstance()->MoveAbs(to_m, GetFeedRate(to_proj, feedrate));
+ 		feedrate = GetFeedRate(to, feedrate);
+
+		CStepper::GetInstance()->MoveAbs(to_m, GetStepRate(to, to_m, feedrate));
 
 		if (CStepper::GetInstance()->IsError())
 		{
@@ -280,14 +282,21 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 
 /////////////////////////////////////////////////////////
 
-steprate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate_t feedrate) const
+steprate_t CMotionControlBase::GetStepRate(const mm1000_t to[NUM_AXIS], const udist_t to_m[NUM_AXIS], feedrate_t feedrate) const
+{
+	return FeedRateToStepRate(0, feedrate);
+}
+
+/////////////////////////////////////////////////////////
+
+feedrate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate_t feedrate) const
 {
 	// feedrate < 0 => no arc correction (allowable max for all axis)
 	// from current position
 
 #define AvoidOverrun 256
 
-	axis_t maxdistaxis = 0;
+	// axis_t maxdistaxis = 0;
 
 	if (feedrate >= 0)
 	{
@@ -307,7 +316,7 @@ steprate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate
 				axiscount++;
 				if (dist > maxdist)
 				{
-					maxdistaxis = x;
+					// maxdistaxis = x;
 					maxdist     = dist;
 				}
 
@@ -352,7 +361,7 @@ steprate_t CMotionControlBase::GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate
 		}
 	}
 
-	return FeedRateToStepRate(maxdistaxis, feedrate);
+	return feedrate;
 }
 
 /////////////////////////////////////////////////////////
@@ -391,7 +400,7 @@ feedrate_t CMotionControlBase::GetMaxFeedRate(axis_t axis, feedrate_t feedRate)
 	steprate_t maxStepRate = CStepper::GetInstance()->GetMaxSpeed(axis);
 	feedrate_t maxFeedRate = StepRateToFeedRate(axis, maxStepRate);
 
-	return min(feedRate,maxFeedRate);
+	return min(feedRate, maxFeedRate);
 }
 
 ////////////////////////////////////////////////////////

@@ -43,6 +43,8 @@ protected:
 	virtual void TransformFromMachinePosition(const udist_t src[NUM_AXIS], mm1000_t dest[NUM_AXIS]) override;
 	virtual bool TransformPosition(const mm1000_t           src[NUM_AXIS], mm1000_t dest[NUM_AXIS]) override;
 
+	steprate_t GetStepRate(const mm1000_t to[NUM_AXIS], const udist_t to_m[NUM_AXIS], feedrate_t feedrate) const override;
+
 private:
 
 	static bool ToAngle(const mm1000_t pos[NUM_AXIS], float      angle[NUM_AXIS]);

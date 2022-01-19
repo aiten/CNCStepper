@@ -10,10 +10,10 @@
 
   <PropertyGroup Label="Custom Variables">
 
-    <TargetFrameworkForProject>net5.0</TargetFrameworkForProject>
-    <TargetFrameworkForApp>net5.0</TargetFrameworkForApp>
-    <TargetFrameworkForUnitTest>net5.0</TargetFrameworkForUnitTest>
-    <TargetFrameworkForWpf>net5.0-windows</TargetFrameworkForWpf>
+    <TargetFrameworkForProject>net6.0</TargetFrameworkForProject>
+    <TargetFrameworkForApp>net6.0</TargetFrameworkForApp>
+    <TargetFrameworkForUnitTest>net6.0</TargetFrameworkForUnitTest>
+    <TargetFrameworkForWpf>net6.0-windows</TargetFrameworkForWpf>
 
   </PropertyGroup>
 

@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31321.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateThermistorLookupBeta", "CreateThermistorLookupBeta\CreateThermistorLookupBeta.csproj", "{854DFACE-7D62-4543-81A4-E02986D5E282}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreateThermistorLookupBeta", "CreateThermistorLookupBeta\CreateThermistorLookupBeta.csproj", "{854DFACE-7D62-4543-81A4-E02986D5E282}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCD12864Emulator", "LCD12864Emulator\LCD12864Emulator.csproj", "{44A2B89E-4B84-40D4-9B16-9628367BB295}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeedChart", "SpeedChart\SpeedChart.csproj", "{FF575F6A-27ED-4ADC-912A-823191111F3A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solutionfolder", "Solutionfolder", "{0BFF82B2-86FB-4D44-A801-AB0284C43FF8}"
+	ProjectSection(SolutionItems) = preProject
+		..\Directory.Build.props = ..\Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

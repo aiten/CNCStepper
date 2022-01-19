@@ -110,6 +110,14 @@ void CMyControl::Init()
 
 ////////////////////////////////////////////////////////////
 
+void CMyControl::PrintVersion()
+{
+	super::PrintVersion();
+	StepperSerial.print(MESSAGE_MYCONTROL_VERSION);
+}
+
+////////////////////////////////////////////////////////////
+
 void CMyControl::IOControl(uint8_t tool, uint16_t level)
 {
 	switch (tool)

@@ -48,7 +48,7 @@ protected:
 	virtual void GoToReference() override;
 
 	virtual void PrintVersion() override;
-
+	
 private:
 
 	static const CConfigEeprom::SCNCEeprom _eepromFlash;

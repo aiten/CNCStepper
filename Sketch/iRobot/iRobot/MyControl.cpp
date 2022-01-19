@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////
 
 #include <stdio.h>
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <Arduino.h>
@@ -80,6 +79,14 @@ const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 
 ////////////////////////////////////////////////////////////
 
+void CMyControl::PrintVersion()
+{
+	super::PrintVersion();
+	StepperSerial.print(MESSAGE_MYCONTROL_VERSION);
+}
+
+////////////////////////////////////////////////////////////
+
 void CMyControl::Init()
 {
 	CSingleton<CConfigEeprom>::GetInstance()->Init(sizeof(CConfigEeprom::SCNCEeprom), &_eepromFlash, EPROM_SIGNATURE);
@@ -87,8 +94,6 @@ void CMyControl::Init()
 #ifdef DISABLELEDBLINK
 	DisableBlinkLed();
 #endif
-
-	StepperSerial.println(MESSAGE_MYCONTROL_VERSION);
 
 	super::Init();
 
@@ -109,7 +114,7 @@ void CMyControl::Init()
 	CStepper::GetInstance()->SetLimitMax(A_AXIS, MAX_LIMIT);
 
 	CStepper::GetInstance()->SetDefaultMaxSpeed(CNC_MAXSPEED, CNC_ACC, CNC_DEC);
-	CGCodeParserDefault::InitAndSetFeedRate(-STEPRATETOFEEDRATE(GO_DEFAULT_STEPRATE), G1_DEFAULT_FEEDPRATE, STEPRATETOFEEDRATE(G1_DEFAULT_MAXSTEPRATE));
+	CGCodeParserDefault::InitAndSetFeedRate(-G0_DEFAULT_FEEDPRATE, G1_DEFAULT_FEEDPRATE, G1_DEFAULT_MAXFEEDPRATE);
 
 #ifdef MYUSE_LCD
 	InitSD(SD_ENABLE_PIN);

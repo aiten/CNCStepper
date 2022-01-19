@@ -165,9 +165,40 @@ bool CMyMotionControl::TransformPosition(const mm1000_t src[NUM_AXIS], mm1000_t 
 	AdjustToAngle(angle);
 
 	for (axis_t i = 0; i < SEGMENTCOUNT; i++)
-		dest[i]   = ToMs(angle[i], X_AXIS);
+	{
+		dest[i] = ToMs(angle[i], X_AXIS);
+	}
 
 	return true;
+}
+
+/////////////////////////////////////////////////////////
+
+steprate_t CMyMotionControl::GetStepRate(const mm1000_t to[NUM_AXIS], const udist_t to_m[NUM_AXIS], feedrate_t feedrate) const
+{
+	mm1000_t max_to=0;
+	udist_t max_to_m = 0;
+
+	for (axis_t x = 0; x < NUM_AXIS; x++)
+	{
+		mm1000_t dist = GetPosition(x);
+		dist = to[x] > dist ? (to[x] - dist) : (dist - to[x]);
+
+		if (dist > max_to)
+		{
+			max_to = dist;
+		}
+
+		udist_t dist_m = CStepper::GetInstance()->GetPosition(x);
+		dist_m = to_m[x] > dist_m ? (to_m[x] - dist_m) : (dist_m - to_m[x]);
+
+		if (dist_m > max_to_m)
+		{
+			max_to_m = dist_m;
+		}
+	}
+
+	return FeedRateToStepRate(0, (float(feedrate) * float(max_to_m)) / float(max_to));
 }
 
 /////////////////////////////////////////////////////////
@@ -312,7 +343,7 @@ void CMyMotionControl::MoveAngleLog(const mm1000_t dest[NUM_AXIS])
 	mm1000_t to[NUM_AXIS];
 	memcpy(to, _current, sizeof(_current));
 
-	for (i                         = 0; i < SEGMENTCOUNT; i++)
+	for (i = 0; i < SEGMENTCOUNT; i++)
 		if (dest[i] != 0) angle[i] = ToAngleRAD(dest[i]);
 
 	FromAngle(angle, to);
@@ -376,7 +407,6 @@ void CMyMotionControl::UnitTest()
 	Test(0, -200000, Hmm, true);		// max dist
 	Test(-1000, -200000, Hmm, true);	// max dist
 
-
 	Test(mm1000_t(SEGMENT1 + SEGMENT2 + SEGMENT3), 0, Hmm, true);				// max dist
 	Test(mm1000_t(SEGMENT2 + SEGMENT3), 0, mm1000_t(SEGMENT1) + Hmm, true);		// max height
 
@@ -420,8 +450,8 @@ void CMyMotionControl::UnitTest()
 	Test(300000, 150000, 200000, true);
 }
 
-inline float ToRAD(float             a) { return (a * 180.0f / MY_PI); }
-inline float ToMM(mm1000_t           a) { return (a / 1000.0f); }
+inline float ToRAD(float a) { return (a * 180.0f / MY_PI); }
+inline float ToMM(mm1000_t a) { return (a / 1000.0f); }
 inline bool  CompareMaxDiff(mm1000_t a, mm1000_t b, mm1000_t diff = 10) { return (abs(a - b) >= diff); }
 
 #define FORMAT_MM "%.0f:%.0f:%.0f"
@@ -457,8 +487,8 @@ bool CMyMotionControl::Test(mm1000_t src1, mm1000_t src2, mm1000_t src3, bool pr
 	FromAngle(a, dest);
 
 	bool isError = false;
-	for (i       = 0; i < SEGMENTCOUNT && !isError; i++)
-		isError  = CompareMaxDiff(src[i], dest[i]);
+	for (i      = 0; i < SEGMENTCOUNT && !isError; i++)
+		isError = CompareMaxDiff(src[i], dest[i]);
 
 	if (printOK || isError)
 	{

@@ -52,7 +52,7 @@ CPushButton btn4(BUTTON4, LOW);
 CPushButton btn5(BUTTON5, LOW);
 CPushButton btn6(BUTTON6, LOW);
 
-const int maxanalog = 32;
+const int maxanalog = 16;
 const int minanalog = 0;
 const int maxdist = (maxanalog - minanalog) / 2;
 int neutralanalogX = (maxanalog - minanalog) / 2;
@@ -97,7 +97,7 @@ unsigned long MoveTime(unsigned int distinmm1000, unsigned int mmPerMin)
 
 bool SendCommand(int mm1000X, int mm1000Y, int mm1000Z, int mm1000A, unsigned int mmPerMin)
 {
-  if (mm1000X==0 || mm1000Y==0 || mm1000Z==0 || mm1000A==0)
+  if (mm1000X!=0 || mm1000Y!=0 || mm1000Z!=0 || mm1000A!=0)
   {
     Serial.print(F("g91 g1"));
     if (mm1000X != 0)
@@ -312,4 +312,3 @@ void loop()
 }
 
 ////////////////////////////////////////////////////////
-

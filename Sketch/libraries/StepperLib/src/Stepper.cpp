@@ -69,6 +69,7 @@ void CStepper::InitMemVar()
 	_pod._idleLevel  = LevelOff;
 
 	_pod._speedOverride = SpeedOverride100P;
+	_pod._timeOutEnableAll = TIMEOUTSETIDLE;
 
 	//	SetUsual(28000);	=> reduce size => hard coded
 	SetDefaultMaxSpeed(28000, 350, 380);
@@ -121,7 +122,10 @@ void CStepper::Init()
 
 	GoIdle();
 
-	SetEnableAll(LevelOff);
+	for (uint8_t i=0;i<NUM_AXIS; i++)
+	{
+		SetEnableSafe(i, LevelOff, true);
+	}
 }
 
 ////////////////////////////////////////////////////////
@@ -292,11 +296,17 @@ void CStepper::EnqueueAndStartTimer(bool waitFinish)
 	}
 	else
 	{
-		_pod._timerLastCheckEnable = _pod._timerStartOrOnIdle = millis();
+#ifndef REDUCED_SIZE
+		_pod._timerLastCheckEnable =
+#endif
+			_pod._timerStartOrOnIdle = millis();
 
 		for (axis_t i = 0; i < NUM_AXIS; i++)
 		{
-			SetTimeoutAndEnable(i, _pod._timeOutEnable[i], CStepper::LevelMax, true);
+#ifndef REDUCED_SIZE
+			_pod._timeEnable[i] = GetEnableTimeout(i);
+#endif
+			SetEnableSafe(i, CStepper::LevelMax, true);
 		}
 
 		OnStart();
@@ -1035,15 +1045,16 @@ void CStepper::OptimizeMovementQueue(bool /* force */)
 void CStepper::OnIdle(uint32_t idleTime)
 {
 	CallEvent(OnIdleEvent);
-	if (idleTime > TIMEOUTSETIDLE)
+	if (_pod._timeOutEnableAll != 0 && idleTime > ((uint32_t) _pod._timeOutEnableAll) * 1024)   // 1024 ist faster than 1000
 	{
-		for (uint8_t x = 0; x < _numAxes; x++)
+		bool setEnable = false;
+		for (uint8_t i = 0; i < NUM_AXIS; i++)
 		{
-			if (GetEnable(x) != _pod._idleLevel)
-			{
-				SetEnableAll(_pod._idleLevel);
-				CallEvent(OnDisableEvent);
-			}
+			setEnable |= SetEnableSafe(i, _pod._idleLevel, true);
+		}
+		if (setEnable)
+		{
+			CallEvent(OnDisableEvent);
 		}
 	}
 }
@@ -1583,10 +1594,12 @@ void CStepper::FillStepBuffer()
 		}
 	}
 
+#ifndef REDUCED_SIZE
+
 	// check if turn off stepper
 
 	auto ms      = millis();
-	auto diffSec = uint8_t(((ms - _pod._timerLastCheckEnable) / 1024)); // div 1024 is faster as 1000
+	auto diffSec = uint8_t((ms - _pod._timerLastCheckEnable) / 1024); // div 1024 is faster as 1000
 
 	if (diffSec > 0)
 	{
@@ -1605,17 +1618,16 @@ void CStepper::FillStepBuffer()
 					_pod._timeEnable[i] -= diffSec;
 				}
 
-				SetTimeoutAndEnable(i, _pod._timeEnable[i], _pod._idleLevel, true);
-				/*
-								if (_pod._timeEnable[i] == 0 && GetEnable(i) != _pod._idleLevel)
-								{
-									CCriticalRegion criticalRegion;
-									SetEnable(i, _pod._idleLevel, true);
-								}
-				*/
+				if (_pod._timeEnable[i] == 0)
+				{
+					SetEnableSafe(i, _pod._idleLevel, true);
+				}
 			}
 		}
 	}
+
+#endif
+
 }
 
 ////////////////////////////////////////////////////////
@@ -1832,13 +1844,10 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 			{
 				if (_distance_[i] != 0)
 				{
-					stepper->SetTimeoutAndEnable(i, 0, CStepper::LevelMax, false);
-					/*
-										pStepper->_pod._timeEnable[i] = 0;
-										CCriticalRegion criticalRegion;
-										if (pStepper->GetEnable(i) != CStepper::LevelMax)
-											pStepper->SetEnable(i, CStepper::LevelMax, false);
-					*/
+#ifndef REDUCED_SIZE
+					stepper->_pod._timeEnable[i] = 0;
+#endif
+					stepper->SetEnableSafe(i, CStepper::LevelMax, false);
 				}
 			}
 
@@ -1866,13 +1875,15 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 		{
 			// End of move/wait/io
 
+#ifndef REDUCED_SIZE
 			for (i = 0; i < NUM_AXIS; i++)
 			{
 				if (_distance_[i] != 0)
 				{
-					stepper->_pod._timeEnable[i] = stepper->_pod._timeOutEnable[i];
+					stepper->_pod._timeEnable[i] = stepper->GetEnableTimeout(i);
 				}
 			}
+#endif
 
 			_state = StateDone;
 			return true;
@@ -2057,16 +2068,6 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 	while (continues);
 
 	return true;
-}
-
-////////////////////////////////////////////////////////
-
-void CStepper::SetEnableAll(uint8_t level)
-{
-	for (axis_t i = 0; i < NUM_AXIS; ++i)
-	{
-		SetEnable(i, level, true);
-	}
 }
 
 ////////////////////////////////////////////////////////
@@ -2544,14 +2545,15 @@ steprate_t CStepper::TimerToSpeed(timer_t timer) const
 
 ////////////////////////////////////////////////////////
 
-void CStepper::SetTimeoutAndEnable(axis_t i, uint8_t timeOut, uint8_t level, bool force)
+bool CStepper::SetEnableSafe(axis_t i, uint8_t level, bool force)
 {
-	_pod._timeEnable[i] = timeOut;
 	CCriticalRegion criticalRegion;
-	if (timeOut == 0 && GetEnable(i) != level)
+	if (GetEnable(i) != level)
 	{
 		SetEnable(i, level, force);
+		return true;
 	}
+	return false;
 }
 
 ////////////////////////////////////////////////////////

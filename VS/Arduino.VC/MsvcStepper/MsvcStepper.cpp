@@ -75,7 +75,7 @@ void CMsvcStepper::DoISR()
 
 void CMsvcStepper::HandleIdle()
 {
-	if (IsBusy())
+	// if (IsBusy()) => timer is running on idle
 	{
 		DoISR();
 	}

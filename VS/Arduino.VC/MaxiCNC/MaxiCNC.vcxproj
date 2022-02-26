@@ -111,6 +111,11 @@
   <ItemGroup>
     <None Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MaxiCNC.ino" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StepperSystem\StepperSystem.vcxproj">
+      <Project>{65f3ea50-71b8-4573-8d35-786d97fdfa91}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

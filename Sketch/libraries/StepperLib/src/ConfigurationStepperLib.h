@@ -59,7 +59,7 @@ typedef FLSTR error_t;
 #define REFERENCESTABLETIME	2						// time in ms for reference must not change (in Reference move) => signal bounce
 
 #define IDLETIMER1VALUE		TIMER1VALUE(31)			// Idle timer value (stepper timer not moving), must fit into 16 bit
-#define TIMEOUTSETIDLE		1000					// set level after 1000ms
+#define TIMEOUTSETIDLE		1			   			// set level after 1s
 
 #define WAITTIMER1VALUE		TIMER1VALUE(100)		// Idle timer value for "no step" movement
 
@@ -144,6 +144,8 @@ typedef unsigned long long uint64_t;
 #define REFERENCESTABLETIME	0
 
 #define MOVEMENTINFOSIZE	128
+
+//#define REDUCED_SIZE
 
 ////////////////////////////////////////////////////////
 

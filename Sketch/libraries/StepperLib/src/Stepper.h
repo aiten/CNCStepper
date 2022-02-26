@@ -204,8 +204,13 @@ public:
 	bool    CanQueueMovement() const { return !_movements._queue.IsFull(); }
 	uint8_t QueuedMovements() const { return _movements._queue.Count(); }
 
+	uint16_t GetEnableTimeout() const { return _pod._timeOutEnableAll; }
+	void    SetEnableTimeout(uint16_t sec) { _pod._timeOutEnableAll = sec; }
+
+#ifndef REDUCED_SIZE
 	uint8_t GetEnableTimeout(axis_t axis) const { return _pod._timeOutEnable[axis]; }
 	void    SetEnableTimeout(axis_t axis, uint8_t sec) { _pod._timeOutEnable[axis] = sec; }
+#endif
 
 	void SetDirection(axisArray_t direction) { _pod._invertDirection = direction; }
 
@@ -311,7 +316,6 @@ public:
 	virtual uint8_t GetReferenceValue(uint8_t referenceId) = 0;
 	bool            IsReferenceTest(uint8_t   referenceId) { return GetReferenceValue(referenceId) == _pod._referenceHitValue[referenceId]; }
 
-	void            SetEnableAll(uint8_t level);				// level 0-255
 	virtual void    SetEnable(axis_t     axis, uint8_t level, bool force) = 0;
 	virtual uint8_t GetEnable(axis_t     axis) = 0;
 
@@ -323,7 +327,7 @@ public:
 
 private:
 
-	void SetTimeoutAndEnable(axis_t i, uint8_t timeout, uint8_t level, bool force);
+	bool SetEnableSafe(axis_t i, uint8_t level, bool force);
 
 	void QueueMove(const mdist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], timer_t timerMax, uint8_t stepMult);
 	void QueueWait(const mdist_t dist, timer_t              timerMax, bool                 checkWaitConditional);
@@ -429,7 +433,9 @@ protected:
 		mdist_t _backlash[NUM_AXIS];						// backlash of each axis (signed mdist_t/2)
 
 		uint32_t _timerStartOrOnIdle;						// timerValue if library start move or goes to Idle
+#ifndef REDUCED_SIZE
 		uint32_t _timerLastCheckEnable;						// timerValue
+#endif
 
 		uint8_t                             _idleLevel;											// level if idle (0..100)
 		volatile EnumAsByte(ESpeedOverride) _speedOverride;		// Speed override, 128 => 100% (change in irq possible)
@@ -440,8 +446,12 @@ protected:
 		error_t _error;
 		error_t _fatalError;
 
+#ifndef REDUCED_SIZE
 		uint8_t _timeOutEnable[NUM_AXIS];					// enableTimeout in sec if no step (0.. disable, always enabled)
-		uint8_t _timeEnable[NUM_AXIS];						// 0: active, do not turn off, else time to turn off
+		uint8_t _timeEnable[NUM_AXIS];						// 0: active(during move), do not turn off, else time to turn off
+#endif
+
+		uint16_t _timeOutEnableAll;							// timeout for enable/disable all steppers (after move)
 
 #ifdef USESLIP
 		unsigned int _slipSum[NUM_AXIS];

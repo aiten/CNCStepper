@@ -124,9 +124,9 @@ public:
 		memset(&_current, 0, sizeof(_current));
 	}
 
-	steprate_t CalcStepRate(const mm1000_t to[NUM_AXIS], feedrate_t feedrate) const
+	feedrate_t CalcFeedRate(const mm1000_t to[NUM_AXIS], feedrate_t feedrate) const
 	{
-		return GetStepRate(to, nullptr, feedrate);
+		return GetFeedRate(to, feedrate);
 	}
 	
 #endif

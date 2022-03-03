@@ -268,6 +268,7 @@ private:
 	void M08Command();		// Coolant on (flood)
 	void M10Command();		// vacuum on
 	void M11Command();		// vacuum off
+	void M31Command();      // Print time since start
 	void M110Command();
 	void M111Command();		// Set debug level
 	void M114Command();		// Report Position

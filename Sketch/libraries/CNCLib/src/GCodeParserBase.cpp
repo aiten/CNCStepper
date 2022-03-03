@@ -304,6 +304,13 @@ void CGCodeParserBase::Wait(uint32_t ms)
 
 ////////////////////////////////////////////////////////////
 
+void CGCodeParserBase::WaitClock(uint32_t clock)
+{
+	CStepper::GetInstance()->WaitClock(clock+_modalState.Clock);
+}
+
+////////////////////////////////////////////////////////////
+
 void CGCodeParserBase::Sync()
 {
 	CStepper::GetInstance()->WaitBusy();
@@ -452,7 +459,7 @@ bool CGCodeParserBase::GCommand(uint8_t gcode)
 		case 91: G91Command();	return true;
 		case 92: G92Command();	return true;
 		default: break;
-			// @formatter:on — enable formatter after this line
+		// @formatter:on — enable formatter after this line
 	}
 	return false;
 }
@@ -476,11 +483,13 @@ bool CGCodeParserBase::MCommand(mcode_t mcode)
 		case 7: M07Command();	return true;
 		case 9: M09Command();	return true;
 
+		case 75: M75Command();	return true;
+
 		// probe config
 		case 100: _modalState.ProbeOnValue = false;	return true;
 		case 101: _modalState.ProbeOnValue = true;	return true;
 		default: break;
-			// @formatter:on — enable formatter after this line
+		// @formatter:on — enable formatter after this line
 	}
 	return false;
 }
@@ -733,7 +742,6 @@ void CGCodeParserBase::G0001Command(bool isG00)
 	// g0 x10 F  => g0 with feedrate (not CutMove)
 	// g0 x10 F1 => error
 
-
 	_modalState.LastCommand = isG00 ? &CGCodeParserBase::G00Command : &CGCodeParserBase::G01Command;
 	bool useG0Feed          = isG00;
 
@@ -879,7 +887,7 @@ void CGCodeParserBase::G0203Command(bool isG02)
 
 ////////////////////////////////////////////////////////////
 
-uint32_t CGCodeParserBase::GetDweel()
+uint32_t CGCodeParserBase::GetDweel(bool defaultIsMs)
 {
 	const char* current = _reader->GetBuffer();
 	uint32_t    dweelms = GetUint32OrParam();
@@ -890,7 +898,26 @@ uint32_t CGCodeParserBase::GetDweel()
 		_reader->ResetBuffer(current);
 		dweelms = GetInt32Scale(0, 1000000, 3, 255);
 	}
+	else if (!defaultIsMs)
+	{
+		dweelms *= 1000;
+	}
+
 	return dweelms;
+}
+
+////////////////////////////////////////////////////////////
+
+void CGCodeParserBase::SetClock()
+{
+	_modalState.Clock = millis();
+}
+
+////////////////////////////////////////////////////////////
+
+uint32_t CGCodeParserBase::GetClock()
+{
+	return millis() - _modalState.Clock;
 }
 
 ////////////////////////////////////////////////////////////
@@ -899,10 +926,12 @@ void CGCodeParserBase::G04Command()
 {
 	uint32_t dweelms = 0;
 
-	if (_reader->SkipSpacesToUpper() == 'P')
+	char ch = _reader->SkipSpacesToUpper();
+
+	if (ch == 'P' || ch == 'S' || ch == 'T')
 	{
-		_reader->GetNextChar();
-		dweelms = GetDweel();
+		_reader->GetNextCharSkipScaces();
+		dweelms = GetDweel(ch != 'S');
 	}
 
 #ifndef REDUCED_SIZE
@@ -914,7 +943,14 @@ void CGCodeParserBase::G04Command()
 
 #endif
 
-	Wait(dweelms);
+	if (ch == 'T')
+	{
+		WaitClock(dweelms);
+	}
+	else
+	{
+		Wait(dweelms);
+	}
 }
 
 ////////////////////////////////////////////////////////////

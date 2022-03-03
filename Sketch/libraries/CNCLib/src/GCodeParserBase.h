@@ -49,17 +49,15 @@ typedef uint8_t gcode_t;
 class CGCodeParserBase : public CParser
 {
 private:
-
 	typedef CParser super;
 
 public:
-
 	CGCodeParserBase(CStreamReader* reader, Stream* output) : super(reader, output) { };
 
-	static void     SetG0FeedRate(feedrate_t    feedrate) { _modalState.G0FeedRate    = feedrate; }
-	static void     SetG1FeedRate(feedrate_t    feedrate) { _modalState.G1FeedRate    = feedrate; }
+	static void     SetG0FeedRate(feedrate_t feedrate) { _modalState.G0FeedRate = feedrate; }
+	static void     SetG1FeedRate(feedrate_t feedrate) { _modalState.G1FeedRate = feedrate; }
 	static void     SetG1MaxFeedRate(feedrate_t feedrate) { _modalState.G1MaxFeedRate = feedrate; }
-	static mm1000_t GetG92PosPreset(axis_t      axis) { return _modalState.G92Pospreset[axis]; }
+	static mm1000_t GetG92PosPreset(axis_t axis) { return _modalState.G92Pospreset[axis]; }
 
 	static feedrate_t GetG0FeedRate() { return _modalState.G0FeedRate; }
 	static feedrate_t GetG1FeedRate() { return _modalState.G1FeedRate; }
@@ -95,25 +93,23 @@ public:
 	}
 
 protected:
-
 	virtual void Parse() override;
 	virtual bool InitParse() override;
 	virtual void CleanupParse() override;
 
 	virtual bool GCommand(gcode_t gcode);
 	virtual bool MCommand(mcode_t mcode);
-	virtual bool Command(char     ch);
+	virtual bool Command(char ch);
 
 	virtual bool ParseLineNumber();
 	virtual char SkipSpacesOrComment() override;
 
 	virtual mm1000_t CalcAllPreset(axis_t axis);
-	virtual void     CommentMessage(char* ) { };
+	virtual void     CommentMessage(char*) { };
 
 	bool IsCommentStart(char);
 
 protected:
-
 	typedef void (CGCodeParserBase::*LastCommandCB)();
 
 	////////////////////////////////////////////////////////
@@ -155,6 +151,8 @@ protected:
 
 		bool ProbeOnValue;
 		bool Dummy;
+
+		uint32_t Clock;					// clock start time
 
 		void Init()
 		{
@@ -221,11 +219,11 @@ protected:
 
 		uint8_t GetIJK() const { return bitfield.all & 7; }
 
-		SAxisMove(bool getcurrentPosition)
+		SAxisMove(bool getCurrentPosition)
 		{
 			axes         = 0;
 			bitfield.all = 0;
-			if (getcurrentPosition)
+			if (getCurrentPosition)
 			{
 				CMotionControlBase::GetInstance()->GetPositions(newpos);
 			}
@@ -241,15 +239,16 @@ protected:
 
 	////////////////////////////////////////////////////////
 
-	void Sync();											// WaitBusy, sync movement with realtime
+	void Sync();									// WaitBusy, sync movement with realtime
 	void Wait(uint32_t ms);							// add "wait" in movement queue
+	void WaitClock(uint32_t clock);					// "wait" until this clock time (see Clock in stepper.h)
 	void SkipCommentNested();
 
 	void ConstantVelocity();
 
 	virtual bool GetParamOrExpression(mm1000_t*, bool) { return false; };
-	mm1000_t     ParseCoordinate(bool          convertUnits);
-	mm1000_t     ParseCoordinateAxis(axis_t    axis);
+	mm1000_t     ParseCoordinate(bool convertUnits);
+	mm1000_t     ParseCoordinateAxis(axis_t axis);
 
 	uint32_t GetUint32OrParam(uint32_t max);
 	uint32_t GetUint32OrParam() { return GetUint32OrParam(0xffffffffl); };
@@ -260,8 +259,8 @@ protected:
 	//mm1000_t GetRelativePosition(axis_t axis)				{ return GetRelativePosition(CMotionControlBase::GetInstance()->GetPosition(axis), axis); }
 
 	bool   CheckAxisSpecified(axis_t axis, uint8_t& axes);
-	axis_t CharToAxis(char           axis);
-	axis_t CharToAxisOffset(char     axis);
+	axis_t CharToAxis(char axis);
+	axis_t CharToAxisOffset(char axis);
 
 	uint8_t GetSubCode();
 
@@ -277,11 +276,14 @@ protected:
 	void GetUint8(uint8_t& value, uint8_t& specified, uint8_t bit);
 
 	void GetFeedrate(SAxisMove& move);
-	void GetAxis(axis_t         axis, SAxisMove& move, EnumAsByte(EAxisPosType) posType);
+	void GetAxis(axis_t axis, SAxisMove& move, EnumAsByte(EAxisPosType) posType);
 
 	void InfoNotImplemented() { Info(MESSAGE_GCODE_NotImplemented); }
 
-	uint32_t GetDweel();
+	uint32_t GetDweel(bool defaultIsMs);
+
+	void SetClock();
+	uint32_t GetClock();
 
 	void GetRadius(SAxisMove& move, mm1000_t& radius);
 
@@ -290,15 +292,14 @@ protected:
 
 	void MoveStart(bool cutmove);
 
-	void G31Command(bool         probevalue);
+	void G31Command(bool probevalue);
 	bool ProbeCommand(SAxisMove& move, bool probevalue);
 
 	static void PrintInfo();
 	static void PrintPosition(mm1000_t (*GetPos)(axis_t axis));
-	static void PrintPosition(mm1000_t   pos);
+	static void PrintPosition(mm1000_t pos);
 
 private:
-
 	void GetIJK(axis_t axis, SAxisMove& move, mm1000_t offset[2]);
 
 	void GetG92Axis(axis_t axis, uint8_t& axes);
@@ -320,7 +321,7 @@ private:
 	void G28Command();
 	void G61Command() { _modalState.ConstantVelocity = false; }
 	void G64Command() { _modalState.ConstantVelocity = true; }
-	void G90Command() { _modalState.IsAbsolut        = true; }
+	void G90Command() { _modalState.IsAbsolut = true; }
 	void G91Command();
 	void G92Command();
 
@@ -333,6 +334,7 @@ private:
 
 	void M07Command() { CallIOControl(CControl::Coolant, CControl::CoolantOn); };
 	void M09Command() { CallIOControl(CControl::Coolant, CControl::CoolantOff); };
+	void M75Command() { SetClock(); };
 
 	/////////////////
 

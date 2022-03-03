@@ -254,7 +254,7 @@ param_t CGCodeParser::ParseParamNo()
 		return GetUInt16();
 	}
 
-	Error(MESSAGE_GCODE_NoValidVaribaleName);;
+	Error(MESSAGE_GCODE_NoValidVaribaleName);
 	return 0;
 }
 
@@ -503,6 +503,7 @@ void CGCodeParser::SetParamValue(param_t paramNo)
 		ExpectEndOfCommand();
 	}
 }
+
 ////////////////////////////////////////////////////////////
 
 const CGCodeParser::SParamInfo* CGCodeParser::FindParamInfo(uintptr_t param, bool (*check)(const SParamInfo*, uintptr_t))
@@ -622,7 +623,7 @@ const CGCodeParser::SParamInfo CGCodeParser::_paramDef[] PROGMEM =
 #endif
 
 	{ PARAMSTART_FEEDRATE, _feedrate, false, CGCodeParser::SParamInfo::IsMm1000 },
-	{ 0, nullptr, false , 0 }
+	{ 0, nullptr, false, 0 }
 };
 
 ////////////////////////////////////////////////////////////
@@ -683,7 +684,7 @@ void CGCodeParser::PrintParamValue(param_t paramNo)
 		StepperSerial.println(CMm1000::ToString(paramValue, tmp, 3));
 	}
 }
-	
+
 ////////////////////////////////////////////////////////////
 
 void CGCodeParser::PrintAllParam()
@@ -766,7 +767,7 @@ bool CGCodeParser::Command(char ch)
 			return true;
 		}
 
-			// case '-':
+		// case '-':
 		case '!':
 		case '&': CommandEscape();
 			return true;
@@ -809,7 +810,7 @@ bool CGCodeParser::GCommand(uint8_t gcode)
 		case 98: G98Command();	return true;
 		case 99: G99Command();	return true;
 		default: break;
-			// @formatter:on — enable formatter after this line
+		// @formatter:on — enable formatter after this line
 	}
 	return false;
 }
@@ -831,7 +832,8 @@ bool CGCodeParser::MCommand(mcode_t mcode)
 		case 8: M08Command();	return true;
 		case 10: M10Command();	return true;
 		case 11: M11Command();	return true;
-		case 110: M110Command();	return true;
+		case 31: M31Command();	return true;
+  		case 110: M110Command();	return true;
 		case 111: M111Command();	return true;
 		case 114: M114Command();	return true;
 		case 220: M220Command();	return true;
@@ -839,7 +841,7 @@ bool CGCodeParser::MCommand(mcode_t mcode)
 		case 300: M300Command();	return true;
 #endif
 		default: break;
-			// @formatter:on — enable formatter after this line
+		// @formatter:on — enable formatter after this line
 	}
 	return false;
 }
@@ -870,7 +872,7 @@ void CGCodeParser::ParameterCommand()
 		}
 		else
 		{
-			Error(MESSAGE_GCODE_NoValidVaribaleName);;
+			Error(MESSAGE_GCODE_NoValidVaribaleName);
 		}
 		return;
 	}
@@ -941,7 +943,7 @@ void CGCodeParser::GetP81(SAxisMove& move)
 	move.bitfield.bit.P = true;
 
 	_reader->GetNextChar();
-	_modalState.G8xP = GetDweel();
+	_modalState.G8xP = GetDweel(true);
 }
 
 ////////////////////////////////////////////////////////////
@@ -1262,6 +1264,7 @@ void CGCodeParser::GetAngleR(SAxisMove& move, mm1000_t& angle)
 	_reader->GetNextChar();
 	angle = ParseCoordinate(false);
 }
+
 ////////////////////////////////////////////////////////////
 
 void CGCodeParser::G68Command()
@@ -1848,6 +1851,13 @@ void CGCodeParser::M11Command()
 
 ////////////////////////////////////////////////////////////
 
+void CGCodeParser::M31Command()
+{
+	StepperSerial.println(GetClock());
+}
+
+////////////////////////////////////////////////////////////
+
 void CGCodeParser::M110Command()
 {
 	// set lineNumber
@@ -1867,6 +1877,7 @@ void CGCodeParser::M110Command()
 
 	super::_modalState.LineNumber = lineNumber;
 }
+
 ////////////////////////////////////////////////////////////
 
 void CGCodeParser::M111Command()

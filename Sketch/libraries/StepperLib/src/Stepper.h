@@ -90,7 +90,7 @@ public:
 		DumpDetails = 128									// detail of each option
 	};
 
-	typedef bool (*StepperEvent)(CStepper*     stepper, uintptr_t param, EnumAsByte(EStepperEvent) eventType, uintptr_t addInfo);
+	typedef bool (*StepperEvent)(CStepper* stepper, uintptr_t param, EnumAsByte(EStepperEvent) eventType, uintptr_t addInfo);
 	typedef bool (*TestContinueMove)(uintptr_t param);
 
 	struct SEvent
@@ -123,11 +123,9 @@ public:
 	/////////////////////
 
 protected:
-
 	CStepper();
 
 public:
-
 	virtual void Init();
 
 	bool    IsError() const { return _pod._error != nullptr; };
@@ -139,9 +137,9 @@ public:
 	void    ClearFatalError() { _pod._fatalError = nullptr; }
 
 
-	void SetMaxSpeed(axis_t axis, steprate_t vMax) { _pod._timerMax[axis]  = SpeedToTimer(vMax); }
-	void SetAcc(axis_t      axis, steprate_t v0Acc) { _pod._timerAcc[axis] = SpeedToTimer(v0Acc); }
-	void SetDec(axis_t      axis, steprate_t v0Dec) { _pod._timerDec[axis] = SpeedToTimer(v0Dec); }
+	void SetMaxSpeed(axis_t axis, steprate_t vMax) { _pod._timerMax[axis] = SpeedToTimer(vMax); }
+	void SetAcc(axis_t axis, steprate_t v0Acc) { _pod._timerAcc[axis] = SpeedToTimer(v0Acc); }
+	void SetDec(axis_t axis, steprate_t v0Dec) { _pod._timerDec[axis] = SpeedToTimer(v0Dec); }
 
 	void SetAccDec(axis_t axis, steprate_t v0Acc, steprate_t v0Dec)
 	{
@@ -182,7 +180,7 @@ public:
 	EnumAsByte(ESpeedOverride) GetSpeedOverride() const { return _pod._speedOverride; }
 
 	static uint8_t                    SpeedOverrideToP(EnumAsByte(ESpeedOverride) speed) { return RoundMulDivU8(uint8_t(speed), 100, SpeedOverride100P); }
-	static EnumAsByte(ESpeedOverride) PToSpeedOverride(uint8_t                    speedP) { return EnumAsByte(ESpeedOverride)(RoundMulDivU8(speedP, SpeedOverride100P, 100)); }
+	static EnumAsByte(ESpeedOverride) PToSpeedOverride(uint8_t speedP) { return EnumAsByte(ESpeedOverride)(RoundMulDivU8(speedP, SpeedOverride100P, 100)); }
 
 	void SetUsual(steprate_t vMax);
 
@@ -205,7 +203,7 @@ public:
 	uint8_t QueuedMovements() const { return _movements._queue.Count(); }
 
 	uint16_t GetEnableTimeout() const { return _pod._timeOutEnableAll; }
-	void    SetEnableTimeout(uint16_t sec) { _pod._timeOutEnableAll = sec; }
+	void     SetEnableTimeout(uint16_t sec) { _pod._timeOutEnableAll = sec; }
 
 #ifndef REDUCED_SIZE
 	uint8_t GetEnableTimeout(axis_t axis) const { return _pod._timeOutEnable[axis]; }
@@ -245,11 +243,11 @@ public:
 	void SetWaitConditional(bool conditionalWait) { _pod._isWaitConditional = conditionalWait; }
 
 	void SetReferenceHitValue(uint8_t referenceId, uint8_t valueHit) { _pod._referenceHitValue[referenceId] = valueHit; }
-	bool IsUseReference(uint8_t       referenceId) const { return _pod._referenceHitValue[referenceId] != 255; }
-	bool IsUseReference(axis_t        axis, bool toMin) const { return IsUseReference(ToReferenceId(axis, toMin)); }
+	bool IsUseReference(uint8_t referenceId) const { return _pod._referenceHitValue[referenceId] != 255; }
+	bool IsUseReference(axis_t axis, bool toMin) const { return IsUseReference(ToReferenceId(axis, toMin)); }
 
 	debugvirtual bool MoveReference(axis_t axis, uint8_t referenceId, bool toMin, steprate_t vMax, sdist_t maxDist = 0, sdist_t distToRef = 0, sdist_t distIfRefIsOn = 0);
-	void              SetPosition(axis_t   axis, udist_t pos);
+	void              SetPosition(axis_t axis, udist_t pos);
 
 	//////////////////////////////
 
@@ -259,11 +257,13 @@ public:
 	void MoveAbs(axis_t axis, udist_t d, steprate_t vMax = 0);
 	void MoveRel(axis_t axis, sdist_t d, steprate_t vMax = 0);
 
-	void MoveAbsEx(steprate_t         vMax, uint16_t axis, udist_t d, ...);	// repeat axis and d until axis not in 0 .. NUM_AXIS-1
-	void MoveRelEx(steprate_t         vMax, uint16_t axis, sdist_t d, ...);	// repeat axis and d until axis not in 0 .. NUM_AXIS-1
-	void Wait(unsigned int            sec100);								// unconditional wait
-	void WaitConditional(unsigned int sec100);								// conditional wait 
-	void IoControl(uint8_t            tool, uint16_t level);
+	void MoveAbsEx(steprate_t vMax, uint16_t axis, udist_t d, ...);	// repeat axis and d until axis not in 0 .. NUM_AXIS-1
+	void MoveRelEx(steprate_t vMax, uint16_t axis, sdist_t d, ...);	// repeat axis and d until axis not in 0 .. NUM_AXIS-1
+	void Wait(unsigned int sec100);									// wait specified time
+	void WaitConditional(unsigned int sec100);						// wait specified time with check condition
+	void WaitClock(uint32_t clock);									// wait until clock
+	void WaitClockConditional(uint32_t clock);						// wait until clock swith check condition
+	void IoControl(uint8_t tool, uint16_t level);
 
 	bool MoveUntil(TestContinueMove testContinue, uintptr_t param);
 
@@ -271,7 +271,7 @@ public:
 
 	const udist_t* GetPositions() const { return _pod._calculatedPos; }
 	void           GetPositions(udist_t pos[NUM_AXIS]) const { memcpy(pos, _pod._calculatedPos, sizeof(_pod._calculatedPos)); }
-	udist_t        GetPosition(axis_t   axis) const { return _pod._calculatedPos[axis]; }
+	udist_t        GetPosition(axis_t axis) const { return _pod._calculatedPos[axis]; }
 
 	void GetCurrentPositions(udist_t pos[NUM_AXIS]) const
 	{
@@ -291,15 +291,15 @@ public:
 #else
 	udist_t GetLimitMin(axis_t axis) const { return _pod._limitMin[axis]; }
 #endif
-	udist_t GetLimitSize(axis_t axis) const { return GetLimitMax(axis)- GetLimitMin(axis); }
+	udist_t GetLimitSize(axis_t axis) const { return GetLimitMax(axis) - GetLimitMin(axis); }
 
 	mdist_t     GetBacklash(axis_t axis) const { return _pod._backlash[axis]; }
 	axisArray_t GetLastDirection() const { return _pod._lastDirection; }		// check for backlash
 
 	steprate_t GetDefaultVmax() const { return TimerToSpeed(_pod._timerMaxDefault); }
-	steprate_t GetMaxSpeed(axis_t  axis) const { return min(GetDefaultVmax(),TimerToSpeed(_pod._timerMax[axis])); }
-	steprate_t GetAcc(axis_t       axis) const { return TimerToSpeed(_pod._timerAcc[axis]); }
-	steprate_t GetDec(axis_t       axis) const { return TimerToSpeed(_pod._timerDec[axis]); }
+	steprate_t GetMaxSpeed(axis_t axis) const { return min(GetDefaultVmax(), TimerToSpeed(_pod._timerMax[axis])); }
+	steprate_t GetAcc(axis_t axis) const { return TimerToSpeed(_pod._timerAcc[axis]); }
+	steprate_t GetDec(axis_t axis) const { return TimerToSpeed(_pod._timerDec[axis]); }
 	steprate_t GetJerkSpeed(axis_t axis) const { return _pod._maxJerkSpeed[axis]; }
 
 #ifndef REDUCED_SIZE
@@ -314,10 +314,10 @@ public:
 
 	virtual bool    IsAnyReference() = 0;
 	virtual uint8_t GetReferenceValue(uint8_t referenceId) = 0;
-	bool            IsReferenceTest(uint8_t   referenceId) { return GetReferenceValue(referenceId) == _pod._referenceHitValue[referenceId]; }
+	bool            IsReferenceTest(uint8_t referenceId) { return GetReferenceValue(referenceId) == _pod._referenceHitValue[referenceId]; }
 
-	virtual void    SetEnable(axis_t     axis, uint8_t level, bool force) = 0;
-	virtual uint8_t GetEnable(axis_t     axis) = 0;
+	virtual void    SetEnable(axis_t axis, uint8_t level, bool force) = 0;
+	virtual uint8_t GetEnable(axis_t axis) = 0;
 
 	static uint8_t ConvertLevel(bool enable) { return enable ? uint8_t(LevelMax) : uint8_t(LevelOff); }
 
@@ -326,11 +326,10 @@ public:
 	////////////////////////////////////////////////////////
 
 private:
-
 	bool SetEnableSafe(axis_t i, uint8_t level, bool force);
 
 	void QueueMove(const mdist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], timer_t timerMax, uint8_t stepMult);
-	void QueueWait(const mdist_t dist, timer_t              timerMax, bool                 checkWaitConditional);
+	void QueueWait(const mdist_t dist, timer_t timerMax, uint32_t clock, bool checkWaitConditional);
 
 	void EnqueueAndStartTimer(bool waitFinish);
 	void WaitUntilCanQueue();
@@ -358,19 +357,18 @@ private:
 	void SubTotalSteps();
 
 protected:
-
 	bool MoveUntil(uint8_t referenceId, bool referenceValue, uint16_t stableTime);
 
 	void QueueAndSplitStep(const udist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], steprate_t vMax);
 
-	debugvirtual void StepRequest(bool           isr);
+	debugvirtual void StepRequest(bool isr);
 	debugvirtual void OptimizeMovementQueue(bool force);
 
 	////////////////////////////////////////////////////////
 
-	timer_t GetTimer(mdist_t             steps, timer_t timerStart);										// calc "speed" after steps with constant a (from v0 = 0)
+	timer_t GetTimer(mdist_t steps, timer_t timerStart);										// calc "speed" after steps with constant a (from v0 = 0)
 	timer_t GetTimerAccelerating(mdist_t steps, timer_t timerV0, timer_t timerStart);			// calc "speed" after steps accelerating with constant a 
-	timer_t GetTimerDecelerating(mdist_t steps, timer_t timerV, timer_t  timerStart);			// calc "speed" after steps decelerating with constant a 
+	timer_t GetTimerDecelerating(mdist_t steps, timer_t timerV, timer_t timerStart);			// calc "speed" after steps decelerating with constant a 
 
 	static mdist_t GetAccSteps(timer_t timer, timer_t timerStart);										// from v=0
 	static mdist_t GetDecSteps(timer_t timer, timer_t timerStop) { return GetAccSteps(timer, timerStop); } // to v=0
@@ -380,16 +378,15 @@ protected:
 
 	static mdist_t GetSteps(timer_t timer1, timer_t timer2, timer_t timerStart, timer_t timerStop);		// from v1 to v2 (v1<v2 uses acc, dec otherwise)
 
-	uint32_t GetAccelerationFromTimer(mdist_t    timerV0);
+	uint32_t GetAccelerationFromTimer(mdist_t timerV0);
 	uint32_t GetAccelerationFromSpeed(steprate_t speedV0) { return GetAccelerationFromTimer(SpeedToTimer(speedV0)); }
 
 	timer_t    SpeedToTimer(steprate_t speed) const;
-	steprate_t TimerToSpeed(timer_t    timer) const;
+	steprate_t TimerToSpeed(timer_t timer) const;
 
 	static uint8_t GetStepMultiplier(timer_t timerMax);
 
 protected:
-
 	//////////////////////////////////////////
 	// often accessed members first => is faster
 	// even size of struct and 2byte alignment
@@ -515,9 +512,9 @@ protected:
 			mdist_t _nUpOffset;							// offset of n ramp calculation(acc) 
 			mdist_t _nDownOffset;						// offset of n ramp calculation(dec)
 
-			void RampUp(SMovement*   movement, timer_t timerRun, timer_t timerJunction);
+			void RampUp(SMovement* movement, timer_t timerRun, timer_t timerJunction);
 			void RampDown(SMovement* movement, timer_t timerJunction);
-			void RampRun(SMovement*  movement);
+			void RampRun(SMovement* movement);
 		};
 
 		union
@@ -539,9 +536,10 @@ protected:
 
 			struct SWait
 			{
-				timer_t _timer;
-				bool    _checkWaitConditional;					// wait only if Stepper.SetConditionalWait is set
-			}           _wait;
+				timer_t  _timer;
+				bool     _checkWaitConditional;					// wait only if Stepper.SetConditionalWait is set
+				uint32_t _endTime;								// wait until "clock" time
+			}            _wait;
 
 			struct SIoControl _io;
 		}                     _pod;
@@ -554,12 +552,12 @@ protected:
 		timer_t GetDownTimerAcc() const { return _pod._move._timerAcc; }
 		timer_t GetDownTimerDec() const { return _pod._move._timerDec; }
 
-		timer_t GetUpTimer(bool   acc) const { return acc ? GetUpTimerAcc() : GetUpTimerDec(); }
+		timer_t GetUpTimer(bool acc) const { return acc ? GetUpTimerAcc() : GetUpTimerDec(); }
 		timer_t GetDownTimer(bool acc) const { return acc ? GetDownTimerAcc() : GetDownTimerDec(); }
 
-		mdist_t GetDistance(axis_t       axis) const;
+		mdist_t GetDistance(axis_t axis) const;
 		uint8_t GetStepMultiplier(axis_t axis) const { return (_dirCount >> (axis * 4)) % 8; }
-		bool    GetDirectionUp(axis_t    axis) const { return ((_dirCount >> (axis * 4)) & 8) != 0; }
+		bool    GetDirectionUp(axis_t axis) const { return ((_dirCount >> (axis * 4)) & 8) != 0; }
 		uint8_t GetMaxStepMultiplier() const;
 
 		bool Ramp(SMovement* mvNext);
@@ -572,11 +570,9 @@ protected:
 		bool CalcNextSteps(bool continues);
 
 	private:
-
 		bool IsEndWait() const;									// immediately end wait 
 
 	public:
-
 		mdist_t GetSteps() const { return _steps; }
 
 		bool IsActiveIo() const { return _state == StateReadyIo; }								// Ready from Io
@@ -591,11 +587,11 @@ protected:
 		bool IsDownMove() const { return IsProcessingMove() && _state > StateRun; }				// Move in ramp dec state
 		bool IsFinished() const { return _state == StateDone; }									// Move finished 
 
-		bool IsSkipForOptimizing() const { return IsActiveIo(); }									// skip the entry when optimizing queue
+		bool IsSkipForOptimizing() const { return IsActiveIo(); }								// skip the entry when optimizing queue
 
-		void InitMove(CStepper*      stepper, SMovement* mvPrev, mdist_t steps, const mdist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], timer_t timerMax);
-		void InitWait(CStepper*      stepper, mdist_t    steps, timer_t  timer, bool          checkWaitConditional);
-		void InitIoControl(CStepper* stepper, uint8_t    tool, uint16_t  level);
+		void InitMove(CStepper* stepper, SMovement* mvPrev, mdist_t steps, const mdist_t dist[NUM_AXIS], const bool directionUp[NUM_AXIS], timer_t timerMax);
+		void InitWait(CStepper* stepper, mdist_t steps, timer_t timer, uint32_t clock, bool checkWaitConditional);
+		void InitIoControl(CStepper* stepper, uint8_t tool, uint16_t level);
 
 		void InitStop(SMovement* mvPrev, timer_t timer, timer_t decTimer);
 
@@ -646,7 +642,6 @@ protected:
 		bool CalcTimerDec(timer_t minTimer, mdist_t n, uint8_t cnt);
 
 	public:
-
 		void Dump(uint8_t options);
 	};
 
@@ -678,7 +673,6 @@ protected:
 	stepperstatic CRingBufferQueue<SStepBuffer, STEPBUFFERSIZE> _steps;
 
 public:
-
 #ifdef _MSC_VER
 	const char* MSCInfo;
 #endif
@@ -686,20 +680,18 @@ public:
 	//////////////////////////////////////////
 
 private:
-
 	SMovement* GetNextMovement(uint8_t idx);
 	SMovement* GetPrevMovement(uint8_t idx);
 
 
 protected:
-
-	debugvirtual void OnIdle(uint32_t              idleTime);		// called in ISR
+	debugvirtual void OnIdle(uint32_t idleTime);		// called in ISR
 	debugvirtual void OnWait(EnumAsByte(EWaitType) wait);			// wait for finish move or movementQueue full
 	debugvirtual void OnStart();									// startup of movement
 
-	debugvirtual void OnError(error_t   error);
+	debugvirtual void OnError(error_t error);
 	debugvirtual void OnWarning(error_t warning);
-	debugvirtual void OnInfo(error_t    info);
+	debugvirtual void OnInfo(error_t info);
 
 	void FatalError(error_t error) { _pod._fatalError = error; }
 
@@ -709,16 +701,15 @@ protected:
 		OnError(error);
 	}
 
-	void Info(error_t    info) { OnInfo(info); }
+	void Info(error_t info) { OnInfo(info); }
 	void Warning(error_t warning) { OnWarning(warning); }
 
 	void Error() NEVER_INLINE_AVR { Error(MESSAGE_UNKNOWNERROR); }
 	void FatalError() { FatalError(MESSAGE_UNKNOWNERROR); }
 
 protected:
-
 	bool         MoveAwayFromReference(axis_t axis, uint8_t referenceId, sdist_t dist, steprate_t vMax);
-	virtual void MoveAwayFromReference(axis_t axis, sdist_t dist, steprate_t     vMax) { MoveRel(axis, dist, vMax); };
+	virtual void MoveAwayFromReference(axis_t axis, sdist_t dist, steprate_t vMax) { MoveRel(axis, dist, vMax); };
 
 #ifdef _MSC_VER
 	virtual void StepBegin(const SStepBuffer* /* step */) { };
@@ -730,14 +721,12 @@ protected:
 	bool IsSameDirectionUp(axisArray_t directionUp) { return directionUp == _pod._lastDirectionUp; }
 
 private:
-
 	void InitMemVar();
 
 	////////////////////////////////////////////////////////
 	// HAL
 
 protected:
-
 	debugvirtual void InitTimer() { CHAL::InitTimer1OneShot(HandleInterrupt); }
 	debugvirtual void RemoveTimer() { CHAL::RemoveTimer1(); }
 
@@ -751,7 +740,6 @@ protected:
 	////////////////////////////////////////////////////////
 	// timer supports pin for step / dir (A4998)
 protected:
-
 	static uint8_t          _mySteps[NUM_AXIS];
 	static volatile uint8_t _setState;
 	static uint8_t          _myCnt;

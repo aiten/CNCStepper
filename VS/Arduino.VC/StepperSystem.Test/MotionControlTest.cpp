@@ -29,7 +29,6 @@ namespace StepperSystemTest
 	TEST_CLASS(CMotionControlTest)
 	{
 	public:
-
 		CMsvcStepper Stepper;
 
 		TEST_METHOD(MotionControlTest)
@@ -59,11 +58,11 @@ namespace StepperSystemTest
 			mm1000_t to2[NUM_AXIS] = { 1000, 2000, 0 };
 			mm1000_t to3[NUM_AXIS] = { 1000, 2000, 3000 };
 
-			Assert::AreEqual(long(1234), long(mc.CalcStepRate(to1, 1234 * 60)));
+			feedrate_t feedrate = 1234 * 60;
 
-			Assert::AreEqual(long(1103), long(mc.CalcStepRate(to2, 1234 * 60)));		// 2000/sqrt(1000*1000 + 2000*2000) * 1234
-
-			Assert::AreEqual(long(989), long(mc.CalcStepRate(to3, 1234 * 60)));
+			Assert::AreEqual(long(feedrate), long(mc.CalcFeedRate(to1, feedrate)));
+			Assert::AreEqual(long(66225), long(mc.CalcFeedRate(to2, feedrate)));		// 2000/sqrt(1000*1000 + 2000*2000) * 1234
+			Assert::AreEqual(long(59359), long(mc.CalcFeedRate(to3, feedrate)));
 		}
 
 		TEST_METHOD(FeedRateDistOverrunTest)
@@ -79,11 +78,11 @@ namespace StepperSystemTest
 			mm1000_t to2[] = { 100000, 20000, 0 };
 			mm1000_t to3[] = { 100000, 20000, 30000 };
 
-			Assert::AreEqual(long(1234), long(mc.CalcStepRate(to1, 1234 * 60)));
+			feedrate_t feedrate = 1234 * 60;
 
-			Assert::AreEqual(long(1209), long(mc.CalcStepRate(to2, 1234 * 60)));
-
-			Assert::AreEqual(long(1159), long(mc.CalcStepRate(to3, 1234 * 60)));
+			Assert::AreEqual(long(feedrate), long(mc.CalcFeedRate(to1, feedrate)));
+			Assert::AreEqual(long(72552), long(mc.CalcFeedRate(to2, feedrate)));
+			Assert::AreEqual(long(69580), long(mc.CalcFeedRate(to3, feedrate)));
 		}
 
 		TEST_METHOD(FeedRateOverrun16BitTest)
@@ -99,11 +98,11 @@ namespace StepperSystemTest
 			mm1000_t to2[] = { 100, 200, 0 };
 			mm1000_t to3[] = { 100, 200, 300 };
 
-			Assert::AreEqual(long(12345), long(mc.CalcStepRate(to1, 123456 * 60)));
+			feedrate_t feedrate = 123456 * 60;
 
-			Assert::AreEqual(long(11022), long(mc.CalcStepRate(to2, 123456 * 60)));
-
-			Assert::AreEqual(long(9902), long(mc.CalcStepRate(to3, 123456 * 60)));
+			Assert::AreEqual(long(feedrate), long(mc.CalcFeedRate(to1, 123456 * 60)));
+			Assert::AreEqual(long(6613714), long(mc.CalcFeedRate(to2, 123456 * 60)));
+			Assert::AreEqual(long(5941732), long(mc.CalcFeedRate(to3, 123456 * 60)));
 		}
 	};
 }

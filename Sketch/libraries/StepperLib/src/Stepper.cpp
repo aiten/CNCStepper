@@ -68,7 +68,7 @@ void CStepper::InitMemVar()
 	_pod._limitCheck = true;
 	_pod._idleLevel  = LevelOff;
 
-	_pod._speedOverride = SpeedOverride100P;
+	_pod._speedOverride    = SpeedOverride100P;
 	_pod._timeOutEnableAll = TIMEOUTSETIDLE;
 
 	//	SetUsual(28000);	=> reduce size => hard coded
@@ -122,7 +122,7 @@ void CStepper::Init()
 
 	GoIdle();
 
-	for (uint8_t i=0;i<NUM_AXIS; i++)
+	for (uint8_t i = 0; i < NUM_AXIS; i++)
 	{
 		SetEnableSafe(i, LevelOff, true);
 	}
@@ -202,7 +202,7 @@ void CStepper::QueueMove(const mdist_t dist[NUM_AXIS], const bool directionUp[NU
 
 			mdist_t backlashSteps = 0;
 			mask                  = 1;
-			for (uint8_t i        = 0; i < NUM_AXIS; i++)
+			for (uint8_t i = 0; i < NUM_AXIS; i++)
 			{
 				if ((_pod._lastDirection & directionMask & mask) != (direction & mask) && dist[i] && _pod._backlash[i])
 				{
@@ -246,10 +246,10 @@ void CStepper::QueueMove(const mdist_t dist[NUM_AXIS], const bool directionUp[NU
 
 ////////////////////////////////////////////////////////
 
-void CStepper::QueueWait(const mdist_t dist, timer_t timerMax, bool checkWaitConditional)
+void CStepper::QueueWait(const mdist_t dist, timer_t timerMax, uint32_t clock, bool checkWaitConditional)
 {
 	WaitUntilCanQueue();
-	_movements._queue.NextTail().InitWait(this, dist, timerMax, checkWaitConditional);
+	_movements._queue.NextTail().InitWait(this, dist, timerMax, clock, checkWaitConditional);
 
 	EnqueueAndStartTimer(true);
 }
@@ -546,7 +546,7 @@ void CStepper::SMovement::InitStop(SMovement* mvPrev, timer_t timer, timer_t dec
 
 ////////////////////////////////////////////////////////
 
-void CStepper::SMovement::InitWait(CStepper* stepper, mdist_t steps, timer_t timer, bool checkWaitConditional)
+void CStepper::SMovement::InitWait(CStepper* stepper, mdist_t steps, timer_t timer, uint32_t clock, bool checkWaitConditional)
 {
 	//this is no POD because of methods => *this = SMovement();		
 	memset(this, 0, sizeof(SMovement)); // init with 0
@@ -555,6 +555,7 @@ void CStepper::SMovement::InitWait(CStepper* stepper, mdist_t steps, timer_t tim
 	_steps                           = steps;
 	_pod._wait._timer                = timer;
 	_pod._wait._checkWaitConditional = checkWaitConditional;
+	_pod._wait._endTime              = clock;
 
 	_state = StateReadyWait;
 }
@@ -807,7 +808,7 @@ void CStepper::SMovement::AdjustJunctionSpeedH2T(SMovement* mvPrev, SMovement* m
 	if (!Ramp(mvNext))
 	{
 		// modify of ramp failed => do not modify _pod._move._timerEndPossible
-		_pod._move._timerEndPossible                                   = _pod._move._ramp._timerStop;
+		_pod._move._timerEndPossible = _pod._move._ramp._timerStop;
 		if (mvNext != nullptr) mvNext->_pod._move._timerJunctionToPrev = _pod._move._ramp._timerStop;
 	}
 }
@@ -916,7 +917,6 @@ void CStepper::SMovement::CalcMaxJunctionSpeed(SMovement* mvPrev)
 			{
 				v2 = steprate_t(RoundMulDivUInt(v2, d2, s2));
 			}
-
 
 			int32_t vDiff;
 
@@ -1045,7 +1045,7 @@ void CStepper::OptimizeMovementQueue(bool /* force */)
 void CStepper::OnIdle(uint32_t idleTime)
 {
 	CallEvent(OnIdleEvent);
-	if (_pod._timeOutEnableAll != 0 && idleTime > ((uint32_t) _pod._timeOutEnableAll) * 1024)   // 1024 ist faster than 1000
+	if (_pod._timeOutEnableAll != 0 && idleTime > ((uint32_t)_pod._timeOutEnableAll) * 1024)   // 1024 ist faster than 1000
 	{
 		bool setEnable = false;
 		for (uint8_t i = 0; i < NUM_AXIS; i++)
@@ -1379,7 +1379,7 @@ void CStepper::PauseMove()
 			if (canInsertAfter)
 			{
 				WaitUntilCanQueue();
-				_movements._queue.InsertTail(_movements._queue.NextIndex(idx))->InitWait(this, 0xffff, WAITTIMER1VALUE, true);
+				_movements._queue.InsertTail(_movements._queue.NextIndex(idx))->InitWait(this, 0xffff, WAITTIMER1VALUE, 0, true);
 				return;
 			}
 		}
@@ -1387,7 +1387,7 @@ void CStepper::PauseMove()
 #endif
 
 		// just queue a stop at end of queue
-		QueueWait(0xffff, WAITTIMER1VALUE, true);
+		QueueWait(0xffff, WAITTIMER1VALUE, 0, true);
 	}
 }
 
@@ -1627,7 +1627,6 @@ void CStepper::FillStepBuffer()
 	}
 
 #endif
-
 }
 
 ////////////////////////////////////////////////////////
@@ -1807,6 +1806,13 @@ bool CStepper::SMovement::IsEndWait() const
 	{
 		// wait only if Stepper is "checkWaitConditional"
 		if (!_stepper->IsPauseMove() && !_stepper->IsWaitConditional())
+		{
+			return true;
+		}
+	}
+	if (_pod._wait._endTime != 0)
+	{
+		if (millis() >= _pod._wait._endTime)
 		{
 			return true;
 		}
@@ -2360,14 +2366,21 @@ bool CStepper::IsAnyReference()
 
 void CStepper::Wait(unsigned int sec100)
 {
-	QueueWait(mdist_t(sec100), WAITTIMER1VALUE, false);
+	QueueWait(mdist_t(sec100), WAITTIMER1VALUE, 0, false);
 }
 
 ////////////////////////////////////////////////////////
 
 void CStepper::WaitConditional(unsigned int sec100)
 {
-	QueueWait(mdist_t(sec100), WAITTIMER1VALUE, true);
+	QueueWait(mdist_t(sec100), WAITTIMER1VALUE, 0, true);
+}
+
+////////////////////////////////////////////////////////
+
+void CStepper::WaitClock(uint32_t clock)
+{
+	QueueWait(0xffff, WAITTIMER1VALUE, clock, false);
 }
 
 ////////////////////////////////////////////////////////
@@ -2621,7 +2634,7 @@ void CStepper::Dump(uint8_t options)
 	{
 		uint8_t idxNoChange = _movements._queue.H2TInit();
 
-		i                = 0;
+		i = 0;
 		for (uint8_t idx = idxNoChange; _movements._queue.H2TTest(idx); idx = _movements._queue.H2TInc(idx))
 		{
 			_movements._queue.Buffer[idx].Dump(i++, options);
@@ -2645,27 +2658,36 @@ void CStepper::SMovement::Dump(uint8_t idx, uint8_t options)
 	DumpType<udist_t>(F("Steps"), _steps, false);
 	DumpType<udist_t>(F("State"), _state, false);
 
-	DumpType<DirCount_t>(F("DirCount"), _dirCount, false);
-	DumpType<DirCount_t>(F("LastDirCount"), _lastStepDirCount, false);
-	DumpArray<mdist_t, NUM_AXIS>(F("Dist"), _distance_, false);
-	DumpType<mdist_t>(F("UpSteps"), _pod._move._ramp._upSteps, false);
-	DumpType<mdist_t>(F("DownSteps"), _pod._move._ramp._downSteps, false);
-	DumpType<mdist_t>(F("DownStartAt"), _pod._move._ramp._downStartAt, false);
-	DumpType<mdist_t>(F("UpOffset"), _pod._move._ramp._nUpOffset, false);
-	DumpType<mdist_t>(F("DownOffset"), _pod._move._ramp._nDownOffset, false);
-
-	DumpType<timer_t>(F("tMax"), _pod._move._timerMax, false);
-	DumpType<timer_t>(F("tRun"), _pod._move._ramp._timerRun, false);
-	DumpType<timer_t>(F("tStart"), _pod._move._ramp._timerStart, false);
-	DumpType<timer_t>(F("tStop"), _pod._move._ramp._timerStop, false);
-	DumpType<timer_t>(F("tEndPossible"), _pod._move._timerEndPossible, false);
-	DumpType<timer_t>(F("tJunctionToPrev"), _pod._move._timerJunctionToPrev, false);
-	DumpType<timer_t>(F("tMaxJunction"), _pod._move._timerMaxJunction, false);
-
-	if (options & DumpDetails)
+    if (IsActiveWait())
 	{
-		DumpType<timer_t>(F("TimerAcc"), _pod._move._timerAcc, false);
-		DumpType<timer_t>(F("TimerDec"), _pod._move._timerDec, false);
+		DumpType<mdist_t>(F("Conditional"), _pod._wait._checkWaitConditional, false);
+		DumpType<mdist_t>(F("EndTime"), _pod._wait._endTime, false);
+	}
+	else
+	{
+		DumpType<DirCount_t>(F("DirCount"), _dirCount, false);
+		DumpType<DirCount_t>(F("LastDirCount"), _lastStepDirCount, false);
+		DumpArray<mdist_t, NUM_AXIS>(F("Dist"), _distance_, false);
+
+		DumpType<mdist_t>(F("UpSteps"), _pod._move._ramp._upSteps, false);
+		DumpType<mdist_t>(F("DownSteps"), _pod._move._ramp._downSteps, false);
+		DumpType<mdist_t>(F("DownStartAt"), _pod._move._ramp._downStartAt, false);
+		DumpType<mdist_t>(F("UpOffset"), _pod._move._ramp._nUpOffset, false);
+		DumpType<mdist_t>(F("DownOffset"), _pod._move._ramp._nDownOffset, false);
+
+		DumpType<timer_t>(F("tMax"), _pod._move._timerMax, false);
+		DumpType<timer_t>(F("tRun"), _pod._move._ramp._timerRun, false);
+		DumpType<timer_t>(F("tStart"), _pod._move._ramp._timerStart, false);
+		DumpType<timer_t>(F("tStop"), _pod._move._ramp._timerStop, false);
+		DumpType<timer_t>(F("tEndPossible"), _pod._move._timerEndPossible, false);
+		DumpType<timer_t>(F("tJunctionToPrev"), _pod._move._timerJunctionToPrev, false);
+		DumpType<timer_t>(F("tMaxJunction"), _pod._move._timerMaxJunction, false);
+
+		if (options & DumpDetails)
+		{
+			DumpType<timer_t>(F("TimerAcc"), _pod._move._timerAcc, false);
+			DumpType<timer_t>(F("TimerDec"), _pod._move._timerDec, false);
+		}
 	}
 
 	StepperSerial.println();

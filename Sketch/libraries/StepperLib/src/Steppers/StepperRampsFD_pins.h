@@ -24,6 +24,7 @@
 
 #undef  RAMPSFD_USE_A4998
 #define RAMPSFD_USE_DRV8825
+#undef  RAMPSFD_USE_TMC220X
 
 ////////////////////////////////////////////////////////
 

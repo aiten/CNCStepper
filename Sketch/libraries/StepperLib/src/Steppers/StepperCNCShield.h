@@ -102,11 +102,12 @@ protected:
 	////////////////////////////////////////////////////////
 
 #if defined(CNCLIB_USE_A4998)
-#define USE_A4998
-#else
-#undef USE_A4998
+#include "StepperStepDirDriverA4998.h"
+#elif defined(CNCLIB_USE_DRV8825)
+#include "StepperStepDirDriverDRV8825.h"
+#elif defined(CNCLIB_USE_TMC220X)
+#include "StepperStepDirDriverTMC220X.h"
 #endif
-#include "StepperA4998_DRV8825.h"
 
 	////////////////////////////////////////////////////////
 

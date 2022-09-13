@@ -157,11 +157,12 @@ protected:
 	////////////////////////////////////////////////////////
 
 #if defined(RAMPS14_USE_A4998)
-		#define USE_A4998
-#else
-#undef USE_A4998
+#include "StepperStepDirDriverA4998.h"
+#elif defined(RAMPS14_USE_DRV8825)
+#include "StepperStepDirDriverDRV8825.h"
+#elif defined(RAMPS14_USE_TMC220X)
+#include "StepperStepDirDriverTMC220X.h"
 #endif
-#include "StepperA4998_DRV8825.h"
 
 	////////////////////////////////////////////////////////
 
@@ -294,10 +295,7 @@ protected:
 		if (!isSameDirection)
 		{
 			SetDirection(directionUp);
-			if (A4998DRV8825_CHANGEDIRECTIONMICROS)
-			{
-				CHAL::DelayMicroseconds(A4998DRV8825_CHANGEDIRECTIONMICROS);
-			}
+			DelayChangeDirection();
 		}
 
 		for (uint8_t cnt = 0;;)

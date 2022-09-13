@@ -26,6 +26,7 @@
 
 #undef  RAMPS14_USE_A4998
 #define RAMPS14_USE_DRV8825
+#undef  RAMPS14_USE_TMC220X
 
 ////////////////////////////////////////////////////////
 

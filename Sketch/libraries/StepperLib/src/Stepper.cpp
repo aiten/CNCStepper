@@ -2658,7 +2658,7 @@ void CStepper::SMovement::Dump(uint8_t idx, uint8_t options)
 	DumpType<udist_t>(F("Steps"), _steps, false);
 	DumpType<udist_t>(F("State"), _state, false);
 
-    if (IsActiveWait())
+	if (IsActiveWait())
 	{
 		DumpType<mdist_t>(F("Conditional"), _pod._wait._checkWaitConditional, false);
 		DumpType<mdist_t>(F("EndTime"), _pod._wait._endTime, false);

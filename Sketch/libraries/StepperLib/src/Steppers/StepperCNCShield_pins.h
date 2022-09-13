@@ -28,6 +28,7 @@
 
 #undef  CNCLIB_USE_A4998
 #define CNCLIB_USE_DRV8825
+#undef  CNCLIB_USE_TMC220X
 
 ////////////////////////////////////////////////////////
 

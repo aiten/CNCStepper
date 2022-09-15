@@ -22,8 +22,8 @@
 #define HARDWARETYPE_CUSTOM			99	// custom
 
 #define HARDWARETYPE HARDWARETYPE_PROXXONMF70
-//#define HARDWARETYPE HARDWARETYPE_MYCNC
-//#define HARDWARETYPE HARDWARETYPE_KK1000S
+//#define HARDWARETYPE HARDWARETYPE_MYCNC        // u8g2 only with Version 2.31.2 => HARDWARETYPE_ does not work with newer version
+//#define HARDWARETYPE HARDWARETYPE_KK1000S    // u8g2 only with Version 2.24.3 => HARDWARETYPE_KK1000S does not work with newer version
 
 ////////////////////////////////////////////////////////
 

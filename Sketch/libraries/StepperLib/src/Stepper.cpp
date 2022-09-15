@@ -69,7 +69,7 @@ void CStepper::InitMemVar()
 	_pod._idleLevel  = LevelOff;
 
 	_pod._speedOverride    = SpeedOverride100P;
-	_pod._timeOutEnableAll = TIMEOUTSETIDLE;
+	_pod._timeOutEnableAll = TIMEOUTSETIDLE_DEFAULT;
 
 	//	SetUsual(28000);	=> reduce size => hard coded
 	SetDefaultMaxSpeed(28000, 350, 380);
@@ -1045,7 +1045,7 @@ void CStepper::OptimizeMovementQueue(bool /* force */)
 void CStepper::OnIdle(uint32_t idleTime)
 {
 	CallEvent(OnIdleEvent);
-	if (_pod._timeOutEnableAll != 0 && idleTime > ((uint32_t)_pod._timeOutEnableAll) * 1024)   // 1024 ist faster than 1000
+	if (_pod._timeOutEnableAll != 0 && idleTime > GetEnableTimeoutInMs())
 	{
 		bool setEnable = false;
 		for (uint8_t i = 0; i < NUM_AXIS; i++)

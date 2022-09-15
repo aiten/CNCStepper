@@ -165,7 +165,7 @@ public:
 #define WORKOFFSETCOUNT_VALUE(a)	(((a)*(1<<WORKOFFSETCOUNT_BIT))&WORKOFFSETCOUNT_MASK)
 #define WORKOFFSETCOUNT_CLEAR(a)	((a)&~WORKOFFSETCOUNT_MASK)
 
-#define EPROM_SIGNATURE		0x21436502
+#define EPROM_SIGNATURE		0x21436503
 
 	struct SCNCEeprom
 	{
@@ -185,8 +185,8 @@ public:
 		// must not be changed: end, see CConfigEeprom::GetConfig32(eepromofs_t ofs) const
 
 		uint8_t StepperDirections; // bits for each axis, see CStepper::SetDirection
-		uint8_t Dummy2;
-		uint8_t Dummy3;
+		uint8_t Dummy8_1;
+		uint8_t Dummy8_2;
 		uint8_t SpindleFadeTime;
 
 		uint16_t MaxSpindleSpeed;
@@ -197,6 +197,15 @@ public:
 		uint16_t Dec;
 		uint32_t RefMoveStepRate;
 		uint32_t MoveAwayFromReference;
+
+		uint16_t StepperOffTimeout;
+		uint16_t Dummy16_2;
+
+		uint16_t Dummy16_3;
+		uint16_t Dummy16_4;
+
+		uint16_t Dummy32_1;
+		uint16_t Dummy32_2;
 
 		float StepsPerMm1000;
 

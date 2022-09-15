@@ -213,9 +213,6 @@
     <ClInclude Include="..\..\..\Sketch\libraries\CNCLib\Src\DecimalAsInt.h">
       <Filter>CNCLib</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\Steppers\StepperA4998_drv8825.h">
-      <Filter>StepperLib\Steppers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\ReadAnalogIOControl.h">
       <Filter>StepperLib</Filter>
     </ClInclude>
@@ -269,6 +266,15 @@
     </ClInclude>
     <ClInclude Include="..\Include\U8glib.h">
       <Filter>MsvcExt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\Steppers\StepperStepDirDriverA4998.h">
+      <Filter>StepperLib\Steppers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\Steppers\StepperStepDirDriverDRV8825.h">
+      <Filter>StepperLib\Steppers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\Steppers\StepperStepDirDriverTMC220X.h">
+      <Filter>StepperLib\Steppers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

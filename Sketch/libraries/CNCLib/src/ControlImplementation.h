@@ -128,7 +128,7 @@ struct ControlData
 #else
 	COnOffIOControl<CONTROLLERFAN_FAN_PIN, CONTROLLERFAN_DIGITAL_ON, CONTROLLERFAN_DIGITAL_OFF> _controllerfan;
 #endif
-	inline bool IsControllerFanTimeout() { return millis() - CStepper::GetInstance()->IdleTime() > CONTROLLERFAN_ONTIME; }
+	inline bool IsControllerFanTimeout() { return (millis() - CStepper::GetInstance()->IdleTime()) > (CStepper::GetInstance()->GetEnableTimeoutInMs() + 1000); }
 #else
 	CDummyIOControl _controllerfan;
 	inline bool     IsControllerFanTimeout() { return false; }

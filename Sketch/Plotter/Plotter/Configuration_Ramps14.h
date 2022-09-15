@@ -62,7 +62,6 @@
 ////////////////////////////////////////////////////////
 
 #define CONTROLLERFAN_ANALOGSPEED
-#define CONTROLLERFAN_ONTIME	10000			// switch off controllerfan if idle for 10 Sec
 #define CONTROLLERFAN_FAN_PIN	RAMPS14_FET2D9_PIN
 
 #ifdef RAMPS14_KILL_PIN

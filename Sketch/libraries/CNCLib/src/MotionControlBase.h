@@ -96,7 +96,6 @@ protected:
 	feedrate_t GetFeedRate(const mm1000_t to[NUM_AXIS], feedrate_t feedrate) const;
 
 	virtual steprate_t GetStepRate(const mm1000_t to[NUM_AXIS], const udist_t to_m[NUM_AXIS], feedrate_t feedrate) const;
-	static steprate_t  FeedRateToStepRate(axis_t axis, feedrate_t feedrate);
 
 	static feedrate_t StepRateToFeedRate(axis_t axis, steprate_t steprate);
 
@@ -111,6 +110,8 @@ private:
 	error_t            _error = nullptr;
 
 public:
+	static steprate_t  FeedRateToStepRate(axis_t axis, feedrate_t feedrate);
+
 	void SetPositionFromMachine();
 	void GetPosition(const udist_t src[NUM_AXIS], mm1000_t dest[NUM_AXIS]);
 

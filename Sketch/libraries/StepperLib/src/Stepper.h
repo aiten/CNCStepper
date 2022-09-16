@@ -204,6 +204,7 @@ public:
 
 	uint16_t GetEnableTimeout() const { return _pod._timeOutEnableAll; }
 	void     SetEnableTimeout(uint16_t sec) { _pod._timeOutEnableAll = sec; }
+	uint32_t GetEnableTimeoutInMs() const { return ((uint32_t)_pod._timeOutEnableAll) * 1024; } // 1024 ist faster than 1000
 
 #ifndef REDUCED_SIZE
 	uint8_t GetEnableTimeout(axis_t axis) const { return _pod._timeOutEnable[axis]; }

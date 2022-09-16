@@ -29,6 +29,9 @@
 
 // change some pin definition here:
 
+//#define CNCLIB_USE_A4998
+//#undef CNCLIB_USE_DRV8825
+//#undef CNCLIB_USE_TMC220X
 
 #include <Steppers/StepperCNCShield.h>
 
@@ -71,7 +74,6 @@
 
 #undef USECONTROLERFAN
 #ifdef USECONTROLERFAN
-#define CONTROLLERFAN_ONTIME	10000			// switch off controllerfan if idle for 10 Sec
 #define CONTROLLERFAN_FAN_PIN	14 // 10
 
 #define CONTROLLERFAN_DIGITAL_ON  HIGH

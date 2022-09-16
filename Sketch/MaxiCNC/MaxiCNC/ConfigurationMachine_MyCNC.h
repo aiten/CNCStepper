@@ -155,7 +155,6 @@
 
 ////////////////////////////////////////////////////////
 
-#define CONTROLLERFAN_ONTIME	  10000			// switch off controller fan if idle for 10 Sec
 #define CONTROLLERFAN_FAN_PIN	  CAT(BOARDNAME,_FET2D9_PIN)
 #define CONTROLLERFAN_ANALOGSPEED
 #define CONTROLLERFAN_ANALOGSPEED_INVERT

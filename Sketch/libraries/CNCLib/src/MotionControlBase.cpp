@@ -284,7 +284,7 @@ void CMotionControlBase::Arc(const mm1000_t to[NUM_AXIS], mm1000_t offset0, mm10
 
 steprate_t CMotionControlBase::GetStepRate(const mm1000_t to[NUM_AXIS], const udist_t to_m[NUM_AXIS], feedrate_t feedrate) const
 {
-	// TODO: look to al axis to calculate the correct (max) steprate. It is not only AXIS_X
+	// TODO: look to all axis to calculate the correct (max) steprate. It is not only AXIS_X
 	return FeedRateToStepRate(0, feedrate);
 }
 

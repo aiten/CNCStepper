@@ -57,6 +57,12 @@ const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 	CNC_DEC,
 	STEPRATE_REFMOVE,
 	MOVEAWAYFROMREF_MM1000,
+	TIMEOUTSETIDLE_DEFAULT,
+	0,
+	0,
+	0,
+	0,
+	0,
 	STEPSPERMM / 1000.0,
 	{
 		{ AXISPARAMETER(X_MAXSIZE, X_USEREFERENCE, REFMOVE_1_AXIS, X_REFERENCEHITVALUE_MIN, X_REFERENCEHITVALUE_MAX, 0, X_MAXSPEED, X_ACC, X_DEC, X_STEPRATE_REFMOVE, X_STEPSPERMM, X_PROBESIZE) },
@@ -226,7 +232,7 @@ bool CMyControl::GoToReference(axis_t axis, steprate_t steprate, bool toMinRef)
 	}
 
 #if FEEDRATE_REFMOVE_PHASE2 > 0
-	return super::GoToReference(axis, CMotionControlBase::GetInstance()->FeedRateToStepRate(axis, FEEDRATE_REFMOVE_PHASE2), toMinRef);
+	return super::GoToReference(axis, CMotionControlBase::FeedRateToStepRate(axis, FEEDRATE_REFMOVE_PHASE2), toMinRef);
 #else
 	return true;
 #endif

@@ -93,6 +93,8 @@ void CControl::InitFromEeprom()
 
 #endif
 
+	CStepper::GetInstance()->SetEnableTimeout(CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, StepperOffTimeout)));
+
 	uint16_t jerkspeed = CConfigEeprom::GetConfigU16(offsetof(CConfigEeprom::SCNCEeprom, JerkSpeed));
 	if (jerkspeed == 0)
 	{

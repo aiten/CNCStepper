@@ -204,8 +204,8 @@ public:
 		uint16_t Dummy16_3;
 		uint16_t Dummy16_4;
 
-		uint16_t Dummy32_1;
-		uint16_t Dummy32_2;
+		uint32_t Dummy32_1;
+		uint32_t Dummy32_2;
 
 		float StepsPerMm1000;
 

@@ -31,7 +31,9 @@
 CMyControl            Control;
 CMotionControlDefault MotionControl;
 CConfigEeprom         Eprom;
+#if defined (USEHARDWARESERIAL)
 HardwareSerial&       StepperSerial = Serial;
+#endif
 
 ////////////////////////////////////////////////////////////
 

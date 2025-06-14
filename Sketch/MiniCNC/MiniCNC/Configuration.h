@@ -25,7 +25,7 @@
 #define HARDWARETYPE_TB6560         13 // 
 #define HARDWARETYPE_CUSTOM	        99 // custom
 
-#define HARDWARETYPE HARDWARETYPE_CNCShield3x
+#define HARDWARETYPE HARDWARETYPE_L298N
 
 ////////////////////////////////////////////////////////
 

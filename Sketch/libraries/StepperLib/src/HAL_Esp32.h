@@ -22,36 +22,33 @@
 
 #if defined(ESP32)
 
+
+// DONOTUSE => only for compiling
+#define PIN_A0   (0)	
+#define PIN_A1   (0)
+#define PIN_A2   (0)
+#define PIN_A3   (0)
+#define PIN_A4   (0)
+#define PIN_A5   (0)
+#define PIN_A6   (0)
+#define PIN_A7   (0)
+#define PIN_A8   (0)
+#define PIN_A9   (0)
+#define PIN_A10  (0)
+#define PIN_A11  (0)
+
 #undef pgm_read_ptr
 inline  const void* pgm_read_ptr(const void* p) { return *((void **)p); }
 inline  int pgm_read_int(const void* p) { return * ((const int*) p); }
 
+#define TIMER0FREQUENCE		1000L
+
 // Clock should be AVR Compatible 2Mhz => 48Mhz/8(prescaler)/3(genclk)
-#define TIMERCLOCKDIV		3	
-#define TIMER0_CLKGEN		5
-#define TIMER1_CLKGEN		5
-
-#define TIMERBASEFREQUENCE	(F_CPU/TIMER1_CLKGEN)
-
-
-#define TIMER0FREQUENCE		(TIMERBASEFREQUENCE/TIMER0PRESCALE)
-#define TIMER0PRESCALE      1024			
-
 // compatible to AVR => no 32 bit Timers
-#if 1
 #define TIMER1FREQUENCE		2000000L	
-//#define TIMER1PRESCALE      (8*3)
-#else
-#define TIMER1FREQUENCE		(TIMERBASEFREQUENCE/TIMER1PRESCALE)
-#define TIMER1PRESCALE      2			
-#endif
 
 #define TIMER1MIN			4
 #define TIMER1MAX			0xffffffffl
-
-#define TIMER0_INTERRUPTPRIORITY	3		// Polling
-#define TIMER1_INTERRUPTPRIORITY	2		// Main timer for stepper, USB => 1
-#define BACKGROUND_INTERRUPTPRIORITY	3
 
 #define MAXINTERRUPTSPEED	(65535/7)		// maximal possible interrupt rate => steprate_t
 
@@ -65,10 +62,8 @@ inline  int pgm_read_int(const void* p) { return * ((const int*) p); }
 
 #define TIMEROVERHEAD		1				// decrease Timervalue for ISR overhead before set new timer
 
-
 inline void CHAL::DisableInterrupts()		{ noInterrupts(); }
 inline void CHAL::EnableInterrupts()		{ interrupts(); }
-
 
 #define HALFastdigitalRead(a)	CHAL::digitalRead(a)
 #define HALFastdigitalWrite(a,b) CHAL::digitalWrite(a,b)
@@ -140,13 +135,10 @@ inline uint32_t* CHAL::GetEepromBaseAdr()
 
 inline void CHAL::InitEeprom()
 {
-	FlashRead(_flashStorage, _flashBuffer, sizeof(_flashStorage));
 }
 
 inline void CHAL::FlushEeprom()
 {
-	FlashErase((void*)_flashStorage, sizeof(_flashBuffer));
-	FlashWriteWords((uint32_t*) _flashStorage, (uint32_t*) _flashBuffer, (sizeof(_flashStorage)+sizeof(uint32_t)-1)/sizeof(uint32_t));
 }
 
 inline bool CHAL::NeedFlushEeprom()
@@ -171,15 +163,21 @@ inline void CHAL::DelayMicroseconds0250()
 
 ////////////////////////////////////////////////////////
 
-
-inline void  CHAL::RemoveTimer0() {}
+inline void  CHAL::RemoveTimer0()
+{
+	timerEnd(_hwTimer[0]);
+}
 
 inline void CHAL::StartTimer0(timer_t delay)
 {
+	timerAlarm(_hwTimer[0], delay, true, 0);
 }
 
 inline void  CHAL::InitTimer0(HALEvent evt)
 {
+	_TimerEvent0 = evt;
+	_hwTimer[0] = timerBegin(TIMER0FREQUENCE);
+	timerAttachInterrupt(_hwTimer[0], OnTimer0);
 }
 
 inline void CHAL::StopTimer0()
@@ -188,18 +186,24 @@ inline void CHAL::StopTimer0()
 
 ////////////////////////////////////////////////////////
 
-inline TcCount16* GetTimer1Struct() { return (TcCount16*)TC4; }
-
-inline void  CHAL::RemoveTimer1() {}
+inline void  CHAL::RemoveTimer1()
+{
+	timerEnd(_hwTimer[1]);
+}
 
 inline void CHAL::StartTimer1OneShot(timer_t delay)
 {
+	timerWrite(_hwTimer[1], 0);
+	timerAlarm(_hwTimer[1], delay, false, 0);
 }
 
 ////////////////////////////////////////////////////////
 
 inline void  CHAL::InitTimer1OneShot(HALEvent evt)
 {
+	_TimerEvent1 = evt;
+	_hwTimer[1] = timerBegin(TIMER1FREQUENCE);
+	timerAttachInterrupt(_hwTimer[1], OnTimer1);
 }
 
 ////////////////////////////////////////////////////////
@@ -209,5 +213,17 @@ inline void CHAL::StopTimer1()
 }
 
 ////////////////////////////////////////////////////////
+
+class CCriticalRegion
+{
+private:
+
+	portMUX_TYPE _spinlock = portMUX_INITIALIZER_UNLOCKED;
+
+public:
+
+	inline CCriticalRegion() ALWAYSINLINE { taskENTER_CRITICAL(&_spinlock); }
+	inline ~CCriticalRegion() ALWAYSINLINE { taskEXIT_CRITICAL(&_spinlock); }
+};
 
 #endif

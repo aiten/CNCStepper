@@ -18,9 +18,9 @@
 
 ////////////////////////////////////////////////////////
 
-// not implemented on due
+// not implemented on due/esp32
 
-#if !defined(__SAM3X8E__) && !defined(__SAMD21G18A__)
+#if !defined(__SAM3X8E__) && !defined(__SAMD21G18A__) && !defined(ESP32)
 
 ////////////////////////////////////////////////////////
 

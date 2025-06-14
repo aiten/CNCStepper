@@ -50,7 +50,7 @@ typedef int32_t inch100000_t; // 1/100000 inch
 #define NUM_MAXPARAMNAMELENGTH 16
 #define NUM_PARAMETERRANGE	255
 
-#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(_MSC_VER)
+#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(_MSC_VER) || defined(ESP32)
 
 #define NUM_PARAMETER	16		// slotCount, map from uint8_t to < NUM_PARAMETER
 #define G54ARRAYSIZE	6
@@ -71,7 +71,7 @@ typedef int32_t inch100000_t; // 1/100000 inch
 #define TIMEOUTCALLIDLE		333			// time in ms after move completed to call Idle
 #define TIMEOUTCALLPOLL		500			// time in ms to call Poll() next if not idle => ASSERT( TIMEOUTCALLPOLL > TIMEOUTCALLIDLE)
 
-#define IDLETIMER0VALUE     TIMER0VALUE(500)	// AVR don't care ... Timer 0 shared with millis, other ?Hz
+#define IDLETIMER0VALUE     TIMER0VALUE(100)	// AVR don't care ... Timer 0 shared with millis, other ?Hz (e.g. 100 Hz)
 
 #define BLINK_LED			LED_BUILTIN
 #define TIMEOUTBLINK		1000		// blink of led 13

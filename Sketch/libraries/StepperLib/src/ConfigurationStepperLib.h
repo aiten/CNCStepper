@@ -20,9 +20,19 @@
 
 #pragma once
 
-//#define StepperSerial SerialUSB
-//#define StepperSerial Serial
+
+#if defined(ESP32)
+
+#undef USEHARDWARESERIAL
+#define StepperSerial Serial
+
+#elif 
+
+#define USEHARDWARESERIAL
 extern class HardwareSerial& StepperSerial;
+
+#endif
+
 
 ////////////////////////////////////////////////////////
 
@@ -108,23 +118,9 @@ typedef FLSTR cncerror_t;
 
 ////////////////////////////////////////////////////////
 
-#elif defined(__SAM3X8E__) || defined(__SAMD21G18A__)
+#elif defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(ESP32)
 
 // usual with Ramps FD
-
-#define use32bit
-#undef use16bit
-
-#define NUM_AXIS			6
-
-#define STEPBUFFERSIZE		128		// size 2^x but not 256
-#define MOVEMENTBUFFERSIZE	64
-
-////////////////////////////////////////////////////////
-
-#elif defined(ESP32)
-
-// usual with ???
 
 #define use32bit
 #undef use16bit

@@ -57,6 +57,7 @@
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\fastio.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\HAL.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_AVR.h" />
+    <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_Esp32.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_I2CEEprom.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_Msvc.h" />
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_Sam3x8e.h" />
@@ -124,6 +125,7 @@
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLib\Src\DecimalAsInt.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\StepperLib\src\HAL.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_AVR.cpp" />
+    <ClCompile Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_Esp32.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_Msvc.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_Sam3x8e.cpp" />
     <ClCompile Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_SamD21g18a.cpp" />

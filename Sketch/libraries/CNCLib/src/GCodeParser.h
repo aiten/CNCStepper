@@ -28,7 +28,7 @@ typedef uint16_t param_t;
 #define NUM_MAXPARAMNAMELENGTH 16
 #define NUM_PARAMETERRANGE	255
 
-#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(_MSC_VER)
+#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(_MSC_VER) || defined(ESP32)
 
 #define NUM_PARAMETER	16		// slotCount, map from uint8_t to < NUM_PARAMETER
 #define G54ARRAYSIZE	6

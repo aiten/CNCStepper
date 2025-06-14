@@ -271,7 +271,7 @@ constexpr uint16_t GetInfo1a()
 #ifndef REDUCED_SIZE
 		CConfigEeprom::CAN_ROTATE |
 #endif
-#if defined(__AVR_ARCH__) || defined(__SAMD21G18A__)
+#if defined(__AVR_ARCH__) || defined(__SAMD21G18A__) || defined(ESP32)
 		CConfigEeprom::HAVE_EEPROM |
 #elif  defined(__SAM3X8E__)
 		//		(CHAL::HaveEeprom() ? CConfigEeprom::HAVE_EEPROM : 0) |
@@ -290,7 +290,7 @@ constexpr uint16_t GetInfo1a()
 constexpr uint16_t GetInfo1b()
 {
 	return
-#if defined(__SAMD21G18A__)
+#if defined(__SAMD21G18A__) || defined(ESP32)
 	CConfigEeprom::EEPROM_NEED_EEPROM_FLUSH |
 	CConfigEeprom::EEPROM_NEED_DTR |
 #else

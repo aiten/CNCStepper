@@ -29,7 +29,7 @@
 #define PENTYPE_ZAXIS 0
 #define PENTYPE_SERVO 1
 
-#define PENTYPE PENTYPE_SERVO
+#define PENTYPE PENTYPE_ZAXIS
 
 ////////////////////////////////////////////////////////
 

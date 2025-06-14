@@ -86,7 +86,7 @@ public:
 	static void ToMm1000(const udist_t machine[NUM_AXIS], mm1000_t mm1000[NUM_AXIS]) { for (axis_t x = 0; x < NUM_AXIS; x++) { mm1000[x] = _ToMm1000(x, machine[x]); } };
 
 	bool    IsError() const { return _error != nullptr; };
-	error_t GetError() const { return _error; }
+	cncerror_t GetError() const { return _error; }
 	void    ClearError() { _error = nullptr; }
 
 protected:
@@ -101,13 +101,13 @@ protected:
 
 	mm1000_t _current[NUM_AXIS];
 
-	void Error(error_t error) { _error = error; }
+	void Error(cncerror_t error) { _error = error; }
 	void Error() { Error(MESSAGE_UNKNOWNERROR); }
 
 private:
 	static ToMm1000_t  _ToMm1000;
 	static ToMachine_t _ToMachine;
-	error_t            _error = nullptr;
+	cncerror_t            _error = nullptr;
 
 public:
 	static steprate_t  FeedRateToStepRate(axis_t axis, feedrate_t feedrate);

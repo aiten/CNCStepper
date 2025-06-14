@@ -1075,14 +1075,14 @@ void CStepper::OnWait(EnumAsByte(EWaitType) wait)
 
 ////////////////////////////////////////////////////////
 
-void CStepper::OnError(error_t error)
+void CStepper::OnError(cncerror_t error)
 {
 	CallEvent(OnErrorEvent, uintptr_t(error));
 }
 
 ////////////////////////////////////////////////////////
 
-void CStepper::OnWarning(error_t warning)
+void CStepper::OnWarning(cncerror_t warning)
 {
 	CallEvent(OnWarningEvent, uintptr_t(warning));
 	StepperSerial.print(MESSAGE_WARNING);
@@ -1091,7 +1091,7 @@ void CStepper::OnWarning(error_t warning)
 
 ////////////////////////////////////////////////////////
 
-void CStepper::OnInfo(error_t info)
+void CStepper::OnInfo(cncerror_t info)
 {
 	CallEvent(OnInfoEvent, uintptr_t(info));
 	StepperSerial.print((MESSAGE_INFO));

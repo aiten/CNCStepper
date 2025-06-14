@@ -50,7 +50,7 @@ typedef uint32_t udist_t;	// type of stepper coordinate system (unsigned)
 
 typedef const __FlashStringHelper* FLSTR;
 
-typedef FLSTR error_t;
+typedef FLSTR cncerror_t;
 
 ////////////////////////////////////////////////////////
 //
@@ -111,6 +111,20 @@ typedef FLSTR error_t;
 #elif defined(__SAM3X8E__) || defined(__SAMD21G18A__)
 
 // usual with Ramps FD
+
+#define use32bit
+#undef use16bit
+
+#define NUM_AXIS			6
+
+#define STEPBUFFERSIZE		128		// size 2^x but not 256
+#define MOVEMENTBUFFERSIZE	64
+
+////////////////////////////////////////////////////////
+
+#elif defined(ESP32)
+
+// usual with ???
 
 #define use32bit
 #undef use16bit

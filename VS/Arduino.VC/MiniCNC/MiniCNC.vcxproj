@@ -90,6 +90,7 @@
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_CNCShield3x.h" />
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_Custom.h" />
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_Default.h" />
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_Esp32C6.h" />
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_L298N.h" />
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_SMC800.h" />
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\ConfigurationMachine_TB6560.h" />

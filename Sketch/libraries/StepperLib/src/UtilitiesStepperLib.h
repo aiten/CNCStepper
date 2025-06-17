@@ -81,7 +81,7 @@ uint32_t _ulsqrt(uint32_t       val);
 
 ////////////////////////////////////////////////////////
 
-#if defined(_MSC_VER) || defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(ESP32)
+#if defined(use32bit)
 
 typedef struct _udiv_t
 {

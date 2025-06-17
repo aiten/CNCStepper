@@ -37,10 +37,9 @@ CStepperL298N::CStepperL298N() {}
 
 pin_t CStepperL298N::_pin[NUM_AXIS][4] =
 {
-{ 0, 0, 0, 0 },
-//	{ 2, 3, 4, 5 },
-//	{ 6, 7, 8, 9 },
-//	{ PIN_A0, PIN_A1, PIN_A2, PIN_A3 }, // A0-A3
+	{ 2, 3, 4, 5 },
+	{ 6, 7, 8, 9 },
+	{ PIN_A0, PIN_A1, PIN_A2, PIN_A3 }, // A0-A3
 #if NUM_AXIS > 3
 #if defined(__AVR_ATmega328P__) || defined(__SAMD21G18A__)
 	{ PIN_A4, PIN_A5, 12, 13 },					// A4&5,12&13, leave 11 for Spindle PWM, A6&A7 are input only!

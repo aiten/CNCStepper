@@ -17,21 +17,12 @@
 #pragma once
 
 ////////////////////////////////////////////////////////
+// please include <Steppers/StepperCNCShield_pins.h> 
+////////////////////////////////////////////////////////
 
 #define CMyStepper CStepperCNCShield
 
 ////////////////////////////////////////////////////////
-
-#define CNCSHIELD_NUM_AXIS MYNUM_AXIS
-//#define CNCSHIELD_GBRL09
-
-#include <Steppers/StepperCNCShield_pins.h>
-
-// change some pin definition here:
-
-//#undef CNCLIB_USE_A4998
-//#define CNCLIB_USE_DRV8825
-//#undef CNCLIB_USE_TMC220X
 
 #include <Steppers/StepperCNCShield.h>
 

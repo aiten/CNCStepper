@@ -26,7 +26,7 @@
 #undef USEHARDWARESERIAL
 #define StepperSerial Serial
 
-#elif 
+#else 
 
 #define USEHARDWARESERIAL
 extern class HardwareSerial& StepperSerial;

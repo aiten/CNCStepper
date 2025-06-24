@@ -25,6 +25,11 @@
 // 
 ////////////////////////////////////////////////////////
 
+#define BLINK_LED 15
+#define BLINK_TIMEOUT		1000		
+
+////////////////////////////////////////////////////////
+
 #define USBBAUDRATE 250000
 
 ////////////////////////////////////////////////////////
@@ -33,9 +38,9 @@
 
 ////////////////////////////////////////////////////////
 
-#define X_MAXSIZE 150000        // in mm1000_t
-#define Y_MAXSIZE 105000
-#define Z_MAXSIZE 30000
+#define X_MAXSIZE 134000				// in mm1000_t
+#define Y_MAXSIZE 134000
+#define Z_MAXSIZE 83000
 #define A_MAXSIZE 360000
 #define B_MAXSIZE 360000
 #define C_MAXSIZE 360000
@@ -44,25 +49,20 @@
 
 #define STEPPERDIRECTION 0		// set bit to invert direction of each axis
 
-#define STEPSPERROTATION	200
-#define MICROSTEPPING		32
-#define SCREWLEAD			4.0
+#define STEPSPERROTATION  200
+#define MICROSTEPPING     32
+#define SCREWLEAD         5.0
 
 ////////////////////////////////////////////////////////
 
-//#define CNC_MAXSPEED 20000        // steps/sec = 6.25 rot/sec
-//#define CNC_ACC  350              // 0.184 sec to full speed
-//#define CNC_DEC  400              // 0.141 sec to break
-//#define CNC_JERKSPEED 1000
-
-#define CNC_MAXSPEED 40000        // steps/sec
-#define CNC_ACC  565
-#define CNC_DEC  495
-#define CNC_JERKSPEED 1600
+#define CNC_MAXSPEED ((steprate_t)50000)			// steps/sec => 50000 => 7.8 rot /sec
+#define CNC_ACC  496								// 0.257 => time to full speed
+#define CNC_DEC  565								// 0.1975 => time to break
+#define CNC_JERKSPEED 2240
 
 #define X_MAXSPEED 0
 #define Y_MAXSPEED 0
-#define Z_MAXSPEED 0
+#define Z_MAXSPEED (CNC_MAXSPEED-5000)
 #define A_MAXSPEED 0
 #define B_MAXSPEED 0
 #define C_MAXSPEED 0
@@ -147,7 +147,6 @@
 
 #define CNCLIB_USE_DRV8825
 
-
 #define CNCSHIELD_NUM_AXIS MYNUM_AXIS
 
 #define CNCSHIELD_PIN_STEP_OFF		0
@@ -187,17 +186,15 @@
 
 #define CNCSHIELD_SPINDLE_DIGITAL_ON		LOW
 #define CNCSHIELD_SPINDLE_DIGITAL_OFF		HIGH
-#define CNCSHIELD_spindle_ANALOG_MAX		255
+#define CNCSHIELD_SPINDLE_ANALOG_MAX		255
 
 #define CNCSHIELD_SPINDLE_DIR_CLW	LOW
 #define CNCSHIELD_SPINDLE_DIR_CCLW	HIGH
 
-// 14=>AD0
-//#define CNCSHIELD_ABORT_PIN			PIN_A0
-//#define CNCSHIELD_HOLD_PIN			PIN_A1
+//#define CNCSHIELD_ABORT_PIN		PIN_A0
+//#define CNCSHIELD_HOLD_PIN		PIN_A1
 //#define CNCSHIELD_RESUME_PIN		PIN_A2
 //#define CNCSHIELD_COOLANT_PIN		PIN_A3
-
 
 #define CNCSHIELD_ABORT_PIN_ON		LOW
 #define CNCSHIELD_ABORT_PIN_OFF		HIGH
@@ -211,14 +208,11 @@
 #define CNCSHIELD_COOLANT_PIN_ON	LOW
 #define CNCSHIELD_COOLANT_PIN_OFF	HIGH
 
-#define CNCSHIELD_A4_PIN			PIN_A4
-#define CNCSHIELD_A5_PIN			PIN_A5
-
-#define CNCSHIELD_PROBE_PIN			CNCSHIELD_A5_PIN
+#define CNCSHIELD_PROBE_PIN			9
 #define CNCSHIELD_PROBE_PIN_ON		LOW
 #define CNCSHIELD_PROBE_PIN_OFF		HIGH
 
-#include "ConfigurationStepper_CNCShield3x.h"
+#include "Stepper_CNCShield3x.h"
 
 ////////////////////////////////////////////////////////
 

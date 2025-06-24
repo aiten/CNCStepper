@@ -53,11 +53,6 @@ void CControl::Init()
 
 #endif
 
-	if (_timeBlink == 0)
-	{
-		CHAL::pinModeOutput(BLINK_LED);
-	}
-
 	CHAL::InitTimer0(HandleInterrupt);
 	CHAL::StartTimer0(IDLETIMER0VALUE);
 }
@@ -515,12 +510,6 @@ void CControl::CheckIdlePoll(bool isIdle)
 	{
 		Poll();
 		_timePoll = time;
-	}
-
-	if (_timeBlink < time)
-	{
-		HALFastdigitalWrite(BLINK_LED, CHAL::digitalRead(BLINK_LED) == HIGH ? LOW : HIGH);
-		_timeBlink = time + TIMEOUTBLINK;
 	}
 }
 

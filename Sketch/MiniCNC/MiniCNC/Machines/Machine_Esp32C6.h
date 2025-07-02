@@ -55,14 +55,14 @@
 
 ////////////////////////////////////////////////////////
 
-#define CNC_MAXSPEED ((steprate_t)50000)			// steps/sec => 50000 => 7.8 rot /sec
-#define CNC_ACC  496								// 0.257 => time to full speed
-#define CNC_DEC  565								// 0.1975 => time to break
-#define CNC_JERKSPEED 2240
+#define CNC_MAXSPEED ((steprate_t)15000)			// steps/sec => 50000 => 7.8 rot /sec
+#define CNC_ACC  350								// 0.257 => time to full speed
+#define CNC_DEC  400								// 0.1975 => time to break
+#define CNC_JERKSPEED 1000
 
 #define X_MAXSPEED 0
 #define Y_MAXSPEED 0
-#define Z_MAXSPEED (CNC_MAXSPEED-5000)
+#define Z_MAXSPEED 0
 #define A_MAXSPEED 0
 #define B_MAXSPEED 0
 #define C_MAXSPEED 0
@@ -145,7 +145,7 @@
 ////////////////////////////////////////////////////////
 // esp32 do not have a CNCShield => we have to define all pins!
 
-#define CNCLIB_USE_DRV8825
+#define CNCLIB_USE_TMC220X
 
 #define CNCSHIELD_NUM_AXIS MYNUM_AXIS
 

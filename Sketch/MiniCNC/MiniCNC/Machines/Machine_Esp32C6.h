@@ -50,12 +50,12 @@
 #define STEPPERDIRECTION 0		// set bit to invert direction of each axis
 
 #define STEPSPERROTATION  200
-#define MICROSTEPPING     32
-#define SCREWLEAD         5.0
+#define MICROSTEPPING     16
+#define SCREWLEAD         2.0
 
 ////////////////////////////////////////////////////////
 
-#define CNC_MAXSPEED ((steprate_t)15000)			// steps/sec => 50000 => 7.8 rot /sec
+#define CNC_MAXSPEED ((steprate_t)13000)			// steps/sec => 50000 => 7.8 rot /sec
 #define CNC_ACC  350								// 0.257 => time to full speed
 #define CNC_DEC  400								// 0.1975 => time to break
 #define CNC_JERKSPEED 1000
@@ -112,9 +112,9 @@
 #define B_USEREFERENCE	EReverenceType::NoReference
 #define C_USEREFERENCE	EReverenceType::NoReference
 
-#define REFMOVE_1_AXIS  255 // Z_AXIS
-#define REFMOVE_2_AXIS  255 // X_AXIS
-#define REFMOVE_3_AXIS  255 // Y_AXIS
+#define REFMOVE_1_AXIS  Z_AXIS
+#define REFMOVE_2_AXIS  X_AXIS
+#define REFMOVE_3_AXIS  Y_AXIS
 #define REFMOVE_4_AXIS  255
 #define REFMOVE_5_AXIS  255
 #define REFMOVE_6_AXIS  255

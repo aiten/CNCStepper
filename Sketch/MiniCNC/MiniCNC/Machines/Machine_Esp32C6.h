@@ -17,41 +17,30 @@
 #pragma once
 
 ////////////////////////////////////////////////////////
+//
+// esp32 c6
+// try to be compatible with CNCShield v3.51
+// use 3-4 Axis
+// DRV8825 with ms32
+// 
+////////////////////////////////////////////////////////
 
-//#define STEPPERTYPE 1		// CStepperL298N
-//#define STEPPERTYPE 2		// CStepperSMC800
-//#define STEPPERTYPE 3		// CStepperTB6560
-#define STEPPERTYPE 4		// CStepperRamps14
-
-//#define LCD_TYPE  1		// LCD_2004_LiquidCrystal_I2C
-#define LCD_TYPE  2			// LCD_12864_u8g
-
-#define PENTYPE_ZAXIS 0
-#define PENTYPE_SERVO 1
-
-#define PENTYPE PENTYPE_ZAXIS
+#define BLINK_LED 15
+#define BLINK_TIMEOUT		1000		
 
 ////////////////////////////////////////////////////////
 
-#define USBBAUDRATE 115200
+#define USBBAUDRATE 250000
 
 ////////////////////////////////////////////////////////
 
-#define EPROM_SIGNATURE_PLOTTER 0x21438703
+#define MYNUM_AXIS 3
 
 ////////////////////////////////////////////////////////
 
-#define MYUSE_LCD
-
-////////////////////////////////////////////////////////
-
-#define FROMPENTYPE(a,b) (PENTYPE==PENTYPE_ZAXIS ? (a) : (b))
-
-////////////////////////////////////////////////////////
-
-#define X_MAXSIZE 510000		//515mm
-#define Y_MAXSIZE 295000		//295mm
-#define Z_MAXSIZE 8000			//8
+#define X_MAXSIZE 134000				// in mm1000_t
+#define Y_MAXSIZE 134000
+#define Z_MAXSIZE 83000
 #define A_MAXSIZE 360000
 #define B_MAXSIZE 360000
 #define C_MAXSIZE 360000
@@ -60,23 +49,16 @@
 
 #define STEPPERDIRECTION 0		// set bit to invert direction of each axis
 
-#define STEPSPERROTATION	200
-#define MICROSTEPPING		16
-
-// 3200steps/rot, T2.5 belt pulley with 12teeth
-
-#define TOOTH 12
-#define TOOTHSIZE 2.5
-#define SCREWLEAD (TOOTH*TOOTHSIZE)
-
-#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
+#define STEPSPERROTATION  200
+#define MICROSTEPPING     16
+#define SCREWLEAD         2.0
 
 ////////////////////////////////////////////////////////
 
-#define CNC_MAXSPEED	25000        // steps/sec
-#define CNC_ACC			400
-#define CNC_DEC			450
-#define CNC_JERKSPEED	1000
+#define CNC_MAXSPEED ((steprate_t)13000)			// steps/sec => 50000 => 7.8 rot /sec
+#define CNC_ACC  350								// 0.257 => time to full speed
+#define CNC_DEC  400								// 0.1975 => time to break
+#define CNC_JERKSPEED 1000
 
 #define X_MAXSPEED 0
 #define Y_MAXSPEED 0
@@ -123,16 +105,16 @@
 ////////////////////////////////////////////////////////
 // NoReference, ReferenceToMin, ReferenceToMax
 
-#define X_USEREFERENCE	EReverenceType::ReferenceToMin
-#define Y_USEREFERENCE	EReverenceType::ReferenceToMin
-#define Z_USEREFERENCE	FROMPENTYPE(EReverenceType::ReferenceToMin,EReverenceType::NoReference)
+#define X_USEREFERENCE	EReverenceType::ReferenceToMax
+#define Y_USEREFERENCE	EReverenceType::ReferenceToMax
+#define Z_USEREFERENCE	EReverenceType::ReferenceToMax
 #define A_USEREFERENCE	EReverenceType::NoReference
 #define B_USEREFERENCE	EReverenceType::NoReference
 #define C_USEREFERENCE	EReverenceType::NoReference
 
 #define REFMOVE_1_AXIS  Z_AXIS
-#define REFMOVE_2_AXIS  Y_AXIS
-#define REFMOVE_3_AXIS  X_AXIS
+#define REFMOVE_2_AXIS  X_AXIS
+#define REFMOVE_3_AXIS  Y_AXIS
 #define REFMOVE_4_AXIS  255
 #define REFMOVE_5_AXIS  255
 #define REFMOVE_6_AXIS  255
@@ -153,79 +135,89 @@
 
 #define MOVEAWAYFROMREF_MM1000 500
 
+////////////////////////////////////////////////////////
+
 #define SPINDLE_ANALOGSPEED
-#define SPINDLE_MAXSPEED		10000		// analog 255
-#define SPINDLE_FADETIMEDELAY  0    		// 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
+#define SPINDLE_MAXSPEED	10000			// analog 255
+#define SPINDLE_FADETIMEDELAY  8    // 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
+#define SPINDLE_FADE
+
+////////////////////////////////////////////////////////
+// esp32 do not have a CNCShield => we have to define all pins!
+
+#define CNCLIB_USE_TMC220X
+
+#define CNCSHIELD_NUM_AXIS MYNUM_AXIS
+
+#define CNCSHIELD_PIN_STEP_OFF		0
+#define CNCSHIELD_PIN_STEP_ON		1
+
+#define CNCSHIELD_PIN_DIR_OFF		0
+#define CNCSHIELD_PIN_DIR_ON		1
+
+// Enable: LOW Active
+#define CNCSHIELD_PIN_ENABLE_OFF	1
+#define CNCSHIELD_PIN_ENABLE_ON		0
 
 ////////////////////////////////////////////////////////
 
-#if STEPPERTYPE==1
-#include "Configuration_L298N.h"
-#elif STEPPERTYPE==2
-#include "Configuration_SMC800.h"
-#elif STEPPERTYPE==3
-#include "Configuration_TB6560.h"
-#elif STEPPERTYPE==4
+#define CNCSHIELD_ENABLE_PIN		20
 
-#include "Configuration_Ramps14.h"
+#define CNCSHIELD_X_STEP_PIN		5
+#define CNCSHIELD_X_DIR_PIN			14
+#define CNCSHIELD_X_MIN_PIN			0
+#define CNCSHIELD_X_MAX_PIN			0
 
-#endif
+#define CNCSHIELD_Y_STEP_PIN		6
+#define CNCSHIELD_Y_DIR_PIN			18
+#define CNCSHIELD_Y_MIN_PIN			1
+#define CNCSHIELD_Y_MAX_PIN			1
 
-////////////////////////////////////////////////////////
+#define CNCSHIELD_Z_STEP_PIN		7
+#define CNCSHIELD_Z_DIR_PIN			19
+#define CNCSHIELD_Z_MIN_PIN			2
+#define CNCSHIELD_Z_MAX_PIN			2
 
-#define STEPRATE_REFMOVE	(CNC_MAXSPEED/4)
+#define CNCSHIELD_A_STEP_PIN		x	
+#define CNCSHIELD_A_DIR_PIN			xx	
 
-////////////////////////////////////////////////////////
-// PlotterControl
+#define CNCSHIELD_SPINDLE_ENABLE_PIN	3
+#define CNCSHIELD_SPINDLE_DIR_PIN		4
 
-#define SERVO1_PIN RAMPS14_SERVO3_PIN
-#define SERVO1_CLAMPOPEN		1000
-#define SERVO1_CLAMPCLOSE		2000
-#define SERVO1_CLAMPOPENDELAY	1000
-#define SERVO1_CLAMPCLOSEDELAY	1000
+#define CNCSHIELD_SPINDLE_DIGITAL_ON		LOW
+#define CNCSHIELD_SPINDLE_DIGITAL_OFF		HIGH
+#define CNCSHIELD_SPINDLE_ANALOG_MAX		255
 
-#define PLOTTER_DEFAULT_PENUP_FEEDRATE			LONG_MAX	 // reduced to maxStepRate
-#define PLOTTER_DEFAULT_PENDOWN_FEEDRATE		3600000l     // 60 mm/ sec;
+#define CNCSHIELD_SPINDLE_DIR_CLW	LOW
+#define CNCSHIELD_SPINDLE_DIR_CCLW	HIGH
 
-#if PENTYPE == PENTYPE_ZAXIS			// Z-AXIS
+//#define CNCSHIELD_ABORT_PIN		PIN_A0
+//#define CNCSHIELD_HOLD_PIN		PIN_A1
+//#define CNCSHIELD_RESUME_PIN		PIN_A2
+//#define CNCSHIELD_COOLANT_PIN		PIN_A3
 
-#define PLOTTER_DEFAULT_Z_PENUP_FEEDRATE		2400000l // 40 mm / sec
-#define PLOTTER_DEFAULT_Z_PENDOWN_FEEDRATE		1800000l // 30 mm / sec
-#define PLOTTER_DEFAULT_Z_PENCHANGE_FEEDRATE	2400000l // 40 mm / sec
+#define CNCSHIELD_ABORT_PIN_ON		LOW
+#define CNCSHIELD_ABORT_PIN_OFF		HIGH
 
-#define PLOTTER_PENDOWNPOS_Z		LONG_MAX
-#define PLOTTER_PENUPPOS_Z			(Z_MAXSIZE/2)
-#define PLOTTER_PENCHANGEPOS_Z		0
+#define CNCSHIELD_HOLD_PIN_ON		LOW
+#define CNCSHIELD_HOLD_PIN_OFF		HIGH
 
-#elif PENTYPE == PENTYPE_SERVO		// servo
+#define CNCSHIELD_RESUME_PIN_ON		LOW
+#define CNCSHIELD_RESUME_PIN_OFF	HIGH
 
-#define SERVO2_PIN RAMPS14_SERVO2_PIN
+#define CNCSHIELD_COOLANT_PIN_ON	LOW
+#define CNCSHIELD_COOLANT_PIN_OFF	HIGH
 
-// feedrate are used as delays (in ms)
-#define PLOTTER_DEFAULT_Z_PENUP_FEEDRATE		200
-#define PLOTTER_DEFAULT_Z_PENDOWN_FEEDRATE		200
-#define PLOTTER_DEFAULT_Z_PENCHANGE_FEEDRATE	200
+#define CNCSHIELD_PROBE_PIN			9
+#define CNCSHIELD_PROBE_PIN_ON		LOW
+#define CNCSHIELD_PROBE_PIN_OFF		HIGH
 
-// servo positions (micro sec)
-#define PLOTTER_PENDOWNPOS_Z		2000
-#define PLOTTER_PENUPPOS_Z			1500
-#define PLOTTER_PENCHANGEPOS_Z		1000
-
-#else
-
-error;
-
-#endif
-
-#define PLOTTER_PENCOUNT		8
-
-#define PLOTTER_PENCHANGEPOS_X		LONG_MAX
-#define PLOTTER_PENCHANGEPOS_X_OFS	0
-#define PLOTTER_PENCHANGEPOS_Y		0
-#define PLOTTER_PENCHANGEPOS_Y_OFS	30000l	//mm1000
-
-#define PLOTTER_PENUP_TIMEOUT		1000
+#include "Stepper_CNCShield3x.h"
 
 ////////////////////////////////////////////////////////
 
-#define MESSAGE_MYCONTROL_VERSION F(", Plotter")
+#define STEPRATE_REFMOVE		(CNC_MAXSPEED/3)
+
+////////////////////////////////////////////////////////
+
+#define MESSAGE_MYCONTROL_VERSION          F(", CNC-Esp32C6")

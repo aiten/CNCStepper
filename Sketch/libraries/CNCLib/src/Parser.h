@@ -46,7 +46,7 @@ public:
 	void ParseCommand();
 
 	bool    IsError() const { return _error != nullptr; };
-	error_t GetError() const { return _error; }
+	cncerror_t GetError() const { return _error; }
 
 	typedef void (*PrintMessage)();
 
@@ -77,15 +77,15 @@ protected:
 
 	////////////////////////////////////////////////////////
 
-	void ErrorAdd(error_t error) { if (!IsError()) Error(error); }
+	void ErrorAdd(cncerror_t error) { if (!IsError()) Error(error); }
 
-	void Error(error_t error)
+	void Error(cncerror_t error)
 	{
 		_error = error;
 		_reader->MoveToEnd();
 	}
 
-	void Info(error_t s1)
+	void Info(cncerror_t s1)
 	{
 		if (_output)
 		{
@@ -94,7 +94,7 @@ protected:
 		}
 	}
 
-	void Warning(error_t s1)
+	void Warning(cncerror_t s1)
 	{
 		if (_output)
 		{
@@ -105,7 +105,7 @@ protected:
 
 	Stream*        _output;
 	CStreamReader* _reader;
-	error_t        _error;
+	cncerror_t        _error;
 	PrintMessage   _OkMessage;
 
 public:

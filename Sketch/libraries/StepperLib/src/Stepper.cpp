@@ -116,7 +116,7 @@ void CStepper::Init()
 {
 	InitMemVar();
 	InitTimer();
-#if defined(__SAM3X8E__) || defined(__SAMD21G18A__)
+#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) 
 	CHAL::InitBackground(HandleBackground);
 #endif
 
@@ -596,7 +596,7 @@ uint8_t CStepper::SMovement::GetMaxStepMultiplier() const
 
 	for (uint8_t i = 0;; i++)
 	{
-		maxMultiplier = max(maxMultiplier, uint8_t(count) % 8);
+		maxMultiplier = max(maxMultiplier, uint8_t(uint8_t(count) % 8));
 		if (i == NUM_AXIS - 1)
 		{
 			break;
@@ -1075,14 +1075,14 @@ void CStepper::OnWait(EnumAsByte(EWaitType) wait)
 
 ////////////////////////////////////////////////////////
 
-void CStepper::OnError(error_t error)
+void CStepper::OnError(cncerror_t error)
 {
 	CallEvent(OnErrorEvent, uintptr_t(error));
 }
 
 ////////////////////////////////////////////////////////
 
-void CStepper::OnWarning(error_t warning)
+void CStepper::OnWarning(cncerror_t warning)
 {
 	CallEvent(OnWarningEvent, uintptr_t(warning));
 	StepperSerial.print(MESSAGE_WARNING);
@@ -1091,7 +1091,7 @@ void CStepper::OnWarning(error_t warning)
 
 ////////////////////////////////////////////////////////
 
-void CStepper::OnInfo(error_t info)
+void CStepper::OnInfo(cncerror_t info)
 {
 	CallEvent(OnInfoEvent, uintptr_t(info));
 	StepperSerial.print((MESSAGE_INFO));
@@ -1534,9 +1534,9 @@ static volatile bool _backgroundActive = false;
 
 void CStepper::StartBackground()
 {
-#if defined(__SAM3X8E__) || defined(__SAMD21G18A__)
+#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) 
 	// sam3x cannot call timer interrupt nested.
-	// we use a other ISR (CAN) as Tail-chaining with lower (priority value is higher) priority and exit the Timer ISR
+	// we use an other ISR (CAN) as Tail-chaining with lower (priority value is higher) priority and exit the Timer ISR
 
 	if (_backgroundActive)
 	{
@@ -1551,7 +1551,7 @@ void CStepper::StartBackground()
 
 	static volatile uint8_t reenterCount = 0;
 
-	reenterCount++;
+	reenterCount = reenterCount+1;
 
 	if (reenterCount != 1)
 	{
@@ -1559,7 +1559,7 @@ void CStepper::StartBackground()
 #ifndef REDUCED_SIZE
 		_pod._timerISRBusy++;
 #endif
-		reenterCount--;
+		reenterCount = reenterCount - 1;
 		return;
 	}
 
@@ -1571,7 +1571,7 @@ void CStepper::StartBackground()
 	FillStepBuffer();
 
 	CHAL::DisableInterrupts();
-	reenterCount--;
+	reenterCount = reenterCount-1;
 
 #endif
 }

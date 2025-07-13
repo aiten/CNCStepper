@@ -14,68 +14,55 @@
   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 */
 
-#pragma once
+#include <stdlib.h>
+#include <string.h>
+
+#include <Arduino.h>
+#include <ctype.h>
+
+#include "HAL.h"
 
 ////////////////////////////////////////////////////////
 
-#include <Control.h>
-#include <OnOffIOControl.h>
-#include <Analog8IOControl.h>
-#include <Analog8IOControlSmooth.h>
-#include <ReadPinIOControl.h>
-#include <PushButtonLow.h>
-#include <DummyIOControl.h>
-#include <ConfigEeprom.h>
+#if defined(ESP32)
 
-#include "Configuration.h"
+hw_timer_t* CHAL::_hwTimer[2] = {0};
 
-// must be after "Configuration.h" because of defines
-#include <ControlImplementation.h>
-
-////////////////////////////////////////////////////////
-
-class CMyControl : public CControl
+void IRAM_ATTR CHAL::OnTimer0()
 {
-private:
+	CHAL::_TimerEvent0();
+}
 
-	typedef CControl super;
+void IRAM_ATTR CHAL::OnTimer1()
+{
+	CHAL::_TimerEvent1();
+}
 
-public:
-
-	CMyControl()
-	{
-	}
-
-	virtual void Kill() override;
-
-	virtual void     IOControl(uint8_t tool, uint16_t level) override;
-	virtual uint16_t IOControl(uint8_t tool) override;
-
-protected:
-
-	virtual void Init() override;
-	virtual void Initialized() override;
-
-	virtual void TimerInterrupt() override;
-
-	virtual bool IsKill() override;
-	virtual void Poll() override;
-
-	virtual bool OnEvent(EnumAsByte(EStepperControlEvent) eventType, uintptr_t addInfo) override;
-
-	virtual void PrintVersion() override;
-	
-private:
-
-#ifdef BLINK_LED
-	uint32_t _timeBlink=0;
-#endif
-
-	static const CConfigEeprom::SCNCEeprom _eepromFlash;
-
-	ControlData _data;
-};
+//static void IgnoreIrq() {}
 
 ////////////////////////////////////////////////////////
 
-extern CMyControl Control;
+const uint8_t CHAL::_flashStorage[EEPROM_SIZE] = { };
+uint8_t CHAL::_flashBuffer[EEPROM_SIZE];
+
+void CHAL::FlashWriteWords(uint32_t *flash_ptr, const uint32_t *src, uint32_t n_words)
+{
+}
+
+void CHAL::FlashErase(void *flash_ptr, uint32_t size)
+{
+}
+
+void CHAL::FlashEraseRow(void *flash_ptr)
+{
+}
+
+void CHAL::FlashRead(const void *flash_ptr, void *data, uint32_t size)
+{
+	memcpy(data, flash_ptr, size);
+}
+
+
+////////////////////////////////////////////////////////
+
+#endif

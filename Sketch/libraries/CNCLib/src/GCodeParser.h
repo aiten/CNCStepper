@@ -25,22 +25,6 @@
 
 typedef uint16_t param_t;
 
-#define NUM_MAXPARAMNAMELENGTH 16
-#define NUM_PARAMETERRANGE	255
-
-#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(_MSC_VER)
-
-#define NUM_PARAMETER	16		// slotCount, map from uint8_t to < NUM_PARAMETER
-#define G54ARRAYSIZE	6
-
-#else
-
-#define NUM_PARAMETER	8
-#define G54ARRAYSIZE	2
-
-#endif
-
-
 // see: http://linuxcnc.org/docs/html/gcode/overview.html#_numbered_parameters_a_id_sub_numbered_parameters_a
 
 #define PARAMSTART_G28HOME		5161		// 5161-5169 - G28 Home for (X Y Z A B C U V W)

@@ -30,14 +30,14 @@ private:
 
 public:
 
-	CMatrix4x4<T>(const CMatrix4x4<T>& src)
+	CMatrix4x4(const CMatrix4x4& src)
 	{
 		memcpy(_v, src._v, sizeof(_v));
 	}
 
-	CMatrix4x4<T>() { }
+	CMatrix4x4() { }
 
-	CMatrix4x4<T>(const T dest[MATRIX4X4SIZEX][MATRIX4X4SIZEY])
+	CMatrix4x4(const T dest[MATRIX4X4SIZEX][MATRIX4X4SIZEY])
 	{
 		memcpy(_v, dest, sizeof(_v));
 	}

@@ -276,6 +276,9 @@
     <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\Steppers\StepperStepDirDriverTMC220X.h">
       <Filter>StepperLib\Steppers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_Esp32.h">
+      <Filter>StepperLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\MsvcStepper\MsvcStepper.cpp">
@@ -382,6 +385,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Sketch\libraries\CNCLibEx\src\U8gLcd.cpp">
       <Filter>CNCLibEx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Sketch\libraries\StepperLib\src\HAL_Esp32.cpp">
+      <Filter>StepperLib</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

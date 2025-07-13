@@ -18,14 +18,15 @@
 
 ////////////////////////////////////////////////////////
 
-#define HARDWARETYPE_CNC3325         1 // CNC-3325, micro steps 32, DRV8825, CNCShield V3.51, zero
-#define HARDWARETYPE_CNCShield3x    10 // All "Test" must be configured with eeprom
-#define HARDWARETYPE_L298N	        11 // (test for sketch maxsize with arduino nano)
-#define HARDWARETYPE_SMC	        12 // 
-#define HARDWARETYPE_TB6560         13 // 
-#define HARDWARETYPE_CUSTOM	        99 // custom
+//#include "Machines/Machine_CNC3325.h"
+#include "Machines/Machine_Esp32C6.h"
+//#include "Machines/Machine_CNCShield3x.h"
+//#include "Machines/Machine_L298N.h"
+//#include "Machines/Machine_SMC800.h"
+//#include "Machines/Machine_TB6560.h"
+//#include "Machines/Machine_Custom.h"
 
-#define HARDWARETYPE HARDWARETYPE_CNCShield3x
+////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////
 
@@ -35,27 +36,6 @@
 
 ////////////////////////////////////////////////////////
 
-#if HARDWARETYPE==HARDWARETYPE_CNC3325
-#include "ConfigurationMachine_CNC3325.h"
-#elif HARDWARETYPE==HARDWARETYPE_CNCShield3x
-#include "ConfigurationMachine_CNCShield3x.h"
-#elif HARDWARETYPE==HARDWARETYPE_L298N
-#include "ConfigurationMachine_L298N.h"
-#elif HARDWARETYPE==HARDWARETYPE_SMC
-#include "ConfigurationMachine_SMC800.h"
-#elif HARDWARETYPE==HARDWARETYPE_TB6560
-#include "ConfigurationMachine_TB6560.h"
-#elif HARDWARETYPE==HARDWARETYPE_CUSTOM
-#include "ConfigurationMachine_Custom.h"
-#else
-#endif
-
-////////////////////////////////////////////////////////
-
 #define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
-
-////////////////////////////////////////////////////////
-
-#define DISABLELEDBLINK
 
 ////////////////////////////////////////////////////////

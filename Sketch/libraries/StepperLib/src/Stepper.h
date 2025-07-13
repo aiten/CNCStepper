@@ -129,11 +129,11 @@ public:
 	virtual void Init();
 
 	bool    IsError() const { return _pod._error != nullptr; };
-	error_t GetError() const { return _pod._error; }
+	cncerror_t GetError() const { return _pod._error; }
 	void    ClearError() { _pod._error = nullptr; }
 
 	bool    IsFatalError() const { return _pod._fatalError != nullptr; };
-	error_t GetFatalError() const { return _pod._fatalError; }
+	cncerror_t GetFatalError() const { return _pod._fatalError; }
 	void    ClearFatalError() { _pod._fatalError = nullptr; }
 
 
@@ -441,8 +441,8 @@ protected:
 		axisArray_t _lastDirection;							// for backlash
 		axisArray_t _invertDirection;						// invert direction
 
-		error_t _error;
-		error_t _fatalError;
+		cncerror_t _error;
+		cncerror_t _fatalError;
 
 #ifndef REDUCED_SIZE
 		uint8_t _timeOutEnable[NUM_AXIS];					// enableTimeout in sec if no step (0.. disable, always enabled)
@@ -690,20 +690,20 @@ protected:
 	debugvirtual void OnWait(EnumAsByte(EWaitType) wait);			// wait for finish move or movementQueue full
 	debugvirtual void OnStart();									// startup of movement
 
-	debugvirtual void OnError(error_t error);
-	debugvirtual void OnWarning(error_t warning);
-	debugvirtual void OnInfo(error_t info);
+	debugvirtual void OnError(cncerror_t error);
+	debugvirtual void OnWarning(cncerror_t warning);
+	debugvirtual void OnInfo(cncerror_t info);
 
-	void FatalError(error_t error) { _pod._fatalError = error; }
+	void FatalError(cncerror_t error) { _pod._fatalError = error; }
 
-	void Error(error_t error)
+	void Error(cncerror_t error)
 	{
 		_pod._error = error;
 		OnError(error);
 	}
 
-	void Info(error_t info) { OnInfo(info); }
-	void Warning(error_t warning) { OnWarning(warning); }
+	void Info(cncerror_t info) { OnInfo(info); }
+	void Warning(cncerror_t warning) { OnWarning(warning); }
 
 	void Error() NEVER_INLINE_AVR { Error(MESSAGE_UNKNOWNERROR); }
 	void FatalError() { FatalError(MESSAGE_UNKNOWNERROR); }

@@ -17,35 +17,14 @@
 #pragma once
 
 ////////////////////////////////////////////////////////
+// please include <Steppers/StepperCNCShield_pins.h> 
+////////////////////////////////////////////////////////
 
 #define CMyStepper CStepperCNCShield
 
 ////////////////////////////////////////////////////////
 
 #define CNCSHIELD_NUM_AXIS MYNUM_AXIS
-//#define CNCSHIELD_GBRL09
-
-#include <Steppers/StepperCNCShield_pins.h>
-
-// change some pin definition here:
-
-// see http://forum.arduino.cc/index.php?topic=358245.0
-// DIR and STEP are swapped for each axis
-
-#undef CNCSHIELD_X_STEP_PIN
-#undef CNCSHIELD_X_DIR_PIN
-#define CNCSHIELD_X_STEP_PIN    5
-#define CNCSHIELD_X_DIR_PIN     2
-
-#undef CNCSHIELD_Y_STEP_PIN
-#undef CNCSHIELD_Y_DIR_PIN
-#define CNCSHIELD_Y_STEP_PIN    6
-#define CNCSHIELD_Y_DIR_PIN     3
-
-#undef CNCSHIELD_Z_STEP_PIN
-#undef CNCSHIELD_Z_DIR_PIN
-#define CNCSHIELD_Z_STEP_PIN    7
-#define CNCSHIELD_Z_DIR_PIN     4
 
 #include <Steppers/StepperCNCShield.h>
 
@@ -58,23 +37,23 @@
 
 #ifdef CNCSHIELD_HOLD_PIN
 #define HOLD_PIN CNCSHIELD_HOLD_PIN
-#define HOLD_PIN_ON CNCSHIELD_HOLD_PIN_ON
+#define HOLD_PIN_ON		CNCSHIELD_HOLD_PIN_ON
 #endif
 
 #ifdef CNCSHIELD_RESUME_PIN
 #define RESUME_PIN CNCSHIELD_RESUME_PIN
-#define RESUME_PIN_ON CNCSHIELD_RESUME_PIN_ON
+#define RESUME_PIN_ON		CNCSHIELD_RESUME_PIN_ON
 #endif
 
 #ifdef CNCSHIELD_PROBE_PIN
-#define PROBE_PIN		CNCSHIELD_PROBE_PIN
-#define PROBE_PIN_ON	CNCSHIELD_PROBE_PIN_ON
+#define PROBE_PIN		    CNCSHIELD_PROBE_PIN
+#define PROBE_PIN_ON		CNCSHIELD_PROBE_PIN_ON
 #endif
 
 #ifdef CNCSHIELD_COOLANT_PIN
-#define COOLANT_PIN		CNCSHIELD_COOLANT_PIN
-#define COOLANT_PIN_ON	CNCSHIELD_COOLANT_PIN_ON
-#define COOLANT_PIN_OFF	CNCSHIELD_COOLANT_PIN_OFF
+#define COOLANT_PIN			CNCSHIELD_COOLANT_PIN
+#define COOLANT_PIN_ON		CNCSHIELD_COOLANT_PIN_ON
+#define COOLANT_PIN_OFF		CNCSHIELD_COOLANT_PIN_OFF
 #endif
 
 #ifdef CNCSHIELD_SPINDLE_ENABLE_PIN
@@ -94,9 +73,5 @@
 #define CONTROLLERFAN_DIGITAL_OFF LOW
 #undef  CONTROLLERFAN_ANALOGSPEED
 #endif
-
-////////////////////////////////////////////////////////
-
-#define DISABLELEDBLINK
 
 ////////////////////////////////////////////////////////

@@ -86,7 +86,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Sketch\Laser\Laser\Configuration.h" />
-    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Configuration_CNCShield.h" />
+    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Machines\Machine_LED_5W.h" />
+    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Machines\Machine_LED_5W_esp32c6.h" />
+    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Machines\Machine_LED_Mini.h" />
+    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Machines\Stepper_CNCShield3x.h" />
     <ClInclude Include="..\..\..\Sketch\Laser\Laser\MyControl.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />

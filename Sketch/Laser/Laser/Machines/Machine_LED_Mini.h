@@ -18,10 +18,6 @@
 
 ////////////////////////////////////////////////////////
 
-#define STEPPERTYPE 4		// CStepperCNCShield
-
-////////////////////////////////////////////////////////
-
 #define USBBAUDRATE 250000
 
 ////////////////////////////////////////////////////////
@@ -129,6 +125,7 @@
 #define C_REFERENCEHITVALUE_MAX LOW
 
 #define MOVEAWAYFROMREF_MM1000 250
+#define STEPRATE_REFMOVE	(CNC_MAXSPEED/4)
 
 #define SPINDLE_ANALOGSPEED
 #define SPINDLE_ISLASER
@@ -137,22 +134,41 @@
 
 ////////////////////////////////////////////////////////
 
-#if STEPPERTYPE==4
-#include "Configuration_CNCShield.h"
-#endif
+#define CNCSHIELD_NUM_AXIS MYNUM_AXIS
+//#define CNCSHIELD_GBRL09
+
+#include <Steppers/StepperCNCShield_pins.h>
+
+// change some pin definition here:
+
+// see http://forum.arduino.cc/index.php?topic=358245.0
+// DIR and STEP are swapped for each axis
+
+#undef CNCSHIELD_X_STEP_PIN
+#undef CNCSHIELD_X_DIR_PIN
+#define CNCSHIELD_X_STEP_PIN    5
+#define CNCSHIELD_X_DIR_PIN     2
+
+#undef CNCSHIELD_Y_STEP_PIN
+#undef CNCSHIELD_Y_DIR_PIN
+#define CNCSHIELD_Y_STEP_PIN    6
+#define CNCSHIELD_Y_DIR_PIN     3
+
+#undef CNCSHIELD_Z_STEP_PIN
+#undef CNCSHIELD_Z_DIR_PIN
+#define CNCSHIELD_Z_STEP_PIN    7
+#define CNCSHIELD_Z_DIR_PIN     4
+
+//#undef CNCLIB_USE_A4998
+//#define CNCLIB_USE_DRV8825
+//#undef CNCLIB_USE_TMC220X
+
+#include "Stepper_CNCShield3x.h"
 
 ////////////////////////////////////////////////////////
 
 // do not use probe
 #undef PROBE_PIN
-
-////////////////////////////////////////////////////////
-
-#define GO_DEFAULT_STEPRATE		((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
-#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
-#define G1_DEFAULT_FEEDPRATE	100000	// in mm1000 / min
-
-#define STEPRATE_REFMOVE	(CNC_MAXSPEED/4)
 
 ////////////////////////////////////////////////////////
 

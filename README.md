@@ -21,6 +21,8 @@ see folder: *Sketch*
 
 -   32 bit Arduino: Due, zero, M0
 
+-   esp32 super mini, e.g. https://www.espboards.dev/esp32/esp32-c6-super-mini/ 
+
 -   Arduino Shields: CNCShield, Ramps 1.4, Ramps FD
 
 -   Drivers: A4988, DRV8825, SMC 800, L298 and TB6560
@@ -47,7 +49,7 @@ see folder: *Sketch*
 ### Installation procedure
 
 -    clone or download repository
--    use Arduino IDE >= 1.8.7
+-    use Arduino IDE >= 2.0.0
 -    set "Sketchbook location" to <basedir>/Sketch (Arduino IDE Menu: File->Preferences) - this is necessary to find the libraries
 -    install the library u8g2 (Menu: Sketch->Include library->Manage libraries)
 -    for arduino due and/or zero install the board (Menu: Tools->Board: xxx->Boards Manager...)

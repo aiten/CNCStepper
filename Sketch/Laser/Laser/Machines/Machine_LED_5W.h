@@ -3,30 +3,18 @@
 
   Copyright (c) Herbert Aitenbichler
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
-  to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+  to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
   and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
-  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #pragma once
-
-////////////////////////////////////////////////////////
-//
-// esp32 c6
-// try to be compatible with CNCShield v3.51
-// use 3(-4) Axis
-// TMC220X with ms16
-// 
-////////////////////////////////////////////////////////
-
-#define BLINK_LED 15
-#define BLINK_TIMEOUT		1000		
 
 ////////////////////////////////////////////////////////
 
@@ -34,30 +22,37 @@
 
 ////////////////////////////////////////////////////////
 
-#define MYNUM_AXIS 3
+#define MYNUM_AXIS 2
 
 ////////////////////////////////////////////////////////
 
-#define X_MAXSIZE 134000				// in mm1000_t
-#define Y_MAXSIZE 134000
-#define Z_MAXSIZE 83000
-#define A_MAXSIZE 360000
+#define X_MAXSIZE 400000				// in mm1000_t
+#define Y_MAXSIZE 380000
+#define Z_MAXSIZE 100000
+#define A_MAXSIZE 50000
 #define B_MAXSIZE 360000
 #define C_MAXSIZE 360000
 
 ////////////////////////////////////////////////////////
 
-#define STEPPERDIRECTION 0		// set bit to invert direction of each axis
+#define STEPPERDIRECTION ((1 << X_AXIS) + (1 << Y_AXIS))		// set bit to invert direction of each axis
 
-#define STEPSPERROTATION  200
-#define MICROSTEPPING     16
-#define SCREWLEAD         2.0
+#define STEPSPERROTATION	200
+#define MICROSTEPPING		16
+
+// GT2 with 15Tooth = > 30mm
+
+#define TOOTH 15
+#define TOOTHSIZE 2.0
+#define SCREWLEAD (TOOTH*TOOTHSIZE)
+
+#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
 
 ////////////////////////////////////////////////////////
 
-#define CNC_MAXSPEED ((steprate_t)13000)			// steps/sec => 13000 => 13000/(200*16) => 4.0 rot /sec
-#define CNC_ACC  350								// time to full speed => see CNCLib EEPromConfig
-#define CNC_DEC  400								// time to break => see CNCLib EEPromConfig
+#define CNC_MAXSPEED 27000        // steps/sec
+#define CNC_ACC  350
+#define CNC_DEC  400
 #define CNC_JERKSPEED 1000
 
 #define X_MAXSPEED 0
@@ -105,16 +100,16 @@
 ////////////////////////////////////////////////////////
 // NoReference, ReferenceToMin, ReferenceToMax
 
-#define X_USEREFERENCE	EReverenceType::ReferenceToMax
-#define Y_USEREFERENCE	EReverenceType::ReferenceToMax
-#define Z_USEREFERENCE	EReverenceType::ReferenceToMax
-#define A_USEREFERENCE	EReverenceType::NoReference
-#define B_USEREFERENCE	EReverenceType::NoReference
-#define C_USEREFERENCE	EReverenceType::NoReference
+#define X_USEREFERENCE	EReverenceType::ReferenceToMin
+#define Y_USEREFERENCE	EReverenceType::ReferenceToMin
+#define Z_USEREFERENCE  EReverenceType::NoReference
+#define A_USEREFERENCE  EReverenceType::NoReference
+#define B_USEREFERENCE  EReverenceType::NoReference
+#define C_USEREFERENCE  EReverenceType::NoReference
 
-#define REFMOVE_1_AXIS  Z_AXIS
+#define REFMOVE_1_AXIS  Y_AXIS
 #define REFMOVE_2_AXIS  X_AXIS
-#define REFMOVE_3_AXIS  Y_AXIS
+#define REFMOVE_3_AXIS  255
 #define REFMOVE_4_AXIS  255
 #define REFMOVE_5_AXIS  255
 #define REFMOVE_6_AXIS  255
@@ -134,28 +129,33 @@
 #define C_REFERENCEHITVALUE_MAX LOW
 
 #define MOVEAWAYFROMREF_MM1000 500
-
-////////////////////////////////////////////////////////
+#define STEPRATE_REFMOVE	4000
 
 #define SPINDLE_ANALOGSPEED
-#define SPINDLE_MAXSPEED	10000	// analog 255
-#define SPINDLE_FADETIMEDELAY  8    // 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
-#define SPINDLE_FADE
+#define SPINDLE_ISLASER
+#define SPINDLE_MAXSPEED	255			// analog 255
+#define SPINDLE_FADETIMEDELAY  0		// e.g. 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
 
 ////////////////////////////////////////////////////////
-// esp32 do not have a CNCShield => we have to define all pins!
-
-#define CNCLIB_USE_TMC220X
 
 #define CNCSHIELD_NUM_AXIS MYNUM_AXIS
+//#define CNCSHIELD_GBRL09
 
-#include <Steppers/StepperCNCShield_esp32_pins.h>
+#include <Steppers/StepperCNCShield_pins.h>
+
+// change some pin definition here:
+
+//#undef CNCLIB_USE_A4998
+//#define CNCLIB_USE_DRV8825
+//#undef CNCLIB_USE_TMC220X
+
 #include "Stepper_CNCShield3x.h"
 
 ////////////////////////////////////////////////////////
 
-#define STEPRATE_REFMOVE		(CNC_MAXSPEED/3)
+// do not use probe
+#undef PROBE_PIN
 
 ////////////////////////////////////////////////////////
 
-#define MESSAGE_MYCONTROL_VERSION          F(", CNC-Esp32C6")
+#define MESSAGE_MYCONTROL_VERSION					F(", Laser")

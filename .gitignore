@@ -47,3 +47,4 @@ bin
 /Doc
 /VS/Arduino.VC/Lib
 .pio
+/Sketch/libraries/Adafruit_NeoPixel

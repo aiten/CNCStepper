@@ -155,7 +155,7 @@
 //#define CNCLIB_USE_DRV8825
 //#undef CNCLIB_USE_TMC220X
 
-#include "ConfigurationStepper_CNCShield3x.h"
+#include "Stepper_CNCShield3x.h"
 
 ////////////////////////////////////////////////////////
 

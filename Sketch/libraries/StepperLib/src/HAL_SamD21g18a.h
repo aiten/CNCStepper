@@ -22,7 +22,7 @@
 
 #if defined(__SAMD21G18A__)
 
-#include <itoa.h>
+//#include <itoa.h>
 
 #undef pgm_read_ptr
 inline  const void* pgm_read_ptr(const void* p) { return *((void **)p); }
@@ -101,12 +101,12 @@ inline uint8_t CHAL::digitalRead(pin_t pin)
 
 inline void CHAL::digitalWrite(pin_t pin, uint8_t val)
 {
-	::digitalWrite(pin,val);
+	::digitalWrite(pin,(PinStatus) val);
 }
 
 inline void CHAL::pinMode(pin_t pin, uint8_t mode)
 { 
-	::pinMode(pin,mode); 
+	::pinMode(pin,(PinMode) mode); 
 }
 
 inline void CHAL::analogWrite8(pin_t pin, uint8_t val)
@@ -126,7 +126,7 @@ inline void CHAL::pinModeInputPullUp(pin_t pin)
 
 inline void CHAL::attachInterruptPin(pin_t pin, void(*userFunc)(void), int mode)
 {
-	::attachInterrupt(digitalPinToInterrupt(pin), userFunc, mode);
+	::attachInterrupt(digitalPinToInterrupt(pin), userFunc, (PinStatus) mode);
 }
 
 ///////////////////////////////////////////

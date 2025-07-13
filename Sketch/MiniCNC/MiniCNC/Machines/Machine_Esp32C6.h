@@ -20,8 +20,8 @@
 //
 // esp32 c6
 // try to be compatible with CNCShield v3.51
-// use 3-4 Axis
-// DRV8825 with ms32
+// use 3(-4) Axis
+// TMC220X with ms16
 // 
 ////////////////////////////////////////////////////////
 
@@ -55,9 +55,9 @@
 
 ////////////////////////////////////////////////////////
 
-#define CNC_MAXSPEED ((steprate_t)13000)			// steps/sec => 50000 => 7.8 rot /sec
-#define CNC_ACC  350								// 0.257 => time to full speed
-#define CNC_DEC  400								// 0.1975 => time to break
+#define CNC_MAXSPEED ((steprate_t)13000)			// steps/sec => 13000 => 13000/(200*16) => 4.0 rot /sec
+#define CNC_ACC  350								// time to full speed => see CNCLib EEPromConfig
+#define CNC_DEC  400								// time to break => see CNCLib EEPromConfig
 #define CNC_JERKSPEED 1000
 
 #define X_MAXSPEED 0
@@ -138,7 +138,7 @@
 ////////////////////////////////////////////////////////
 
 #define SPINDLE_ANALOGSPEED
-#define SPINDLE_MAXSPEED	10000			// analog 255
+#define SPINDLE_MAXSPEED	10000	// analog 255
 #define SPINDLE_FADETIMEDELAY  8    // 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
 #define SPINDLE_FADE
 
@@ -149,69 +149,7 @@
 
 #define CNCSHIELD_NUM_AXIS MYNUM_AXIS
 
-#define CNCSHIELD_PIN_STEP_OFF		0
-#define CNCSHIELD_PIN_STEP_ON		1
-
-#define CNCSHIELD_PIN_DIR_OFF		0
-#define CNCSHIELD_PIN_DIR_ON		1
-
-// Enable: LOW Active
-#define CNCSHIELD_PIN_ENABLE_OFF	1
-#define CNCSHIELD_PIN_ENABLE_ON		0
-
-////////////////////////////////////////////////////////
-
-#define CNCSHIELD_ENABLE_PIN		20
-
-#define CNCSHIELD_X_STEP_PIN		5
-#define CNCSHIELD_X_DIR_PIN			14
-#define CNCSHIELD_X_MIN_PIN			0
-#define CNCSHIELD_X_MAX_PIN			0
-
-#define CNCSHIELD_Y_STEP_PIN		6
-#define CNCSHIELD_Y_DIR_PIN			18
-#define CNCSHIELD_Y_MIN_PIN			1
-#define CNCSHIELD_Y_MAX_PIN			1
-
-#define CNCSHIELD_Z_STEP_PIN		7
-#define CNCSHIELD_Z_DIR_PIN			19
-#define CNCSHIELD_Z_MIN_PIN			2
-#define CNCSHIELD_Z_MAX_PIN			2
-
-#define CNCSHIELD_A_STEP_PIN		x	
-#define CNCSHIELD_A_DIR_PIN			xx	
-
-#define CNCSHIELD_SPINDLE_ENABLE_PIN	3
-#define CNCSHIELD_SPINDLE_DIR_PIN		4
-
-#define CNCSHIELD_SPINDLE_DIGITAL_ON		LOW
-#define CNCSHIELD_SPINDLE_DIGITAL_OFF		HIGH
-#define CNCSHIELD_SPINDLE_ANALOG_MAX		255
-
-#define CNCSHIELD_SPINDLE_DIR_CLW	LOW
-#define CNCSHIELD_SPINDLE_DIR_CCLW	HIGH
-
-//#define CNCSHIELD_ABORT_PIN		PIN_A0
-//#define CNCSHIELD_HOLD_PIN		PIN_A1
-//#define CNCSHIELD_RESUME_PIN		PIN_A2
-//#define CNCSHIELD_COOLANT_PIN		PIN_A3
-
-#define CNCSHIELD_ABORT_PIN_ON		LOW
-#define CNCSHIELD_ABORT_PIN_OFF		HIGH
-
-#define CNCSHIELD_HOLD_PIN_ON		LOW
-#define CNCSHIELD_HOLD_PIN_OFF		HIGH
-
-#define CNCSHIELD_RESUME_PIN_ON		LOW
-#define CNCSHIELD_RESUME_PIN_OFF	HIGH
-
-#define CNCSHIELD_COOLANT_PIN_ON	LOW
-#define CNCSHIELD_COOLANT_PIN_OFF	HIGH
-
-#define CNCSHIELD_PROBE_PIN			9
-#define CNCSHIELD_PROBE_PIN_ON		LOW
-#define CNCSHIELD_PROBE_PIN_OFF		HIGH
-
+#include <Steppers/StepperCNCShield_esp32_pins.h>
 #include "Stepper_CNCShield3x.h"
 
 ////////////////////////////////////////////////////////

@@ -22,8 +22,8 @@
 
 ////////////////////////////////////////////////////////
 
-//#include "Machines/Machine_LED_5W.h"
+#include "Machines/Machine_LED_5W.h"
 //#include "Machines/Machine_LED_5W_esp32c6.h"
-#include "Machines/Machine_LED_Mini.h"
+//#include "Machines/Machine_LED_Mini.h"
 
 ////////////////////////////////////////////////////////

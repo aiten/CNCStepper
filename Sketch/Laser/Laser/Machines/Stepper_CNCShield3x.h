@@ -16,20 +16,6 @@
 
 #pragma once
 
-////////////////////////////////////////////////////////
-// please include <Steppers/StepperCNCShield_pins.h> 
-////////////////////////////////////////////////////////
-
-#define CMyStepper CStepperCNCShield
-
-////////////////////////////////////////////////////////
-
-#define CNCSHIELD_NUM_AXIS MYNUM_AXIS
-
-#include <Steppers/StepperCNCShield.h>
-
-////////////////////////////////////////////////////////
-
 #ifdef CNCSHIELD_ABORT_PIN
 #define KILL_PIN		CNCSHIELD_ABORT_PIN
 #define KILL_PIN_ON		CNCSHIELD_ABORT_PIN_ON

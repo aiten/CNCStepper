@@ -18,10 +18,11 @@
 
 ////////////////////////////////////////////////////////
 //
-// Arduino Zero => do not use eeprom => configure all values
-// CNCShield v3.51
-// use 3 Axis
-// DRV8825 with ms32
+// * Arduino Zero => do not use eeprom => configure all values
+// * CNCShield v3.51
+// * use 3 Axis
+// * DRV8825 with ms32
+// * Router 3020
 // 
 ////////////////////////////////////////////////////////
 
@@ -48,12 +49,9 @@
 #define MICROSTEPPING		32
 #define SCREWLEAD			4.0
 
-////////////////////////////////////////////////////////
+#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
 
-//#define CNC_MAXSPEED 20000        // steps/sec = 6.25 rot/sec
-//#define CNC_ACC  350              // 0.184 sec to full speed
-//#define CNC_DEC  400              // 0.141 sec to break
-//#define CNC_JERKSPEED 1000
+////////////////////////////////////////////////////////
 
 #define CNC_MAXSPEED 40000        // steps/sec
 #define CNC_ACC  565
@@ -143,6 +141,9 @@
 #define SPINDLE_FADE
 
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+#define CMyStepper CStepperCNCShield
 
 #define CNCSHIELD_NUM_AXIS MYNUM_AXIS
 //#define CNCSHIELD_GBRL09
@@ -155,10 +156,15 @@
 //#define CNCLIB_USE_DRV8825
 //#undef CNCLIB_USE_TMC220X
 
+#include <Steppers/StepperCNCShield.h>
 #include "Stepper_CNCShield3x.h"
 
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
+#define GO_DEFAULT_STEPRATE		  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_FEEDPRATE	  100000	// in mm1000 / min
 #define STEPRATE_REFMOVE		(CNC_MAXSPEED/3)
 
 ////////////////////////////////////////////////////////

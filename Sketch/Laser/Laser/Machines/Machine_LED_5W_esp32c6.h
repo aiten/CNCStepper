@@ -17,6 +17,13 @@
 #pragma once
 
 ////////////////////////////////////////////////////////
+//
+// esp32 c6
+// try to be compatible with CNCShield v3.51
+// use 2(-4) Axis
+// TMC220X with ms16
+// 
+////////////////////////////////////////////////////////
 
 #define BLINK_LED 15
 #define BLINK_TIMEOUT		1000		
@@ -134,7 +141,6 @@
 #define C_REFERENCEHITVALUE_MAX LOW
 
 #define MOVEAWAYFROMREF_MM1000 500
-#define STEPRATE_REFMOVE	4000
 
 #define SPINDLE_ANALOGSPEED
 #define SPINDLE_ISLASER
@@ -142,14 +148,31 @@
 #define SPINDLE_FADETIMEDELAY  0		// e.g. 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
 
 ////////////////////////////////////////////////////////
-#define CNCLIB_USE_TMC220X
+////////////////////////////////////////////////////////
+
+#define CMyStepper CStepperCNCShield
 
 #define CNCSHIELD_NUM_AXIS MYNUM_AXIS
 
 #include <Steppers/StepperCNCShield_esp32_pins.h>
+
+// change some pin definition here:
+
+#undef CNCLIB_USE_A4998
+#undef CNCLIB_USE_DRV8825
+#define CNCLIB_USE_TMC220X
+
+#include <Steppers/StepperCNCShield.h>
 #include "Stepper_CNCShield3x.h"
 
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+
+#define GO_DEFAULT_STEPRATE		((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_FEEDPRATE	100000	// in mm1000 / min
+#define STEPRATE_REFMOVE	4000
 
 // do not use probe
 #undef PROBE_PIN

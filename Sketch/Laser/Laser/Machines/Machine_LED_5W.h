@@ -17,6 +17,15 @@
 #pragma once
 
 ////////////////////////////////////////////////////////
+//
+// laser (5w)
+// 
+// use 2(-4) Axis
+// 8225 with ms16
+// CNCShield
+// Arduino Uno
+// 
+////////////////////////////////////////////////////////
 
 #define USBBAUDRATE 250000
 
@@ -129,7 +138,6 @@
 #define C_REFERENCEHITVALUE_MAX LOW
 
 #define MOVEAWAYFROMREF_MM1000 500
-#define STEPRATE_REFMOVE	4000
 
 #define SPINDLE_ANALOGSPEED
 #define SPINDLE_ISLASER
@@ -137,6 +145,9 @@
 #define SPINDLE_FADETIMEDELAY  0		// e.g. 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
 
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+#define CMyStepper CStepperCNCShield
 
 #define CNCSHIELD_NUM_AXIS MYNUM_AXIS
 //#define CNCSHIELD_GBRL09
@@ -149,7 +160,16 @@
 //#define CNCLIB_USE_DRV8825
 //#undef CNCLIB_USE_TMC220X
 
+#include <Steppers/StepperCNCShield.h>
 #include "Stepper_CNCShield3x.h"
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+#define GO_DEFAULT_STEPRATE		  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_FEEDPRATE	  100000	// in mm1000 / min
+#define STEPRATE_REFMOVE	4000
 
 ////////////////////////////////////////////////////////
 

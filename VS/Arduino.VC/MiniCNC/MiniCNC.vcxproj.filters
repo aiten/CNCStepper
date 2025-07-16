@@ -25,12 +25,6 @@
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\MyControl.h">
       <Filter>MiniCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\Machines\Machine_CNC3325.h">
-      <Filter>MiniCNC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\Machines\Machine_CNCShield3x.h">
-      <Filter>MiniCNC</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\Machines\Machine_Custom.h">
       <Filter>MiniCNC\Machines</Filter>
     </ClInclude>
@@ -59,6 +53,12 @@
       <Filter>MiniCNC\Machines</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\Machines\Machine_Esp32C6.h">
+      <Filter>MiniCNC\Machines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\Machines\Machine_CNC3325.h">
+      <Filter>MiniCNC\Machines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MiniCNC\MiniCNC\Machines\Machine_CNCShield3x.h">
       <Filter>MiniCNC\Machines</Filter>
     </ClInclude>
   </ItemGroup>

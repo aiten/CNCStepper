@@ -17,6 +17,12 @@
 #pragma once
 
 ////////////////////////////////////////////////////////
+//
+// * Sample for L298 driver
+// * Arduino Uno (or Nano)
+// * use 3 Axis
+// 
+////////////////////////////////////////////////////////
 
 #define USBBAUDRATE 250000
 
@@ -34,6 +40,8 @@
 #define STEPSPERROTATION  48
 #define MICROSTEPPING   1
 #define SCREWLEAD     1.0
+
+#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
 
 ////////////////////////////////////////////////////////
 
@@ -85,8 +93,21 @@
 #define C_PROBESIZE 25000
 
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
-#include "Stepper_L298N.h"
+#define CMyStepper CStepperL298N
+
+#define MYNUM_AXIS  4
+
+#include <Steppers/StepperL298N.h>
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+#define GO_DEFAULT_STEPRATE		  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_FEEDPRATE	  100000	// in mm1000 / min
+#define STEPRATE_REFMOVE		(CNC_MAXSPEED/3)
 
 ////////////////////////////////////////////////////////
 

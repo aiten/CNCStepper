@@ -53,6 +53,8 @@
 #define MICROSTEPPING     16
 #define SCREWLEAD         2.0
 
+#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
+
 ////////////////////////////////////////////////////////
 
 #define CNC_MAXSPEED ((steprate_t)13000)			// steps/sec => 13000 => 13000/(200*16) => 4.0 rot /sec
@@ -112,9 +114,9 @@
 #define B_USEREFERENCE	EReverenceType::NoReference
 #define C_USEREFERENCE	EReverenceType::NoReference
 
-#define REFMOVE_1_AXIS  Z_AXIS
-#define REFMOVE_2_AXIS  X_AXIS
-#define REFMOVE_3_AXIS  Y_AXIS
+#define REFMOVE_1_AXIS  255 // Z_AXIS
+#define REFMOVE_2_AXIS  255 // X_AXIS
+#define REFMOVE_3_AXIS  255 // Y_AXIS
 #define REFMOVE_4_AXIS  255
 #define REFMOVE_5_AXIS  255
 #define REFMOVE_6_AXIS  255
@@ -143,17 +145,29 @@
 #define SPINDLE_FADE
 
 ////////////////////////////////////////////////////////
-// esp32 do not have a CNCShield => we have to define all pins!
+////////////////////////////////////////////////////////
 
-#define CNCLIB_USE_TMC220X
+#define CMyStepper CStepperCNCShield
 
 #define CNCSHIELD_NUM_AXIS MYNUM_AXIS
 
 #include <Steppers/StepperCNCShield_esp32_pins.h>
+
+// change some pin definition here:
+
+#undef CNCLIB_USE_A4998
+#undef CNCLIB_USE_DRV8825
+#define CNCLIB_USE_TMC220X
+
+#include <Steppers/StepperCNCShield.h>
 #include "Stepper_CNCShield3x.h"
 
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
+#define GO_DEFAULT_STEPRATE		  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_FEEDPRATE	  100000	// in mm1000 / min
 #define STEPRATE_REFMOVE		(CNC_MAXSPEED/3)
 
 ////////////////////////////////////////////////////////

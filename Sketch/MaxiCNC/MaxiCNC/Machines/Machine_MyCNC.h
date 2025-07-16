@@ -17,12 +17,24 @@
 #pragma once
 
 ////////////////////////////////////////////////////////
+//
+// * self build (134/134/83)
+// * Ramps FD with due
+// * Nema 23 Stepper Motors
+// * LCD 128/64
+//
+////////////////////////////////////////////////////////
 
 #define CMyStepper CStepperRampsFD
 
 ////////////////////////////////////////////////////////
 
 #define USBBAUDRATE 115200
+
+////////////////////////////////////////////////////////
+
+#define BLINK_LED LED_BUILTIN
+#define BLINK_TIMEOUT		1000		
 
 ////////////////////////////////////////////////////////
 
@@ -50,6 +62,8 @@
 #define STEPSPERROTATION  200
 #define MICROSTEPPING     32
 #define SCREWLEAD         5.0
+
+#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
 
 ////////////////////////////////////////////////////////
 
@@ -141,9 +155,41 @@
 #define SPINDLE_FADETIMEDELAY  0	// 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
 
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+//
+// use ramps board
 
-#include "ConfigurationStepper_RampsFD.h"
+#define RAMPSFD_DISABLE_E1
+#define LCD_NUMAXIS			MYNUM_AXIS
 
+#include <Steppers/StepperRampsFD_pins.h>
+
+//swap X with E PINs because damaged pin on X socket => use e0
+#undef RAMPSFD_X_STEP_PIN
+#undef RAMPSFD_X_DIR_PIN
+#undef RAMPSFD_X_ENABLE_PIN
+#undef RAMPSFD_E0_STEP_PIN
+#undef RAMPSFD_E0_DIR_PIN
+#undef RAMPSFD_E0_ENABLE_PIN
+
+#define RAMPSFD_E0_STEP_PIN      63
+#define RAMPSFD_E0_DIR_PIN     62
+#define RAMPSFD_E0_ENABLE_PIN    48
+
+#define RAMPSFD_X_STEP_PIN     36
+#define RAMPSFD_X_DIR_PIN      28
+#define RAMPSFD_X_ENABLE_PIN   42
+
+#include <Steppers/StepperRampsFD.h>
+#define BOARDNAME RAMPSFD
+
+////////////////////////////////////////////////////////
+
+#define ROTARY_EN1           CAT(BOARDNAME,_LCD_ROTARY_EN1)
+#define ROTARY_EN2           CAT(BOARDNAME,_LCD_ROTARY_EN2)
+#define SD_ENABLE_PIN		 CAT(BOARDNAME,_SDSS_PIN)
+
+////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 
 #define GO_DEFAULT_STEPRATE		  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec

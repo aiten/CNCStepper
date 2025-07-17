@@ -32,7 +32,10 @@
 CMyControl      Control;
 CMotionControl  MotionControl;
 CConfigEeprom   Eprom;
-HardwareSerial& StepperSerial = Serial;
+#if defined (USEHARDWARESERIAL)
+HardwareSerial&       StepperSerial = Serial;
+#endif
+
 
 ////////////////////////////////////////////////////////////
 
@@ -56,13 +59,13 @@ const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 	CNC_DEC,
 	STEPRATE_REFMOVE,
 	MOVEAWAYFROMREF_MM1000,
-	STEPSPERMM / 1000.0,
 	TIMEOUTSETIDLE_DEFAULT,
 	0,
 	0,
 	0,
 	0,
 	0,
+	STEPSPERMM / 1000.0,
 	{
 		{ AXISPARAMETER(X_MAXSIZE, X_USEREFERENCE, REFMOVE_1_AXIS, X_REFERENCEHITVALUE_MIN, X_REFERENCEHITVALUE_MAX, 0, X_MAXSPEED, X_ACC, X_DEC, X_STEPRATE_REFMOVE, X_STEPSPERMM, X_PROBESIZE) },
 		{ AXISPARAMETER(Y_MAXSIZE, Y_USEREFERENCE, REFMOVE_2_AXIS, Y_REFERENCEHITVALUE_MIN, Y_REFERENCEHITVALUE_MAX, 0, Y_MAXSPEED, Y_ACC, Y_DEC, Y_STEPRATE_REFMOVE, Y_STEPSPERMM, Y_PROBESIZE) },
@@ -85,8 +88,8 @@ void CMyControl::Init()
 {
 	CSingleton<CConfigEeprom>::GetInstance()->Init(sizeof(CConfigEeprom::SCNCEeprom), &_eepromFlash, EPROM_SIGNATURE);
 
-#ifdef DISABLELEDBLINK
-	DisableBlinkLed();
+#ifdef BLINK_LED
+	CHAL::pinModeOutput(BLINK_LED);
 #endif
 
 	super::Init();
@@ -237,6 +240,15 @@ void CMyControl::Poll()
 		Lcd.Diagnostic(F("LCD Hold"));
 #endif
 	}
+#ifdef BLINK_LED
+
+	uint32_t time = millis();
+	if (_timeBlink < time)
+	{
+		HALFastdigitalWrite(BLINK_LED, CHAL::digitalRead(BLINK_LED) == HIGH ? LOW : HIGH);
+		_timeBlink = time + BLINK_TIMEOUT;
+	}
+#endif
 }
 
 ////////////////////////////////////////////////////////////

@@ -26,6 +26,11 @@
 
 ////////////////////////////////////////////////////////
 
+#define BLINK_LED LED_BUILTIN
+#define BLINK_TIMEOUT		1000		
+
+////////////////////////////////////////////////////////
+
 #define MYUSE_LCD
 
 ////////////////////////////////////////////////////////
@@ -49,6 +54,8 @@
 #define STEPSPERROTATION  200
 #define MICROSTEPPING     16
 #define SCREWLEAD         1.0
+
+#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
 
 ////////////////////////////////////////////////////////
 
@@ -137,9 +144,18 @@
 #define SPINDLE_FADETIMEDELAY  0		// 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
 
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
-#include "ConfigurationStepper_Ramps14.h"
+#define RAMPS14_NUM_AXIS	MYNUM_AXIS
+#define LCD_NUMAXIS			MYNUM_AXIS
 
+
+#include <Steppers/StepperRamps14_pins.h>
+#include <Steppers/StepperRamps14.h>
+
+#define BOARDNAME RAMPS14
+
+////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 
 #define GO_DEFAULT_STEPRATE		  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec

@@ -17,6 +17,14 @@
 #pragma once
 
 ////////////////////////////////////////////////////////
+//
+// * Sample for TB6560 driver 
+// * Arduino Uno (or Nano)
+// * use 3 Axis
+// 
+////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
 
 #define USBBAUDRATE 250000
 
@@ -32,6 +40,8 @@
 #define STEPSPERROTATION	200
 #define MICROSTEPPING		8
 #define SCREWLEAD			1.0
+
+#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
 
 ////////////////////////////////////////////////////////
 
@@ -83,8 +93,25 @@
 #define C_PROBESIZE 25000
 
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
-#include "Stepper_TB6560.h"
+#define CMyStepper CStepperTB6560
+
+#define MYNUM_AXIS 4
+
+#include <Steppers/StepperTB6560_pins.h>
+
+// change some pin definition here:
+
+#include <Steppers/StepperTB6560.h>
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+#define GO_DEFAULT_STEPRATE		  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_FEEDPRATE	  100000	// in mm1000 / min
+#define STEPRATE_REFMOVE		(CNC_MAXSPEED/3)
 
 ////////////////////////////////////////////////////////
 

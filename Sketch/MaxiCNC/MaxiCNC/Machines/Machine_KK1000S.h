@@ -17,12 +17,25 @@
 #pragma once
 
 ////////////////////////////////////////////////////////
+//
+// * CNC4All (800/500/100)
+// * Due
+// * Mash6050S Controller (Parallel Port)
+// * 3.3V => 5V Converter (from due)
+// * LCD 128/64
+//
+////////////////////////////////////////////////////////
 
 #define CMyStepper CStepperMash6050S
 
 ////////////////////////////////////////////////////////
 
 #define USBBAUDRATE 115200
+
+////////////////////////////////////////////////////////
+
+#define BLINK_LED LED_BUILTIN
+#define BLINK_TIMEOUT		1000		
 
 ////////////////////////////////////////////////////////
 
@@ -47,6 +60,8 @@
 #define STEPSPERROTATION	200
 #define MICROSTEPPING		16
 #define SCREWLEAD			5.0
+
+#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
 
 ////////////////////////////////////////////////////////
 
@@ -135,9 +150,13 @@
 #define SPINDLE_FADETIMEDELAY  0		// 8ms * 255 => 2040ms from 0 to max, 4080 from -max to +max
 
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
-#include "ConfigurationStepper_Mash6050S.h"
+#include <Steppers/StepperMash6050S_pins.h>
+#include <Steppers/StepperMash6050S.h>
+#define BOARDNAME MASH6050S
 
+////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 
 #define GO_DEFAULT_STEPRATE		((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec

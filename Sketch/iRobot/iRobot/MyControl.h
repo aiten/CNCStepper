@@ -44,12 +44,17 @@ protected:
 	virtual bool IsKill() override;
 
 	virtual bool Parse(CStreamReader* reader, Stream* output) override;
+	virtual void Poll() override;
 
 	virtual void GoToReference() override;
 
 	virtual void PrintVersion() override;
 	
 private:
+
+#ifdef BLINK_LED
+	uint32_t _timeBlink=0;
+#endif
 
 	static const CConfigEeprom::SCNCEeprom _eepromFlash;
 

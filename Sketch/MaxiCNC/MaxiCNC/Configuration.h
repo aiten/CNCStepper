@@ -16,35 +16,8 @@
 
 #pragma once
 
-#define HARDWARETYPE_PROXXONMF70	1	// proxxon mf70, ramps 1.4, micro-steps 16
-#define HARDWARETYPE_MYCNC	        2	// My-CNC, rampsfd, micro-steps 32
-#define HARDWARETYPE_KK1000S        4	// KK1000S, due 
-#define HARDWARETYPE_CUSTOM			99	// custom
-
-#define HARDWARETYPE HARDWARETYPE_PROXXONMF70
-//#define HARDWARETYPE HARDWARETYPE_MYCNC        // u8g2 only with Version 2.31.2 => HARDWARETYPE_ does not work with newer version
-//#define HARDWARETYPE HARDWARETYPE_KK1000S    // u8g2 only with Version 2.24.3 => HARDWARETYPE_KK1000S does not work with newer version
-
-////////////////////////////////////////////////////////
-
-#if HARDWARETYPE==HARDWARETYPE_PROXXONMF70
-
-#include "ConfigurationMachine_ProxxonMF70.h"
-
-#elif HARDWARETYPE==HARDWARETYPE_MYCNC
-
-#include "ConfigurationMachine_MyCNC.h"
-
-#elif HARDWARETYPE==HARDWARETYPE_KK1000S
-
-#include "ConfigurationMachine_KK1000S.h"
-
-#else
-
-#endif
-
-////////////////////////////////////////////////////////
-
-#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
+//#include "Machines/Machine_ProxxonMF70.h"	  // proxxon mf70, ramps 1.4, micro-steps 16
+//#include "Machines/Machine_MyCNC.h" 		  // My-CNC, rampsfd, micro-steps 32
+#include "Machines/Machine_KK1000S.h"		   // u8g2 only with Version 2.24.3 => HARDWARETYPE_KK1000S does not work with newer version
 
 ////////////////////////////////////////////////////////

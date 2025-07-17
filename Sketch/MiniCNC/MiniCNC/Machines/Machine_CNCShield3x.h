@@ -17,6 +17,13 @@
 #pragma once
 
 ////////////////////////////////////////////////////////
+//
+// * Sample for CNCShield v3.51 (Uno)
+// * CNCShield v3.51
+// * use 3 Axis
+// * DRV8825 with ms32
+// 
+////////////////////////////////////////////////////////
 
 #define USBBAUDRATE 250000
 
@@ -36,6 +43,8 @@
 #define STEPSPERROTATION  200
 #define MICROSTEPPING   16
 #define SCREWLEAD     4.0
+
+#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
 
 ////////////////////////////////////////////////////////
 
@@ -91,6 +100,9 @@
 #define SPINDLE_FADE
 
 ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+#define CMyStepper CStepperCNCShield
 
 #define CNCSHIELD_NUM_AXIS MYNUM_AXIS
 //#define CNCSHIELD_GBRL09
@@ -103,7 +115,16 @@
 //#define CNCLIB_USE_DRV8825
 //#undef CNCLIB_USE_TMC220X
 
+#include <Steppers/StepperCNCShield.h>
 #include "Stepper_CNCShield3x.h"
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+#define GO_DEFAULT_STEPRATE		  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
+#define G1_DEFAULT_FEEDPRATE	  100000	// in mm1000 / min
+#define STEPRATE_REFMOVE		(CNC_MAXSPEED/3)
 
 ////////////////////////////////////////////////////////
 

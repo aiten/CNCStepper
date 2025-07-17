@@ -24,16 +24,5 @@
 //#include "Machines/Machine_L298N.h"
 //#include "Machines/Machine_SMC800.h"
 //#include "Machines/Machine_TB6560.h"
-//#include "Machines/Machine_Custom.h"
-
-////////////////////////////////////////////////////////
-
-#define GO_DEFAULT_STEPRATE     ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))  // steps/sec
-#define G1_DEFAULT_MAXSTEPRATE  ((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))  // steps/sec
-#define G1_DEFAULT_FEEDPRATE    100000  // in mm1000 / min
-
-////////////////////////////////////////////////////////
-
-#define STEPSPERMM ((STEPSPERROTATION*MICROSTEPPING)/SCREWLEAD)
 
 ////////////////////////////////////////////////////////

@@ -6,6 +6,9 @@
     </Filter>
     <Filter Include="MaxiCNC">
     </Filter>
+    <Filter Include="MaxiCNC\Machines">
+      <UniqueIdentifier>{e0ba4fef-678e-44c1-9d31-ec88853ced18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -17,24 +20,6 @@
     <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Configuration.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationMachine_KK1000S.h">
-      <Filter>MaxiCNC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationMachine_MyCNC.h">
-      <Filter>MaxiCNC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationMachine_ProxxonMF70.h">
-      <Filter>MaxiCNC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationStepper_Mash6050S.h">
-      <Filter>MaxiCNC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationStepper_Ramps14.h">
-      <Filter>MaxiCNC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\ConfigurationStepper_RampsFD.h">
-      <Filter>MaxiCNC</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyControl.h">
       <Filter>MaxiCNC</Filter>
     </ClInclude>
@@ -43,6 +28,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\MyMenu.h">
       <Filter>MaxiCNC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Machines\Machine_KK1000S.h">
+      <Filter>MaxiCNC\Machines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Machines\Machine_MyCNC.h">
+      <Filter>MaxiCNC\Machines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Machines\Machine_ProxxonMF70.h">
+      <Filter>MaxiCNC\Machines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Machines\Stepper_Ramps14.h">
+      <Filter>MaxiCNC\Machines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

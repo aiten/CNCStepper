@@ -21,7 +21,7 @@
 // esp32 c6
 // try to be compatible with CNCShield v3.51
 // use 2(-4) Axis
-// TMC220X with ms16
+// 8825 with ms32
 // 
 ////////////////////////////////////////////////////////
 
@@ -50,7 +50,7 @@
 #define STEPPERDIRECTION ((1 << X_AXIS) + (1 << Y_AXIS))		// set bit to invert direction of each axis
 
 #define STEPSPERROTATION	200
-#define MICROSTEPPING		16
+#define MICROSTEPPING		32
 
 // GT2 with 15Tooth = > 30mm
 
@@ -62,10 +62,10 @@
 
 ////////////////////////////////////////////////////////
 
-#define CNC_MAXSPEED 13000        // steps/sec
-#define CNC_ACC  350
-#define CNC_DEC  400
-#define CNC_JERKSPEED 1000
+#define CNC_MAXSPEED 51200        // steps/sec (8rpm, 0.2acc, 0.15dec, 32/200, 15/2), see cnclib-Calc-Eeprom
+#define CNC_ACC  537
+#define CNC_DEC  620
+#define CNC_JERKSPEED 2048
 
 #define X_MAXSPEED 0
 #define Y_MAXSPEED 0
@@ -159,8 +159,8 @@
 // change some pin definition here:
 
 #undef CNCLIB_USE_A4998
-#undef CNCLIB_USE_DRV8825
-#define CNCLIB_USE_TMC220X
+#define CNCLIB_USE_DRV8825
+#undef CNCLIB_USE_TMC220X
 
 #include <Steppers/StepperCNCShield.h>
 #include "Stepper_CNCShield3x.h"
@@ -172,7 +172,7 @@
 #define GO_DEFAULT_STEPRATE		((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
 #define G1_DEFAULT_MAXSTEPRATE	((steprate_t) CConfigEeprom::GetConfigU32(offsetof(CConfigEeprom::SCNCEeprom, MaxStepRate)))	// steps/sec
 #define G1_DEFAULT_FEEDPRATE	100000	// in mm1000 / min
-#define STEPRATE_REFMOVE	4000
+#define STEPRATE_REFMOVE	    (CNC_MAXSPEED/6)
 
 // do not use probe
 #undef PROBE_PIN

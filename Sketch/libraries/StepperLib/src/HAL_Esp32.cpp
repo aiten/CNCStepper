@@ -26,6 +26,10 @@
 
 #if defined(ESP32)
 
+#include "esp_dsp.h"
+
+const uint32_t CHAL::_timeout_cycles = microsecondsToClockCycles(1);
+
 hw_timer_t* CHAL::_hwTimer[2] = {0};
 
 void IRAM_ATTR CHAL::OnTimer0()

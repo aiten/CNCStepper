@@ -193,6 +193,8 @@ inline void CHAL::DelayMicroseconds(unsigned int usec)
 	::delayMicroseconds(usec);
 }
 
+inline void CHAL::DelayNanoseconds(unsigned int) {}
+
 inline void CHAL::DelayMicroseconds0500()
 {
 	// uint32_t n = usec * (VARIANT_MCK / 3000000);

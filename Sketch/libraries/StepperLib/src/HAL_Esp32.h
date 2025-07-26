@@ -148,6 +148,18 @@ inline bool CHAL::NeedFlushEeprom()
 
 ////////////////////////////////////////////////////////
 
+void CHAL::DelayNanoseconds(unsigned int nanoseconds)
+{
+	const uint32_t start_cycle_count = esp_cpu_get_cycle_count();
+	const uint32_t until_cycle_count = start_cycle_count + ((nanoseconds * _timeout_cycles) / 1000);
+	uint32_t  nowcount;
+
+	while ((nowcount = esp_cpu_get_cycle_count()) <= until_cycle_count && nowcount >= start_cycle_count)
+	{
+
+	}
+}
+
 inline void CHAL::DelayMicroseconds(unsigned int usec)
 {
 	::delayMicroseconds(usec);
@@ -155,10 +167,12 @@ inline void CHAL::DelayMicroseconds(unsigned int usec)
 
 inline void CHAL::DelayMicroseconds0500()
 {
+	DelayNanoseconds(500);
 }
 
 inline void CHAL::DelayMicroseconds0250()
 {
+	DelayNanoseconds(250);
 }
 
 ////////////////////////////////////////////////////////
@@ -193,6 +207,10 @@ inline void  CHAL::RemoveTimer1()
 
 inline void CHAL::StartTimer1OneShot(timer_t delay)
 {
+	if (delay > 65556)
+	{
+		delay = 65556; // max timer value		
+	}
 	timerWrite(_hwTimer[1], 0);
 	timerAlarm(_hwTimer[1], delay, false, 0);
 }

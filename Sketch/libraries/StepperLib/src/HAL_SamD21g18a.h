@@ -176,6 +176,8 @@ inline bool CHAL::NeedFlushEeprom()
 
 ////////////////////////////////////////////////////////
 
+inline void CHAL::DelayNanoseconds(unsigned int) {}
+
 inline void CHAL::DelayMicroseconds(unsigned int usec)
 {
 	::delayMicroseconds(usec);

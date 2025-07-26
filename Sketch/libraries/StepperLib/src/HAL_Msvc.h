@@ -60,6 +60,7 @@ inline void CHAL::DelayMicroseconds0375() {}
 inline void CHAL::DelayMicroseconds0438() {}
 inline void CHAL::DelayMicroseconds0500() {}
 
+inline void CHAL::DelayNanoseconds(unsigned int) {}
 inline void CHAL::DelayMicroseconds(unsigned int) {}
 
 inline irqflags_t CHAL::GetSREG() { return SREG; }

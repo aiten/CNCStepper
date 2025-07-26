@@ -207,7 +207,10 @@ public:
 	static inline void DisableInterrupts() ALWAYSINLINE;
 	static inline void EnableInterrupts() ALWAYSINLINE;
 
-	static inline void DelayMicroseconds(unsigned int us) ALWAYSINLINE ;
+	static const uint32_t _timeout_cycles;
+
+	static inline void DelayNanoseconds(unsigned int ns);
+	static inline void DelayMicroseconds(unsigned int us) ALWAYSINLINE;
 	static inline void DelayMicroseconds0250() ALWAYSINLINE; // delay 1/4 us (4 nop on AVR)
 	static inline void DelayMicroseconds0312() ALWAYSINLINE; // delay 0.312us (5 nop on AVR)
 	static inline void DelayMicroseconds0375() ALWAYSINLINE; // delay 0.312us (6 nop on AVR)

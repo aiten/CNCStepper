@@ -214,6 +214,7 @@ void CMyControl::Poll()
 	{
 		HALFastdigitalWrite(BLINK_LED, CHAL::digitalRead(BLINK_LED) == HIGH ? LOW : HIGH);
 		_timeBlink = time + BLINK_TIMEOUT;
+		 //CStepper::GetInstance()->Dump(CStepper::DumpAll);	
 	}
 #endif
 }

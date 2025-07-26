@@ -671,7 +671,7 @@ protected:
 		};
 	};
 
-	stepperstatic CRingBufferQueue<SStepBuffer, STEPBUFFERSIZE> _steps;
+	stepperstatic CRingBufferQueue<SStepBuffer, STEPBUFFERSIZE> _stepBuffer;
 
 public:
 #ifdef _MSC_VER

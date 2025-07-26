@@ -668,7 +668,9 @@ protected:
 		{
 			Timer        = 0;
 			DirStepCount = dirCount;
-		};
+		}
+
+		void Dump(uint8_t options);
 	};
 
 	stepperstatic CRingBufferQueue<SStepBuffer, STEPBUFFERSIZE> _stepBuffer;

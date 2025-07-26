@@ -1758,12 +1758,15 @@ bool CStepper::SMovementState::CalcTimerAcc(timer_t maxtimer, mdist_t n, uint8_t
 		mudiv_t udivRemainder = mudiv(_timer * (2 * cnt) + _rest, n * 4 + 2 - cnt);
 
 		_rest  = udivRemainder.rem;
-		_timer = _timer - udivRemainder.quot;
-		if (maxtimer >= _timer)
+		auto timer = _timer - udivRemainder.quot;
+
+		if (udivRemainder.quot > _timer || maxtimer >= timer)	// must be in range
 		{
 			_timer = maxtimer;
 			return true;
 		}
+
+		_timer = timer;
 	}
 	return false;
 }
@@ -2641,6 +2644,16 @@ void CStepper::Dump(uint8_t options)
 		{
 			_movements._queue.Buffer[idx].Dump(i++, options);
 		}
+
+		/*
+		DumpType<uint8_t>(F("StepsHead"), _stepBuffer.GetHeadPos(), false);
+		DumpType<uint8_t>(F("Tail"), _stepBuffer.GetTailPos(), false);
+
+		for (uint8_t idx = 0; idx < STEPBUFFERSIZE; idx++)
+		{
+			_stepBuffer.Buffer[idx].Dump(options);
+		}
+		*/
 	}
 #endif
 }
@@ -2711,5 +2724,15 @@ void CStepper::SMovementState::Dump(uint8_t /* options */)
 	DumpType<timer_t>(F("r"), _rest, false);
 	DumpType<uint32_t>(F("sum"), _sumTimer, false);
 	DumpArray<mdist_t, NUM_AXIS>(F("a"), _add, false);
+#endif
+}
+
+////////////////////////////////////////////////////////
+
+void CStepper::SStepBuffer::Dump(uint8_t /* options */)
+{
+#ifndef _NO_DUMP
+	DumpType<DirCount_t>(F("d"), DirStepCount, false);
+	DumpType<timer_t>(F("t"), Timer, false);
 #endif
 }

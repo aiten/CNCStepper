@@ -316,6 +316,11 @@ inline void  CHAL::RemoveTimer1() {}
 
 inline void CHAL::StartTimer1OneShot(timer_t delay)
 {
+	if (delay > 65556)		// limit timer value to 65556
+	{
+		delay = 65556; // max timer value		
+	}
+
 	// do not use 32bit => 2Mhz Timer as AVR
 
 	uint16_t timer_count = (uint16_t) delay;

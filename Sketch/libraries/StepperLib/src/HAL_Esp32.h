@@ -207,7 +207,7 @@ inline void  CHAL::RemoveTimer1()
 
 inline void CHAL::StartTimer1OneShot(timer_t delay)
 {
-	if (delay > 65556)
+	if (delay > 65556)		// limit timer value to 65556
 	{
 		delay = 65556; // max timer value		
 	}

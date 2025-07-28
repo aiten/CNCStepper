@@ -22,6 +22,8 @@
 
 #if defined(ESP32)
 
+#include <EEPROM.h>
+
 
 // DONOTUSE => only for compiling
 #define PIN_A0   (0)	
@@ -108,12 +110,12 @@ inline void CHAL::attachInterruptPin(pin_t pin, void(*userFunc)(void), int mode)
 
 inline void CHAL::eeprom_write_dword(uint32_t* ptr_buffer, uint32_t value)
 {
-	*ptr_buffer = value;
+	EEPROM.writeUInt((int) ptr_buffer,value);
 }
 
 inline uint32_t CHAL::eeprom_read_dword(const uint32_t* ptr_buffer)
 {
-	return *ptr_buffer;
+	return EEPROM.readUInt((int) ptr_buffer);
 }
 
 /*
@@ -130,15 +132,17 @@ inline bool CHAL::HaveEeprom()
 
 inline uint32_t* CHAL::GetEepromBaseAdr()
 {
-	return (uint32_t*) _flashBuffer;
+	return (uint32_t*)NULL;
 }
 
 inline void CHAL::InitEeprom()
 {
+	EEPROM.begin(1014);
 }
 
 inline void CHAL::FlushEeprom()
 {
+	EEPROM.commit();
 }
 
 inline bool CHAL::NeedFlushEeprom()

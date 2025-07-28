@@ -46,27 +46,4 @@ void IRAM_ATTR CHAL::OnTimer1()
 
 ////////////////////////////////////////////////////////
 
-const uint8_t CHAL::_flashStorage[EEPROM_SIZE] = { };
-uint8_t CHAL::_flashBuffer[EEPROM_SIZE];
-
-void CHAL::FlashWriteWords(uint32_t *flash_ptr, const uint32_t *src, uint32_t n_words)
-{
-}
-
-void CHAL::FlashErase(void *flash_ptr, uint32_t size)
-{
-}
-
-void CHAL::FlashEraseRow(void *flash_ptr)
-{
-}
-
-void CHAL::FlashRead(const void *flash_ptr, void *data, uint32_t size)
-{
-	memcpy(data, flash_ptr, size);
-}
-
-
-////////////////////////////////////////////////////////
-
 #endif

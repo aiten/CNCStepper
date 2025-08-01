@@ -34,8 +34,8 @@ public:
 	CGCodeExpressionParser(CGCodeParser* parser) : super(parser->GetReader(), parser->GetOutput())
 	{
 		_gcodeParser      = parser;
-		_LeftParenthesis  = '[';
-		_RightParenthesis = ']';
+		_leftParenthesis  = '[';
+		_rightParenthesis = ']';
 	};
 
 protected:

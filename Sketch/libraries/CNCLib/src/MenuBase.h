@@ -102,8 +102,8 @@ public:
 	bool         Select(menupos_t idx);
 	virtual void Changed() =0;
 
-	void OKBeep() { return CLcd::GetInstance()->OKBeep(); };
-	void ErrorBeep() { return CLcd::GetInstance()->ErrorBeep(); };
+	void OKBeep() { return CLcd::GetInstance()->OKBeep(); }
+	void ErrorBeep() { return CLcd::GetInstance()->ErrorBeep(); }
 
 	const SMenuDef* GetMenuDef() const { return _current; }
 	const SMenuDef* GetMainMenuDef() const { return _main; }
@@ -138,7 +138,7 @@ public:
 	{
 		_current = pMenu;
 		_menuNavigator.Clear();
-	};
+	}
 
 	////////////////////////////////////////////////////////
 

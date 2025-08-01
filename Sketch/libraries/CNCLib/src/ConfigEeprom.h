@@ -79,7 +79,7 @@ public:
 		eepromofs_t diff = ofs % 4;
 		uint32_t    val  = GetConfigU32(ofs - diff);
 		return (val >> (diff * 8)) & 0xff;
-	};
+	}
 
 	static uint16_t GetConfigU16(eepromofs_t ofs)
 	{

@@ -97,8 +97,8 @@ public:
 		VacuumOn = 1
 	};
 
-	virtual void     IOControl(uint8_t /* tool */, uint16_t /*level */) { };
-	virtual uint16_t IOControl(uint8_t /* tool */) { return 0; };
+	virtual void     IOControl(uint8_t /* tool */, uint16_t /*level */) { }
+	virtual uint16_t IOControl(uint8_t /* tool */) { return 0; }
 
 	enum EStepperControlEvent
 	{

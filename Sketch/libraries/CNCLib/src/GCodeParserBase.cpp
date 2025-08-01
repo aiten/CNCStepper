@@ -608,7 +608,6 @@ void CGCodeParserBase::GetUint8(uint8_t& value, uint8_t& specified, uint8_t bit)
 
 	BitSet(specified, bit);
 
-	_reader->GetNextChar();
 	value = GetUInt8();
 }
 
@@ -1186,7 +1185,6 @@ void CGCodeParserBase::G92Command()
 
 void CGCodeParserBase::GetSpindleSpeed(bool setIo)
 {
-	_reader->GetNextChar();
 	_reader->SkipSpaces();
 	auto speed = short(GetUint32OrParam(MAXSPINDLE_SPEED));
 

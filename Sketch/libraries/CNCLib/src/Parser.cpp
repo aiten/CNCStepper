@@ -103,7 +103,7 @@ int32_t CParser::GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale
 	bool    negativ;
 	int32_t value     = 0;
 	uint8_t thisscale = 0;
-	uint8_t ch        = _reader->GetChar();
+	char  ch        = _reader->GetChar();
 
 	if ((negativ = CStreamReader::IsMinus(ch)) != 0)
 	{
@@ -188,8 +188,8 @@ int32_t CParser::GetInt32Scale(int32_t minvalue, int32_t maxvalue, uint8_t scale
 
 expr_t CParser::GetDouble()
 {
-	uint8_t ch    = _reader->GetChar();
-	auto    start = const_cast<char*>(_reader->GetBuffer());
+	char ch    = _reader->GetChar();
+	auto start = const_cast<char*>(_reader->GetBuffer());
 
 	while (CStreamReader::IsDigitDot(ch))
 	{

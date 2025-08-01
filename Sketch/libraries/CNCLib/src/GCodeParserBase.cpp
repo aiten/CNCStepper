@@ -384,6 +384,12 @@ void CGCodeParserBase::Parse()
 				}
 				break;
 			}
+			case 'S':		// spindle/laser speed
+			{
+				_reader->GetNextChar();
+				GetSpindleSpeed(true);
+				break;
+			}
 			case '$':
 			{
 				_reader->GetNextChar();
@@ -551,6 +557,20 @@ axis_t CGCodeParserBase::CharToAxis(char axis)
 
 ////////////////////////////////////////////////////////////
 
+bool CGCodeParserBase::GetAxisNo(char axis, axis_t max, axis_t& axes)
+{
+	axis_t a = CharToAxis(axis);
+	if (a < max)
+	{
+		axes = a;
+		_reader->GetNextChar();
+		return true;
+	}
+	return false;
+}
+
+////////////////////////////////////////////////////////////
+
 axis_t CGCodeParserBase::CharToAxisOffset(char axis)
 {
 	switch (axis)
@@ -560,6 +580,20 @@ axis_t CGCodeParserBase::CharToAxisOffset(char axis)
 		case 'K': return Z_AXIS;
 		default: return 255;
 	}
+}
+
+////////////////////////////////////////////////////////////
+
+bool CGCodeParserBase::GetAxisNoOffset(char axis, axis_t max, axis_t& axes)
+{
+	axis_t a = CharToAxisOffset(axis);
+	if (a < max)
+	{
+		axes = a;
+		_reader->GetNextChar();
+		return true;
+	}
+	return false;
 }
 
 ////////////////////////////////////////////////////////////
@@ -574,7 +608,6 @@ void CGCodeParserBase::GetUint8(uint8_t& value, uint8_t& specified, uint8_t bit)
 
 	BitSet(specified, bit);
 
-	_reader->GetNextChar();
 	value = GetUInt8();
 }
 
@@ -587,8 +620,6 @@ void CGCodeParserBase::GetAxis(axis_t axis, SAxisMove& move, EnumAsByte(EAxisPos
 		return;
 	}
 
-	_reader->GetNextChar();
-
 	move.newpos[axis] = ParseCoordinate(axis, move.newpos[axis], posType);
 }
 
@@ -600,8 +631,6 @@ void CGCodeParserBase::GetIJK(axis_t axis, SAxisMove& move, mm1000_t offset[2])
 	{
 		return;
 	}
-
-	_reader->GetNextChar();
 
 	if (axis == _modalState.Plane_axis_0)
 	{
@@ -628,7 +657,6 @@ void CGCodeParserBase::GetRadius(SAxisMove& move, mm1000_t& radius)
 	}
 	move.bitfield.bit.R = true;
 
-	_reader->GetNextChar();
 	radius = ParseCoordinateAxis(_modalState.Plane_axis_0);
 }
 
@@ -636,8 +664,6 @@ void CGCodeParserBase::GetRadius(SAxisMove& move, mm1000_t& radius)
 
 void CGCodeParserBase::GetFeedrate(SAxisMove& move)
 {
-	_reader->GetNextChar();
-
 	if (move.bitfield.bit.F)
 	{
 		Error(MESSAGE(MESSAGE_GCODE_FalreadySpecified));
@@ -707,7 +733,6 @@ void CGCodeParserBase::GetG92Axis(axis_t axis, uint8_t& axes)
 		return;
 	}
 
-	_reader->GetNextChar();
 	_modalState.G92Pospreset[axis] = 0;	// clear this => can use CalcAllPreset
 	_modalState.G92Pospreset[axis] = ParseCoordinateAxis(axis) + CMotionControlBase::GetInstance()->GetPosition(axis) - CalcAllPreset(axis);
 }
@@ -750,12 +775,13 @@ void CGCodeParserBase::G0001Command(bool isG00)
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		if (GetAxisNo(ch, NUM_AXIS, axis))
 		{
 			GetAxis(axis, move, _modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
 		else if (ch == 'F' && !isG00)
 		{
+			_reader->GetNextChar();
 			GetFeedrate(move);
 		}
 		else if (ch == 'F' && isG00)
@@ -766,6 +792,11 @@ void CGCodeParserBase::G0001Command(bool isG00)
 				return;
 			}
 			useG0Feed = false;
+		}
+		else if (ch == 'S')
+		{
+			_reader->GetNextChar();
+			GetSpindleSpeed(true);
 		}
 		else
 		{
@@ -799,21 +830,28 @@ void CGCodeParserBase::G0203Command(bool isG02)
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		if (GetAxisNo(ch, NUM_AXIS, axis))
 		{
 			GetAxis(axis, move, _modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
-		else if ((axis = CharToAxisOffset(ch)) < NUM_AXIS)
+		else if (GetAxisNoOffset(ch, NUM_AXIS, axis))
 		{
 			GetIJK(axis, move, offset);
 		}
 		else if (ch == 'R')
 		{
+			_reader->GetNextChar();
 			GetRadius(move, radius);
 		}
 		else if (ch == 'F')
 		{
+			_reader->GetNextChar();
 			GetFeedrate(move);
+		}
+		else if (ch == 'S')
+		{
+			_reader->GetNextChar();
+			GetSpindleSpeed(true);
 		}
 		else
 		{
@@ -971,7 +1009,7 @@ void CGCodeParserBase::G28Command()
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		if (GetAxisNo(ch, NUM_AXIS, axis))
 		{
 			GetAxis(axis, move, AbsolutPosition);
 		}
@@ -1034,12 +1072,13 @@ void CGCodeParserBase::G31Command(bool probevalue)
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		if (GetAxisNo(ch, NUM_AXIS, axis))
 		{
 			GetAxis(axis, move, _modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
 		else if (ch == 'F')
 		{
+			_reader->GetNextChar();
 			GetFeedrate(move);
 		}
 		else
@@ -1116,7 +1155,7 @@ void CGCodeParserBase::G92Command()
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		if (GetAxisNo(ch, NUM_AXIS, axis))
 		{
 			GetG92Axis(axis, axes);
 		}
@@ -1144,7 +1183,7 @@ void CGCodeParserBase::G92Command()
 
 ////////////////////////////////////////////////////////////
 
-void CGCodeParserBase::SpindleSpeedCommand()
+void CGCodeParserBase::GetSpindleSpeed(bool setIo)
 {
 	_reader->SkipSpaces();
 	auto speed = short(GetUint32OrParam(MAXSPINDLE_SPEED));
@@ -1158,7 +1197,15 @@ void CGCodeParserBase::SpindleSpeedCommand()
 
 #endif
 
+
+	bool callIO = setIo && _modalState.SpindleOn && _modalState.SpindleSpeed != speed;
+
 	_modalState.SpindleSpeed = speed;
+
+	if (callIO)
+	{
+		SpindleCallIOControl();
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -1176,11 +1223,13 @@ void CGCodeParserBase::M0304Command(bool m3)
 	if (ch == 'S')
 	{
 		_reader->GetNextChar();
-		SpindleSpeedCommand();
+		GetSpindleSpeed(false);
 	}
 
-	_modalState.SpindleOn = true;
-	CallIOControl(m3 ? CControl::SpindleCW : CControl::SpindleCCW, _modalState.SpindleSpeed);
+	_modalState.SpindleOn   = true;
+	_modalState.SpindleOnCW = m3;
+
+	SpindleCallIOControl();
 }
 
 ////////////////////////////////////////////////////////////

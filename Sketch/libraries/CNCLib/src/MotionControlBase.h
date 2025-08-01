@@ -58,8 +58,8 @@ public:
 
 	static void InitConversion(ToMm1000_t toMm1000, ToMachine_t toMachine)
 	{
-		_ToMm1000  = toMm1000;
-		_ToMachine = toMachine;
+		_toMm1000  = toMm1000;
+		_toMachine = toMachine;
 	}
 
 	static void InitConversionStepsPer(float stepspermm1000)
@@ -76,16 +76,16 @@ public:
 
 	static void SetConversionStepsPerEx(axis_t axis, float stepspermm1000)
 	{
-		StepsPerMm1000[axis] = stepspermm1000;;
+		StepsPerMm1000[axis] = stepspermm1000;
 	}
 
-	static mm1000_t ToMm1000(axis_t axis, sdist_t val) { return _ToMm1000(axis, val); }
-	static sdist_t  ToMachine(axis_t axis, mm1000_t val) { return _ToMachine(axis, val); }
+	static mm1000_t ToMm1000(axis_t axis, sdist_t val) { return _toMm1000(axis, val); }
+	static sdist_t  ToMachine(axis_t axis, mm1000_t val) { return _toMachine(axis, val); }
 
-	static void ToMachine(const mm1000_t mm1000[NUM_AXIS], udist_t machine[NUM_AXIS]) { for (axis_t x = 0; x < NUM_AXIS; x++) { machine[x] = _ToMachine(x, mm1000[x]); } };
-	static void ToMm1000(const udist_t machine[NUM_AXIS], mm1000_t mm1000[NUM_AXIS]) { for (axis_t x = 0; x < NUM_AXIS; x++) { mm1000[x] = _ToMm1000(x, machine[x]); } };
+	static void ToMachine(const mm1000_t mm1000[NUM_AXIS], udist_t machine[NUM_AXIS]) { for (axis_t x = 0; x < NUM_AXIS; x++) { machine[x] = _toMachine(x, mm1000[x]); } }
+	static void ToMm1000(const udist_t machine[NUM_AXIS], mm1000_t mm1000[NUM_AXIS]) { for (axis_t x = 0; x < NUM_AXIS; x++) { mm1000[x] = _toMm1000(x, machine[x]); } }
 
-	bool    IsError() const { return _error != nullptr; };
+	bool    IsError() const { return _error != nullptr; }
 	cncerror_t GetError() const { return _error; }
 	void    ClearError() { _error = nullptr; }
 
@@ -105,8 +105,8 @@ protected:
 	void Error() { Error(MESSAGE_UNKNOWNERROR); }
 
 private:
-	static ToMm1000_t  _ToMm1000;
-	static ToMachine_t _ToMachine;
+	static ToMm1000_t  _toMm1000;
+	static ToMachine_t _toMachine;
 	cncerror_t            _error = nullptr;
 
 public:

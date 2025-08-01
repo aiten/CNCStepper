@@ -84,8 +84,8 @@ void CExpressionParser::ScanNextToken()
 	if (IsToken(F(">="), false, false))	{ _state._detailToken = GreaterEqualSy;  return; }
 	if (IsToken(F("<="), false, false))	{ _state._detailToken = LessEqualSy;	 return; }
 
-	if (ch == _LeftParenthesis)			{ _state._detailToken = LeftParenthesisSy;	 _reader->GetNextChar(); return; }
-	if (ch == _RightParenthesis)		{ _state._detailToken = RightParenthesisSy;	 _reader->GetNextChar(); return; }
+	if (ch == _leftParenthesis)			{ _state._detailToken = LeftParenthesisSy;	 _reader->GetNextChar(); return; }
+	if (ch == _rightParenthesis)		{ _state._detailToken = RightParenthesisSy;	 _reader->GetNextChar(); return; }
 
 	switch (ch)
 	{
@@ -129,7 +129,7 @@ void CExpressionParser::ScanNextToken()
 		// check if this is a variable or a function.
 		// a function has a parenthesis '(' open after the name
 
-		if (ch == _LeftParenthesis)
+		if (ch == _leftParenthesis)
 		{
 			// @formatter:off — disable formatter after this line
 			if (TryToken(start, F("ABS"), true))		{ _state._detailToken = AbsSy; return; }

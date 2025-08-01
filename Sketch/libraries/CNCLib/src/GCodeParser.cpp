@@ -742,12 +742,6 @@ bool CGCodeParser::Command(char ch)
 {
 	switch (ch)
 	{
-		case 'S':		// spindle speed
-		{
-			_reader->GetNextChar();
-			SpindleSpeedCommand();
-			return true;
-		}
 		case 'T':		// tool select
 		{
 			_reader->GetNextChar();
@@ -927,7 +921,6 @@ void CGCodeParser::GetR81(SAxisMove& move)
 	}
 	move.bitfield.bit.R = true;
 
-	_reader->GetNextChar();
 	_modalState.G8xR = ParseCoordinate(super::_modalState.Plane_axis_2, CMotionControlBase::GetInstance()->GetPosition(super::_modalState.Plane_axis_2), super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 }
 
@@ -942,7 +935,6 @@ void CGCodeParser::GetP81(SAxisMove& move)
 	}
 	move.bitfield.bit.P = true;
 
-	_reader->GetNextChar();
 	_modalState.G8xP = GetDweel(true);
 }
 
@@ -957,7 +949,6 @@ void CGCodeParser::GetL81(SAxisMove& move, uint8_t& l)
 	}
 	move.bitfield.bit.L = true;
 
-	_reader->GetNextChar();
 	uint32_t myL = GetUint32OrParam();
 
 	if (myL == 0 || myL > 255)
@@ -979,7 +970,6 @@ void CGCodeParser::GetQ81(SAxisMove& move)
 	}
 	move.bitfield.bit.Q = true;
 
-	_reader->GetNextChar();
 	mm1000_t q = ParseCoordinate(super::_modalState.Plane_axis_2, 0, AbsolutPosition);
 
 	if (q <= 0)
@@ -1004,20 +994,23 @@ void CGCodeParser::G10Command()
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		if (GetAxisNo(ch, NUM_AXIS, axis))
 		{
 			GetAxis(axis, move, AbsolutPosition);
 		}
 		else if (ch == 'L')
 		{
+			_reader->GetNextChar();
 			GetUint8(l, specified, 0);
 		}
 		else if (ch == 'P')
 		{
+			_reader->GetNextChar();
 			GetUint8(p, specified, 1);
 		}
 		else if (ch == 'G')
 		{
+			_reader->GetNextChar();
 			GetUint8(g90or91, specified, 7);
 			if (!IsError() && g90or91 != 90 && g90or91 != 91)
 			{
@@ -1118,12 +1111,13 @@ void CGCodeParser::G38CenterProbe(bool probeValue)
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		if (GetAxisNo(ch, NUM_AXIS, axis))
 		{
 			GetAxis(axis, move, RelativPosition);
 		}
 		else if (ch == 'F')
 		{
+			_reader->GetNextChar();
 			GetFeedrate(move);
 		}
 		else
@@ -1245,8 +1239,6 @@ void CGCodeParser::GetG68IJK(axis_t axis, SAxisMove& move, mm1000_t offset[NUM_A
 		return;
 	}
 
-	_reader->GetNextChar();
-
 	offset[axis] = ParseCoordinateAxis(axis);
 }
 
@@ -1261,7 +1253,6 @@ void CGCodeParser::GetAngleR(SAxisMove& move, mm1000_t& angle)
 	}
 	move.bitfield.bit.R = true;
 
-	_reader->GetNextChar();
 	angle = ParseCoordinate(false);
 }
 
@@ -1311,16 +1302,17 @@ void CGCodeParser::G68CommandDefault()
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
+		if (GetAxisNo(ch, NUM_AXISXYZ, axis))
 		{
 			GetAxis(axis, move, super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
-		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)
+		else if (GetAxisNoOffset(ch, NUM_AXISXYZ, axis))
 		{
 			GetG68IJK(axis, move, vect);
 		}
 		else if (ch == 'R')
 		{
+			_reader->GetNextChar();
 			GetAngleR(move, r);
 		}
 		else
@@ -1393,7 +1385,7 @@ void CGCodeParser::G68Ext11Command()
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
+		if (GetAxisNo(ch, NUM_AXISXYZ, axis))
 		{
 			GetAxis(axis, move, super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
@@ -1424,11 +1416,11 @@ void CGCodeParser::G68Ext12Command()
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
+		if (GetAxisNo(ch, NUM_AXISXYZ, axis))
 		{
 			GetAxis(axis, move, super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
-		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)
+		else if (GetAxisNoOffset(ch, NUM_AXISXYZ, axis))
 		{
 			GetG68IJK(axis, move, vect);
 		}
@@ -1470,11 +1462,11 @@ void CGCodeParser::G68ExtXXCommand(axis_t rotAxis)
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXISXYZ)
+		if (GetAxisNo(ch, NUM_AXISXYZ, axis))
 		{
 			GetAxis(axis, move, super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
-		else if ((axis = CharToAxisOffset(ch)) < NUM_AXISXYZ)
+		else if (GetAxisNoOffset(ch, NUM_AXISXYZ, axis))
 		{
 			if (rotAxis == axis)
 			{
@@ -1568,7 +1560,7 @@ void CGCodeParser::G5xCommand(uint8_t idx)
 {
 	// G54 => idx = 1 => arraySize==1
 
-	if (CutterRadiosIsOn())
+	if (CutterRadiusIsOn())
 	{
 		return;
 	}
@@ -1587,35 +1579,40 @@ void CGCodeParser::G5xCommand(uint8_t idx)
 
 void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMinQ)
 {
-	if (CutterRadiosIsOn()) return;
+	if (CutterRadiusIsOn()) return;
 
 	uint8_t l = 1;
 
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) <= Z_AXIS)
+		if (GetAxisNo(ch, NUM_AXISXYZ, axis))
 		{
 			GetAxis(axis, move, super::_modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
 		else if (ch == 'R')
 		{
+			_reader->GetNextChar();
 			GetR81(move);
 		}
 		else if (ch == 'L')
 		{
+			_reader->GetNextChar();
 			GetL81(move, l);
 		}
 		else if (ch == 'F')
 		{
+			_reader->GetNextChar();
 			GetFeedrate(move);
 		}
 		else if (ch == 'P' && useP)
 		{
+			_reader->GetNextChar();
 			GetP81(move);
 		}
 		else if (ch == 'Q' && useQ)
 		{
+			_reader->GetNextChar();
 			GetQ81(move);
 		}
 		else

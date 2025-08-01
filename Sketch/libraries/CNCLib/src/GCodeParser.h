@@ -71,7 +71,7 @@ private:
 
 public:
 
-	CGCodeParser(CStreamReader* reader, Stream* output) : super(reader, output) { };
+	CGCodeParser(CStreamReader* reader, Stream* output) : super(reader, output) { }
 
 	static mm1000_t GetG54PosPreset(axis_t        axis);
 	static mm1000_t GetToolHeightPosPreset(axis_t axis) { return axis == super::_modalState.Plane_axis_2 ? _modalState.ToolHeigtCompensation : 0; }
@@ -184,7 +184,7 @@ protected:
 	////////////////////////////////////////////////////////
 	// Parser structure
 
-	bool CutterRadiosIsOn()
+	bool CutterRadiusIsOn()
 	{
 		if (_modalState.CutterRadiusCompensation)
 		{
@@ -242,8 +242,8 @@ private:
 	void G81Command();		// Basic drilling canned cycle
 	void G82Command();		// Spot Drilling Cycle
 	void G83Command();		// Peck Drilling for Deeper Holes
-	void G98Command() { _modalState.IsG98 = true; };
-	void G99Command() { _modalState.IsG98 = false; };
+	void G98Command() { _modalState.IsG98 = true; }
+	void G99Command() { _modalState.IsG98 = false; }
 
 	void M00Command();		// Compulsory stop
 	void M01Command();		// Optional stop

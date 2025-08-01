@@ -128,11 +128,11 @@ protected:
 public:
 	virtual void Init();
 
-	bool    IsError() const { return _pod._error != nullptr; };
+	bool    IsError() const { return _pod._error != nullptr; }
 	cncerror_t GetError() const { return _pod._error; }
 	void    ClearError() { _pod._error = nullptr; }
 
-	bool    IsFatalError() const { return _pod._fatalError != nullptr; };
+	bool    IsFatalError() const { return _pod._fatalError != nullptr; }
 	cncerror_t GetFatalError() const { return _pod._fatalError; }
 	void    ClearFatalError() { _pod._fatalError = nullptr; }
 
@@ -186,17 +186,17 @@ public:
 
 	void SetJerkSpeed(axis_t axis, steprate_t vMaxJerk) { _pod._maxJerkSpeed[axis] = vMaxJerk; }
 
-	void SetWaitFinishMove(bool wait) { _pod._waitFinishMove = wait; };
+	void SetWaitFinishMove(bool wait) { _pod._waitFinishMove = wait; }
 	bool IsWaitFinishMove() const { return _pod._waitFinishMove; }
 
-	void SetCheckForReference(bool check) { _pod._checkReference = check; };
+	void SetCheckForReference(bool check) { _pod._checkReference = check; }
 	bool IsCheckForReference() const { return _pod._checkReference; }
 
-	void       SetBacklash(steprate_t speed) { _pod._timerBacklash = SpeedToTimer(speed); };
+	void       SetBacklash(steprate_t speed) { _pod._timerBacklash = SpeedToTimer(speed); }
 	bool       IsSetBacklash() const { return timer_t(-1) != _pod._timerBacklash; }
-	steprate_t GetBacklash() const { return TimerToSpeed(_pod._timerBacklash); };
+	steprate_t GetBacklash() const { return TimerToSpeed(_pod._timerBacklash); }
 
-	bool IsBusy() const { return _pod._timerRunning; };
+	bool IsBusy() const { return _pod._timerRunning; }
 	void WaitBusy();
 
 	bool    CanQueueMovement() const { return !_movements._queue.IsFull(); }
@@ -217,9 +217,9 @@ public:
 	void SetSlip(int dist[NUM_AXIS]);
 #endif
 
-	void SetLimitMax(axis_t axis, udist_t limit) { _pod._limitMax[axis] = limit; };
+	void SetLimitMax(axis_t axis, udist_t limit) { _pod._limitMax[axis] = limit; }
 #ifndef REDUCED_SIZE
-	void SetLimitMin(axis_t axis, udist_t limit) { _pod._limitMin[axis] = limit; };
+	void SetLimitMin(axis_t axis, udist_t limit) { _pod._limitMin[axis] = limit; }
 #endif
 
 	void SetBacklash(axis_t axis, mdist_t dist) { _pod._backlash[axis] = dist; }
@@ -712,11 +712,11 @@ protected:
 
 protected:
 	bool         MoveAwayFromReference(axis_t axis, uint8_t referenceId, sdist_t dist, steprate_t vMax);
-	virtual void MoveAwayFromReference(axis_t axis, sdist_t dist, steprate_t vMax) { MoveRel(axis, dist, vMax); };
+	virtual void MoveAwayFromReference(axis_t axis, sdist_t dist, steprate_t vMax) { MoveRel(axis, dist, vMax); }
 
 #ifdef _MSC_VER
-	virtual void StepBegin(const SStepBuffer* /* step */) { };
-	virtual void StepEnd() {};
+	virtual void StepBegin(const SStepBuffer* /* step */) { }
+	virtual void StepEnd() {}
 #endif
 
 	virtual void Step(const uint8_t steps[NUM_AXIS], axisArray_t directionUp, bool isSameDirection) = 0;

@@ -41,11 +41,11 @@ public:
 		_output    = output;
 		_error     = nullptr;
 		_OkMessage = nullptr;
-	};
+	}
 
 	void ParseCommand();
 
-	bool    IsError() const { return _error != nullptr; };
+	bool    IsError() const { return _error != nullptr; }
 	cncerror_t GetError() const { return _error; }
 
 	typedef void (*PrintMessage)();
@@ -62,17 +62,17 @@ protected:
 	////////////////////////////////////////////////////////
 
 	virtual void Parse() = 0;
-	virtual bool InitParse() { return true; }; // begin parsing of a command (override for pre checks), return true to continue
-	virtual void CleanupParse() { }; // called after call to Parse()
+	virtual bool InitParse() { return true; } // begin parsing of a command (override for pre checks), return true to continue
+	virtual void CleanupParse() { }           // called after call to Parse()
 
 	bool         CheckError();
 	virtual char SkipSpacesOrComment() { return _reader->SkipSpaces(); }
-	void         SkipCommentSingleLine() { _reader->MoveToEnd(); };
+	void         SkipCommentSingleLine() { _reader->MoveToEnd(); }
 
 	bool ExpectEndOfCommand();
 	void ErrorNotImplemented() { Error(MESSAGE(MESSAGE_PARSER_NotImplemented)); }
-	void ErrorNotANumber() { Error(MESSAGE(MESSAGE_PARSER_NotANumber)); };
-	void ErrorNumberRange() { Error(MESSAGE(MESSAGE_PARSER_OverrunOfNumber)); };
+	void ErrorNotANumber() { Error(MESSAGE(MESSAGE_PARSER_NotANumber)); }
+	void ErrorNumberRange() { Error(MESSAGE(MESSAGE_PARSER_OverrunOfNumber)); }
 	void Error() { Error(MESSAGE_UNKNOWNERROR); }
 
 	////////////////////////////////////////////////////////

@@ -54,7 +54,7 @@ private:
 
 public:
 
-	CConfigEeprom() { }
+	CConfigEeprom() = default;
 
 	CConfigEeprom(uint16_t eepromSize, const void* defaultEeprom, uint32_t eepromID)
 	{

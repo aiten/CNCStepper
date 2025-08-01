@@ -67,7 +67,7 @@ public:
 		Coolant,
 		ControllerFan,
 		Vacuum,
-		//Laser, => use Spindle
+		//Laser, => use Spindle SpindleCW/SpindleCCW
 
 		Servo1,
 		Servo2,

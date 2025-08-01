@@ -16,8 +16,8 @@
 
 #pragma once
 
-//#include "Machines/Machine_ProxxonMF70.h"	  // proxxon mf70, ramps 1.4, micro-steps 16
+#include "Machines/Machine_ProxxonMF70.h"	  // proxxon mf70, ramps 1.4, micro-steps 16
 //#include "Machines/Machine_MyCNC.h" 		  // My-CNC, rampsfd, micro-steps 32
-#include "Machines/Machine_KK1000S.h"		   // u8g2 only with Version 2.24.3 => HARDWARETYPE_KK1000S does not work with newer version
+//#include "Machines/Machine_KK1000S.h"		   // u8g2 only with Version 2.24.3 => HARDWARETYPE_KK1000S does not work with newer version
 
 ////////////////////////////////////////////////////////

@@ -184,7 +184,7 @@ protected:
 	////////////////////////////////////////////////////////
 	// Parser structure
 
-	bool CutterRadiosIsOn()
+	bool CutterRadiusIsOn()
 	{
 		if (_modalState.CutterRadiusCompensation)
 		{

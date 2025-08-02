@@ -1674,7 +1674,7 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 				pos[super::_modalState.Plane_axis_1] += move.newpos[super::_modalState.Plane_axis_1];
 			}
 
-			MoveStart(false);
+			MoveStart(false,false);
 			CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalState.G0FeedRate);
 			if (CheckError())
 			{
@@ -1718,7 +1718,7 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 				}
 
 				// 3. Step: Goto Z (with feedrate)
-				MoveStart(true);
+				MoveStart(true,false);
 				pos[super::_modalState.Plane_axis_2] = nextPlan2;
 				CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalState.G1FeedRate);
 				if (CheckError())
@@ -1746,7 +1746,7 @@ void CGCodeParser::G8xCommand(SAxisMove& move, bool useP, bool useQ, bool useMin
 					pos[super::_modalState.Plane_axis_2] = _modalState.G8xR;
 				}
 
-				MoveStart(false);
+				MoveStart(false,false);
 				CMotionControlBase::GetInstance()->MoveAbs(pos, super::_modalState.G0FeedRate);
 				if (CheckError())
 				{

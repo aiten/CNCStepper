@@ -68,7 +68,7 @@ public:
 	static bool IsSpindleOn() { return _modalState.SpindleOn; }
 
 	static bool    IsCutMove() { return _modalState.CutMove; }
-	static int16_t GetSpindleSpeed() { return _modalState.SpindleSpeed; }
+	static uint16_t GetSpindleSpeed() { return _modalState.SpindleSpeed; }
 
 	static void Init()
 	{
@@ -112,12 +112,20 @@ protected:
 protected:
 	typedef void (CGCodeParserBase::*LastCommandCB)();
 
+	enum ESpindleMode
+	{
+		NormalOnOff = 0,
+		CutMoveOnOff			// set on/off while starting a move g0=>off, g1=>on
+	};
+
 	////////////////////////////////////////////////////////
 	// Modal State
 
 	struct SModalState
 	{
-#ifdef REDUCED_SIZE
+		uint32_t Clock;					// clock start time
+
+		#ifdef REDUCED_SIZE
 		uint16_t		LineNumber;
 #else
 		int32_t ReceivedLineNumber;
@@ -140,19 +148,19 @@ protected:
 		feedrate_t G1FeedRate;
 		feedrate_t G1MaxFeedRate;
 
-		int16_t SpindleSpeed;			// > 0 CW, < 0 CCW
+		uint16_t SpindleSpeed;			// see SpindleOnCW
 
-		bool CutMove;					// G00 is no cut move
 		bool SpindleOn;
+		bool SpindleOnCW;
+		uint8_t SpindleMode;			// see ESpindleMode
+		bool CutMove;					// G00 is no cut move
 
-		mm1000_t G92Pospreset[NUM_AXIS];
+		bool ProbeOnValue;
+		bool Dummy;
 
 		CGCodeParserBase::LastCommandCB LastCommand;
 
-		bool ProbeOnValue;
-		bool SpindleOnCW;
-
-		uint32_t Clock;					// clock start time
+		mm1000_t G92Pospreset[NUM_AXIS];
 
 		void Init()
 		{
@@ -291,10 +299,10 @@ protected:
 	void GetRadius(SAxisMove& move, mm1000_t& radius);
 
 	void CallIOControl(uint8_t io, uint16_t value);
-	void GetSpindleSpeed(bool setIo);
+	bool GetSpindleSpeedCommand();	
 	void SpindleCallIOControl() { CallIOControl(_modalState.SpindleOnCW ? CControl::SpindleCW : CControl::SpindleCCW, _modalState.SpindleSpeed); }
 
-	void MoveStart(bool cutmove);
+	void MoveStart(bool cutMove, bool needSpindleCallIo);
 
 	void G31Command(bool probevalue);
 	bool ProbeCommand(SAxisMove& move, bool probevalue);

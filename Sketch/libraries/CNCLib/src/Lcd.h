@@ -70,7 +70,7 @@ protected:
 
 	virtual uint32_t Splash() = 0; // return time to display
 
-	bool IsSplash() const { return _splash; };
+	bool IsSplash() const { return _splash; }
 
 public:
 
@@ -95,7 +95,7 @@ public:
 
 	void Diagnostic(FLSTR diag) { _diagnostics = diag; }
 
-	bool  IsDiagnostic() const { return _diagnostics != nullptr; };
+	bool  IsDiagnostic() const { return _diagnostics != nullptr; }
 	FLSTR GetDiagnostic() const { return _diagnostics; }
 	void  ClearDiagnostic() { _diagnostics = nullptr; }
 

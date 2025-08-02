@@ -32,7 +32,7 @@ public:
 	}
 
 	bool    IsError() const { return _error != nullptr; }
-	error_t GetError() const { return _error; }
+	cncerror_t GetError() const { return _error; }
 
 	char SkipSpaces();
 	char SkipSpacesToUpper() { return Toupper(SkipSpaces()); }
@@ -80,14 +80,14 @@ public:
 	static bool IsLowerAZ(char ch) { return ch >= 'a' && ch <= 'z'; }
 	static bool IsUpperAZ(char ch) { return ch >= 'A' && ch <= 'Z'; }
 
-	void Error(error_t error)
+	void Error(cncerror_t error)
 	{
 		_error = error;
 		MoveToEnd();
 	}
 
 	const char* _buffer;
-	error_t     _error;
+	cncerror_t     _error;
 
 	class CSetTemporary
 	{

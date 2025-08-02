@@ -44,7 +44,10 @@ CGCodeTools GCodeTools;
 
 CMyMotionControl MotionControl;
 CConfigEeprom    Eprom;
-HardwareSerial&  StepperSerial = Serial;
+#if defined (USEHARDWARESERIAL)
+HardwareSerial&       StepperSerial = Serial;
+#endif
+
 
 const CConfigEeprom::SCNCEeprom CMyControl::_eepromFlash PROGMEM =
 {
@@ -97,8 +100,8 @@ void CMyControl::Init()
 {
 	CSingleton<CConfigEeprom>::GetInstance()->Init(sizeof(CConfigEeprom::SCNCEeprom), &_eepromFlash, EPROM_SIGNATURE);
 
-#ifdef DISABLELEDBLINK
-	DisableBlinkLed();
+#ifdef BLINK_LED
+	CHAL::pinModeOutput(BLINK_LED);
 #endif
 
 	super::Init();
@@ -162,3 +165,21 @@ bool CMyControl::Parse(CStreamReader* reader, Stream* output)
 }
 
 ////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+void CMyControl::Poll()
+{
+	super::Poll();
+
+#ifdef BLINK_LED
+
+	uint32_t time = millis();
+	if (_timeBlink < time)
+	{
+		HALFastdigitalWrite(BLINK_LED, CHAL::digitalRead(BLINK_LED) == HIGH ? LOW : HIGH);
+		_timeBlink = time + BLINK_TIMEOUT;
+	}
+#endif
+}
+
+

@@ -52,7 +52,7 @@ private:
 	typedef CParser super;
 
 public:
-	CGCodeParserBase(CStreamReader* reader, Stream* output) : super(reader, output) { };
+	CGCodeParserBase(CStreamReader* reader, Stream* output) : super(reader, output) { }
 
 	static void     SetG0FeedRate(feedrate_t feedrate) { _modalState.G0FeedRate = feedrate; }
 	static void     SetG1FeedRate(feedrate_t feedrate) { _modalState.G1FeedRate = feedrate; }
@@ -105,7 +105,7 @@ protected:
 	virtual char SkipSpacesOrComment() override;
 
 	virtual mm1000_t CalcAllPreset(axis_t axis);
-	virtual void     CommentMessage(char*) { };
+	virtual void     CommentMessage(char*) { }
 
 	bool IsCommentStart(char);
 
@@ -142,7 +142,7 @@ protected:
 
 		int16_t SpindleSpeed;			// > 0 CW, < 0 CCW
 
-		bool CutMove;
+		bool CutMove;					// G00 is no cut move
 		bool SpindleOn;
 
 		mm1000_t G92Pospreset[NUM_AXIS];
@@ -150,7 +150,7 @@ protected:
 		CGCodeParserBase::LastCommandCB LastCommand;
 
 		bool ProbeOnValue;
-		bool Dummy;
+		bool SpindleOnCW;
 
 		uint32_t Clock;					// clock start time
 
@@ -246,14 +246,14 @@ protected:
 
 	void ConstantVelocity();
 
-	virtual bool GetParamOrExpression(mm1000_t*, bool) { return false; };
+	virtual bool GetParamOrExpression(mm1000_t*, bool) { return false; }
 	mm1000_t     ParseCoordinate(bool convertUnits);
 	mm1000_t     ParseCoordinateAxis(axis_t axis);
 
 	uint32_t GetUint32OrParam(uint32_t max);
-	uint32_t GetUint32OrParam() { return GetUint32OrParam(0xffffffffl); };
-	uint16_t GetUint16OrParam() { return uint16_t(GetUint32OrParam(65535)); };
-	uint8_t  GetUint8OrParam() { return uint8_t(GetUint32OrParam(255)); };
+	uint32_t GetUint32OrParam() { return GetUint32OrParam(0xffffffffl); }
+	uint16_t GetUint16OrParam() { return uint16_t(GetUint32OrParam(65535)); }
+	uint8_t  GetUint8OrParam() { return uint8_t(GetUint32OrParam(255)); }
 
 	//mm1000_t GetRelativePosition(mm1000_t pos, axis_t axis)	{ return pos - CalcAllPreset(axis); }
 	//mm1000_t GetRelativePosition(axis_t axis)				{ return GetRelativePosition(CMotionControlBase::GetInstance()->GetPosition(axis), axis); }
@@ -261,6 +261,9 @@ protected:
 	bool   CheckAxisSpecified(axis_t axis, uint8_t& axes);
 	axis_t CharToAxis(char axis);
 	axis_t CharToAxisOffset(char axis);
+
+	bool GetAxisNo(char axis, axis_t max, axis_t& axes);
+	bool GetAxisNoOffset(char axis, axis_t max, axis_t& axes);
 
 	uint8_t GetSubCode();
 
@@ -288,7 +291,8 @@ protected:
 	void GetRadius(SAxisMove& move, mm1000_t& radius);
 
 	void CallIOControl(uint8_t io, uint16_t value);
-	void SpindleSpeedCommand();
+	void GetSpindleSpeed(bool setIo);
+	void SpindleCallIOControl() { CallIOControl(_modalState.SpindleOnCW ? CControl::SpindleCW : CControl::SpindleCCW, _modalState.SpindleSpeed); }
 
 	void MoveStart(bool cutmove);
 
@@ -308,16 +312,16 @@ private:
 
 	bool LastCommand();
 
-	void G00Command() { G0001Command(true); };
-	void G01Command() { G0001Command(false); };
+	void G00Command() { G0001Command(true); }
+	void G01Command() { G0001Command(false); }
 	void G0001Command(bool isG00);
-	void G02Command() { G0203Command(true); };
-	void G03Command() { G0203Command(false); };
+	void G02Command() { G0203Command(true); }
+	void G03Command() { G0203Command(false); }
 	void G0203Command(bool isG02);
 	void G04Command();
 	void G171819Command(axis_t axis0, axis_t axis1, axis_t axis2);
-	void G20Command() { _modalState.UnitisMm = false; };
-	void G21Command() { _modalState.UnitisMm = true; };
+	void G20Command() { _modalState.UnitisMm = false; }
+	void G21Command() { _modalState.UnitisMm = true; }
 	void G28Command();
 	void G61Command() { _modalState.ConstantVelocity = false; }
 	void G64Command() { _modalState.ConstantVelocity = true; }
@@ -332,9 +336,9 @@ private:
 		CallIOControl(CControl::SpindleCW, 0);
 	} //Spindle off
 
-	void M07Command() { CallIOControl(CControl::Coolant, CControl::CoolantOn); };
-	void M09Command() { CallIOControl(CControl::Coolant, CControl::CoolantOff); };
-	void M75Command() { SetClock(); };
+	void M07Command() { CallIOControl(CControl::Coolant, CControl::CoolantOn); }
+	void M09Command() { CallIOControl(CControl::Coolant, CControl::CoolantOff); }
+	void M75Command() { SetClock(); }
 
 	/////////////////
 

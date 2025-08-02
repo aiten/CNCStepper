@@ -38,7 +38,7 @@ public:
 
 	void Check()
 	{
-		bool isOn = CHAL::digitalRead(_pin) == _onvalue;
+		bool isOn = IsPressed();
 		switch (_state)
 		{
 			case ButtonOff:
@@ -108,7 +108,7 @@ protected:
 	{
 		ButtonOff = 0,		// button not pressed, not waiting
 		ButtonPressed,		// report pressed if IsOn is called, Button still pressed, wait for Button Off
-		ButtonPressedOff,	// Pressed an released but not reported
+		ButtonPressedOff,	// Pressed and released but not reported
 		ExpectButtonOff		// reported on IsOn, wait for "Off"
 	};
 

@@ -116,7 +116,7 @@ void CStepper::Init()
 {
 	InitMemVar();
 	InitTimer();
-#if defined(__SAM3X8E__) || defined(__SAMD21G18A__)
+#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) 
 	CHAL::InitBackground(HandleBackground);
 #endif
 
@@ -289,7 +289,7 @@ void CStepper::EnqueueAndStartTimer(bool waitFinish)
 	{
 		// situation: wait for last interrupt, need recalculate next step for stepBuffer
 		CCriticalRegion criticalRegion;
-		if (_movements._queue.Count() == 1 && _steps.IsEmpty())
+		if (_movements._queue.Count() == 1 && _stepBuffer.IsEmpty())
 		{
 			StartMovement();
 		}
@@ -596,7 +596,7 @@ uint8_t CStepper::SMovement::GetMaxStepMultiplier() const
 
 	for (uint8_t i = 0;; i++)
 	{
-		maxMultiplier = max(maxMultiplier, uint8_t(count) % 8);
+		maxMultiplier = max(maxMultiplier, uint8_t(uint8_t(count) % 8));
 		if (i == NUM_AXIS - 1)
 		{
 			break;
@@ -1075,14 +1075,14 @@ void CStepper::OnWait(EnumAsByte(EWaitType) wait)
 
 ////////////////////////////////////////////////////////
 
-void CStepper::OnError(error_t error)
+void CStepper::OnError(cncerror_t error)
 {
 	CallEvent(OnErrorEvent, uintptr_t(error));
 }
 
 ////////////////////////////////////////////////////////
 
-void CStepper::OnWarning(error_t warning)
+void CStepper::OnWarning(cncerror_t warning)
 {
 	CallEvent(OnWarningEvent, uintptr_t(warning));
 	StepperSerial.print(MESSAGE_WARNING);
@@ -1091,7 +1091,7 @@ void CStepper::OnWarning(error_t warning)
 
 ////////////////////////////////////////////////////////
 
-void CStepper::OnInfo(error_t info)
+void CStepper::OnInfo(cncerror_t info)
 {
 	CallEvent(OnInfoEvent, uintptr_t(info));
 	StepperSerial.print((MESSAGE_INFO));
@@ -1327,7 +1327,7 @@ void CStepper::AbortMove()
 
 	SubTotalSteps();
 
-	_steps.Clear();
+	_stepBuffer.Clear();
 	_movements._queue.Clear();
 
 	memcpy(_pod._calculatedPos, _pod._current, sizeof(_pod._calculatedPos));
@@ -1451,18 +1451,18 @@ inline void CStepper::StepOut()
 	// called in interrupt => must be "fast"
 	// "Out" the Step to the stepper 
 
-	// calculate all axes and set PINS parallel - DRV 8225 requires 1.9us * 2 per step => sequential is to slow 
+	// calculate all axes and set PINS parallel - DRV 8225 requires 1.9us * 2 per step => sequential is too slow 
 
 	DirCount_t dir_count;
 
 	{
-		auto stepBuffer = &_steps.Head();
+		auto stepBuffer = &_stepBuffer.Head();
 		StartTimer(stepBuffer->Timer - TIMEROVERHEAD);
 		dir_count = stepBuffer->DirStepCount;
 	}
 
 #ifdef _MSC_VER
-	StepBegin(&_steps.Head());
+	StepBegin(&_stepBuffer.Head());
 #endif
 	// AVR: div with 256 is faster than 16 (loop shift)
 
@@ -1525,7 +1525,7 @@ inline void CStepper::StepOut()
 	Step(axesCount, directionUp, _pod._lastDirectionUp == directionUp);
 	_pod._lastDirectionUp = directionUp;
 
-	_steps.Dequeue();
+	_stepBuffer.Dequeue();
 }
 
 ////////////////////////////////////////////////////////
@@ -1534,9 +1534,9 @@ static volatile bool _backgroundActive = false;
 
 void CStepper::StartBackground()
 {
-#if defined(__SAM3X8E__) || defined(__SAMD21G18A__)
+#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) 
 	// sam3x cannot call timer interrupt nested.
-	// we use a other ISR (CAN) as Tail-chaining with lower (priority value is higher) priority and exit the Timer ISR
+	// we use an other ISR (CAN) as Tail-chaining with lower (priority value is higher) priority and exit the Timer ISR
 
 	if (_backgroundActive)
 	{
@@ -1551,7 +1551,7 @@ void CStepper::StartBackground()
 
 	static volatile uint8_t reenterCount = 0;
 
-	reenterCount++;
+	reenterCount = reenterCount+1;
 
 	if (reenterCount != 1)
 	{
@@ -1559,7 +1559,7 @@ void CStepper::StartBackground()
 #ifndef REDUCED_SIZE
 		_pod._timerISRBusy++;
 #endif
-		reenterCount--;
+		reenterCount = reenterCount - 1;
 		return;
 	}
 
@@ -1571,7 +1571,7 @@ void CStepper::StartBackground()
 	FillStepBuffer();
 
 	CHAL::DisableInterrupts();
-	reenterCount--;
+	reenterCount = reenterCount-1;
 
 #endif
 }
@@ -1675,7 +1675,7 @@ void CStepper::StepRequest(bool isr)
 		return;
 	}
 
-	if (_steps.IsEmpty())
+	if (_stepBuffer.IsEmpty())
 	{
 		GoIdle();
 		return;
@@ -1706,7 +1706,7 @@ void CStepper::StepRequest(bool isr)
 #if defined (stepperstatic_)
 
 CStepper::SMovementState CStepper::_movementState;
-CRingBufferQueue<CStepper::SStepBuffer, STEPBUFFERSIZE> CStepper::_steps;
+CRingBufferQueue<CStepper::SStepBuffer, STEPBUFFERSIZE> CStepper::_stepBuffer;
 CStepper::SMovements CStepper::_movements;
 CStepper* CStepper::SMovement::_stepper;
 
@@ -1758,12 +1758,15 @@ bool CStepper::SMovementState::CalcTimerAcc(timer_t maxtimer, mdist_t n, uint8_t
 		mudiv_t udivRemainder = mudiv(_timer * (2 * cnt) + _rest, n * 4 + 2 - cnt);
 
 		_rest  = udivRemainder.rem;
-		_timer = _timer - udivRemainder.quot;
-		if (maxtimer >= _timer)
+		auto timer = _timer - udivRemainder.quot;
+
+		if (udivRemainder.quot > _timer || maxtimer >= timer)	// must be in range
 		{
 			_timer = maxtimer;
 			return true;
 		}
+
+		_timer = timer;
 	}
 	return false;
 }
@@ -1833,8 +1836,10 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 		auto stepper = _stepper;
 		auto mvState = &stepper->_movementState;
 
-		if (stepper->_steps.IsFull() || ((_state == SMovement::StateReadyWait || _state == SMovement::StateReadyIo) && stepper->_steps.Count() > SYNC_STEPBUFFERCOUNT)
-		)
+		if (
+			stepper->_stepBuffer.IsFull() ||
+			((_state == SMovement::StateReadyWait || _state == SMovement::StateReadyIo) && stepper->_stepBuffer.Count() > SYNC_STEPBUFFERCOUNT)
+			)
 		{
 			// cannot add to queue
 			return false;
@@ -1901,7 +1906,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 			if (count > 1 && _steps - n <= count)
 			{
 				// last step with multiplier
-				stepper->_steps.NextTail().Init(_lastStepDirCount);
+				stepper->_stepBuffer.NextTail().Init(_lastStepDirCount);
 				count = uint8_t(_steps - n); // must fit in unsigned char
 			}
 			else
@@ -1933,7 +1938,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 					}
 					mask *= 16;
 				}
-				stepper->_steps.NextTail().Init(stepCount);
+				stepper->_stepBuffer.NextTail().Init(stepCount);
 			}
 		}
 
@@ -2047,7 +2052,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 		mvState->_sumTimer += t;
 #endif
 
-		stepper->_steps.NextTail().Timer = t;
+		stepper->_stepBuffer.NextTail().Timer = t;
 
 		n += count;
 		if (count > n)
@@ -2059,7 +2064,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 
 #ifdef _MSC_VER
 		{
-			SStepBuffer& stepBuffer = stepper->_steps.NextTail();
+			SStepBuffer& stepBuffer = stepper->_stepBuffer.NextTail();
 			memcpy(stepBuffer._distance, _distance_, sizeof(stepBuffer._distance));
 			stepBuffer._steps = _steps;
 			stepBuffer._state = _state;
@@ -2069,7 +2074,7 @@ bool CStepper::SMovement::CalcNextSteps(bool continues)
 		}
 #endif
 
-		stepper->_steps.Enqueue();
+		stepper->_stepBuffer.Enqueue();
 	}
 	while (continues);
 
@@ -2639,6 +2644,16 @@ void CStepper::Dump(uint8_t options)
 		{
 			_movements._queue.Buffer[idx].Dump(i++, options);
 		}
+
+		/*
+		DumpType<uint8_t>(F("StepsHead"), _stepBuffer.GetHeadPos(), false);
+		DumpType<uint8_t>(F("Tail"), _stepBuffer.GetTailPos(), false);
+
+		for (uint8_t idx = 0; idx < STEPBUFFERSIZE; idx++)
+		{
+			_stepBuffer.Buffer[idx].Dump(options);
+		}
+		*/
 	}
 #endif
 }
@@ -2662,6 +2677,11 @@ void CStepper::SMovement::Dump(uint8_t idx, uint8_t options)
 	{
 		DumpType<mdist_t>(F("Conditional"), _pod._wait._checkWaitConditional, false);
 		DumpType<mdist_t>(F("EndTime"), _pod._wait._endTime, false);
+	}
+	else if (IsActiveIo())
+	{
+		DumpType<mdist_t>(F("tool"), _pod._io._tool, false);
+		DumpType<mdist_t>(F("level"), _pod._io._level, false);
 	}
 	else
 	{
@@ -2704,5 +2724,15 @@ void CStepper::SMovementState::Dump(uint8_t /* options */)
 	DumpType<timer_t>(F("r"), _rest, false);
 	DumpType<uint32_t>(F("sum"), _sumTimer, false);
 	DumpArray<mdist_t, NUM_AXIS>(F("a"), _add, false);
+#endif
+}
+
+////////////////////////////////////////////////////////
+
+void CStepper::SStepBuffer::Dump(uint8_t /* options */)
+{
+#ifndef _NO_DUMP
+	DumpType<DirCount_t>(F("d"), DirStepCount, false);
+	DumpType<timer_t>(F("t"), Timer, false);
 #endif
 }

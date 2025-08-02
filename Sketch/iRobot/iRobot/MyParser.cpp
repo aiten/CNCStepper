@@ -62,7 +62,7 @@ bool CMyParser::GetAxisAbs(SAxisMove& move)
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
 		axis_t axis;
-		if ((axis = CharToAxis(ch)) < NUM_AXIS)
+		if (GetAxisNo(ch, NUM_AXIS,axis))
 		{
 			GetAxis(axis, move, AbsolutWithZeroShiftPosition);
 		}

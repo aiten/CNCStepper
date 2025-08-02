@@ -33,7 +33,10 @@ CMyControl      Control;
 CGCodeTools     GCodeTools;
 CMotionControl  MotionControl;
 CConfigEeprom   Eprom;
-HardwareSerial& StepperSerial = Serial;
+#if defined (USEHARDWARESERIAL)
+HardwareSerial&       StepperSerial = Serial;
+#endif
+
 
 ////////////////////////////////////////////////////////////
 
@@ -86,8 +89,8 @@ void CMyControl::Init()
 {
 	CSingleton<CConfigEeprom>::GetInstance()->Init(sizeof(CConfigEeprom::SCNCEeprom), &_eepromFlash, EPROM_SIGNATURE);
 
-#ifdef DISABLELEDBLINK
-	DisableBlinkLed();
+#ifdef BLINK_LED
+	CHAL::pinModeOutput(BLINK_LED);
 #endif
 
 	super::Init();
@@ -220,6 +223,15 @@ void CMyControl::Poll()
 		Lcd.Diagnostic(F("LCD Hold"));
 #endif
 	}
+#ifdef BLINK_LED
+
+	uint32_t time = millis();
+	if (_timeBlink < time)
+	{
+		HALFastdigitalWrite(BLINK_LED, CHAL::digitalRead(BLINK_LED) == HIGH ? LOW : HIGH);
+		_timeBlink = time + BLINK_TIMEOUT;
+	}
+#endif
 }
 
 ////////////////////////////////////////////////////////////

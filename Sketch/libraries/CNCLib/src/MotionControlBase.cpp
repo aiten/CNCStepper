@@ -30,8 +30,8 @@
 
 /////////////////////////////////////////////////////////
 
-ToMm1000_t  CMotionControlBase::_ToMm1000;
-ToMachine_t CMotionControlBase::_ToMachine;
+ToMm1000_t  CMotionControlBase::_toMm1000;
+ToMachine_t CMotionControlBase::_toMachine;
 
 /////////////////////////////////////////////////////////
 
@@ -376,7 +376,7 @@ steprate_t CMotionControlBase::FeedRateToStepRate(axis_t axis, feedrate_t feedra
 	}
 
 	// feedrate => 32bit, steprate can be 16 bit
-	feedrate_t steprate32 = _ToMachine(axis, feedrate / 60);
+	feedrate_t steprate32 = _toMachine(axis, feedrate / 60);
 	if (steprate32 > STEPRATE_MAX)
 	{
 		return STEPRATE_MAX;
@@ -390,7 +390,7 @@ steprate_t CMotionControlBase::FeedRateToStepRate(axis_t axis, feedrate_t feedra
 feedrate_t CMotionControlBase::StepRateToFeedRate(axis_t axis, steprate_t steprate)
 {
 	// 60 because of min=>sec (feedrate in mm1000/min)
-	auto feedrate = feedrate_t(_ToMm1000(axis, steprate * 60l));
+	auto feedrate = feedrate_t(_toMm1000(axis, steprate * 60l));
 	return feedrate ? feedrate : 1;
 }
 

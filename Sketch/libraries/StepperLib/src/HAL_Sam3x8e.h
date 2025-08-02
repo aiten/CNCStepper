@@ -193,6 +193,8 @@ inline void CHAL::DelayMicroseconds(unsigned int usec)
 	::delayMicroseconds(usec);
 }
 
+inline void CHAL::DelayNanoseconds(unsigned int) {}
+
 inline void CHAL::DelayMicroseconds0500()
 {
 	// uint32_t n = usec * (VARIANT_MCK / 3000000);
@@ -276,6 +278,11 @@ inline void  CHAL::RemoveTimer1() {}
 
 inline void CHAL::StartTimer1OneShot(timer_t delay)
 {
+	if (delay > 65556)		// limit timer value to 65556
+	{
+		delay = 65556; // max timer value		
+	}
+
 	// convert old AVR timer delay value for SAM timers
 	delay *= 21;		// 2MhZ to 42MhZ
 

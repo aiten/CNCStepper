@@ -8,6 +8,9 @@
     <Filter Include="Laser">
       <UniqueIdentifier>{8bd08f54-b62d-4a9c-b0bd-4d7a50e5854c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Laser\Machines">
+      <UniqueIdentifier>{bb7b29b6-ba6c-4876-94da-c40fcd06c395}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -19,11 +22,20 @@
     <ClInclude Include="..\..\..\Sketch\Laser\Laser\Configuration.h">
       <Filter>Laser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Configuration_CNCShield.h">
-      <Filter>Laser</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Sketch\Laser\Laser\MyControl.h">
       <Filter>Laser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Machines\Machine_LED_5W.h">
+      <Filter>Laser\Machines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Machines\Machine_LED_5W_esp32c6.h">
+      <Filter>Laser\Machines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Machines\Stepper_CNCShield3x.h">
+      <Filter>Laser\Machines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\Laser\Laser\Machines\Machine_LED_Mini.h">
+      <Filter>Laser\Machines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

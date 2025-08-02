@@ -25,22 +25,6 @@
 
 typedef uint16_t param_t;
 
-#define NUM_MAXPARAMNAMELENGTH 16
-#define NUM_PARAMETERRANGE	255
-
-#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(_MSC_VER)
-
-#define NUM_PARAMETER	16		// slotCount, map from uint8_t to < NUM_PARAMETER
-#define G54ARRAYSIZE	6
-
-#else
-
-#define NUM_PARAMETER	8
-#define G54ARRAYSIZE	2
-
-#endif
-
-
 // see: http://linuxcnc.org/docs/html/gcode/overview.html#_numbered_parameters_a_id_sub_numbered_parameters_a
 
 #define PARAMSTART_G28HOME		5161		// 5161-5169 - G28 Home for (X Y Z A B C U V W)
@@ -87,7 +71,7 @@ private:
 
 public:
 
-	CGCodeParser(CStreamReader* reader, Stream* output) : super(reader, output) { };
+	CGCodeParser(CStreamReader* reader, Stream* output) : super(reader, output) { }
 
 	static mm1000_t GetG54PosPreset(axis_t        axis);
 	static mm1000_t GetToolHeightPosPreset(axis_t axis) { return axis == super::_modalState.Plane_axis_2 ? _modalState.ToolHeigtCompensation : 0; }
@@ -200,7 +184,7 @@ protected:
 	////////////////////////////////////////////////////////
 	// Parser structure
 
-	bool CutterRadiosIsOn()
+	bool CutterRadiusIsOn()
 	{
 		if (_modalState.CutterRadiusCompensation)
 		{
@@ -258,8 +242,8 @@ private:
 	void G81Command();		// Basic drilling canned cycle
 	void G82Command();		// Spot Drilling Cycle
 	void G83Command();		// Peck Drilling for Deeper Holes
-	void G98Command() { _modalState.IsG98 = true; };
-	void G99Command() { _modalState.IsG98 = false; };
+	void G98Command() { _modalState.IsG98 = true; }
+	void G99Command() { _modalState.IsG98 = false; }
 
 	void M00Command();		// Compulsory stop
 	void M01Command();		// Optional stop

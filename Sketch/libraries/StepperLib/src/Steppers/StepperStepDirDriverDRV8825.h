@@ -26,7 +26,7 @@ static void DelayChangeDirection()
 
 #define A4998DRV8825_CHANGEDIRECTIONMICROS	0
 
-#if defined(__SAM3X8E__) || defined(__SAMD21G18A__)
+#if defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(esp32)
 
 static void Delay1(uint8_t) ALWAYSINLINE		{ CHAL::DelayMicroseconds(1); } 
 static void Delay2() ALWAYSINLINE				{ CHAL::DelayMicroseconds(1); } 

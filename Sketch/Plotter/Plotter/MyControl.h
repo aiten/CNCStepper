@@ -101,6 +101,10 @@ public:
 
 private:
 
+#ifdef BLINK_LED
+	uint32_t _timeBlink=0;
+#endif
+
 	static const SMyCNCEeprom _eepromFlash;
 
 	ControlData _data;

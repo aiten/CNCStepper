@@ -20,9 +20,19 @@
 
 #pragma once
 
-//#define StepperSerial SerialUSB
-//#define StepperSerial Serial
+
+#if defined(ESP32)
+
+#undef USEHARDWARESERIAL
+#define StepperSerial Serial
+
+#else 
+
+#define USEHARDWARESERIAL
 extern class HardwareSerial& StepperSerial;
+
+#endif
+
 
 ////////////////////////////////////////////////////////
 
@@ -50,7 +60,7 @@ typedef uint32_t udist_t;	// type of stepper coordinate system (unsigned)
 
 typedef const __FlashStringHelper* FLSTR;
 
-typedef FLSTR error_t;
+typedef FLSTR cncerror_t;
 
 ////////////////////////////////////////////////////////
 //
@@ -108,7 +118,7 @@ typedef FLSTR error_t;
 
 ////////////////////////////////////////////////////////
 
-#elif defined(__SAM3X8E__) || defined(__SAMD21G18A__)
+#elif defined(__SAM3X8E__) || defined(__SAMD21G18A__) || defined(ESP32)
 
 // usual with Ramps FD
 

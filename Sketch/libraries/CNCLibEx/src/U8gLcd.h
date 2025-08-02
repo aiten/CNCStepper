@@ -257,7 +257,7 @@ protected:
 
 #else
 	static ButtonFunction GetButtonPress(const ButtonFunction* adr) { return *adr; }
-	static DrawFunction   GetDrawFunction(const DrawFunction*  adr) { return *adr; };
+	static DrawFunction   GetDrawFunction(const DrawFunction*  adr) { return *adr; }
 
 #endif
 };

@@ -80,6 +80,20 @@ typedef uint32_t pin_t;
 
 #define irqflags_t uint8_t
 
+#elif defined(ESP32)
+
+typedef uint32_t pin_t;
+
+#define ALWAYSINLINE		__attribute__((__always_inline__)) 
+#define ALWAYSINLINE_SAM
+#define ALWAYSINLINE_AVR
+#define NEVER_INLINE		__attribute__((__noinline__))
+#define NEVER_INLINE_AVR
+#define NEVER_INLINE_SAM
+#define ALIGN_WORD			__attribute__((aligned (4)))
+
+#define irqflags_t uint8_t
+
 #elif defined(__AVR_ARCH__)
 
 #define ALWAYSINLINE		__attribute__((__always_inline__)) 
@@ -153,7 +167,13 @@ public:
 
 #endif
 
-#if defined(__SAMD21G18A__)
+#if defined(ESP32)
+
+	static hw_timer_t* _hwTimer[2];
+
+#endif
+
+#if defined(__SAMD21G18A__) 
 	
 #define EEPROM_SIZE	512		// must be x*256
 
@@ -167,10 +187,30 @@ public:
 
 #endif
 
+#if defined(ESP32)
+
+#define EEPROM_SIZE	512		// must be x*256
+
+	static void IRAM_ATTR OnTimer0();
+	static void IRAM_ATTR OnTimer1();
+
+	static const uint8_t _flashStorage[EEPROM_SIZE] __attribute__((__aligned__(256)));
+	static uint8_t _flashBuffer[EEPROM_SIZE] __attribute__((__aligned__(4)));
+
+	static void FlashWriteWords(uint32_t* flash_ptr, const uint32_t* data, uint32_t nwords);
+	static void FlashErase(void* flash_ptr, uint32_t size);
+	static void FlashEraseRow(void* flash_ptr);
+	static void FlashRead(const void* flash_ptr, void* data, uint32_t size);
+
+#endif
+
 	static inline void DisableInterrupts() ALWAYSINLINE;
 	static inline void EnableInterrupts() ALWAYSINLINE;
 
-	static inline void DelayMicroseconds(unsigned int us) ALWAYSINLINE ;
+	static const uint32_t _timeout_cycles;
+
+	static inline void DelayNanoseconds(unsigned int ns);
+	static inline void DelayMicroseconds(unsigned int us) ALWAYSINLINE;
 	static inline void DelayMicroseconds0250() ALWAYSINLINE; // delay 1/4 us (4 nop on AVR)
 	static inline void DelayMicroseconds0312() ALWAYSINLINE; // delay 0.312us (5 nop on AVR)
 	static inline void DelayMicroseconds0375() ALWAYSINLINE; // delay 0.312us (6 nop on AVR)
@@ -221,6 +261,8 @@ private:
 
 //////////////////////////////////////////
 
+#if !defined(ESP32)
+
 class CCriticalRegion
 {
 private:
@@ -228,15 +270,18 @@ private:
 
 public:
 
-	inline CCriticalRegion() ALWAYSINLINE : _sreg(CHAL::GetSREG()) { CHAL::DisableInterrupts(); };
+	inline CCriticalRegion() ALWAYSINLINE : _sreg(CHAL::GetSREG()) { CHAL::DisableInterrupts(); }
 	inline ~CCriticalRegion() ALWAYSINLINE { CHAL::SetSREG(_sreg); }
 };
+
+#endif
 
 //////////////////////////////////////////
 
 #include "HAL_AVR.h"
 #include "HAL_Sam3x8e.h"
 #include "HAL_SamD21g18a.h"
+#include "HAL_Esp32.h"
 #include "HAL_Msvc.h"
 
 //////////////////////////////////////////

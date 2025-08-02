@@ -66,6 +66,10 @@ protected:
 	
 private:
 
+#ifdef BLINK_LED
+	uint32_t _timeBlink=0;
+#endif
+
 	static const CConfigEeprom::SCNCEeprom _eepromFlash;
 
 	ControlData _data;

@@ -279,10 +279,33 @@ bool CGCodeParserBase::ParseLineNumber()
 
 ////////////////////////////////////////////////////////////
 
-void CGCodeParserBase::MoveStart(bool cutmove)
+void CGCodeParserBase::MoveStart(bool cutMove, bool needSpindleCallIo)
 {
-	CControl::GetInstance()->CallOnEvent(CControl::OnStartCut, cutmove);
-	_modalState.CutMove = cutmove;
+	CControl::GetInstance()->CallOnEvent(CControl::OnStartCut, cutMove);
+
+	if (_modalState.SpindleMode == ESpindleMode::CutMoveOnOff)
+	{
+		if (_modalState.SpindleOn && cutMove != _modalState.CutMove)
+		{
+			if (cutMove)
+			{
+				needSpindleCallIo = true;
+			}
+			else
+			{
+				needSpindleCallIo = false;
+				CallIOControl(CControl::SpindleCW, 0);
+			}
+		}
+	}
+
+	// modify old(previous) state
+	_modalState.CutMove = cutMove;
+
+	if (needSpindleCallIo)
+	{
+		SpindleCallIOControl();
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -387,7 +410,10 @@ void CGCodeParserBase::Parse()
 			case 'S':		// spindle/laser speed
 			{
 				_reader->GetNextChar();
-				GetSpindleSpeed(true);
+				if (GetSpindleSpeedCommand())
+				{
+					SpindleCallIOControl();
+				}
 				break;
 			}
 			case '$':
@@ -769,6 +795,7 @@ void CGCodeParserBase::G0001Command(bool isG00)
 
 	_modalState.LastCommand = isG00 ? &CGCodeParserBase::G00Command : &CGCodeParserBase::G01Command;
 	bool useG0Feed          = isG00;
+	bool needSpindleCallIo     = false;
 
 	SAxisMove move(true);
 
@@ -779,24 +806,27 @@ void CGCodeParserBase::G0001Command(bool isG00)
 		{
 			GetAxis(axis, move, _modalState.IsAbsolut ? AbsolutWithZeroShiftPosition : RelativPosition);
 		}
-		else if (ch == 'F' && !isG00)
+		else if (ch == 'F') 
 		{
-			_reader->GetNextChar();
-			GetFeedrate(move);
-		}
-		else if (ch == 'F' && isG00)
-		{
-			if (IsInt(_reader->GetNextCharSkipScaces()))
+			if (isG00)
 			{
-				Error(MESSAGE(MESSAGE_GCODE_FeedrateWithG0));
-				return;
+				if (IsInt(_reader->GetNextCharSkipScaces()))
+				{
+					Error(MESSAGE(MESSAGE_GCODE_FeedrateWithG0));
+					return;
+				}
+				useG0Feed = false;
 			}
-			useG0Feed = false;
+			else
+			{
+				_reader->GetNextChar();
+				GetFeedrate(move);
+			}
 		}
 		else if (ch == 'S')
 		{
 			_reader->GetNextChar();
-			GetSpindleSpeed(true);
+			needSpindleCallIo = GetSpindleSpeedCommand();
 		}
 		else
 		{
@@ -809,9 +839,10 @@ void CGCodeParserBase::G0001Command(bool isG00)
 		}
 	}
 
+	MoveStart(!isG00, needSpindleCallIo);
+
 	if (move.axes)
 	{
-		MoveStart(!isG00);
 		CMotionControlBase::GetInstance()->MoveAbs(move.newpos, useG0Feed ? _modalState.G0FeedRate : _modalState.G1FeedRate);
 		ConstantVelocity();
 	}
@@ -826,6 +857,8 @@ void CGCodeParserBase::G0203Command(bool isG02)
 	SAxisMove move(true);
 	mm1000_t  radius;
 	mm1000_t  offset[2] = { 0, 0 };
+
+	bool needSpindleCallIo = false;
 
 	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
@@ -851,7 +884,7 @@ void CGCodeParserBase::G0203Command(bool isG02)
 		else if (ch == 'S')
 		{
 			_reader->GetNextChar();
-			GetSpindleSpeed(true);
+			needSpindleCallIo = GetSpindleSpeedCommand();
 		}
 		else
 		{
@@ -918,7 +951,7 @@ void CGCodeParserBase::G0203Command(bool isG02)
 		offset[1] = mm1000_t(0.5 * (y + (x * h_x2_div_d)));
 	}
 
-	MoveStart(true);
+	MoveStart(true, needSpindleCallIo);
 	CMotionControlBase::GetInstance()->Arc(move.newpos, offset[0], offset[1], _modalState.Plane_axis_0, _modalState.Plane_axis_1, isG02, _modalState.G1FeedRate);
 	ConstantVelocity();
 }
@@ -1183,29 +1216,27 @@ void CGCodeParserBase::G92Command()
 
 ////////////////////////////////////////////////////////////
 
-void CGCodeParserBase::GetSpindleSpeed(bool setIo)
+bool CGCodeParserBase::GetSpindleSpeedCommand()
 {
 	_reader->SkipSpaces();
-	auto speed = short(GetUint32OrParam(MAXSPINDLE_SPEED));
+	auto speed = uint16_t(GetUint32OrParam(MAXSPINDLE_SPEED));
 
 #ifndef REDUCED_SIZE
 
 	if (IsError())
 	{
-		return;
+		return false;
 	}
 
 #endif
 
-
-	bool callIO = setIo && _modalState.SpindleOn && _modalState.SpindleSpeed != speed;
+	bool needCallIo = _modalState.SpindleOn && 
+		_modalState.SpindleSpeed != speed &&
+		(_modalState.SpindleMode != ESpindleMode::CutMoveOnOff || _modalState.CutMove);
 
 	_modalState.SpindleSpeed = speed;
 
-	if (callIO)
-	{
-		SpindleCallIOControl();
-	}
+	return needCallIo;
 }
 
 ////////////////////////////////////////////////////////////
@@ -1219,17 +1250,42 @@ void CGCodeParserBase::CallIOControl(uint8_t io, uint16_t value)
 
 void CGCodeParserBase::M0304Command(bool m3)
 {
-	char ch = _reader->SkipSpacesToUpper();
-	if (ch == 'S')
+	for (char ch = _reader->SkipSpacesToUpper(); ch; ch = _reader->SkipSpacesToUpper())
 	{
-		_reader->GetNextChar();
-		GetSpindleSpeed(false);
+		if (ch == 'S')
+		{
+			_reader->GetNextChar();
+			GetSpindleSpeedCommand();
+		}
+		else if (ch == 'Q')
+		{
+			_reader->GetNextChar();
+			_modalState.SpindleMode = GetUInt8();
+		}
+		else
+		{
+			break;
+		}
+
+#ifndef REDUCED_SIZE
+
+		if (CheckError())
+		{
+			return;
+		}
+
+#endif
+
 	}
 
-	_modalState.SpindleOn   = true;
+	bool wasSpindleOn = _modalState.SpindleOn;
+	_modalState.SpindleOn = true;
 	_modalState.SpindleOnCW = m3;
 
-	SpindleCallIOControl();
+	if (_modalState.SpindleMode != ESpindleMode::CutMoveOnOff || (wasSpindleOn && _modalState.CutMove))
+	{
+		SpindleCallIOControl();
+	}
 }
 
 ////////////////////////////////////////////////////////////

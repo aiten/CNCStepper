@@ -19,8 +19,8 @@
 ////////////////////////////////////////////////////////
 
 //#include "Machines/Machine_CNC3325.h"
-#include "Machines/Machine_Esp32C6.h"
-//#include "Machines/Machine_CNCShield3x.h"
+//#include "Machines/Machine_Esp32C6.h"
+#include "Machines/Machine_CNCShield3x.h"
 //#include "Machines/Machine_L298N.h"
 //#include "Machines/Machine_SMC800.h"
 //#include "Machines/Machine_TB6560.h"

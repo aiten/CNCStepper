@@ -107,6 +107,13 @@
 #define B_STEPSPERMM 0.0
 #define C_STEPSPERMM 0.0
 
+#define X_INITPOS 0 
+#define Y_INITPOS 0
+#define Z_INITPOS 0
+#define A_INITPOS 0
+#define B_INITPOS 0
+#define C_INITPOS 0
+
 #define X_PROBESIZE 25000
 #define Y_PROBESIZE 25000
 #define Z_PROBESIZE 25000

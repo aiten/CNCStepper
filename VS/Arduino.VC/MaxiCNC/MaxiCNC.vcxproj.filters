@@ -41,6 +41,9 @@
     <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Machines\Stepper_Ramps14.h">
       <Filter>MaxiCNC\Machines</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Machines\Machine_6AxisRobot.h">
+      <Filter>MaxiCNC\Machines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

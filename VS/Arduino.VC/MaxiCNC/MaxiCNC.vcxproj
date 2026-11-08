@@ -86,6 +86,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Configuration.h" />
+    <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Machines\Machine_6AxisRobot.h" />
     <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Machines\Machine_KK1000S.h" />
     <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Machines\Machine_MyCNC.h" />
     <ClInclude Include="..\..\..\Sketch\MaxiCNC\MaxiCNC\Machines\Machine_ProxxonMF70.h" />

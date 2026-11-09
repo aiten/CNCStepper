@@ -84,7 +84,9 @@ void CMyLcd::Init()
 
 	SetRotaryPin(ROTARY_EN1,ROTARY_EN2, ROTARY_ENC, ROTARY_ENC_ON);
 
-	CHAL::pinModeInputPullUp(CAT(BOARDNAME,_LCD_KILL_PIN));
+  #if defined(HOLDRESUME_PIN)
+		CHAL::pinModeInputPullUp(CAT(BOARDNAME,_LCD_KILL_PIN));
+	#endif
 }
 
 ////////////////////////////////////////////////////////////

@@ -55,10 +55,10 @@
 
 ////////////////////////////////////////////////////////
 
-#define CNC_MAXSPEED ((steprate_t)28000)			// steps/sec => 8.75 rot /sec
-#define CNC_ACC  350								// 0.257 => time to full speed
-#define CNC_DEC  400								// 0.1975 => time to break
-#define CNC_JERKSPEED 1000
+#define CNC_MAXSPEED ((steprate_t)40000)			// steps/sec => 6,25 rot /sec
+#define CNC_ACC  475								// 0.257 => time to full speed
+#define CNC_DEC  548								// 0.1975 => time to break
+#define CNC_JERKSPEED 1600
 
 #define X_MAXSPEED 0
 #define Y_MAXSPEED 0

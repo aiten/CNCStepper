@@ -63,7 +63,7 @@ bool CGCode3DParser::InitParse()
 		// m29 ends the writing => we have to check first
 		if (!TryToken(F("M29"), false, true))
 		{
-			GetExecutingFile().println(lineStart);
+			GetCopyToFile().println(lineStart);
 			_reader->MoveToEnd();
 			return false;
 		}
@@ -183,8 +183,13 @@ void CGCode3DParser::M22Command() {}
 
 void CGCode3DParser::M23Command()
 {
+	if (GetExecutingFile())
+	{
+		GetExecutingFile().close();
+	}
+
 	char fileName[MAXPATHNAME];
-	if (!CheckSD() || !GetPathName(fileName))
+	if (!GetPathName(fileName))
 	{
 		return;
 	}
@@ -309,7 +314,7 @@ void CGCode3DParser::M27Command()
 
 char* CGCode3DParser::GetFile(char* fileName)
 {
-	if (!CheckSD() || !GetPathName(fileName))
+	if (!GetPathName(fileName))
 	{
 		return NULL;
 	}
@@ -336,61 +341,71 @@ char* CGCode3DParser::GetFile(char* fileName)
 
 ////////////////////////////////////////////////////////////
 
-void CGCode3DParser::M281AppendFile()
+void CGCode3DParser::M281AppendFile(uint8_t subCode)
 {
 	char  fileNameBuffer[MAXPATHNAME];
 	char* fileName = GetFile(fileNameBuffer);
 
-	if (fileName==NULL)
+	if (fileName == NULL)
 	{
 		return;
 	}
 
 	// write will always append to the end of the file => no need to seek to end
 
-	_state._file = SD.open(fileName, FILE_WRITE);
-	if (!GetExecutingFile())
+	File file = SD.open(fileName, FILE_WRITE);
+	if (!file)
 	{
 		Error(MESSAGE_PARSER3D_ERROR_CREATING_FILE);
 		return;
 	}
 
-	GetExecutingFile().print("g1 ");
-
 	char ch = _reader->SkipSpacesToUpper();
 
-	if (_reader->IsEOC(ch))
+	if (subCode == 2)
 	{
-		for (axis_t axis = 0; axis < NUM_AXIS; axis++)
+		for (ch = _reader->GetChar(); ch; ch = _reader->GetNextChar())
 		{
-			GetExecutingFile().print(CGCodeBuilder::AxisToChar(axis));
-			WritePosition(CMotionControlBase::GetInstance()->GetPosition(axis));
+			file.print(ch);
 		}
 	}
 	else
 	{
-		for (; ch; ch = _reader->SkipSpacesToUpper())
-		{
-			axis_t axis;
-			if (GetAxisNo(ch, NUM_AXIS, axis))
-			{
-				GetExecutingFile().print(CGCodeBuilder::AxisToChar(axis));
-				WritePosition(CMotionControlBase::GetInstance()->GetPosition(axis));
-			}
-			else
-			{
-				break;
-			}
+		file.print("g1 ");
 
-			if (CheckError())
+		if (_reader->IsEOC(ch))
+		{
+			for (axis_t axis = 0; axis < NUM_AXIS; axis++)
 			{
-				GetExecutingFile().close();
-				return;
+				file.print(CGCodeBuilder::AxisToChar(axis));
+				WritePosition(file, CMotionControlBase::GetInstance()->GetPosition(axis));
+			}
+		}
+		else
+		{
+			for (; ch; ch = _reader->SkipSpacesToUpper())
+			{
+				axis_t axis;
+				if (GetAxisNo(ch, NUM_AXIS, axis))
+				{
+					file.print(CGCodeBuilder::AxisToChar(axis));
+					WritePosition(file, CMotionControlBase::GetInstance()->GetPosition(axis));
+				}
+				else
+				{
+					break;
+				}
+
+				if (CheckError())
+				{
+					file.close();
+					return;
+				}
 			}
 		}
 	}
-	GetExecutingFile().println();
-	GetExecutingFile().close();
+	file.println();
+	file.close();
 
 	if (!ExpectEndOfCommand()) { return; }
 }
@@ -403,7 +418,9 @@ void CGCode3DParser::M28Command()
 
 	switch (subCode)
 	{
-		case 1: M281AppendFile();
+		case 1:
+		case 2: 
+			M281AppendFile(subCode);
 			return;
 
 		case 255: break;
@@ -423,8 +440,8 @@ void CGCode3DParser::M28Command()
 			return;
 		}
 
-		_state._file = SD.open(fileName, FILE_WRITE);
-		if (!GetExecutingFile())
+		GetCopyToFile() = SD.open(fileName, FILE_WRITE);
+		if (!GetCopyToFile())
 		{
 			Error(MESSAGE_PARSER3D_ERROR_CREATING_FILE);
 			return;
@@ -443,9 +460,9 @@ void CGCode3DParser::M29Command()
 {
 	if (_state._isM28)
 	{
-		if (GetExecutingFile())
+		if (GetCopyToFile())
 		{
-			GetExecutingFile().close();
+			GetCopyToFile().close();
 		}
 
 		_state._isM28 = false;
@@ -458,7 +475,7 @@ void CGCode3DParser::M29Command()
 void CGCode3DParser::M30Command()
 {
 	char fileName[MAXPATHNAME];
-	if (!CheckSD() || !GetPathName(fileName))
+	if (!GetPathName(fileName))
 	{
 		return;
 	}
@@ -486,16 +503,16 @@ bool CGCode3DParser::CheckSD()
 
 bool CGCode3DParser::DeleteSDFile(char* fileName, bool errorIfNotExists)
 {
-	GetExecutingFile() = SD.open(fileName);
-	if (GetExecutingFile())
+	File file = SD.open(fileName);
+	if (file)
 	{
-		if (GetExecutingFile().isDirectory())
+		if (file.isDirectory())
 		{
-			GetExecutingFile().close();
+			file.close();
 			Error(MESSAGE_PARSER3D_DIRECOTRY_SPECIFIED);
 			return false;
 		}
-		GetExecutingFile().close();
+		file.close();
 		if (!SD.remove(fileName))
 		{
 			Error(MESSAGE_PARSER3D_CANNOT_DELETE_FILE);
@@ -636,22 +653,22 @@ void CGCode3DParser::PrintVersion()
 
 ////////////////////////////////////////////////////////////
 
-void CGCode3DParser::WritePosition(mm1000_t pos)
+void CGCode3DParser::WritePosition(File& file, mm1000_t pos)
 {
 	int16_t  div = pos / 1000;
 	uint16_t rem = abs(int16_t(pos % 1000));
 
-	GetExecutingFile().print(div);
-	GetExecutingFile().print('.');
+	file.print(div);
+	file.print('.');
 
 	if (rem < 100)
 	{
-		GetExecutingFile().print('0');
+		file.print('0');
 		if (rem < 10)
 		{
-			GetExecutingFile().print('0');
+			file.print('0');
 		}
 	}
 
-	GetExecutingFile().print(rem);
+	file.print(rem);
 }

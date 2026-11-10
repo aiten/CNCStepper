@@ -30,6 +30,8 @@
 #include "MessageCNCLibEx.h"
 #include <Control3D.h>
 
+#include "GCodeBuilder.h"
+
 ////////////////////////////////////////////////////////////
 
 struct CGCode3DParser::GCodeState CGCode3DParser::_state;
@@ -305,32 +307,116 @@ void CGCode3DParser::M27Command()
 
 ////////////////////////////////////////////////////////////
 
+char* CGCode3DParser::GetFile(char* fileName)
+{
+	if (!CheckSD() || !GetPathName(fileName))
+	{
+		return NULL;
+	}
+
+	// create folders
+	char* lastSlash = strrchr(fileName, '/');
+
+	if (lastSlash != nullptr && lastSlash != fileName)
+	{
+		*lastSlash = 0;
+		if (!SD.exists(fileName))
+		{
+			if (!SD.mkdir(fileName))
+			{
+				Error(MESSAGE_PARSER3D_ERROR_CREATING_FILE);
+				return NULL;
+			}
+		}
+		*lastSlash = '/';
+	}
+
+	return fileName;
+}
+
+////////////////////////////////////////////////////////////
+
+void CGCode3DParser::M281AppendFile()
+{
+	char  fileNameBuffer[MAXPATHNAME];
+	char* fileName = GetFile(fileNameBuffer);
+
+	if (fileName==NULL)
+	{
+		return;
+	}
+
+	// write will always append to the end of the file => no need to seek to end
+
+	_state._file = SD.open(fileName, FILE_WRITE);
+	if (!GetExecutingFile())
+	{
+		Error(MESSAGE_PARSER3D_ERROR_CREATING_FILE);
+		return;
+	}
+
+	GetExecutingFile().print("g1 ");
+
+	char ch = _reader->SkipSpacesToUpper();
+
+	if (_reader->IsEOC(ch))
+	{
+		for (axis_t axis = 0; axis < NUM_AXIS; axis++)
+		{
+			GetExecutingFile().print(CGCodeBuilder::AxisToChar(axis));
+			WritePosition(CMotionControlBase::GetInstance()->GetPosition(axis));
+		}
+	}
+	else
+	{
+		for (; ch; ch = _reader->SkipSpacesToUpper())
+		{
+			axis_t axis;
+			if (GetAxisNo(ch, NUM_AXIS, axis))
+			{
+				GetExecutingFile().print(CGCodeBuilder::AxisToChar(axis));
+				WritePosition(CMotionControlBase::GetInstance()->GetPosition(axis));
+			}
+			else
+			{
+				break;
+			}
+
+			if (CheckError())
+			{
+				GetExecutingFile().close();
+				return;
+			}
+		}
+	}
+	GetExecutingFile().println();
+	GetExecutingFile().close();
+
+	if (!ExpectEndOfCommand()) { return; }
+}
+
+////////////////////////////////////////////////////////////
+
 void CGCode3DParser::M28Command()
 {
+	uint8_t subCode = GetSubCode();
+
+	switch (subCode)
+	{
+		case 1: M281AppendFile();
+			return;
+
+		case 255: break;
+		default:
+
+			ErrorNotImplemented();
+			return;
+	}
+
 	if (!_state._isM28)
 	{
-		char fileName[MAXPATHNAME];
-		if (!CheckSD() || !GetPathName(fileName))
-		{
-			return;
-		}
-
-		// create folders
-		char* lastSlash = strrchr(fileName, '/');
-
-		if (lastSlash != nullptr && lastSlash != fileName)
-		{
-			*lastSlash = 0;
-			if (!SD.exists(fileName))
-			{
-				if (!SD.mkdir(fileName))
-				{
-					Error(MESSAGE_PARSER3D_ERROR_CREATING_FILE);
-					return;
-				}
-			}
-			*lastSlash = '/';
-		}
+		char  fileNameBuffer[MAXPATHNAME];
+		char* fileName = GetFile(fileNameBuffer);
 
 		if (!DeleteSDFile(fileName, false))
 		{
@@ -546,4 +632,26 @@ bool CGCode3DParser::GetFileName(char*& buffer, uint8_t& pathLength)
 void CGCode3DParser::PrintVersion()
 {
 	StepperSerial.print(MESSAGE_PARSER3D_VERSION);
+}
+
+////////////////////////////////////////////////////////////
+
+void CGCode3DParser::WritePosition(mm1000_t pos)
+{
+	int16_t  div = pos / 1000;
+	uint16_t rem = abs(int16_t(pos % 1000));
+
+	GetExecutingFile().print(div);
+	GetExecutingFile().print('.');
+
+	if (rem < 100)
+	{
+		GetExecutingFile().print('0');
+		if (rem < 10)
+		{
+			GetExecutingFile().print('0');
+		}
+	}
+
+	GetExecutingFile().print(rem);
 }

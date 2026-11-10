@@ -112,6 +112,10 @@ private:
 
 protected:
 
+	char* GetFile(char* filename);
+	void M281AppendFile();	//append file with position
+	void WritePosition(mm1000_t pos);
+
 	static void PrintVersion();
 };
 

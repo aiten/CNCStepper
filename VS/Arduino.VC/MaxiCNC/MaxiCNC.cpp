@@ -41,7 +41,10 @@ int _tmain(int /* argc */, _TCHAR* /* argv */[])
 	{
 		switch (pin)
 		{
-			case CAT(BOARDNAME, _LCD_KILL_PIN): return CAT(BOARDNAME, _LCD_KILL_PIN_OFF);
+#if defined(HOLDRESUME_PIN)
+		case CAT(BOARDNAME, _LCD_KILL_PIN): return CAT(BOARDNAME, _LCD_KILL_PIN_OFF);
+#endif
+
 			default: break;
 		}
 		return DIGITALREADNOVALUE;

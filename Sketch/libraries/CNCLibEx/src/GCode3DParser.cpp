@@ -226,7 +226,32 @@ void CGCode3DParser::M24Command()
 
 ////////////////////////////////////////////////////////////
 
-void CGCode3DParser::M25Command() {}
+void CGCode3DParser::M25Command()
+{
+	char  fileNameBuffer[MAXPATHNAME];
+	char* fileName = GetFile(fileNameBuffer);
+
+	if (fileName == NULL)
+	{
+		return;
+	}
+
+	if (!ExpectEndOfCommand()) { return; }
+
+	File file = SD.open(fileName, FILE_READ);
+	if (!file)
+	{
+		Error(MESSAGE_PARSER3D_ERROR_READING_FILE);
+		return;
+	}
+
+	while (file.available() > 0)
+	{
+		char ch = file.read();
+		StepperSerial.print(ch);
+	}
+	file.close();
+}
 
 ////////////////////////////////////////////////////////////
 

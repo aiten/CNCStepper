@@ -95,7 +95,7 @@ private:
 	void M22Command(); // Release SD card
 	void M23Command(); // Select file on SD card
 	void M24Command(); // Start file on SD card
-	void M25Command();
+	void M25Command(); // Pause SD print, but we use it as "cat" a file on SD card
 	void M26Command(); // Set file position on SD card
 	void M27Command(); // Status of SD print - position/size 
 	void M28Command(); // Start write to SD file

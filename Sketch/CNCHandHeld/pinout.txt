@@ -1,0 +1,33 @@
+Versorgung
+VCC     rot
+GND     schwarz
+
+Rotary
+A       grün
+B       weiss
+/A      lila
+/B      lila
+
+Geschw
+X1      grau
+X10     grau/schwarz
+X100    orange
+
+Achsen
+X       gelb
+Y       gelb/schwarz
+Z       braun
+4       braun/schwarz
+5       rosa
+6       rosa/schwarz
+
+Schalter
+COM     orang/schwarz
+
+Anzeigelicht
+DC24+   grün/schwarz
+DC24-   weiss/schwarz
+
+Notaus
+C       hellblau
+CN      hellblau/schwarz

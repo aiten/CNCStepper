@@ -189,7 +189,7 @@ void CGCode3DParser::M23Command()
 	}
 
 	char fileName[MAXPATHNAME];
-	if (!GetPathName(fileName))
+	if (!GetPathName(fileName) || fileName[0] == 0)
 	{
 		return;
 	}
@@ -680,29 +680,6 @@ void CGCode3DParser::PrintVersion()
 
 void CGCode3DParser::WritePosition(File& file, mm1000_t pos)
 {
-	int16_t  div = pos / 1000;
-	uint16_t rem = abs(int16_t(pos % 1000));
-
-	if (div == 0 && pos < 0)
-	{
-		file.print('-');
-	}
-
-	file.print(div);
-	
-	if (rem != 0)
-	{
-		file.print('.');
-
-		if (rem < 100)
-		{
-			file.print('0');
-			if (rem < 10)
-			{
-				file.print('0');
-			}
-		}
-
-		file.print(rem);
-	}
+	char tmp[16];
+	file.print(CMm1000::ToString(pos, tmp, 3));
 }

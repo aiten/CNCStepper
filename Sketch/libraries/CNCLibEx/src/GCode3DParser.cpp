@@ -683,17 +683,26 @@ void CGCode3DParser::WritePosition(File& file, mm1000_t pos)
 	int16_t  div = pos / 1000;
 	uint16_t rem = abs(int16_t(pos % 1000));
 
-	file.print(div);
-	file.print('.');
-
-	if (rem < 100)
+	if (div == 0 && pos < 0)
 	{
-		file.print('0');
-		if (rem < 10)
-		{
-			file.print('0');
-		}
+		file.print('-');
 	}
 
-	file.print(rem);
+	file.print(div);
+	
+	if (rem != 0)
+	{
+		file.print('.');
+
+		if (rem < 100)
+		{
+			file.print('0');
+			if (rem < 10)
+			{
+				file.print('0');
+			}
+		}
+
+		file.print(rem);
+	}
 }

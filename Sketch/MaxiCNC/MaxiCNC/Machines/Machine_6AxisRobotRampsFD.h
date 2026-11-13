@@ -31,6 +31,19 @@
 
 ////////////////////////////////////////////////////////
 
+#define STEPSPERROTATION 200
+#define MICROSTEPPING    64
+#define DISTANCE 360.0
+
+#define RATIO_1 96.0
+#define RATIO_2 82.0
+#define RATIO_3 35.0
+
+#define MYSTEPSPERMM(RATIO) (STEPSPERROTATION * MICROSTEPPING * (RATIO) / (DISTANCE))
+#define MYSTEPSPERMM1000(RATIO) (MYSTEPSPERMM(RATIO) / 1000.0)
+
+////////////////////////////////////////////////////////
+
 #define MYUSE_LCD
 
 ////////////////////////////////////////////////////////
@@ -51,7 +64,7 @@
 #define STEPPERDIRECTION 0
 //#define STEPPERDIRECTION (1<<X_AXIS) + (1<<Y_AXIS)		// set bit to invert direction of each axis
 
-#define STEPSPERMM 1706.666667
+#define STEPSPERMM MYSTEPSPERMM(RATIO_1)
 
 ////////////////////////////////////////////////////////
 
@@ -88,12 +101,12 @@
 #define B_STEPRATE_REFMOVE 0
 #define C_STEPRATE_REFMOVE 0
 
-#define X_STEPSPERMM 1.706666667		// gear ratio 1:96 
-#define Y_STEPSPERMM 1.706666667		// gear ratio 1:96
-#define Z_STEPSPERMM 1.706666667		// gear ratio 1:96
-#define A_STEPSPERMM 1.457777778		// gear ratio 1:82
-#define B_STEPSPERMM 0.622222222		// gear ratio 1:35
-#define C_STEPSPERMM 0.622222222		// gear ratio 1:35
+#define X_STEPSPERMM MYSTEPSPERMM1000(RATIO_1)		// gear ratio 1:96 
+#define Y_STEPSPERMM MYSTEPSPERMM1000(RATIO_1)		// gear ratio 1:96
+#define Z_STEPSPERMM MYSTEPSPERMM1000(RATIO_1)		// gear ratio 1:96
+#define A_STEPSPERMM MYSTEPSPERMM1000(RATIO_2)		// gear ratio 1:82
+#define B_STEPSPERMM MYSTEPSPERMM1000(RATIO_3)		// gear ratio 1:35
+#define C_STEPSPERMM MYSTEPSPERMM1000(RATIO_3)		// gear ratio 1:35
 
 #define X_INITPOS 180000 
 #define Y_INITPOS 180000
@@ -154,6 +167,10 @@
 #define LCD_NUMAXIS			MYNUM_AXIS
 
 #include <Steppers/StepperRampsFD_pins.h>
+
+#undef  RAMPSFD_USE_A4998
+#undef RAMPSFD_USE_DRV8825
+#define  RAMPSFD_USE_TMC220X
 
 #include <Steppers/StepperRampsFD.h>
 #define BOARDNAME RAMPSFD

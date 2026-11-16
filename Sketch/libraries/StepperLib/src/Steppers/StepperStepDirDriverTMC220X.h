@@ -15,6 +15,7 @@
 */
 
 #define CHANGEDIRECTIONDILAYMICROS	0
+#define A4998DRV8825_CHANGEDIRECTIONMICROS	0
 
 static void DelayChangeDirection()
 {

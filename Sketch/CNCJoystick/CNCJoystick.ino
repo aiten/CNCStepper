@@ -68,9 +68,9 @@ bool speedfast = false;
 char buffer[64];
 unsigned char bufferidx = 0;
 
-#define LOGBUTTINCOUNT 16
+#define LOGBUTTONCOUNT 16
 unsigned long timeNext = 0;
-unsigned long buttonCount[LOGBUTTINCOUNT] = { 0 };
+unsigned long buttonCount[LOGBUTTONCOUNT] = { 0 };
 
 ////////////////////////////////////////////////////////
 
@@ -95,9 +95,9 @@ unsigned long MoveTime(unsigned int distinmm1000, unsigned int mmPerMin)
 
 ////////////////////////////////////////////////////////
 
-bool SendCommand(int mm1000X, int mm1000Y, int mm1000Z, int mm1000A, unsigned int mmPerMin)
+bool SendCommand(int mm1000X, int mm1000Y, int mm1000Z, int mm1000A, int mm1000B, int mm1000C, unsigned int mmPerMin)
 {
-  if (mm1000X!=0 || mm1000Y!=0 || mm1000Z!=0 || mm1000A!=0)
+  if (mm1000X!=0 || mm1000Y!=0 || mm1000Z!=0 || mm1000A!=0|| mm1000B!=0|| mm1000C!=0)
   {
     Serial.print(F("g91 g1"));
     if (mm1000X != 0)
@@ -119,6 +119,16 @@ bool SendCommand(int mm1000X, int mm1000Y, int mm1000Z, int mm1000A, unsigned in
     {
       Serial.print('A');
       Serial.print(mm1000A / 1000.0);
+    }
+    if (mm1000B != 0)
+    {
+      Serial.print('B');
+      Serial.print(mm1000B / 1000.0);
+    }
+    if (mm1000C != 0)
+    {
+      Serial.print('C');
+      Serial.print(mm1000C / 1000.0);
     }
     Serial.print(F("F"));
     Serial.print(mmPerMin);
@@ -216,7 +226,7 @@ void ButtonPress(uint8_t buttonIndex)
       Serial.print(F("c"));
     }        
     
-    if (LOGBUTTINCOUNT >= buttonIndex)
+    if (LOGBUTTONCOUNT >= buttonIndex)
     {
       Serial.print(F(":"));
       Serial.println(buttonCount[buttonIndex]++);
@@ -260,19 +270,25 @@ void loop()
     if (speedPerMin)
     {
       unsigned int mm1000 = SpeedToDist(speedPerMin, intervall);
-      int mm1000X=0,mm1000Y=0,mm1000Z=0,mm1000A=0;
+      int mm1000X=0,mm1000Y=0,mm1000Z=0,mm1000A=0,mm1000B=0,mm1000C=0;
 
-      if (btn5.IsPressed())
-      {
-        mm1000Z = (int) (-sin(angle)*mm1000);
-      }
-      else
+      if (btn5.IsPressed() && !btn6.IsPressed())
       {
         mm1000X = (int) (cos(angle)*mm1000);
         mm1000Y = (int) (-sin(angle)*mm1000);
       }
+      else if (!btn5.IsPressed() && btn6.IsPressed())
+      {
+        mm1000A = (int) (-cos(angle)*mm1000);
+        mm1000Z = (int) (-sin(angle)*mm1000);
+      }
+      else if (btn5.IsPressed() && btn6.IsPressed())
+      {
+        mm1000B = (int) (-cos(angle)*mm1000);
+        mm1000C = (int) (-sin(angle)*mm1000);
+      }
 
-      if (SendCommand(mm1000X, mm1000Y, mm1000Z,mm1000A, speedPerMin))
+      if (SendCommand(mm1000X, mm1000Y, mm1000Z,mm1000A, mm1000B, mm1000C, speedPerMin))
         timeNext = millis() + MoveTime(abs(mm1000), speedPerMin);
     }
   }

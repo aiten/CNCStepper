@@ -1,33 +1,34 @@
-Versorgung
+
+Versorgung (rotary)
 VCC     rot
 GND     schwarz
 
 Rotary
-A       grün
-B       weiss
-/A      lila
-/B      lila
+A       grün			=> in
+B       weiss			=> in
+/A      lila			=> GND
+/B      lila			=> GND
 
 Geschw
-X1      grau
-X10     grau/schwarz
-X100    orange
+X1      grau			=> in
+X10     grau/schwarz	=> in
+X100    orange			=> in
 
 Achsen
-X       gelb
-Y       gelb/schwarz
-Z       braun
-4       braun/schwarz
-5       rosa
-6       rosa/schwarz
+X       gelb			=> in
+Y       gelb/schwarz	=> in
+Z       braun			=> in
+4       braun/schwarz	=> in
+5       rosa			=> in
+6       rosa/schwarz	=> in
 
 Schalter
-COM     orang/schwarz
+COM     orang/schwarz	=> GND => wird für Schalter als GND verwendet
 
 Anzeigelicht
-DC24+   grün/schwarz
-DC24-   weiss/schwarz
+DC24+   grün/schwarz	=> NC
+DC24-   weiss/schwarz	=> NC
 
 Notaus
-C       hellblau
-CN      hellblau/schwarz
+C       hellblau		=> in
+CN      hellblau/schwarz => GND

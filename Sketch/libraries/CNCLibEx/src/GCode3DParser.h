@@ -37,7 +37,8 @@ public:
 
 	CGCode3DParser(CStreamReader* reader, Stream* output) : super(reader, output) { }
 
-	static File& GetExecutingFile() { return _state._file; }
+	static File& GetExecutingFile() { return _state._printFile; }
+	static File& GetCopyToFile() { return _state._copyToFile; }
 
 	static uint32_t    GetExecutingFilePosition() { return _state._printFilePos; }
 	static uint32_t    GetExecutingFileLine() { return _state._printFileLine; }
@@ -69,7 +70,8 @@ private:
 		uint32_t _printFilePos;
 		uint32_t _printFileLine;
 		uint32_t _printFileSize;
-		File     _file;
+		File     _printFile;
+		File     _copyToFile;
 
 		bool _isM28; // SD write mode
 		char _printFileName[MAXFILEEXTNAME + 1];
@@ -93,7 +95,7 @@ private:
 	void M22Command(); // Release SD card
 	void M23Command(); // Select file on SD card
 	void M24Command(); // Start file on SD card
-	void M25Command();
+	void M25Command(); // Pause SD print, but we use it as "cat" a file on SD card
 	void M26Command(); // Set file position on SD card
 	void M27Command(); // Status of SD print - position/size 
 	void M28Command(); // Start write to SD file
@@ -111,6 +113,10 @@ private:
 	static void PrintSDFileListRecurse(class File& dir, uint8_t depth, uint16_t& count, char* fileNameBuffer, char separatorChar);
 
 protected:
+
+	char* GetFile(char* filename);
+	void M281AppendFile(uint8_t subCode);	//append file with position
+	void WritePosition(File& file, mm1000_t pos);
 
 	static void PrintVersion();
 };

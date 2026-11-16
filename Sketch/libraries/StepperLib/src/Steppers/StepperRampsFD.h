@@ -286,10 +286,13 @@ protected:
 	{
 		// optimize => not used as "Delay1
 		return steps[X_AXIS] > cnt || steps[Y_AXIS] > cnt || steps[Z_AXIS] > cnt
-#if RAMPS14_NUM_AXIS > 3
+#if RAMPSFD_NUM_AXIS > 3
 			|| steps[E0_AXIS] > cnt
-#if RAMPS14_NUM_AXIS > 4
+#if RAMPSFD_NUM_AXIS > 4
 			|| steps[E1_AXIS] > cnt
+#if RAMPSFD_NUM_AXIS > 5
+			|| steps[E2_AXIS] > cnt
+#endif
 #endif
 #endif
 			;

@@ -63,6 +63,10 @@ void CU8GLcd::Init()
 
 	GetU8G().begin();
 
+#if defined(__SAM3X8E__)
+	// GetU8G().setBusClock(150000);
+#endif	
+
 	super::Init();
 
 	GetMenu().SetMainMenu();

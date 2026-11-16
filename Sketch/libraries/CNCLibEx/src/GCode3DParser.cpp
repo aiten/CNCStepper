@@ -222,6 +222,10 @@ void CGCode3DParser::M24Command()
 	{
 		CControl::GetInstance()->StartPrintFromSD();
 	}
+	else
+	{
+		Error(MESSAGE_PARSER3D_NO_FILE_SELECTED);
+	}
 }
 
 ////////////////////////////////////////////////////////////
